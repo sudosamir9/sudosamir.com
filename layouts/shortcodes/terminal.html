@@ -1,0 +1,9 @@
+<div class="rh-terminal">
+  <div class="rh-terminal-header">
+    <div class="rh-terminal-buttons">
+      <span class="close"></span><span class="min"></span><span class="max"></span>
+    </div>
+    <div class="rh-terminal-title">{{ .Get "title" | default "samir@rhel:~" }}</div>
+  </div>
+  <pre class="rh-terminal-body">{{ .Inner | safeHTML }}</pre>
+</div>

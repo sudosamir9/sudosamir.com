@@ -1,3 +1,73 @@
 :root {
   --accent: #7eda28;
 }
+
+/* Sit content on a darker backdrop so Matrix rain only shows in the side margins */
+.container.center {
+  background: rgba(20, 18, 12, 0.78);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 4px;
+}
+
+/* Red Hat-style terminal window for code examples */
+.rh-terminal {
+  background: #1d1d1d;
+  border-radius: 6px;
+  margin: 22px 0;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  border: 1px solid #2a2a2a;
+}
+.rh-terminal-header {
+  background: linear-gradient(180deg, #3a3a3a 0%, #2c2c2c 100%);
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.rh-terminal-buttons {
+  display: flex;
+  gap: 7px;
+}
+.rh-terminal-buttons span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.rh-terminal-buttons .close { background: #ff5f57; }
+.rh-terminal-buttons .min   { background: #febc2e; }
+.rh-terminal-buttons .max   { background: #28c840; }
+.rh-terminal-title {
+  color: #ccc;
+  font-size: 0.78em;
+  flex: 1;
+  text-align: center;
+  font-family: 'Fira Code', 'Source Code Pro', monospace;
+  letter-spacing: 0.5px;
+  margin-right: 50px; /* visually balance the buttons on the left */
+}
+.rh-terminal-body {
+  padding: 14px 18px;
+  color: #e8e8e8;
+  font-size: 0.88em;
+  line-height: 1.55;
+  font-family: 'Fira Code', 'Source Code Pro', monospace;
+  margin: 0;
+  overflow-x: auto;
+  background: #1d1d1d;
+  white-space: pre;
+}
+.rh-prompt {
+  color: #7eda28;
+  font-weight: 700;
+}
+.rh-prompt-host {
+  color: #5fc4ff;
+}
+.rh-out-err {
+  color: #ff8585;
+}
