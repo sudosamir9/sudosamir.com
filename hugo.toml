@@ -3,10 +3,12 @@ languageCode = "en-us"
 theme = "terminal"
 paginate = 5
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [params]
   contentTypeName = "posts"
-  themeColor = "green"
-  showMenuItems = 2
+  showMenuItems = 3
   fullWidthTheme = false
   centerTheme = true
   showLastUpdated = false
@@ -22,6 +24,11 @@ paginate = 5
     [languages.en.params]
       subtitle = "Linux. Cybersecurity. Splunk."
       owner = "Samir"
+
+[[menu.main]]
+  identifier = "rhcsa"
+  name = "RHCSA"
+  url = "/rhcsa/"
 
 [[menu.main]]
   identifier = "about"
