@@ -1,0 +1,31 @@
+{{ define "main" }}
+<div class="post" style="text-align: center; padding: 30px 0 50px 0;">
+  <div style="font-size: 7em; font-weight: 900; color: #ee0000; line-height: 1; margin-bottom: 6px; font-family: 'Fira Code', monospace; letter-spacing: -2px;">404</div>
+  <h1 style="margin: 0 0 10px 0;">Page not found.</h1>
+  <p style="opacity: 0.85; margin: 0 0 28px 0;">Mr. Sudo checked the logs. There's nothing at this path.</p>
+
+  <div class="rh-terminal" style="max-width: 540px; margin: 0 auto 26px auto; text-align: left;">
+    <div class="rh-terminal-header">
+      <div class="rh-terminal-buttons">
+        <span class="close"></span><span class="min"></span><span class="max"></span>
+      </div>
+      <div class="rh-terminal-title">samir@rhel:~</div>
+    </div>
+    <pre class="rh-terminal-body"><span class="rh-prompt">[<span class="rh-prompt-host">samir@rhel</span> ~]$</span> ls <span class="rh-404-urlpath">/missing</span>
+<span class="rh-out-err">ls: cannot access '<span class="rh-404-urlpath">/missing</span>': No such file or directory</span>
+<span class="rh-prompt">[<span class="rh-prompt-host">samir@rhel</span> ~]$</span> cd ~</pre>
+  </div>
+
+  <a href="/" style="color: var(--accent); font-weight: 700; text-decoration: none; border-bottom: 1px dashed var(--accent);">← back to /home</a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var path = window.location.pathname || "/missing";
+    if (path === "/404.html") path = "/missing";
+    document.querySelectorAll(".rh-404-urlpath").forEach(function (el) {
+      el.textContent = path;
+    });
+  });
+</script>
+{{ end }}

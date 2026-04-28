@@ -3,6 +3,7 @@
   "name": "sudosamir",
   "compatibility_date": "2026-04-28",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "not_found_handling": "404-page"
   }
 }
