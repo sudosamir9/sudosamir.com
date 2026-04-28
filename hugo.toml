@@ -22,7 +22,7 @@ paginate = 5
     languageName = "English"
     title = "Mr. Sudo's Lab"
     [languages.en.params]
-      subtitle = "Linux. Cybersecurity. Splunk."
+      subtitle = "Welcome to Mr. Sudo's Lab — Samir's corner of the internet, where the penguin runs the prompt and approves of your shell habits."
       owner = "Samir"
 
 [[menu.main]]
