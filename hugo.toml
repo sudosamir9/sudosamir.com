@@ -1,0 +1,34 @@
+baseURL = "https://sudosamir.com/"
+languageCode = "en-us"
+theme = "terminal"
+paginate = 5
+
+[params]
+  contentTypeName = "posts"
+  themeColor = "green"
+  showMenuItems = 2
+  fullWidthTheme = false
+  centerTheme = true
+  showLastUpdated = false
+
+  [params.logo]
+    logoText = "Mr. Sudo's Lab"
+    logoHomeLink = "/"
+
+[languages]
+  [languages.en]
+    languageName = "English"
+    title = "Mr. Sudo's Lab"
+    [languages.en.params]
+      subtitle = "Linux. Cybersecurity. Splunk."
+      owner = "Samir"
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about"
+
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts"
