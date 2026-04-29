@@ -71,3 +71,41 @@
 .rh-out-err {
   color: #ff8585;
 }
+
+/* Mr. Sudo's footer */
+.mr-sudo-footer {
+  margin-top: 60px;
+  padding: 22px 0 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 0.82em;
+  opacity: 0.78;
+  font-family: 'Fira Code', 'Source Code Pro', monospace;
+}
+.mr-sudo-footer-inner {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 0;
+}
+.mr-sudo-footer code {
+  background: rgba(126, 218, 40, 0.08);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 0.95em;
+}
+.mr-sudo-footer a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: border-bottom-color 0.15s;
+}
+.mr-sudo-footer a:hover {
+  border-bottom-color: var(--accent);
+}
+.mr-sudo-footer-sep {
+  margin: 0 10px;
+  opacity: 0.5;
+}

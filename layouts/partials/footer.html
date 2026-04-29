@@ -3,6 +3,16 @@
 
 {{ $bundle := slice $menu $cp | resources.Concat "bundle.js" | resources.Minify }}
 
+<footer class="mr-sudo-footer">
+  <div class="mr-sudo-footer-inner">
+    <span>© {{ now.Year }} <strong>Samir</strong></span>
+    <span class="mr-sudo-footer-sep">·</span>
+    <span>Mr. Sudo's Lab</span>
+    <span class="mr-sudo-footer-sep">·</span>
+    <span><code>sudo all rights reserved</code></span>
+  </div>
+</footer>
+
 <script type="text/javascript" src="{{ $bundle.RelPermalink }}"></script>
 
 <!-- Extended footer section-->
