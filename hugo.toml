@@ -8,7 +8,7 @@ paginate = 5
 
 [params]
   contentTypeName = "posts"
-  showMenuItems = 3
+  showMenuItems = 4
   fullWidthTheme = false
   centerTheme = true
   showLastUpdated = false
@@ -39,3 +39,9 @@ paginate = 5
   identifier = "posts"
   name = "Posts"
   url = "/posts"
+
+[[menu.main]]
+  identifier = "splunk"
+  name = "Splunk"
+  url = "/splunk/"
+  weight = 40
