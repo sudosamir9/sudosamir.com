@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.0 Correlating Events | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="03-correlating-events.html" aria-current="page"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../topics/03-correlating-events.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Correlating events</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="03-correlating-events.html">Study</a><a class="" href="../cram/03-correlating-events.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="3.0-correlating-events-15">3.0 Correlating Events</h1>
+<p>The heaviest single section of SPLK-1002: it tests whether you can build a group of related events with the <code>transaction</code> command, read its output contract exactly, and then justify choosing <code>stats</code> instead, which is the answer more often than candidates expect.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Section 3.0 Correlating Events, 15% of the exam</li>
+<li>3.1 Identify transactions</li>
+<li>3.2 Group events using fields</li>
+<li>3.3 Group events using fields and time</li>
+<li>3.4 Search with transactions</li>
+<li>3.5 Report on transactions</li>
+<li>3.6 Determine when to use transactions vs. stats</li>
+</ul>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Sub-objective</th>
+<th>Udemy &quot;Splunk: Zero to Power User&quot; (Hailie Shaw)</th>
+<th>Apress &quot;Splunk Certified Study Guide&quot; (Deep Mehta, 2021)</th>
+<th>Honest gap note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1 Identify transactions</td>
+<td>Module 10A</td>
+<td>Chapter 2</td>
+<td>Both treat a transaction as &quot;events sharing a field&quot; and miss the docs definition: raw text of every member, the time fields of the earliest member, and the union of all other fields.</td>
+</tr>
+<tr>
+<td>3.2 Group events using fields</td>
+<td>Module 10A</td>
+<td>Chapter 2</td>
+<td>Neither covers <code>connected</code>, and neither states that an event missing the unifying field can still join a transaction.</td>
+</tr>
+<tr>
+<td>3.3 Group events using fields and time</td>
+<td>Module 10A</td>
+<td>Chapter 2 (<code>maxpause</code>, <code>maxspan</code> only)</td>
+<td>Apress gives <code>maxspan</code> and <code>maxpause</code> but not their default of <code>-1</code>, and states a &quot;1000 event max&quot; without saying that this is the configurable <code>maxevents</code> default.</td>
+</tr>
+<tr>
+<td>3.4 Search with transactions</td>
+<td>Module 10B</td>
+<td>Chapter 4</td>
+<td>Neither source covers <code>startswith</code>, <code>endswith</code>, <code>keeporphans</code>, <code>unifyends</code>, or <code>keepevicted</code>, which are exactly the options a question writer reaches for as distractors.</td>
+</tr>
+<tr>
+<td>3.5 Report on transactions</td>
+<td>Module 10B</td>
+<td>Chapter 4</td>
+<td>Thin in both. Neither drills the point that <code>duration</code> and <code>eventcount</code> exist only after <code>transaction</code>, so filters on them must come later in the pipeline.</td>
+</tr>
+<tr>
+<td>3.6 Determine when to use transactions vs. stats</td>
+<td>Not contrasted</td>
+<td>Not contrasted</td>
+<td>Neither source contrasts <code>transaction</code> with <code>stats</code> or builds the decision table. This sub-objective must be learned from the docs page &quot;About transactions&quot; alone.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>Event correlation is finding relationships between events that a single search line does not express: how far apart in time a set of events occurred, how long an end-to-end operation took, how many steps it involved. The Splunk docs list five correlation mechanisms: time and geographic proximity, transactions, subsearches, field lookups, and joins. The exam concentrates on transactions, with <code>stats</code> as the constant alternative.</p>
+<p>A transaction is any group of conceptually-related events that spans time. The <code>transaction</code> command builds one output result per group. That result is made of the raw text (the <code>_raw</code> field) of each member, the time and date fields of the earliest member, and the union of all other fields of each member. The command then adds <code>duration</code> and <code>eventcount</code>.</p>
+<p>Members do not have to look alike. The docs list what a transaction can include: different events from the same source and host, different events from different sources on the same host, and similar events from different hosts and sources. Members need not share a sourcetype, need not carry the same set of fields, and do not share a timestamp, since a transaction spans time by definition. What binds them is the definition you hand the command: a field list, a start or end condition, a time constraint, or a combination. Where a field list is given the members must agree on those field values, and even the field list is optional in the syntax.</p>
+<p>Where it sits in the processing model matters for 3.6. <code>transaction</code> is a centralized streaming command: it applies a transformation to each event returned by the search, and it only works on the search head. <code>stats</code> is a transforming command: it orders results into a data table and can push its first reduce step to the indexers. That single difference is the reason the docs say <code>stats</code> &quot;performs more efficiently, especially in a distributed environment&quot;.</p>
+<div class="mermaid-wrap" style="min-height:460px"><div class="mermaid">flowchart TD
+  A[&quot;Events arrive at transaction&lt;br/&gt;in descending chronological order&quot;] --&gt; B{&quot;Does the event match&lt;br/&gt;the startswith condition?&quot;}
+  B -- yes --&gt; C[&quot;Close the current open transaction&lt;br/&gt;closed_txn = 1&quot;]
+  B -- no --&gt; D{&quot;Do the field-list values&lt;br/&gt;match an open transaction?&quot;}
+  D -- no --&gt; E[&quot;Open a new transaction&quot;]
+  D -- yes --&gt; F{&quot;Would adding the event break&lt;br/&gt;maxspan, maxpause or maxevents?&quot;}
+  F -- yes --&gt; C
+  F -- no --&gt; G[&quot;Add event to the open transaction&quot;]
+  G --&gt; H{&quot;Does the event match&lt;br/&gt;the endswith condition?&quot;}
+  H -- yes --&gt; I[&quot;Mark the transaction ended&quot;]
+  H -- no --&gt; J{&quot;Open pool over maxopentxn&lt;br/&gt;or maxopenevents?&quot;}
+  J -- yes --&gt; K[&quot;Evict least recently used transaction&lt;br/&gt;closed_txn = 0&lt;br/&gt;emitted only if keepevicted=true&quot;]
+  J -- no --&gt; L[&quot;Keep holding in memory&quot;]
+  E --&gt; L
+  C --&gt; M[&quot;Emit result: _raw of all members,&lt;br/&gt;_time of earliest member,&lt;br/&gt;union of all other fields,&lt;br/&gt;plus duration and eventcount&quot;]
+  I --&gt; M
+  K --&gt; M
+  N[&quot;Events matching no transaction&quot;] --&gt; O[&quot;Dropped, unless keeporphans=true&lt;br/&gt;then emitted with _txn_orphan=1&quot;]</div></div>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">transaction</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">name</span><span class="t-op">=&lt;</span><span class="t-field">transaction-name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">txn_definition-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">memcontrol-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">rendering-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span></code></pre></div>
+<p>There are no required arguments. <code>transaction</code> with no arguments at all is legal and groups every event into one transaction, bounded only by <code>maxevents</code>.</p>
+<p>The option groups are fixed and the exam does use their names: <code>&lt;txn_definition-options&gt;</code> is <code>maxspan | maxpause | maxevents | startswith | endswith | connected | unifyends | keeporphans</code>, <code>&lt;memcontrol-options&gt;</code> is <code>maxopentxn | maxopenevents | keepevicted</code>, and <code>&lt;rendering-options&gt;</code> is <code>delim | mvlist | mvraw | nullstr</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;field-list&gt;</code></td>
+<td><code>&lt;field&gt; ...</code> (space separated in the Search Reference, comma separated in the Knowledge Management Manual; both parse)</td>
+<td>none</td>
+<td>Groups events by unique values of the listed fields. For <code>transaction client_ip host</code>, each <code>client_ip</code> value gets a separate transaction per unique <code>host</code> value. Events with common field names and different values are never grouped, but an event that carries no value at all for a listed field can still join.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>name=&lt;transaction-name&gt;</code></td>
+<td>none</td>
+<td>Names a stanza in <code>transactiontypes.conf</code>. Options given inline overrule the same options in that stanza.</td>
+</tr>
+<tr>
+<td><code>maxspan</code></td>
+<td><code>&lt;int&gt;[s|m|h|d]</code></td>
+<td><code>-1</code> (no limit)</td>
+<td>Maximum total time between the earliest and latest events in a transaction. Events in the transaction must span less than the integer specified. Events that exceed it become a separate transaction. Negative deactivates the constraint. Requires events sorted in descending chronological order.</td>
+</tr>
+<tr>
+<td><code>maxpause</code></td>
+<td><code>&lt;int&gt;[s|m|h|d]</code></td>
+<td><code>-1</code> (no limit)</td>
+<td>Maximum gap between consecutive events inside one transaction. Negative deactivates the constraint. Requires events sorted in descending chronological order.</td>
+</tr>
+<tr>
+<td><code>maxevents</code></td>
+<td><code>&lt;int&gt;</code></td>
+<td><code>1000</code></td>
+<td>Maximum number of events in a transaction. Deactivated if the value is negative.</td>
+</tr>
+<tr>
+<td><code>startswith</code></td>
+<td><code>&lt;filter-string&gt;</code></td>
+<td>none (empty string per <code>transactiontypes.conf.spec</code>)</td>
+<td>A search or eval filtering expression which, if satisfied by an event, marks the beginning of a new transaction.</td>
+</tr>
+<tr>
+<td><code>endswith</code></td>
+<td><code>&lt;filter-string&gt;</code></td>
+<td>none (empty string per <code>transactiontypes.conf.spec</code>)</td>
+<td>A search or eval filtering expression which, if satisfied by an event, marks the end of a transaction.</td>
+</tr>
+<tr>
+<td><code>connected</code></td>
+<td><code>true | false</code></td>
+<td><code>true</code></td>
+<td>Only relevant when a field list is specified. When an event contains the fields the transaction requires but none of them has yet been instantiated in that transaction, <code>connected=true</code> opens a new transaction and <code>connected=false</code> adds the event to the existing one. Changing it changes the <code>unifyends</code> default to match.</td>
+</tr>
+<tr>
+<td><code>unifyends</code></td>
+<td><code>true | false</code></td>
+<td><code>true</code>, set to the same default value as <code>connected</code></td>
+<td>Forces events matching <code>startswith</code> or <code>endswith</code> to also match at least one of the fields used to unify events into the transaction.</td>
+</tr>
+<tr>
+<td><code>keeporphans</code></td>
+<td><code>true | false</code></td>
+<td><code>false</code></td>
+<td>Outputs results that are not part of any transaction. Orphans carry a <code>_txn_orphan</code> field with a value of <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>keepevicted</code></td>
+<td><code>&lt;bool&gt;</code></td>
+<td><code>false</code> or <code>0</code></td>
+<td>Outputs evicted transactions. Evicted results are distinguished by <code>closed_txn=0</code>; non-evicted, closed transactions have <code>closed_txn=1</code>.</td>
+</tr>
+<tr>
+<td><code>maxopentxn</code></td>
+<td><code>&lt;int&gt;</code></td>
+<td>read from the <code>[transactions]</code> stanza in <code>limits.conf</code>, where the shipped default is <code>5000</code></td>
+<td>Maximum number of not yet closed transactions to hold in the open pool before LRU eviction starts.</td>
+</tr>
+<tr>
+<td><code>maxopenevents</code></td>
+<td><code>&lt;int&gt;</code></td>
+<td>read from the <code>[transactions]</code> stanza in <code>limits.conf</code>, where the shipped default is <code>100000</code></td>
+<td>Maximum number of events belonging to open transactions before LRU eviction starts.</td>
+</tr>
+<tr>
+<td><code>mvlist</code></td>
+<td><code>true | false | &lt;field-list&gt;</code></td>
+<td><code>false</code></td>
+<td><code>true</code> renders multivalue fields as a list of the original event values in arrival order. <code>false</code> renders them as a set of unique values ordered alphabetically. A comma or space delimited field list renders only those fields as lists.</td>
+</tr>
+<tr>
+<td><code>mvraw</code></td>
+<td><code>&lt;bool&gt;</code></td>
+<td><code>false</code></td>
+<td>Makes the <code>_raw</code> field of the transaction result a multivalue field.</td>
+</tr>
+<tr>
+<td><code>delim</code></td>
+<td><code>&lt;string&gt;</code></td>
+<td><code>&quot; &quot;</code> (whitespace)</td>
+<td>Character separating multiple values. With <code>mvraw=t</code> it delimits the values inside <code>_raw</code>.</td>
+</tr>
+<tr>
+<td><code>nullstr</code></td>
+<td><code>&lt;string&gt;</code></td>
+<td><code>NULL</code></td>
+<td>Placeholder for missing field values inside multivalue fields. Applies only to fields rendered as lists.</td>
+</tr>
+<tr>
+<td><code>match</code></td>
+<td><code>closest</code></td>
+<td>none stated</td>
+<td>Matching type for a transaction definition. <code>closest</code> is the only supported value.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A <code>&lt;filter-string&gt;</code> for <code>startswith</code> and <code>endswith</code> is one of three shapes: <code>&lt;search-expression&gt;</code> (a valid search expression without quotes), <code>(&lt;quoted-search-expression&gt;)</code> (a valid search expression that contains quotes), or <code>eval(&lt;eval-expression&gt;)</code> where the eval expression returns a Boolean. Documented examples include <code>startswith=&quot;login&quot;</code>, <code>startswith=(username=foobar)</code>, and <code>startswith=eval(speed_field &lt; max_speed_field)</code>.</p>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p><code>transaction</code> collapses N input events into 1 output result per group. Field-level contract:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Origin</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_raw</code></td>
+<td>preserved</td>
+<td>The raw text of every member event, one event per line by default. <code>mvraw=true</code> makes it a genuine multivalue field.</td>
+</tr>
+<tr>
+<td><code>_time</code></td>
+<td>preserved</td>
+<td>The time and date fields of the earliest member event. Not the latest, and not the time the transaction closed.</td>
+</tr>
+<tr>
+<td>every other field</td>
+<td>preserved</td>
+<td>The union of all other fields of each member. A field with different values across members becomes multivalue.</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>created</td>
+<td>Difference, in seconds, between the timestamps of the first and last events in the transaction. A single-event transaction has <code>duration=0</code>.</td>
+</tr>
+<tr>
+<td><code>eventcount</code></td>
+<td>created</td>
+<td>Number of events in the transaction.</td>
+</tr>
+<tr>
+<td><code>closed_txn</code></td>
+<td>created</td>
+<td><code>1</code> (true) for non-evicted, closed transactions; <code>0</code> (false) for evicted ones.</td>
+</tr>
+<tr>
+<td><code>linecount</code></td>
+<td>present in output</td>
+<td>Appears alongside the created fields in the documented example output for <code>transaction</code>.</td>
+</tr>
+<tr>
+<td><code>field_match_sum</code></td>
+<td>present in output</td>
+<td>Appears alongside the created fields in the documented example output for <code>transaction</code>.</td>
+</tr>
+<tr>
+<td><code>_txn_orphan</code></td>
+<td>created when <code>keeporphans=true</code></td>
+<td><code>1</code> on results passed through as orphans.</td>
+</tr>
+<tr>
+<td><code>transactiontype</code></td>
+<td>created when <code>name=</code> is used</td>
+<td>The stanza name of the transaction from <code>transactiontypes.conf</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Everything in the options table is an input: no option name comes back as a field, and there is no field called <code>transaction</code> either. The command creates only <code>duration</code>, <code>eventcount</code>, <code>closed_txn</code>, and, under the relevant options, <code>_txn_orphan</code> and <code>transactiontype</code>.</p>
+<p>Because the raw text of every member survives into <code>_raw</code>, a <code>search &lt;term&gt;</code> after <code>transaction</code> matches a group when any single member contributed that term, and the whole group comes back intact.</p>
+<p>Command type: <code>transaction</code> is a centralized streaming command, and is additionally listed as a dataset processing command in some modes. It runs on the search head only. It is not a transforming command, so its output stays on the Events tab as a list of grouped events rather than becoming a statistics table.</p>
+<p>Rendering: in the Events list, the member events of a transaction are grouped as multiple values in the Events field and each event starts on a new line. If a transaction has more than 5 events, the remaining events are collapsed behind a message that offers to show all of them.</p>
+<p>Ordering: the incoming events must be in descending chronological order. Commands such as <code>eval</code> can change the order or time labeling of events; if one of them precedes <code>transaction</code>, the search returns an error unless a <code>sort</code> command appears immediately before <code>transaction</code>. The docs show that using <code>maxspan</code> on ascending-order events silently returns wrong results, not an error.</p>
+<p>A rendered example. The documented <code>| makeresults count=10 | streamstats count | eval _time=now()+10*count, user=&quot;nobody&quot; | sort -_time | transaction user maxspan=11s</code> search returns five rows shaped like this:</p>
+<div class="tw wide"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>closed_txn</th>
+<th>count</th>
+<th>duration</th>
+<th>eventcount</th>
+<th>field_match_sum</th>
+<th>linecount</th>
+<th>user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-07-16 16:10:30</td>
+<td>1</td>
+<td>10, 9</td>
+<td>10</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>nobody</td>
+</tr>
+<tr>
+<td>2024-07-16 16:10:10</td>
+<td>1</td>
+<td>7, 8</td>
+<td>10</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>nobody</td>
+</tr>
+<tr>
+<td>2024-07-16 16:09:50</td>
+<td>1</td>
+<td>5, 6</td>
+<td>10</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>nobody</td>
+</tr>
+<tr>
+<td>2024-07-16 16:09:30</td>
+<td>1</td>
+<td>3, 4</td>
+<td>10</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>nobody</td>
+</tr>
+<tr>
+<td>2024-07-16 16:09:10</td>
+<td>0</td>
+<td>1, 2</td>
+<td>10</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>nobody</td>
+</tr>
+</tbody>
+</table></div>
+<p>Note two things: <code>count</code> became multivalue because its members disagreed, and the last transaction has <code>closed_txn=0</code> because nothing closed it before the input ran out.</p>
+<p><code>stats</code> by contrast is a transforming command. Without a BY clause it returns exactly one row, the aggregation over the entire incoming result set. With a BY clause it returns one row per distinct value of the BY fields, and every field not named in the aggregation or the BY clause is discarded. <code>_raw</code> does not survive <code>stats</code>.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Group web access events by client IP with both time constraints. This is the canonical 3.3 pattern.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">clientip</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">30s</span> <span class="t-opt">maxpause</span><span class="t-op">=</span><span class="t-time">5s</span></code></pre></div>
+<p>Produces one result per burst of activity from a single <code>clientip</code>, where the whole burst spans less than 30 seconds and no two consecutive events are more than 5 seconds apart. <code>host</code> and <code>source</code> may come back multivalue if several machines share one source IP.</p>
+<ol start="2">
+<li>Group by a start and an end condition, then filter on a field that only exists afterwards.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-field">clientip</span> <span class="t-opt">startswith</span><span class="t-op">=</span><span class="t-str">&quot;view&quot;</span> <span class="t-opt">endswith</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">duration</span><span class="t-op">&gt;</span><span class="t-num">0</span></code></pre></div>
+<p>The first event of each transaction must contain the string <code>view</code> and the last must contain <code>purchase</code>. The <code>where duration&gt;0</code> clause drops sessions that completed inside the same second. That filter cannot be moved before <code>transaction</code>, because <code>duration</code> does not exist until <code>transaction</code> creates it.</p>
+<p>The same sequencing applies to plain text filters, for a different reason. To return whole sessions that contain at least one rejection:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">sessionid</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-field">REJECT</span></code></pre></div>
+<p><code>search REJECT</code> matches a transaction whose combined <code>_raw</code> contains that term, contributed by any one member, and the session comes back whole. Writing <code>index=main REJECT | transaction sessionid</code> instead discards every non-matching event before grouping, leaving one-event transactions with <code>duration=0</code>. Pre-filter on terms every member carries, such as the index, the sourcetype, or the session id; filter after <code>transaction</code> on terms only some members carry.</p>
+<ol start="3">
+<li>Bound the group by event count as well as time.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">clientip</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">10m</span> <span class="t-opt">maxevents</span><span class="t-op">=</span><span class="t-num">3</span></code></pre></div>
+<p>Defines a purchase transaction as at most 3 events from one IP inside a 10 minute window. The filtering happens before the first pipe, which the docs say makes any search faster, and <code>transaction</code> is the command you least want to feed unfiltered. It is safe here because every event of interest carries <code>action=purchase</code>.</p>
+<ol start="4">
+<li>Report on transactions. This is the whole of 3.5: everything happens after the <code>transaction</code> command.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-opt">maxpause</span><span class="t-op">=</span><span class="t-time">30m</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">closed_txn</span><span class="t-op">=</span><span class="t-num">1</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">eventcount</span><span class="t-op">&gt;</span><span class="t-num">3</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">duration_min</span><span class="t-op">=</span><span class="t-func">round</span><span class="t-op">(</span><span class="t-field">duration</span><span class="t-op">/</span><span class="t-num">60</span><span class="t-op">,</span><span class="t-num">2</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">sessions</span><span class="t-op">,</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">duration_min</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_minutes</span><span class="t-op">,</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">eventcount</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">longest</span> <span class="t-kw">BY</span> <span class="t-field">host</span></code></pre></div>
+<p><code>search closed_txn=1</code> keeps only transactions that a constraint actually closed. <code>where eventcount&gt;3</code> keeps sessions with real depth. <code>eval</code> converts seconds to minutes because <code>duration</code> is always in seconds. The final <code>stats</code> aggregates the transactions themselves, which is the normal shape of a transaction report. Swap the last line for <code>| timechart span=1h avg(duration) AS avg_seconds</code> to trend it.</p>
+<ol start="5">
+<li>Keep the events that did not form a transaction, and the ones memory pressure threw away.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">clientip</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">5m</span> <span class="t-opt">keeporphans</span><span class="t-op">=</span><span class="t-kw">true</span> <span class="t-opt">keepevicted</span><span class="t-op">=</span><span class="t-kw">true</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-func">case</span><span class="t-op">(</span><span class="t-opt">_txn_orphan</span><span class="t-op">==</span><span class="t-num">1</span><span class="t-op">,</span><span class="t-str">&quot;orphan&quot;</span><span class="t-op">,</span> <span class="t-opt">closed_txn</span><span class="t-op">==</span><span class="t-num">0</span><span class="t-op">,</span><span class="t-str">&quot;evicted&quot;</span><span class="t-op">,</span> <span class="t-num">1</span><span class="t-op">==</span><span class="t-num">1</span><span class="t-op">,</span><span class="t-str">&quot;closed&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">status</span></code></pre></div>
+<p>This is a diagnostic search, not a reporting search. It tells you how much of your data never made it into a group and how much was evicted by the open-transaction pool limits.</p>
+<ol start="6">
+<li>Show what <code>mvlist</code> changes.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">clientip</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">1m</span> <span class="t-opt">mvlist</span><span class="t-op">=</span><span class="t-kw">true</span></code></pre></div>
+<p>With the default <code>mvlist=false</code>, a field such as <code>action</code> comes back as the unique set of its values ordered alphabetically. With <code>mvlist=true</code> it comes back as every value from every member event, in arrival order, duplicates included. Use <code>mvlist=action,status</code> to get list rendering for only those two fields and set rendering for the rest.</p>
+<ol start="7">
+<li>The same problem solved both ways. This is the 3.6 pattern the exam draws from directly.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">duration</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">range</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">duration</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">eventcount</span><span class="t-op">,</span> <span class="t-func">min</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">_time</span><span class="t-op">,</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">actions</span><span class="t-op">,</span> <span class="t-func">earliest</span><span class="t-op">(</span><span class="t-field">referer</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">entry_page</span><span class="t-op">,</span> <span class="t-func">latest</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">exit_action</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">duration</span></code></pre></div>
+<p>Both give the distribution of session durations. The <code>stats</code> version is a transforming command that distributes across indexers, discards <code>_raw</code>, and has no open-transaction pool to blow. The docs give the identical pair for trades, <code>... | transaction trade_id | chart count by duration span=log2</code> and <code>... | stats range(_time) as duration by trade_id | chart count by duration span=log2</code>, and the <code>stats</code> form is correct only because <code>trade_id</code> is unique. If <code>trade_id</code> values are reused, the docs say the only solution is <code>... | transaction trade_id endswith=END</code>, or <code>... | transaction trade_id maxpause=10m</code> when the reuse is separated by time rather than marked by a message.</p>
+<p>Equivalence table for rebuilding transaction output with <code>stats</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>transaction field</th>
+<th>stats equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>duration</code></td>
+<td><code>range(_time) AS duration</code></td>
+</tr>
+<tr>
+<td><code>eventcount</code></td>
+<td><code>count AS eventcount</code></td>
+</tr>
+<tr>
+<td><code>_time</code> of the group</td>
+<td><code>min(_time) AS _time</code>, or <code>earliest_time(&lt;field&gt;)</code> for the epoch of a specific field value</td>
+</tr>
+<tr>
+<td>union of a field's values, set rendering (<code>mvlist=false</code>)</td>
+<td><code>values(&lt;field&gt;)</code>, distinct, lexicographical order</td>
+</tr>
+<tr>
+<td>union of a field's values, list rendering (<code>mvlist=true</code>)</td>
+<td><code>list(&lt;field&gt;)</code>, event order, capped at the first 100 values</td>
+</tr>
+<tr>
+<td>first event's value, chronologically</td>
+<td><code>earliest(&lt;field&gt;)</code></td>
+</tr>
+<tr>
+<td>last event's value, chronologically</td>
+<td><code>latest(&lt;field&gt;)</code></td>
+</tr>
+<tr>
+<td>first or last value in processing order</td>
+<td><code>first(&lt;field&gt;)</code> or <code>last(&lt;field&gt;)</code></td>
+</tr>
+<tr>
+<td><code>_raw</code> of every member</td>
+<td><code>values(_raw)</code> or <code>list(_raw)</code>, which is the one thing <code>stats</code> does badly</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="mermaid-wrap" style="min-height:428px"><div class="mermaid">flowchart TD
+  S[&quot;I need to group related events&quot;] --&gt; Q1{&quot;Do I need the raw event text&lt;br/&gt;of the members in the result?&quot;}
+  Q1 -- yes --&gt; T[&quot;Use transaction&quot;]
+  Q1 -- no --&gt; Q2{&quot;Does a single unique ID&lt;br/&gt;identify each group?&quot;}
+  Q2 -- no --&gt; Q3{&quot;Is the ID reused over time,&lt;br/&gt;or is the group defined by&lt;br/&gt;a start or end message?&quot;}
+  Q3 -- yes --&gt; T
+  Q3 -- no --&gt; Q4{&quot;Are the events related by a sequence&lt;br/&gt;rather than a shared key?&quot;}
+  Q4 -- yes --&gt; T
+  Q4 -- no --&gt; ST[&quot;Use stats&quot;]
+  Q2 -- yes --&gt; Q5{&quot;Do I only need aggregate values&lt;br/&gt;such as count, duration, sums?&quot;}
+  Q5 -- yes --&gt; ST
+  Q5 -- no --&gt; Q6{&quot;Is the result set large,&lt;br/&gt;or is this a distributed search?&quot;}
+  Q6 -- yes --&gt; ST
+  Q6 -- no --&gt; T</div></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Command</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Every group has one unique identifier and you want aggregates</td>
+<td><code>stats ... BY &lt;id&gt;</code></td>
+<td>More efficient, especially in a distributed environment.</td>
+</tr>
+<tr>
+<td>The identifier is reused, for example a cookie or a client IP</td>
+<td><code>transaction &lt;id&gt; maxpause=...</code> or <code>maxspan=...</code></td>
+<td>Time spans or pauses segment the reused identifier into separate transactions.</td>
+</tr>
+<tr>
+<td>The group boundary is a message, for example <code>END</code> or <code>logout</code></td>
+<td><code>transaction &lt;id&gt; endswith=...</code></td>
+<td><code>stats</code> has no concept of a start or end condition.</td>
+</tr>
+<tr>
+<td>You want to read the combined raw text of the events</td>
+<td><code>transaction</code></td>
+<td><code>stats</code> discards <code>_raw</code> unless you aggregate it, and even then loses event boundaries.</td>
+</tr>
+<tr>
+<td>You want a statistic over the grouped events</td>
+<td><code>stats</code></td>
+<td><code>transaction</code> computes nothing except <code>duration</code> and <code>eventcount</code>.</td>
+</tr>
+<tr>
+<td>The result set is large or the search is distributed</td>
+<td><code>stats</code></td>
+<td><code>transaction</code> is centralized streaming and holds open transactions in search head memory.</td>
+</tr>
+<tr>
+<td>You already used <code>append</code></td>
+<td><code>stats</code></td>
+<td>You cannot use a <code>transaction</code> command after you use an <code>append</code> command.</td>
+</tr>
+<tr>
+<td>You need to break groups longer than a fixed duration</td>
+<td><code>transaction ... maxspan=</code></td>
+<td>Directly supported; <code>stats</code> would need <code>bin</code> plus a compound BY clause.</td>
+</tr>
+<tr>
+<td>Two different datasets, one of them small and static</td>
+<td><code>lookup</code></td>
+<td>The docs list lookup ahead of <code>join</code> for this shape.</td>
+</tr>
+<tr>
+<td>Two different datasets, both dynamic, small right side</td>
+<td><code>join</code></td>
+<td>Last resort: the right-side dataset is capped at 50,000 rows over 60 seconds by default.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sequencing rules inside a transaction search:</p>
+<ol>
+<li>Filter as much as possible before the first pipe, but only on terms every member of the group carries. <code>transaction</code> gets whatever you hand it, and a pre-pipe term that only some members carry silently shrinks each group to those members.</li>
+<li>If any command before <code>transaction</code> can change event order or time labeling, put <code>| sort -_time</code> immediately before <code>transaction</code>.</li>
+<li>Any filter on <code>duration</code>, <code>eventcount</code>, <code>closed_txn</code>, or <code>_txn_orphan</code> must come after <code>transaction</code>, and once there, <code>where</code> and <code>search</code> both work on them because they are ordinary fields at that point.</li>
+<li>Report on transactions by piping to <code>stats</code>, <code>chart</code>, <code>timechart</code>, or <code>table</code>. A transaction result is a row like any other.</li>
+<li>To keep whole groups but see only the ones containing a particular term, put <code>| search &lt;term&gt;</code> after <code>transaction</code> and rely on the preserved <code>_raw</code>.</li>
+</ol>
+<p>Other correlation approaches named in the docs chapter, and when the exam would prefer <code>stats</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>One-line note</th>
+<th>Exam preference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subsearch</td>
+<td>Enclosed in square brackets, runs first, its results feed the outer search. Default cap of 10,000 results and 60 seconds runtime.</td>
+<td>Prefer <code>stats</code> when both halves are in the same index and share a key.</td>
+</tr>
+<tr>
+<td><code>append</code></td>
+<td>Adds subsearch results as extra rows at the end. Transforming command. <code>maxtime=60</code>, <code>maxout=50000</code>, <code>extendtimerange=false</code>. Historical data only.</td>
+<td>Prefer <code>stats</code> with a compound BY clause; you cannot follow <code>append</code> with <code>transaction</code>.</td>
+</tr>
+<tr>
+<td><code>appendcols</code></td>
+<td>Merges the Nth subsearch row into the Nth main row by position. <code>override=false</code>, <code>maxtime=60</code>, <code>maxout=50000</code>, <code>timeout=60</code>. Dataset processing command.</td>
+<td>Almost never the answer; positional merging is fragile.</td>
+</tr>
+<tr>
+<td><code>union</code></td>
+<td>Merges two or more datasets into one, interleaving on <code>_time</code>. Dataset processing command. <code>maxtime=60</code>, <code>maxout=50000</code>, <code>timeout=300</code>.</td>
+<td>Prefer <code>union</code> over <code>append</code> for multi-dataset merges, then <code>stats</code> to group.</td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td>SQL-style inner, outer, or left join with a right-side dataset or subsearch. <code>type=inner</code>, <code>max=1</code>, <code>usetime=false</code>, <code>earlier=true</code>, <code>overwrite=true</code>. Centralized streaming when a field list is given, dataset processing when it is not.</td>
+<td>The docs recommend <code>stats</code> and <code>transaction</code> over <code>join</code> and <code>append</code>. Field values in the join field list are case sensitive.</td>
+</tr>
+<tr>
+<td><code>selfjoin</code></td>
+<td>Joins result rows with other rows in the same result set on one or more fields. <code>keepsingle=false</code>, <code>max=1</code>, <code>overwrite=true</code>, main results capped at 100,000.</td>
+<td>Niche: parent process to child process style data.</td>
+</tr>
+<tr>
+<td><code>searchtxn</code></td>
+<td>Efficiently returns transaction events matching a transaction type from <code>transactiontypes.conf</code>. <code>eventsonly=false</code>, <code>max_terms=1000</code>.</td>
+<td>Only appears as a distractor; it requires a configured transaction type.</td>
+</tr>
+<tr>
+<td><code>streamstats</code></td>
+<td>Adds running aggregates to each event as it passes, in order. Every input event stays an output event.</td>
+<td>Never the answer to &quot;group events by fields&quot;: it correlates a value with the events before it rather than collapsing events into a group.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-03-01"><span class="tid">T-03-01</span> The exam offers <code>maxspan</code> and <code>maxpause</code> defaults such as <code>30s</code>, <code>5m</code>, or <code>1000</code>. <span class="wrong">Wrong belief</span>: they have a positive default. <span class="right">Correct fact</span>: both default to <code>-1</code>, which means no limit and the constraint is deactivated. Only <code>maxevents</code> has a positive default, <code>1000</code>.</p>
+<p class="trap" id="T-03-02"><span class="tid">T-03-02</span> A question shows <code>... | eval x=1 | transaction user maxspan=60s</code> and asks why the results are wrong. <span class="wrong">Wrong belief</span>: <code>transaction</code> sorts its own input. <span class="right">Correct fact</span>: <code>transaction</code> requires incoming events in descending chronological order, and <code>sort</code> must occur immediately before <code>transaction</code>. Ascending order with <code>maxspan</code> returns incorrect results rather than an error.</p>
+<p class="trap" id="T-03-03"><span class="tid">T-03-03</span> <code>duration</code> is offered in minutes, or as null for a one-event transaction. <span class="wrong">Wrong belief</span>: <code>duration</code> is formatted or absent. <span class="right">Correct fact</span>: <code>duration</code> is the difference in seconds between the timestamps of the first and last events, and a single-event transaction has <code>duration=0</code>. Convert with <code>eval</code> if you want minutes.</p>
+<p class="trap" id="T-03-04"><span class="tid">T-03-04</span> A question asks what <code>_time</code> is on a transaction result. <span class="wrong">Wrong belief</span>: the latest event, or the time the transaction closed. <span class="right">Correct fact</span>: the transaction takes the time and date fields of the earliest member event.</p>
+<p class="trap" id="T-03-05"><span class="tid">T-03-05</span> A question sets <code>endswith</code> and asks why <code>closed_txn</code> is <code>0</code> everywhere. <span class="wrong">Wrong belief</span>: any boundary option closes a transaction. <span class="right">Correct fact</span>: <code>closed_txn</code> is set to <code>1</code> if one of <code>maxevents</code>, <code>maxspan</code>, <code>maxpause</code>, or <code>startswith</code> is specified. <code>endswith</code> is not in that list. If none of the four is specified, all transactions are output with <code>closed_txn=0</code>.</p>
+<p class="trap" id="T-03-06"><span class="tid">T-03-06</span> <code>keeporphans=true</code> is claimed to mark results with <code>orphan=1</code> or <code>closed_txn=0</code>. <span class="wrong">Wrong belief</span>: orphans reuse an existing field. <span class="right">Correct fact</span>: orphan results are distinguished by a <code>_txn_orphan</code> field with a value of <code>1</code>, and the option default is <code>false</code>.</p>
+<p class="trap" id="T-03-07"><span class="tid">T-03-07</span> <code>mvlist</code> defaults are inverted. <span class="wrong">Wrong belief</span>: <code>mvlist=false</code> suppresses multivalue fields entirely, or <code>true</code> is the default. <span class="right">Correct fact</span>: the default is <code>false</code>, which renders multivalue fields as a set of unique values ordered alphabetically. <code>mvlist=true</code> renders them as a list of the original event values in arrival order. You can also pass a field list to make only those fields render as lists.</p>
+<p class="trap" id="T-03-08"><span class="tid">T-03-08</span> <code>unifyends</code> is offered with an independent default. <span class="wrong">Wrong belief</span>: <code>unifyends</code> is always <code>true</code>. <span class="right">Correct fact</span>: its default is <code>true</code> because it is set to the same default value as <code>connected</code>. Setting <code>connected=false</code> makes <code>unifyends=false</code>.</p>
+<p class="trap" id="T-03-09"><span class="tid">T-03-09</span> A question asks which command is more efficient in a distributed deployment. <span class="wrong">Wrong belief</span>: they are equivalent, or <code>transaction</code> wins because it makes fewer results. <span class="right">Correct fact</span>: <code>stats</code> is a transforming command and performs more efficiently, especially in a distributed environment. <code>transaction</code> is a centralized streaming command that only works on the search head.</p>
+<p class="trap" id="T-03-10"><span class="tid">T-03-10</span> <code>... | transaction clientip | where count&gt;5</code>. <span class="wrong">Wrong belief</span>: <code>transaction</code> produces a <code>count</code> field. <span class="right">Correct fact</span>: <code>transaction</code> produces <code>eventcount</code>. <code>count</code> is what <code>stats</code> produces. This filter returns nothing.</p>
+<p class="trap" id="T-03-11"><span class="tid">T-03-11</span> <code>... | append [search ...] | transaction sessionid</code>. <span class="wrong">Wrong belief</span>: <code>append</code> and <code>transaction</code> compose freely. <span class="right">Correct fact</span>: you cannot use a <code>transaction</code> command after you use an <code>append</code> command. Use <code>stats</code> to group after an <code>append</code>.</p>
+<p class="trap" id="T-03-12"><span class="tid">T-03-12</span> <code>first()</code> and <code>latest()</code> are treated as synonyms. <span class="wrong">Wrong belief</span>: <code>first()</code> returns the chronologically earliest value. <span class="right">Correct fact</span>: <code>first()</code> returns the first seen value in processing order, which is the most recent instance, and <code>last()</code> returns the oldest instance in processing order. For time order use <code>earliest()</code> and <code>latest()</code>. Processing order is not necessarily chronological order.</p>
+<p class="trap" id="T-03-13"><span class="tid">T-03-13</span> <code>values()</code> and <code>list()</code> are offered interchangeably as the <code>stats</code> equivalent of a transaction's multivalue field. <span class="wrong">Wrong belief</span>: they differ only in name. <span class="right">Correct fact</span>: <code>values()</code> returns distinct values in lexicographical order with no default cap; <code>list()</code> returns every value in event order and returns only the first 100 if a field has more than 100 values.</p>
+<p class="trap" id="T-03-14"><span class="tid">T-03-14</span> <code>maxevents=-1</code> is read as &quot;no events allowed&quot;. <span class="wrong">Wrong belief</span>: a negative value means zero. <span class="right">Correct fact</span>: a negative value deactivates the constraint, exactly as it does for <code>maxspan</code> and <code>maxpause</code>.</p>
+<p class="trap" id="T-03-15"><span class="tid">T-03-15</span> <code>startswith=&quot;/cart&quot;</code> is described as a regular expression. <span class="wrong">Wrong belief</span>: <code>startswith</code> and <code>endswith</code> take regex. <span class="right">Correct fact</span>: a <code>&lt;filter-string&gt;</code> is a search expression, a quoted search expression in parentheses, or <code>eval(&lt;eval-expression&gt;)</code> that evaluates to a Boolean. Use <code>eval(match(...))</code> if you genuinely need a regex.</p>
+<p class="trap" id="T-03-16"><span class="tid">T-03-16</span> A question claims <code>transaction host cookie</code> means <code>host AND cookie</code>. <span class="wrong">Wrong belief</span>: the field list is a strict conjunction. <span class="right">Correct fact</span>: Splunk software does not necessarily interpret multiple fields as a conjunction or a disjunction. If a transitive relationship exists between the fields and the related events appear in the right sequence, <code>transaction</code> uses it. Separately, a result with no <code>host</code> value can join a transaction with <code>host=mylaptop</code>, while <code>host=mylaptop</code> and <code>host=myserver</code> can never share one.</p>
+<p class="trap" id="T-03-17"><span class="tid">T-03-17</span> <code>join</code> is offered as the general-purpose correlation answer. <span class="wrong">Wrong belief</span>: <code>join</code> scales like SQL. <span class="right">Correct fact</span>: <code>join</code> defaults to <code>max=1</code> subsearch result per main result, and the right-side dataset defaults to a maximum of 50,000 rows over a maximum runtime of 60 seconds. The docs recommend <code>stats</code> and <code>transaction</code> over <code>join</code> and <code>append</code>.</p>
+<p class="trap" id="T-03-18"><span class="tid">T-03-18</span> <code>connected=false</code> is offered as a way to change time behaviour. <span class="wrong">Wrong belief</span>: <code>connected</code> affects <code>maxspan</code> or <code>maxpause</code>. <span class="right">Correct fact</span>: <code>connected</code> is only relevant when a field or field list is specified, and it governs one narrow case: an event that carries the transaction's required fields but where none of those fields has yet been instantiated in the open transaction.</p>
+<p class="trap" id="T-03-19"><span class="tid">T-03-19</span> The Apress book's &quot;1000 event max&quot; is read as a hard product ceiling. <span class="wrong">Wrong belief</span>: transactions can never exceed 1000 events. <span class="right">Correct fact</span>: the accurate phrasing is that by default there is a limit of 1000 events per transaction. <code>1000</code> is the <code>maxevents</code> default, it is settable per search or per <code>transactiontypes.conf</code> stanza, and a negative value removes the limit entirely. The other ceilings are <code>maxopentxn</code> (<code>5000</code> by default) and <code>maxopenevents</code> (<code>100000</code> by default), and those cause eviction rather than truncation. Direction matters too: a group that runs past 1000 events argues for <code>stats</code>, never for <code>transaction</code>.</p>
+<p class="trap" id="T-03-20"><span class="tid">T-03-20</span> <code>keepevicted</code> is confused with <code>keeporphans</code>. <span class="wrong">Wrong belief</span>: they do the same thing. <span class="right">Correct fact</span>: <code>keepevicted=true</code> outputs transactions that memory pressure or a missing close condition left open, identified by <code>closed_txn=0</code>. <code>keeporphans=true</code> outputs events that never belonged to any transaction, identified by <code>_txn_orphan=1</code>. Both default to <code>false</code>. Note that <code>transactiontypes.conf.spec</code> describes the eviction marker as an <code>evicted</code> field; the <code>transaction</code> command reference, which is the authority for the command, uses <code>closed_txn</code>.</p>
+<p class="trap" id="T-03-21"><span class="tid">T-03-21</span> A <code>limits.conf</code> setting is offered as the way to raise how many events one transaction may hold. <span class="wrong">Wrong belief</span>: <code>max_events_per_bucket</code> controls the per-transaction event ceiling. <span class="right">Correct fact</span>: <code>max_events_per_bucket</code> sits in the <code>[search]</code> stanza, where it caps the events retrieved for each timeline bucket in searches with <code>status_buckets&gt;0</code>, and has nothing to do with <code>transaction</code>. The <code>[transactions]</code> stanza holds only <code>maxopentxn</code> and <code>maxopenevents</code>, both also settable as memory control options on the command. The events-per-transaction ceiling is the command's own <code>maxevents</code>.</p>
+<p class="trap" id="T-03-22"><span class="tid">T-03-22</span> A question lists the fields a bare <code>... | transaction JSESSIONID</code> adds and slips <code>maxspan</code> into the list. <span class="wrong">Wrong belief</span>: the options that shape a group come back as fields. <span class="right">Correct fact</span>: <code>maxspan</code>, <code>maxpause</code>, and <code>maxevents</code> are inputs only. The command adds <code>duration</code> and <code>eventcount</code>, sets <code>closed_txn</code>, and creates <code>_txn_orphan</code> and <code>transactiontype</code> only under the relevant options. No field named <code>transaction</code> exists either, so filters shaped like <code>where transaction=&quot;REJECT&quot;</code> match nothing.</p>
+<p class="trap" id="T-03-23"><span class="tid">T-03-23</span> <code>index=main REJECT | transaction sessionid</code> is offered as the way to see the sessions containing a rejection. <span class="wrong">Wrong belief</span>: pre-filtering on a term is the same as filtering the finished groups. <span class="right">Correct fact</span>: the pre-pipe term discards every event that does not carry it, so each session contributes only its <code>REJECT</code> events and you get one-event transactions with <code>duration=0</code>. Group first, then <code>| search REJECT</code>, which matches the preserved <code>_raw</code> of any member and returns the whole session.</p>
+<p class="trap" id="T-03-24"><span class="tid">T-03-24</span> <code>streamstats</code> is offered as the efficient way to group events by fields in a large environment. <span class="wrong">Wrong belief</span>: <code>streamstats</code> is a cheaper <code>stats</code>. <span class="right">Correct fact</span>: <code>streamstats</code> adds running aggregates to each event as it passes and returns every event; it never collapses events into a group. The grouping commands are <code>stats</code> and <code>transaction</code>, recommended by the docs over <code>join</code> and <code>append</code>.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.</p>
+<p>Step 1, build a transaction and read its contract. In Splunk Web open Search &amp; Reporting, set the time range to All time, and run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">30m</span> <span class="t-opt">maxpause</span><span class="t-op">=</span><span class="t-time">10m</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">_time</span> <span class="t-field">JSESSIONID</span> <span class="t-field">duration</span> <span class="t-field">eventcount</span> <span class="t-field">closed_txn</span> <span class="t-field">action</span></code></pre></div>
+<p>Confirm on the Statistics tab that <code>duration</code> is in seconds, that <code>eventcount</code> is an integer, and that <code>action</code> is multivalue on multi-step sessions.</p>
+<p>Step 2, prove that field rendering is controlled by <code>mvlist</code>. Run the same search twice, with and without <code>mvlist=true</code> on the <code>transaction</code> clause. With the default the <code>action</code> column shows a short alphabetical set; with <code>mvlist=true</code> it shows one entry per member event in arrival order.</p>
+<p>Step 3, prove the <code>closed_txn</code> rule. Run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-opt">endswith</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span> <span class="t-opt">keepevicted</span><span class="t-op">=</span><span class="t-kw">true</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">closed_txn</span></code></pre></div>
+<p>Then run it again with <code>maxspan=30m</code> added. The first search returns everything under <code>closed_txn=0</code> because <code>endswith</code> alone does not close a transaction. Adding <code>maxspan</code> moves rows into <code>closed_txn=1</code>.</p>
+<p>Step 4, prove the ordering requirement. Run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span> <span class="t-opt">count</span><span class="t-op">=</span><span class="t-num">20</span> <span class="t-pipe">|</span> <span class="t-cmd">streamstats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">_time</span><span class="t-op">=</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">+</span><span class="t-num">10</span><span class="t-op">*</span><span class="t-func">count</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;nobody&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">user</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">11s</span></code></pre></div>
+<p>You get a single transaction with <code>eventcount=10</code> and <code>duration=90</code>, which is wrong. Insert <code>| sort -_time</code> immediately before <code>| transaction</code> and rerun. You now get five two-event transactions with <code>duration=10</code>, and the last one has <code>closed_txn=0</code>.</p>
+<p>Step 5, create a reusable transaction type. Create <code>$SPLUNK_HOME/etc/system/local/transactiontypes.conf</code> with:</p>
+<pre class="plain lang-ini"><code>[buttercup_session]
+fields = JSESSIONID
+maxspan = 30m
+maxpause = 10m
+maxevents = 100
+mvlist = false</code></pre>
+<p>In Splunk Web go to Settings, then Server controls, then Restart Splunk. After the restart, verify with:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-opt">name</span><span class="t-op">=</span><span class="t-field">buttercup_session</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">transactions</span><span class="t-op">,</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">duration</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_seconds</span><span class="t-op">,</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">eventcount</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">biggest</span></code></pre></div>
+<p>Then confirm that an inline option overrules the stanza:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-opt">name</span><span class="t-op">=</span><span class="t-field">buttercup_session</span> <span class="t-opt">maxevents</span><span class="t-op">=</span><span class="t-num">3</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">eventcount</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">biggest</span></code></pre></div>
+<p><code>biggest</code> must now be <code>3</code> or less.</p>
+<p>Step 6, save the report. With the step 5 verification search finalized, click Save As, select Report, title it <code>buttercup_session_summary</code>, and save.</p>
+<p>Verification search that proves the whole lab worked:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-16">Copy</button></div><pre id="spl-16"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-opt">name</span><span class="t-op">=</span><span class="t-field">buttercup_session</span> <span class="t-opt">keeporphans</span><span class="t-op">=</span><span class="t-kw">true</span> <span class="t-opt">keepevicted</span><span class="t-op">=</span><span class="t-kw">true</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">bucket</span><span class="t-op">=</span><span class="t-func">case</span><span class="t-op">(</span><span class="t-opt">_txn_orphan</span><span class="t-op">==</span><span class="t-num">1</span><span class="t-op">,</span><span class="t-str">&quot;orphan&quot;</span><span class="t-op">,</span> <span class="t-opt">closed_txn</span><span class="t-op">==</span><span class="t-num">0</span><span class="t-op">,</span><span class="t-str">&quot;open_or_evicted&quot;</span><span class="t-op">,</span> <span class="t-num">1</span><span class="t-op">==</span><span class="t-num">1</span><span class="t-op">,</span><span class="t-str">&quot;closed&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">results</span><span class="t-op">,</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">eventcount</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">events</span> <span class="t-kw">BY</span> <span class="t-field">bucket</span></code></pre></div>
+<p>If <code>transactiontypes.conf</code> was picked up you get results in the <code>closed</code> bucket without specifying any inline constraint, because the stanza supplies <code>maxspan</code>, <code>maxpause</code>, and <code>maxevents</code>.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>
+<p>A search reads <code>index=web sourcetype=access_* | transaction clientip</code>. What are the defaults in effect for <code>maxspan</code>, <code>maxpause</code>, and <code>maxevents</code>?</p>
+<p>A. <code>maxspan=-1</code>, <code>maxpause=-1</code>, <code>maxevents=1000</code>
+B. <code>maxspan=30s</code>, <code>maxpause=5s</code>, <code>maxevents=1000</code>
+C. <code>maxspan=-1</code>, <code>maxpause=-1</code>, <code>maxevents=-1</code>
+D. <code>maxspan=0</code>, <code>maxpause=0</code>, <code>maxevents=1000</code></p>
+</li>
+<li>
+<p>Which field does <code>transaction</code> add that tells you whether a constraint actually closed the group?</p>
+<p>A. <code>eventcount</code>
+B. <code>closed_txn</code>
+C. <code>_txn_orphan</code>
+D. <code>transactiontype</code></p>
+</li>
+<li>
+<p><code>... | transaction sessionid maxspan=10m | where eventcount&gt;5</code> returns results. Which single change makes the search return nothing?</p>
+<p>A. Changing <code>where</code> to <code>search</code>
+B. Changing <code>eventcount</code> to <code>count</code>
+C. Moving <code>| where eventcount&gt;5</code> after a <code>| table</code> command
+D. Adding <code>keeporphans=true</code></p>
+</li>
+<li>
+<p>A support team needs the total duration and the number of steps for every order, where <code>order_id</code> is globally unique and never reused, over a 30 day search that runs across four indexers. Which search is correct and most efficient?</p>
+<p>A. <code>index=orders | transaction order_id | table order_id duration eventcount</code>
+B. <code>index=orders | stats range(_time) AS duration, count AS eventcount BY order_id</code>
+C. <code>index=orders | transaction order_id keepevicted=true | stats values(duration) BY order_id</code>
+D. <code>index=orders | join order_id [search index=orders | stats count]</code></p>
+</li>
+<li>
+<p>Web sessions are identified by a <code>cookie</code> value that the application recycles across days. A session ends when the user hits the logout page. Which search groups the sessions correctly?</p>
+<p>A. <code>... | stats range(_time) AS duration BY cookie</code>
+B. <code>... | transaction cookie mvlist=true</code>
+C. <code>... | transaction cookie endswith=&quot;logout&quot;</code>
+D. <code>... | selfjoin cookie</code></p>
+</li>
+<li>
+<p>What does <code>mvlist=false</code>, the default, do to a field whose members carry the values <code>view, addtocart, view, purchase</code> in that order?</p>
+<p>A. Returns <code>view addtocart view purchase</code> in arrival order
+B. Returns <code>addtocart purchase view</code> as a unique set ordered alphabetically
+C. Suppresses the field from the output entirely
+D. Returns only <code>view</code>, the first value seen</p>
+</li>
+<li>
+<p>Which statement about command types is correct?</p>
+<p>A. <code>transaction</code> is transforming and <code>stats</code> is centralized streaming
+B. Both are transforming commands
+C. <code>transaction</code> is centralized streaming and <code>stats</code> is transforming
+D. Both are distributable streaming commands</p>
+</li>
+<li>
+<p>A search is written as <code>index=a | append [search index=b] | transaction request_id</code>. What is wrong with it?</p>
+<p>A. Nothing; this is the recommended pattern for merging two indexes
+B. <code>append</code> must come after <code>transaction</code>
+C. You cannot use a <code>transaction</code> command after you use an <code>append</code> command
+D. <code>transaction</code> requires <code>maxspan</code> when the input comes from a subsearch</p>
+</li>
+<li>
+<p><code>limits.conf</code> on the search head contains the stanza below, and a user runs the search below it. What is the effect on the search?</p>
+</li>
+</ol>
+<pre class="plain lang-ini"><code>[transactions]
+maxopentxn = 5000
+maxopenevents = 100000</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-17">Copy</button></div><pre id="spl-17"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">app</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">session_id</span> <span class="t-opt">maxevents</span><span class="t-op">=</span><span class="t-op">-</span><span class="t-num">1</span></code></pre></div>
+<p>A. The search fails, because <code>maxevents</code> cannot take a negative value
+B. No per-transaction event cap applies, but eviction still starts once the open pool exceeds the stanza values, and evicted results are discarded
+C. Each transaction is capped at 5000 events, because the stanza overrules the inline option
+D. Each transaction is capped at 1000 events, because a negative value falls back to the default</p>
+<ol start="10">
+<li>A user runs <code>index=payments ERROR | transaction order_id maxspan=10m</code> and reports that almost every result has <code>eventcount=1</code> and <code>duration=0</code>, although each order clearly writes many events. What explains the output?</li>
+</ol>
+<p>A. <code>maxspan=10m</code> caps the gap between consecutive events, so any order with a longer gap was split into single events
+B. The pre-pipe <code>ERROR</code> term discarded every event that does not contain it, so only the error events of each order ever reached the command
+C. <code>maxevents</code> must be set explicitly before <code>transaction</code> will group more than one event
+D. <code>order_id</code> must be declared in a <code>transactiontypes.conf</code> stanza before it can group events</p>
+<details><summary>Answers</summary>
+<ol>
+<li>
+<p><strong>A.</strong> <code>maxspan</code> and <code>maxpause</code> both default to <code>-1</code>, meaning no limit, and <code>maxevents</code> defaults to <code>1000</code>. B is the values from the most-copied example in the docs (<code>maxspan=30s maxpause=5s</code>), not defaults. C is wrong on <code>maxevents</code>: a negative value would deactivate the constraint, but the shipped default is <code>1000</code>. D is wrong because <code>0</code> is not the default for either time option and would be a meaningless constraint.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>closed_txn</code> is <code>1</code> for non-evicted, closed transactions and <code>0</code> for evicted ones, and is set to <code>1</code> when one of <code>maxevents</code>, <code>maxspan</code>, <code>maxpause</code>, or <code>startswith</code> is specified. A, <code>eventcount</code>, is the number of member events and says nothing about closure. C, <code>_txn_orphan</code>, marks results that were never part of any transaction and only appears with <code>keeporphans=true</code>. D, <code>transactiontype</code>, is the <code>transactiontypes.conf</code> stanza name and only appears when <code>name=</code> is used.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>transaction</code> creates <code>eventcount</code>, not <code>count</code>; filtering on a field that does not exist returns nothing. A is wrong because <code>search</code> and <code>where</code> both work on <code>eventcount</code> at that point in the pipeline. C is wrong because <code>table</code> keeps <code>eventcount</code> if you list it, and in any case moving a filter later does not make it match nothing. D is wrong because <code>keeporphans=true</code> adds results rather than removing them.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>order_id</code> is a single unique identifier and only aggregates are required, so <code>stats</code> is both correct and more efficient, especially in a distributed environment. A works but is a centralized streaming command that holds transactions in search head memory over a 30 day window for no benefit. C is worse still: it runs <code>transaction</code> and then aggregates the result, doing the expensive step first. D is a <code>join</code> with no correlation logic, and <code>join</code> is capped at 50,000 right-side rows over 60 seconds by default.</p>
+</li>
+<li>
+<p><strong>C.</strong> A recycled identifier plus an explicit end message is the exact case the docs name for <code>endswith</code>. A is wrong because a recycled <code>cookie</code> makes <code>stats</code> merge unrelated sessions from different days into one group. B groups by <code>cookie</code> but has no boundary at all, so recycled cookies still merge; <code>mvlist</code> only changes rendering. D, <code>selfjoin</code>, joins rows to other rows in the same result set and does not build time-bounded groups.</p>
+</li>
+<li>
+<p><strong>B.</strong> The default <code>mvlist=false</code> renders multivalue fields as a set of unique field values ordered alphabetically. A describes <code>mvlist=true</code>, which is a list of the original event values in arrival order. C is wrong: the field is present, just deduplicated and sorted. D describes what <code>first()</code> would do in a <code>stats</code> command, not what <code>transaction</code> does.</p>
+</li>
+<li>
+<p><strong>C.</strong> <code>transaction</code> is documented as a centralized streaming command, which only works on the search head, and <code>stats</code> is documented as a transforming command. A inverts both. B is wrong because <code>transaction</code> does not order results into a data table; its output stays an events list. D is wrong for both: neither command is distributable streaming, which is the class that includes <code>eval</code>, <code>where</code>, <code>fields</code>, and <code>rename</code>.</p>
+</li>
+<li>
+<p><strong>C.</strong> The <code>join</code> command reference states plainly that you cannot use a <code>transaction</code> command after you use an <code>append</code> command, and recommends grouping with <code>stats</code> instead. A is wrong for that reason and because <code>union</code> is the better merge command anyway. B is wrong: <code>append</code> is a transforming command and there is no rule forcing it after <code>transaction</code>. D is invented; <code>transaction</code> has no required arguments at all.</p>
+</li>
+<li>
+<p><strong>B.</strong> A negative <code>maxevents</code> deactivates the events-per-transaction constraint, so nothing caps group size, but the open pool is still bounded: <code>maxopentxn</code> and <code>maxopenevents</code> are the <code>[transactions]</code> settings the command reads for its memory control options, and exceeding either starts least-recently-used eviction. <code>keepevicted</code> defaults to <code>false</code>, so evicted transactions never appear. A is wrong because a negative value is the documented way to switch the constraint off. C is wrong twice over: <code>maxopentxn</code> counts open transactions in the pool, not events inside one transaction, and an inline option overrules the configured value rather than the reverse. D invents a fallback; negative means deactivated, not &quot;use 1000&quot;.</p>
+</li>
+<li>
+<p><strong>B.</strong> Anything before the first pipe filters events, not groups, so only the <code>ERROR</code> events survive to reach <code>transaction</code>, and an order that wrote one error yields a one-event transaction with <code>duration=0</code>. Group first and put <code>| search ERROR</code> after <code>transaction</code> to keep whole orders. A misdefines <code>maxspan</code>, which bounds the time from the earliest to the latest event in a group; the gap between consecutive events is <code>maxpause</code>. C is wrong because <code>maxevents</code> already defaults to <code>1000</code> and grouping does not depend on setting it. D is wrong because a <code>transactiontypes.conf</code> stanza is only needed for the <code>name=</code> argument; an inline field list needs no configuration.</p>
+</li>
+</ol>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/about-event-grouping-and-correlation" target="_blank" rel="noopener">About event grouping and correlation</a> - the five correlation mechanisms, and the sentence recommending <code>stats</code> and <code>transaction</code> over <code>join</code> and <code>append</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/about-transactions" target="_blank" rel="noopener">About transactions</a> - the two cases where <code>transaction</code> is right, and the <code>trade_id</code> pairs behind sub-objective 3.6. Read it twice. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/transaction" target="_blank" rel="noopener">transaction command reference</a> - every option and default, the <code>closed_txn</code> rule, the descending chronological order requirement, and seven worked examples. The most exam-relevant page in the section. 30 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/identify-and-group-events-into-transactions" target="_blank" rel="noopener">Identify and group events into transactions</a> - field-list semantics, including that an event with no value for the field can still join. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/transactions/search-for-transactions" target="_blank" rel="noopener">Search for transactions</a> - <code>transactiontype</code>, <code>match=closest</code>, and the macro combination. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/transactions/configure-transaction-types" target="_blank" rel="noopener">Configure transaction types</a> - <code>transactiontypes.conf</code> attributes and defaults, needed for <code>name=</code>. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/stats" target="_blank" rel="noopener">stats command reference</a> - the function table, the transforming-command statement, and the note that <code>first</code>/<code>last</code> are not time ordered. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/event-order-functions" target="_blank" rel="noopener">Event order functions</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/time-functions" target="_blank" rel="noopener">Time functions</a> - the <code>first</code>/<code>last</code> versus <code>earliest</code>/<code>latest</code> table. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/multivalue-stats-and-chart-functions" target="_blank" rel="noopener">Multivalue stats and chart functions</a> - <code>values()</code> versus <code>list()</code> and the 100-value cap on <code>list()</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/quick-reference/command-types" target="_blank" rel="noopener">Command types</a> - the classification of <code>transaction</code>, <code>stats</code>, <code>join</code>, <code>append</code>, <code>appendcols</code>, and <code>union</code>. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/join" target="_blank" rel="noopener">join command reference</a> - the &quot;Alternative commands&quot; table, the clearest published statement of when to pick <code>transaction</code> over <code>stats</code>. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/about-subsearches" target="_blank" rel="noopener">About subsearches</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/use-subsearch-to-correlate-events" target="_blank" rel="noopener">Use subsearch to correlate events</a> - background for the correlation approaches the blueprint touches indirectly. 12 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/splunk-enterprise-admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/limits.conf" target="_blank" rel="noopener">limits.conf</a> - the <code>[transactions]</code> stanza (<code>maxopentxn</code>, <code>maxopenevents</code>) and, separately, <code>max_events_per_bucket</code> under <code>[search]</code>. 5 minutes.</li>
+</ol>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="02-filtering-and-formatting.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Filtering and formatting</span></a><a class="pn pn-next" href="04-field-extractions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Field extractions</span></a></nav>
+      <p class="doc-foot">Built from <code>topics/03-correlating-events.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#blueprint-mapping"><span class="toc-text">Blueprint mapping</span><span class="mins">2 min</span></a>
+<a class="h2" href="#what-it-is"><span class="toc-text">What it is</span><span class="mins">2 min</span></a>
+<a class="h2" href="#syntax-and-options"><span class="toc-text">Syntax and options</span><span class="mins">4 min</span></a>
+<a class="h2" href="#result-contract"><span class="toc-text">Result contract</span><span class="mins">4 min</span></a>
+<a class="h2" href="#worked-examples"><span class="toc-text">Worked examples</span><span class="mins">5 min</span></a>
+<a class="h2" href="#decision-rules"><span class="toc-text">Decision rules</span><span class="mins">5 min</span></a>
+<a class="h2" href="#traps"><span class="toc-text">Traps</span><span class="mins">7 min</span></a>
+<a class="h2" href="#lab"><span class="toc-text">Lab</span><span class="mins">2 min</span></a>
+<a class="h2" href="#self-check"><span class="toc-text">Self-check</span><span class="mins">7 min</span></a>
+<a class="h2" href="#docs"><span class="toc-text">Docs</span><span class="mins">1 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">15% of the exam</span>
+      <span class="onpage-time">39 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+<script src="../mermaid-init.js"></script>
+</body>
+</html>

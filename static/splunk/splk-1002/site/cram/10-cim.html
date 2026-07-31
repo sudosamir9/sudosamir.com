@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.0 CIM Add-On - Cram | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/10-cim.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>CIM</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/10-cim.html">Study</a><a class="on" href="10-cim.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="10.0-cim-add-on---cram">10.0 CIM Add-On - Cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-cmd">search</span><span class="t-pipe">|</span><span class="t-field">flat</span><span class="t-pipe">|</span><span class="t-field">acceleration_search</span><span class="t-pipe">|</span><span class="t-field">search_string</span><span class="t-pipe">|</span><span class="t-field">flat_string</span><span class="t-pipe">|</span><span class="t-field">acceleration_search_string</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">strict_fields</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">stats-func</span><span class="t-op">&gt;</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">root</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">where</span> <span class="t-opt">nodename</span><span class="t-op">=&lt;</span><span class="t-field">lineage</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">fields</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">span</span><span class="t-op">=&lt;</span><span class="t-field">t</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=&lt;</span><span class="t-field">models</span><span class="t-pipe">|</span><span class="t-field">objects</span><span class="t-pipe">|</span><span class="t-field">attributes</span><span class="t-op">&gt;</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span> <span class="t-opt">object</span><span class="t-op">=&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span> <span class="t-opt">nodename</span><span class="t-op">=&lt;</span><span class="t-field">lineage</span><span class="t-op">&gt;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:</span><span class="t-op">&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span>
+<span class="t-pipe">|</span> <span class="t-macro">`cim_datamodelinfo`</span></code></pre></div>
+<pre class="plain lang-ini"><code># eventtypes.conf
+[buttercup_web]
+search = sourcetype=access_combined_wcookie
+
+# tags.conf
+[eventtype=buttercup_web]
+web = enabled
+
+# props.conf
+[access_combined_wcookie]
+FIELDALIAS-cim_src = clientip AS src
+
+[secure]
+EVAL-action = case(match(_raw,&quot;(?i)Accepted&quot;),&quot;success&quot;, match(_raw,&quot;(?i)Failed&quot;),&quot;failure&quot;, true(),&quot;error&quot;)</code></pre>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CIM data model acceleration</td>
+<td>disabled, every model</td>
+</tr>
+<tr>
+<td>CIM Setup Indexes allowlist</td>
+<td>all indexes</td>
+</tr>
+<tr>
+<td><code>datamodel</code> search mode</td>
+<td>none, returns JSON</td>
+</tr>
+<tr>
+<td><code>strict_fields</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>allow_old_summaries</code> (datamodel, tstats)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>summariesonly</code> (datamodel, tstats)</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>Add-on install tier</td>
+<td>search heads only</td>
+</tr>
+<tr>
+<td>Splunkbase app ID / folder</td>
+<td>1621 / <code>Splunk_SA_CIM</code></td>
+</tr>
+<tr>
+<td>Model JSON path</td>
+<td><code>$SPLUNK_HOME/etc/apps/Splunk_SA_CIM/default/data/models</code></td>
+</tr>
+<tr>
+<td>CIM Setup page</td>
+<td>Apps &gt; Manage Apps &gt; Set up, or <code>/en-US/app/search/cim_setup</code></td>
+</tr>
+<tr>
+<td>Setup capability</td>
+<td><code>accelerate_datamodel</code> (4.12.0+), <code>admin_all_objects</code> (4.11.0 and below)</td>
+</tr>
+<tr>
+<td>Common action model index</td>
+<td><code>cim_modactions</code> (<code>cim_summary</code> removed)</td>
+</tr>
+<tr>
+<td>Documented models in 8.6</td>
+<td>26, two deprecated (Application State, Change Analysis, both 4.12.0)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<p>Right fields, no rows in the model = missing tag. Rows in the model, empty columns = missing field mapping. Rename only = field alias. Derive or normalize a value = calculated field (EVAL). Value absent or coded = lookup. Pipeline order: extraction, alias, calculated field, lookup, event type, tag. Child dataset inherits parent tags and adds its own.</p>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Search-time only. Schema-on-the-fly, raw data left intact, nothing reindexed.</li>
+<li>Tags are the entry condition. Compliance = correct tags AND populated required fields.</li>
+<li>Acceleration is OFF by default; <code>summariesonly=true</code> returns zero rows on a stock CIM model.</li>
+<li><code>datamodel ... search</code> returns dotted <code>Dataset.field</code> names; <code>flat</code> strips the prefix.</li>
+<li><code>datamodelsimple</code> ships with the add-on; <code>datamodel</code>, <code>tstats</code>, <code>pivot</code>, <code>from</code> are core SPL.</li>
+</ol>
+<h2 id="tag-quick-list">Tag quick list<a class="anchor" href="#tag-quick-list" aria-label="Link to this section">#</a></h2>
+<p><code>alert</code> Alerts | <code>authentication</code> Authentication | <code>certificate</code> Certificates | <code>change</code> Change | <code>data</code>,<code>access</code> Data Access | <code>database</code> Databases | <code>dlp</code>,<code>incident</code> DLP | <code>email</code> Email | <code>process</code>,<code>report</code> Endpoint Processes | <code>service</code>,<code>report</code> Endpoint Services | <code>endpoint</code>,<code>filesystem</code> Endpoint Filesystem | <code>endpoint</code>,<code>registry</code> Endpoint Registry | <code>listening</code>,<code>port</code> Endpoint Ports | <code>track_event_signatures</code> Event Signatures | <code>messaging</code> Interprocess Messaging | <code>ids</code>,<code>attack</code> Intrusion Detection | <code>inventory</code> Inventory | <code>jvm</code> JVM | <code>malware</code>,<code>attack</code> Malware_Attacks | <code>malware</code>,<code>operations</code> Malware_Operations | <code>network</code>,<code>resolution</code>,<code>dns</code> DNS | <code>network</code>,<code>session</code> Network Sessions | <code>network</code>,<code>communicate</code> Network Traffic | <code>performance</code> Performance | <code>modaction</code> Splunk Audit Modular_Actions | <code>ticketing</code> Ticket Management | <code>update</code>,<code>status</code> Updates | <code>report</code>,<code>vulnerability</code> Vulnerabilities | <code>web</code> Web</p>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-10-01 search-time not index-time | T-10-02 acceleration off by default | T-10-03 tags required, not just fields | T-10-04 allowlist default is all indexes | T-10-05 search heads only | T-10-06 Inventory not &quot;Compute Inventory&quot; | T-10-07 dotted field names vs flat | T-10-08 alias runs before calc/lookup/eventtype/tag | T-10-09 datamodelsimple is add-on only | T-10-10 expected values are not enforced | T-10-11 Application State deprecated, use Endpoint | T-10-12 child datasets inherit parent tags | T-10-13 do not clone a CIM model | T-10-14 CIM Add-on vs Add-on Builder | T-10-15 <code>cim_modactions</code>, not <code>cim_summary</code></p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="09-data-models-and-pivot.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Data models and pivot</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/10-cim.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#tag-quick-list"><span class="toc-text">Tag quick list</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">3 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

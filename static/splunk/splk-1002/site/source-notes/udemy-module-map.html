@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Udemy course map: &amp;quot;Splunk: Zero to Power User&amp;quot; (Hailie Shaw) | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item current" href="udemy-module-map.html" aria-current="page"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../source-notes/udemy-module-map.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Practice and sources</span><span class="sep">/</span>
+        <span>Udemy module map</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="udemy-course-map-quotsplunk-zero-to-power-userquot-hailie-shaw">Udemy course map: &quot;Splunk: Zero to Power User&quot; (Hailie Shaw)</h1>
+<p>All 41 modules mapped to the official SPLK-1002 blueprint, so you can see exactly which parts of the course earn exam points, which are background, and which earn nothing on this exam. This is not a criticism of the course, which teaches Splunk as a product rather than as an exam. It is a triage tool for what to re-watch.</p>
+<h2 id="the-headline">The headline<a class="anchor" href="#the-headline" aria-label="Link to this section">#</a></h2>
+<p>Roughly 20 of 41 modules map to blueprint sections. Roughly 11 are off blueprint entirely (installation, data onboarding, lookups, dashboards, reports, alerts). The rest are foundations that the exam assumes without listing.</p>
+<p>The course also under-serves several things the exam does test. The gaps at the bottom of this file are the ones to care about.</p>
+<h2 id="coverage-by-module">Coverage by module<a class="anchor" href="#coverage-by-module" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Module</th>
+<th>Blueprint section</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Introduction</td>
+<td>none</td>
+<td>Orientation</td>
+</tr>
+<tr>
+<td>2</td>
+<td>What Makes Up Splunk</td>
+<td>none</td>
+<td>Off blueprint. Forwarder/indexer/search head architecture is SPLK-1003 material</td>
+</tr>
+<tr>
+<td>3A</td>
+<td>Demo of Lets Download Splunk</td>
+<td>none</td>
+<td>Off blueprint</td>
+</tr>
+<tr>
+<td>3B</td>
+<td>MacOS Installation</td>
+<td>none</td>
+<td>Off blueprint. SPLK-1003</td>
+</tr>
+<tr>
+<td>3C</td>
+<td>Demo of Getting the Practice Data</td>
+<td>none</td>
+<td>Off blueprint, but you need this data for the labs in this guide</td>
+</tr>
+<tr>
+<td>4A</td>
+<td>Getting Data into Splunk</td>
+<td>none</td>
+<td>Off blueprint. SPLK-1003 sections on inputs and parsing</td>
+</tr>
+<tr>
+<td>4B</td>
+<td>Demo of Data Preview and Creating Inputs</td>
+<td>none</td>
+<td>Off blueprint. SPLK-1003</td>
+</tr>
+<tr>
+<td>4C</td>
+<td>App vs Addon</td>
+<td>none</td>
+<td>Off blueprint, but the distinction matters for understanding what the CIM add-on is in section 10.0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Demo of Searching and Basic Navigation</td>
+<td>foundations</td>
+<td>Assumed knowledge. Covered in <code>topics/00-foundations-refresher.md</code></td>
+</tr>
+<tr>
+<td>6A</td>
+<td>Knowledge Objects</td>
+<td>underpins 4.0 to 10.0</td>
+<td>The KO taxonomy is the spine of seven blueprint sections</td>
+</tr>
+<tr>
+<td>6B</td>
+<td>Demo of KOs</td>
+<td>underpins 4.0 to 10.0</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Show me the Fields!</td>
+<td>4.0 + foundations</td>
+<td>Fields sidebar, Selected vs Interesting vs All, the 20% rule</td>
+</tr>
+<tr>
+<td>8A</td>
+<td>Search Processing Language</td>
+<td>foundations + 2.0</td>
+<td>Pipeline semantics, command types</td>
+</tr>
+<tr>
+<td>8B</td>
+<td>Demo of Building SPLs and Basic Commands</td>
+<td>foundations + 2.0</td>
+<td></td>
+</tr>
+<tr>
+<td>9A</td>
+<td>Transforming Your Search</td>
+<td><strong>1.0</strong></td>
+<td>Direct hit, 5% of the exam</td>
+</tr>
+<tr>
+<td>9B</td>
+<td>Transforming Commands</td>
+<td><strong>1.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>10A</td>
+<td>What are the Events Telling Me?</td>
+<td><strong>3.0</strong></td>
+<td>Direct hit, 15% of the exam, the heaviest section</td>
+</tr>
+<tr>
+<td>10B</td>
+<td>Demo of the Transaction Command</td>
+<td><strong>3.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>11A</td>
+<td>Manipulating Your Data</td>
+<td><strong>2.0</strong></td>
+<td>Direct hit, 10%</td>
+</tr>
+<tr>
+<td>11B</td>
+<td>Demo of eval, where, and search</td>
+<td><strong>2.0</strong></td>
+<td>Direct hit. Note the course does not cover <code>fillnull</code>, which is objective 2.3</td>
+</tr>
+<tr>
+<td>12A</td>
+<td>Fields, Part 2!</td>
+<td><strong>4.0 + 5.0</strong></td>
+<td>Direct hit, 20% combined</td>
+</tr>
+<tr>
+<td>12B</td>
+<td>Demo of Field Extracting</td>
+<td><strong>4.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>13A</td>
+<td>Lookups</td>
+<td>none</td>
+<td><strong>Off blueprint.</strong> Lookups do not appear anywhere in the SPLK-1002 blueprint</td>
+</tr>
+<tr>
+<td>13B</td>
+<td>Demo of Using Lookups</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>14A</td>
+<td>Visualize Your Data</td>
+<td>1.0 in part</td>
+<td>Partial. The transforming-command half counts, the visualization-picking half does not</td>
+</tr>
+<tr>
+<td>14B</td>
+<td>Demo of Chart, Chart, Chart.....stats.</td>
+<td><strong>1.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>15A</td>
+<td>Visualizations, Part 2!</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>15B</td>
+<td>Demo of More Dashboards!</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>16A</td>
+<td>Reports &amp; Drilldowns</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>16B</td>
+<td>Demo of Generating Reports, Drilldowns, Home Dashboard</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>17</td>
+<td>Alerts</td>
+<td>none</td>
+<td><strong>Off blueprint</strong></td>
+</tr>
+<tr>
+<td>18</td>
+<td>Welcome, Tags and Events!</td>
+<td><strong>6.0</strong></td>
+<td>Direct hit, 10%</td>
+</tr>
+<tr>
+<td>19A</td>
+<td>Macros</td>
+<td><strong>7.0</strong></td>
+<td>Direct hit, 10%</td>
+</tr>
+<tr>
+<td>19B</td>
+<td>Demo of Making Macros</td>
+<td><strong>7.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Workflows to Save You Time</td>
+<td><strong>8.0</strong></td>
+<td>Direct hit, 10%. This is the only module covering all three workflow action types</td>
+</tr>
+<tr>
+<td>21A</td>
+<td>Data Normalization &amp; Troubleshooting</td>
+<td><strong>5.0 + 10.0</strong></td>
+<td>Direct hit on aliases, calculated fields and CIM normalization</td>
+</tr>
+<tr>
+<td>21B</td>
+<td>Demo of All the random things we just covered</td>
+<td><strong>5.0 + 10.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>22A</td>
+<td>Datamodels</td>
+<td><strong>9.0</strong></td>
+<td>Direct hit, 10%</td>
+</tr>
+<tr>
+<td>22B</td>
+<td>Demo of Searching Datamodels</td>
+<td><strong>9.0</strong></td>
+<td>Direct hit</td>
+</tr>
+<tr>
+<td>23A</td>
+<td>The Common Information Model</td>
+<td><strong>10.0</strong></td>
+<td>Direct hit, 10%. The only real coverage you have of the section with no official Splunk course</td>
+</tr>
+<tr>
+<td>23B</td>
+<td>Demo of the CIM Add-on &amp; CIM Add-On Builder</td>
+<td><strong>10.0</strong></td>
+<td>Direct hit. Note the CIM Add-on Builder itself is not an exam topic</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="coverage-by-blueprint-section-the-other-direction">Coverage by blueprint section, the other direction<a class="anchor" href="#coverage-by-blueprint-section-the-other-direction" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Weight</th>
+<th>Udemy modules</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 Transforming commands</td>
+<td>5%</td>
+<td>9A, 9B, 14A, 14B</td>
+<td>Good coverage for the weight</td>
+</tr>
+<tr>
+<td>2.0 Filtering and formatting</td>
+<td>10%</td>
+<td>8A, 8B, 11A, 11B</td>
+<td>Good on eval, search and where. <code>fillnull</code> (objective 2.3) is not covered</td>
+</tr>
+<tr>
+<td>3.0 Correlating events</td>
+<td>15%</td>
+<td>10A, 10B</td>
+<td>Covers <code>transaction</code>. Does not do the transaction-vs-stats comparison, which is objective 3.6 and the single most tested idea in the section</td>
+</tr>
+<tr>
+<td>4.0 Field extractions</td>
+<td>10%</td>
+<td>7, 12A, 12B</td>
+<td>Good coverage of the Field Extractor</td>
+</tr>
+<tr>
+<td>5.0 Aliases and calculated fields</td>
+<td>10%</td>
+<td>12A, 21A, 21B</td>
+<td>Aliases covered. Calculated fields as a saved knowledge object are lighter than the 10% weight deserves</td>
+</tr>
+<tr>
+<td>6.0 Tags and event types</td>
+<td>10%</td>
+<td>18, 6A, 6B</td>
+<td>Reasonable. Priority semantics and event type nesting are thin</td>
+</tr>
+<tr>
+<td>7.0 Macros</td>
+<td>10%</td>
+<td>19A, 19B</td>
+<td>Covers basic macros. Objectives 7.3 and 7.4 are entirely about arguments, which need more than the course gives</td>
+</tr>
+<tr>
+<td>8.0 Workflow actions</td>
+<td>10%</td>
+<td>20</td>
+<td>One module for 10% of the exam. Re-read the topic file rather than relying on this</td>
+</tr>
+<tr>
+<td>9.0 Data models</td>
+<td>10%</td>
+<td>22A, 22B</td>
+<td>Good on building and searching. Acceleration is light</td>
+</tr>
+<tr>
+<td>10.0 CIM</td>
+<td>10%</td>
+<td>23A, 23B</td>
+<td>The best coverage available anywhere for this section, since Splunk has no course for it. Still needs the docs</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-the-course-does-not-give-you-that-the-exam-wants">What the course does not give you that the exam wants<a class="anchor" href="#what-the-course-does-not-give-you-that-the-exam-wants" aria-label="Link to this section">#</a></h2>
+<p>Work through these in the topic files rather than re-watching:</p>
+<ul>
+<li><code>fillnull</code>, which is a named blueprint objective (2.3) with its own bullet</li>
+<li>The transaction versus stats decision (3.6), including the stats equivalents <code>range(_time)</code>, <code>earliest()</code>, <code>latest()</code>, <code>values()</code></li>
+<li><code>transaction</code> options beyond <code>maxspan</code> and <code>maxpause</code>: <code>startswith</code>, <code>endswith</code>, <code>keeporphans</code>, <code>unifyends</code>, <code>keepevicted</code>, <code>connected</code>, <code>maxevents</code></li>
+<li>Macro arguments end to end (7.3, 7.4): the <code>name(n)</code> argument-count naming, <code>$arg$</code> substitution, the <code>args</code> list, validation expressions and error messages, eval-based definitions</li>
+<li>POST workflow actions (8.3) specifically, including that post arguments travel in the request body</li>
+<li>Calculated fields as a <code>Settings, Fields, Calculated fields</code> object rather than as <code>eval</code> typed into a search</li>
+<li>The search-time knowledge object precedence order, which decides what a lookup, an alias and a calculated field can each see</li>
+<li>Data model acceleration, <code>tstats</code>, and the <code>| from datamodel:</code> syntax</li>
+<li>The CIM data model catalogue and the required-versus-recommended field classification</li>
+<li><code>erex</code>, <code>fieldformat</code>, <code>eventstats</code>, <code>streamstats</code>, <code>xyseries</code>, <code>untable</code></li>
+</ul>
+<h2 id="what-to-ignore-for-this-exam">What to ignore for this exam<a class="anchor" href="#what-to-ignore-for-this-exam" aria-label="Link to this section">#</a></h2>
+<p>Modules 2, 3A, 3B, 4A, 4B, 13A, 13B, 15A, 15B, 16A, 16B and 17. That is roughly a quarter of the course. Two caveats: Module 3C is how you get the practice data these labs use, and Module 4C (App vs Addon) is worth two minutes because section 10.0 is entirely about an add-on. Lookups (13A, 13B) stay useful in real work and appear in <code>topics/00-foundations-refresher.md</code> in condensed form, and they do come back on SPLK-1004, so the time was not wasted.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="apress-part1-notes.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Apress part 1 notes</span></a></nav>
+      <p class="doc-foot">Built from <code>source-notes/udemy-module-map.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#the-headline"><span class="toc-text">The headline</span></a>
+<a class="h2" href="#coverage-by-module"><span class="toc-text">Coverage by module</span></a>
+<a class="h2" href="#coverage-by-blueprint-section-the-other-direction"><span class="toc-text">Coverage by blueprint section, the other direction</span></a>
+<a class="h2" href="#what-the-course-does-not-give-you-that-the-exam-wants"><span class="toc-text">What the course does not give you that the exam wants</span></a>
+<a class="h2" href="#what-to-ignore-for-this-exam"><span class="toc-text">What to ignore for this exam</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">7 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

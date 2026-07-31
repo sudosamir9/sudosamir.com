@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.0 Field Aliases and Calculated Fields (10%) - Cram | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/05-aliases-and-calculated-fields.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Aliases and calculated fields</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/05-aliases-and-calculated-fields.html">Study</a><a class="on" href="05-aliases-and-calculated-fields.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="5.0-field-aliases-and-calculated-fields-10---cram">5.0 Field Aliases and Calculated Fields- Cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<pre class="plain lang-ini"><code>[&lt;sourcetype&gt;|source::&lt;source&gt;|host::&lt;host&gt;]
+FIELDALIAS-&lt;class&gt; = (&lt;orig_field_name&gt; AS|ASNEW &lt;new_field_name&gt;)+
+EVAL-&lt;fieldname&gt;   = &lt;eval statement&gt;</code></pre>
+<p>Alias UI: Settings, Fields, Field aliases, New Field Alias. Form: Destination app, Name, Apply to (sourcetype / source / host) named, Field aliases (existing on the left, new alias on the right), Overwrite field values.</p>
+<p>Calc field UI: Settings, Fields, Calculated Fields row, Add new. Form: Destination app, Apply to named, Name, Eval expression. Expression is the right-hand side only: no <code>eval</code> keyword, no <code>fieldname =</code>.</p>
+<p>Valid: <code>FIELDALIAS-v = VendorID AS vendor_id VendorID AS vendor_name</code></p>
+<p>Invalid: <code>FIELDALIAS-f = userID AS user loginID AS user</code> (use <code>EVAL-user = coalesce(userID, loginID)</code>)</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search-time sequence</td>
+<td>1 field filters, 2 EXTRACT, 3 REPORT, 4 KV_MODE, 5 FIELDALIAS, 6 EVAL, 7 LOOKUP, 8 event types, 9 tags</td>
+</tr>
+<tr>
+<td><code>FIELDALIAS-&lt;class&gt;</code> default</td>
+<td>No default</td>
+</tr>
+<tr>
+<td><code>EVAL-&lt;fieldname&gt;</code> default</td>
+<td>No default</td>
+</tr>
+<tr>
+<td>Overwrite field values</td>
+<td>Not selected by default (writes <code>ASNEW</code>); selected writes <code>AS</code></td>
+</tr>
+<tr>
+<td><code>AS</code> when dest exists</td>
+<td>Value replaced by original</td>
+</tr>
+<tr>
+<td><code>AS</code> when original missing or empty</td>
+<td>Destination removed</td>
+</tr>
+<tr>
+<td><code>ASNEW</code> when dest exists</td>
+<td>Destination unchanged</td>
+</tr>
+<tr>
+<td><code>ASNEW</code> when original missing or empty</td>
+<td>Destination kept</td>
+</tr>
+<tr>
+<td><code>ASNEW</code> introduced</td>
+<td>Splunk 7.2.4</td>
+</tr>
+<tr>
+<td>Alias name characters</td>
+<td><code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, <code>_</code></td>
+</tr>
+<tr>
+<td>Aliases per field</td>
+<td>Many. One alias maps to exactly one field</td>
+</tr>
+<tr>
+<td>Alias reading another alias</td>
+<td>Only if the referenced alias's <code>&lt;class&gt;</code> sorts earlier. Step 5 runs in lexicographical order by class</td>
+</tr>
+<tr>
+<td><code>EVAL-</code> prefix case</td>
+<td><code>EVAL</code> not case-sensitive, hyphen required, <code>&lt;fieldname&gt;</code> IS case sensitive</td>
+</tr>
+<tr>
+<td>Multiple <code>EVAL-</code> in one stanza</td>
+<td>Processed in parallel, never chained</td>
+</tr>
+<tr>
+<td>Calc field vs same-named extraction</td>
+<td>Calculated field wins, even when the expression returns null</td>
+</tr>
+<tr>
+<td>Scope choices</td>
+<td>host, source, source type. Nothing else</td>
+</tr>
+<tr>
+<td>Wildcards in &quot;named&quot;</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td>Sharing on creation</td>
+<td>Private to creator</td>
+</tr>
+<tr>
+<td>Alias to <code>_time</code> or other internal field</td>
+<td>Unsupported, unpredictable results</td>
+</tr>
+<tr>
+<td>Alias collision, two <code>AS</code> configs</td>
+<td>Classes applied in lexicographical order, last one wins</td>
+</tr>
+<tr>
+<td>Calc field on an aliased source</td>
+<td>Not supported. Filter with <code>if()</code> inside the expression instead</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<p>Alias adds a name, <code>rename</code> replaces one. Alias if the value already exists under another name. Calculated field if the value must be derived, or if two source fields collapse into one name via <code>coalesce</code>. <code>eval</code> or <code>rename</code> in SPL if it only matters for this search. Anything reading a lookup output field goes in SPL after the lookup, never in a calculated field.</p>
+<p>Can reference: alias reads extractions only. Calc field reads extractions and aliases. Lookup reads extractions, aliases, calc fields. Event type reads all four. Tags read anything, including event types.</p>
+<p>Ordering inside a step is lexicographical by class for extractions, aliases and lookups, and priority then lexicographical for event types. That is the only way one object can consume another of the same type.</p>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>The original field survives aliasing. Both names return the same events.</li>
+<li><code>EVAL-</code> statements in one stanza run in parallel. <code>EVAL-response_time = response_time/1000</code> followed by <code>EVAL-bitrate = bytes*1000/response_time</code> still divides by milliseconds.</li>
+<li>The Eval expression box holds <code>round(bytes/1024, 2)</code>, never <code>eval kb = round(bytes/1024, 2)</code>.</li>
+<li>You cannot alias a calculated field, a lookup output field, an event type, or a tag. Silent failure, no error.</li>
+<li>A calculated field referencing a lookup output field is the one ordering violation that raises a visible error message.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-05-01 alias renames | T-05-02 alias vs rename | T-05-03 one alias, many originals | T-05-04 Overwrite default | T-05-05 calc reads lookup | T-05-06 alias a calc field | T-05-07 EVAL parallel | T-05-08 eval keyword in form | T-05-09 calc overrides on null | T-05-10 usable pre-pipe | T-05-11 scope triple | T-05-12 calc on aliased source | T-05-13 conf setting names | T-05-14 private on creation | T-05-15 aliasing <code>_time</code></p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="04-field-extractions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Field extractions</span></a><a class="pn pn-next" href="06-tags-and-event-types.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Tags and event types</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/05-aliases-and-calculated-fields.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">4 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

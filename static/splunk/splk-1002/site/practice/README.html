@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Practice and sources</summary>
+<a class="tree-item current" href="README.html" aria-current="page"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../practice/README.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Practice and sources</span><span class="sep">/</span>
+        <span>How to drill</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="practice">Practice</h1>
+<p>Practice-test questions as structured JSON, so a web interface can drill them, score them, and filter by weak area. Source: the Udemy course &quot;Splunk Core Certified Power User Practice Tests (SPLK-1002)&quot;, 165 questions across five tests.</p>
+<h2 id="layout">Layout<a class="anchor" href="#layout" aria-label="Link to this section">#</a></h2>
+<pre class="plain"><code>practice/
+  schema.json                  JSON Schema for a test file
+  udemy-tests/
+    tests.json                 manifest: which tests exist, blueprint weights, exam facts
+    test-1.json                25 questions
+    test-2.json                25 questions
+    test-3.json                25 questions
+    test-4.json                25 questions
+    test-final.json            65 questions, 59 of them duplicates
+  attempts/
+    example-attempt.json       shape of an attempt record
+  tracker.md                   attempt log and repeat-miss counter
+  weak-areas.md                regenerated after each attempt</code></pre>
+<p>Question files are immutable reference data. Attempts are separate files, so retaking a test never destroys the previous result and a UI can chart progress over time.</p>
+<h2 id="the-question-shape">The question shape<a class="anchor" href="#the-question-shape" aria-label="Link to this section">#</a></h2>
+<p>Every question carries the course's content verbatim plus a <code>guide</code> block that this study guide adds.</p>
+<pre class="plain lang-json"><code>{
+  &quot;id&quot;: &quot;t1-q23&quot;,
+  &quot;number&quot;: 23,
+  &quot;type&quot;: &quot;single&quot;,
+  &quot;stem&quot;: &quot;Which of the following searches will return events containing a tag named Privileged?&quot;,
+  &quot;options&quot;: [
+    { &quot;id&quot;: &quot;A&quot;, &quot;text&quot;: &quot;tag=Priv&quot;,       &quot;isCorrect&quot;: false, &quot;explanation&quot;: null },
+    { &quot;id&quot;: &quot;B&quot;, &quot;text&quot;: &quot;tag=Priv*&quot;,      &quot;isCorrect&quot;: true,  &quot;explanation&quot;: null },
+    { &quot;id&quot;: &quot;C&quot;, &quot;text&quot;: &quot;tag=priv*&quot;,      &quot;isCorrect&quot;: false, &quot;explanation&quot;: null },
+    { &quot;id&quot;: &quot;D&quot;, &quot;text&quot;: &quot;tag=privileged&quot;, &quot;isCorrect&quot;: false, &quot;explanation&quot;: null }
+  ],
+  &quot;overallExplanation&quot;: &quot;• Tags are case sensitive • To search for a tag ...&quot;,
+  &quot;courseKey&quot;: [&quot;B&quot;],
+  &quot;guide&quot;: {
+    &quot;blueprintSection&quot;: &quot;6.1&quot;,
+    &quot;blueprintTitle&quot;: &quot;Create and use tags&quot;,
+    &quot;onBlueprint&quot;: true,
+    &quot;trapIds&quot;: [&quot;T-06-12&quot;, &quot;T-06-02&quot;],
+    &quot;readNext&quot;: [&quot;topics/06-tags-and-event-types.md#traps&quot;],
+    &quot;keyVerdict&quot;: &quot;disputed&quot;,
+    &quot;verdictNote&quot;: &quot;The whole question turns on tag names being case sensitive, which the course asserts but the Splunk 10.4 documentation never states ...&quot;,
+    &quot;resolveInLab&quot;: &quot;Tag a field-value pair with `Privileged`, then run tag=Privileged, tag=privileged, tag=priv* and tag=Priv* ...&quot;,
+    &quot;correctedAnswer&quot;: null,
+    &quot;explanationIssues&quot;: [&quot;\&quot;Tags are case sensitive\&quot; is not supported by the 10.4 documentation ...&quot;],
+    &quot;factChecked&quot;: true,
+    &quot;docs&quot;: [
+      {
+        &quot;url&quot;: &quot;https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search&quot;,
+        &quot;title&quot;: &quot;Tag field-value pairs in Search (Knowledge Management Manual 10.4)&quot;,
+        &quot;note&quot;: &quot;Documented tag search syntax and the wildcard examples. Says nothing about case.&quot;,
+        &quot;primary&quot;: true
+      }
+    ],
+    &quot;difficulty&quot;: &quot;hard&quot;
+  }
+}</code></pre>
+<p>Fields added by the fact-check pass:</p>
+<ul>
+<li><code>courseKey</code> preserves the option ids Udemy marked correct. <code>isCorrect</code> holds the verified truth, so the two differ only where <code>keyVerdict</code> is <code>wrong</code>.</li>
+<li><code>guide.docs</code> is the documentation for the question. <code>docs[0]</code> is the primary page to open; every URL was fetched and returns HTTP 200.</li>
+<li><code>guide.correctedAnswer</code> is set only when <code>keyVerdict</code> is <code>wrong</code>. An empty array means no offered option is correct.</li>
+<li><code>guide.unanswerable</code> is <code>true</code> on the one question where no option is correct. A UI should skip it in scoring rather than mark you wrong.</li>
+<li><code>guide.explanationIssues</code> lists false statements found in the course's explanation text, each with the correction.</li>
+<li><code>guide.factChecked</code> is <code>true</code> on all 165.</li>
+</ul>
+<p>Conventions worth knowing before you build against it:</p>
+<ul>
+<li><code>type</code> is <code>single</code> when the course marks one <strong>Correct answer</strong>, <code>multi</code> when it marks one or more <strong>Correct selection</strong>. Multi questions also say &quot;Choose all that apply&quot; in the stem.</li>
+<li>Option <code>id</code> is <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> assigned in the order the course presents them. The course itself does not letter its options, so these IDs are ours and are stable.</li>
+<li><code>explanation</code> is <code>null</code> when the course gave none. That is common: questions 1 to 10 mostly have per-option explanations, 11 onward mostly do not.</li>
+<li><code>readNext</code> paths are relative to <code>SPLK-1002/</code>, not to <code>practice/</code>.</li>
+<li><code>trapIds</code> resolve against <code>reference/exam-traps.md</code>.</li>
+</ul>
+<h2 id="keyverdict-and-why-it-exists">keyVerdict, and why it exists<a class="anchor" href="#keyverdict-and-why-it-exists" aria-label="Link to this section">#</a></h2>
+<p>Third-party practice tests get answers wrong. Rather than silently &quot;fixing&quot; the course, each question records whether its key holds up against the official documentation.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Verdict</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>agree</code></td>
+<td>The course key matches the docs</td>
+</tr>
+<tr>
+<td><code>imprecise</code></td>
+<td>The keyed answer is defensible, but the question or its explanation is loosely worded or contains a side error</td>
+</tr>
+<tr>
+<td><code>disputed</code></td>
+<td>The docs do not settle it and the sources genuinely disagree. <code>resolveInLab</code> gives a check that would settle it</td>
+</tr>
+<tr>
+<td><code>wrong</code></td>
+<td>The course key contradicts the docs</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every one of the 106 unique questions has been fact-checked against fetched documentation, keyed answer and explanation text both. Results: <strong>56 agree, 44 imprecise, 3 wrong, 3 disputed</strong>, with 65 false statements found in explanation text across 44 questions.</p>
+<p><code>isCorrect</code> holds the <strong>documentation-verified</strong> answer, so your UI scores you against reality. <code>courseKey</code> preserves what Udemy said. Where the two differ, <code>guide.keyVerdict</code> is <code>wrong</code> and <code>guide.correctedAnswer</code> gives the true answer.</p>
+<h3 id="three-keys-were-wrong">Three keys were wrong<a class="anchor" href="#three-keys-were-wrong" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Course said</th>
+<th>Actually</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t1-q3</code></td>
+<td>A, B, C</td>
+<td><strong>A, B, C, D.</strong> The docs say &quot;Datasets break down into four types. These types are: Event datasets, search datasets, transaction datasets, and child datasets.&quot; Child datasets are a documented type, so option D is correct.</td>
+</tr>
+<tr>
+<td><code>t4-q19</code></td>
+<td>A, &quot;cannot be edited, create a new one&quot;</td>
+<td><strong>B, de-accelerate first.</strong> Manage data models says &quot;To make changes to an accelerated data model, you must turn off its acceleration.&quot;</td>
+</tr>
+<tr>
+<td><code>t4-q14</code></td>
+<td>B, <code>tags=&lt;tagname&gt;</code></td>
+<td><strong>No valid option.</strong> The syntax is <code>tag=&lt;tagname&gt;</code>, which the question's own explanation states. Flagged <code>unanswerable</code>; skip it.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="three-disputed-all-the-same-unsourced-claim">Three disputed, all the same unsourced claim<a class="anchor" href="#three-disputed-all-the-same-unsourced-claim" aria-label="Link to this section">#</a></h3>
+<p><code>t1-q23</code>, <code>t2-q1</code> and <code>t4-q3</code> each depend on tag NAMES being case sensitive. The course asserts it three times; the 10.4 tags pages state nothing either way. For <code>t1-q23</code> it decides the answer: if tag names are not case sensitive, that question has three correct answers. One check on your instance settles all three and closes trap T-06-12.</p>
+<h3 id="recurring-defects-in-explanation-text">Recurring defects in explanation text<a class="anchor" href="#recurring-defects-in-explanation-text" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong><code>max_events_per_bucket</code></strong> is cited four times as the admin override for the 1,000-event transaction limit. The setting exists, but in the <code>limits.conf</code> <code>[search]</code> stanza, where it caps events per timeline bucket when <code>status_buckets&gt;0</code>. It has no effect on <code>transaction</code>. The real controls are the command's own <code>maxevents</code> (default 1000, deactivated when negative) plus <code>[transactions] maxopentxn</code> (5000) and <code>maxopenevents</code> (100000).</li>
+<li><strong>&quot;The delimiters method is for data that doesn't have headers&quot;</strong> appears on five questions and is backwards. The 10.4 docs describe the method as designed for data from files WITH headers.</li>
+<li><strong>&quot;Name the workflow action with no spaces or special characters&quot;</strong> appears on four questions and is not a Splunk rule; no documentation states it.</li>
+<li><strong>&quot;Must be based on an extracted field&quot;</strong> (calculated fields) appears on three questions and is too narrow. The docs say calculated fields can reference all types of field extractions and field aliases; what they cannot reference is lookups, event types and tags.</li>
+<li><strong><code>t1-q6</code></strong> keys event type Priority correctly then explains that higher values win. Backwards: 1 is highest.</li>
+<li><strong><code>t1-q25</code></strong> says &quot;GET and POST action both can use Link&quot;, inverting the relationship. GET and POST are not action types; they are the two values of the link METHOD.</li>
+<li><strong><code>t4-q12</code></strong> has transcription errors that would stop the keyed answer running: <code>index-web</code> with a hyphen, and a session id switching between <code>SD42IK</code> and <code>SD421K</code>.</li>
+</ul>
+<h3 id="the-fact-check-also-corrected-this-guide">The fact-check also corrected this guide<a class="anchor" href="#the-fact-check-also-corrected-this-guide" aria-label="Link to this section">#</a></h3>
+<p>Two findings came back against my own material, both now fixed:</p>
+<ul>
+<li><strong><code>reference/cim-data-models.md</code></strong> asserted a <code>cim_&lt;Model&gt;_indexes</code> macro convention. No CIM 8.6 page documents such a macro; index scoping is the per-model Indexes allowlist on the CIM Setup page. The macros the add-on documentably ships are <code>cim_datamodelinfo</code> and the <code>cim_filter_*</code> set.</li>
+<li><strong><code>topics/09</code></strong> now carries the docs' verbatim four-types sentence and a new trap, <strong>T-09-19</strong>, on editing an accelerated data model.</li>
+</ul>
+<h2 id="coverage-and-why-the-final-test-is-worth-less-than-it-looks">Coverage, and why the final test is worth less than it looks<a class="anchor" href="#coverage-and-why-the-final-test-is-worth-less-than-it-looks" aria-label="Link to this section">#</a></h2>
+<p>The course advertises 165 questions. <strong>The final test repeats 59 of its 65 questions verbatim from tests 1 to 4</strong>, so there are only <strong>106 unique questions</strong>. Every repeat carries <code>duplicateOf</code> pointing at the original, so a UI can hide them and so coverage stats stay honest.</p>
+<p>Unique-question coverage against the blueprint weights:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Weight</th>
+<th>Expected on a 65q exam</th>
+<th>Unique questions here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 Transforming commands</td>
+<td>5%</td>
+<td>~3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2.0 Filtering and formatting</td>
+<td>10%</td>
+<td>~7</td>
+<td>9</td>
+</tr>
+<tr>
+<td>3.0 Correlating events</td>
+<td><strong>15%</strong></td>
+<td>~10</td>
+<td>13</td>
+</tr>
+<tr>
+<td>4.0 Field extractions</td>
+<td>10%</td>
+<td>~7</td>
+<td>9</td>
+</tr>
+<tr>
+<td>5.0 Aliases and calculated fields</td>
+<td>10%</td>
+<td>~7</td>
+<td>10</td>
+</tr>
+<tr>
+<td>6.0 Tags and event types</td>
+<td>10%</td>
+<td>~7</td>
+<td>9</td>
+</tr>
+<tr>
+<td>7.0 Macros</td>
+<td>10%</td>
+<td>~7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>8.0 Workflow actions</td>
+<td>10%</td>
+<td>~7</td>
+<td>13</td>
+</tr>
+<tr>
+<td>9.0 Data models</td>
+<td>10%</td>
+<td>~7</td>
+<td>14</td>
+</tr>
+<tr>
+<td>10.0 CIM</td>
+<td>10%</td>
+<td>~7</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Off blueprint</td>
+<td>0%</td>
+<td>0</td>
+<td>4</td>
+</tr>
+</tbody>
+</table></div>
+<p>Reasonably balanced, with workflow actions and data models over-represented and section 1.0 heavier than its 5% deserves. The four off-blueprint questions cover chart stack mode, bubble charts, Splunk jobs and the Job Inspector.</p>
+<h2 id="sending-me-a-new-test">Sending me a new test<a class="anchor" href="#sending-me-a-new-test" aria-label="Link to this section">#</a></h2>
+<p>Paste the raw text exactly as the course renders it. Do not clean up formatting, fix typos, or renumber. The parser handles:</p>
+<ul>
+<li><code>Question N</code> followed by <code>Skipped</code> or your answer status</li>
+<li><code>Correct answer</code> for single-select, <code>Correct selection</code> for multi-select, each appearing <strong>before</strong> the option text it belongs to</li>
+<li>An optional <code>Explanation</code> block after any option</li>
+<li>A closing <code>Overall explanation</code></li>
+</ul>
+<p>If a test is too long for one message, split it and say &quot;part 1 of 2&quot;. Numbering continues across parts.</p>
+<p>Tell me if you actually answered rather than skipping, and I'll write an attempt file alongside the question file.</p>
+<h2 id="attempts">Attempts<a class="anchor" href="#attempts" aria-label="Link to this section">#</a></h2>
+<p>One file per attempt in <code>attempts/</code>, named <code>&lt;testId&gt;-&lt;date&gt;.json</code>. See <code>example-attempt.json</code>.</p>
+<p><code>selected</code> is always an array, even for single-select, so the same code path handles both. <code>correct</code> is computed against <code>isCorrect</code> in the test file rather than stored as a judgement, which means a later key correction automatically re-scores old attempts.</p>
+<h2 id="what-a-ui-should-probably-do">What a UI should probably do<a class="anchor" href="#what-a-ui-should-probably-do" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Filter by <code>guide.blueprintSection</code> to drill one weak area</li>
+<li>Filter by <code>guide.trapIds</code> to drill the traps you keep missing, which is the single most useful view</li>
+<li>Badge anything where <code>keyVerdict != &quot;agree&quot;</code> and show <code>verdictNote</code> after the answer is revealed</li>
+<li>Weight a mock exam by the blueprint percentages in <code>tests.json</code>, not evenly</li>
+<li>Show <code>readNext</code> links after each miss</li>
+<li>Not display a pass or fail. Splunk publishes no cut score, so <code>exam.passingScore</code> in <code>tests.json</code> is <code>null</code> deliberately</li>
+</ul>
+<h2 id="how-to-run-the-loop">How to run the loop<a class="anchor" href="#how-to-run-the-loop" aria-label="Link to this section">#</a></h2>
+<div class="mermaid-wrap" style="min-height:384px"><div class="mermaid">flowchart TD
+    A[&quot;Read the topic file for a section, end to end&quot;] --&gt; B[&quot;Answer its ten self-check questions&quot;]
+    B --&gt; C{&quot;Comfortable?&quot;}
+    C --&gt;|&quot;No&quot;| A
+    C --&gt;|&quot;Yes&quot;| D[&quot;Drill that section from the question bank&lt;br/&gt;filter on guide.blueprintSection&quot;]
+    D --&gt; E[&quot;Record the attempt under attempts/&quot;]
+    E --&gt; F[&quot;Review every miss: read guide.verdictNote,&lt;br/&gt;then open guide.docs[0]&quot;]
+    F --&gt; G{&quot;Any trap id missed twice or more?&quot;}
+    G --&gt;|&quot;Yes&quot;| H[&quot;Re-read that trap in reference/exam-traps.md&lt;br/&gt;and the heading it names&quot;]
+    G --&gt;|&quot;No&quot;| I[&quot;Next section&quot;]
+    H --&gt; I
+    I --&gt; J[&quot;When all ten sections are done,&lt;br/&gt;take a full 65-question mock cold&quot;]</div></div>
+<p>Read the topic files first and drill second. The topic files and their self-check questions are written to teach; the question bank is written to test, and it only measures something if you meet it cold.</p>
+<h2 id="two-things-to-do-deliberately">Two things to do deliberately<a class="anchor" href="#two-things-to-do-deliberately" aria-label="Link to this section">#</a></h2>
+<p><strong>Take each test cold, once.</strong> Re-taking the same test measures memory of the questions, not of the rules. For a second pass on a weak area, use the self-check questions at the end of the relevant topic file.</p>
+<p><strong>Watch the repeat-miss table in <code>tracker.md</code>, not the score.</strong> A trap missed three times across three different tests is what will cost you on exam day.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-next" href="tracker.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Attempt tracker</span></a></nav>
+      <p class="doc-foot">Built from <code>practice/README.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#layout"><span class="toc-text">Layout</span><span class="mins">1 min</span></a>
+<a class="h2" href="#the-question-shape"><span class="toc-text">The question shape</span><span class="mins">2 min</span></a>
+<a class="h2" href="#keyverdict-and-why-it-exists"><span class="toc-text">keyVerdict, and why it exists</span><span class="mins">3 min</span></a>
+<a class="h3" href="#three-keys-were-wrong"><span class="toc-text">Three keys were wrong</span></a>
+<a class="h3" href="#three-disputed-all-the-same-unsourced-claim"><span class="toc-text">Three disputed, all the same unsourced claim</span></a>
+<a class="h3" href="#recurring-defects-in-explanation-text"><span class="toc-text">Recurring defects in explanation text</span></a>
+<a class="h3" href="#the-fact-check-also-corrected-this-guide"><span class="toc-text">The fact-check also corrected this guide</span></a>
+<a class="h2" href="#coverage-and-why-the-final-test-is-worth-less-than-it-looks"><span class="toc-text">Coverage, and why the final test is worth less than it looks</span><span class="mins">1 min</span></a>
+<a class="h2" href="#sending-me-a-new-test"><span class="toc-text">Sending me a new test</span><span class="mins">1 min</span></a>
+<a class="h2" href="#attempts"><span class="toc-text">Attempts</span><span class="mins">1 min</span></a>
+<a class="h2" href="#what-a-ui-should-probably-do"><span class="toc-text">What a UI should probably do</span><span class="mins">1 min</span></a>
+<a class="h2" href="#how-to-run-the-loop"><span class="toc-text">How to run the loop</span><span class="mins">1 min</span></a>
+<a class="h2" href="#two-things-to-do-deliberately"><span class="toc-text">Two things to do deliberately</span><span class="mins">1 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">12 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+<script src="../mermaid-init.js"></script>
+</body>
+</html>

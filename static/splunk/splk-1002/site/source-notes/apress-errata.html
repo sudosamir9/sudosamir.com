@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Errata: Splunk Certified Study Guide (Deep Mehta, Apress 2021), Part I | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item current" href="apress-errata.html" aria-current="page"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../source-notes/apress-errata.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Practice and sources</span><span class="sep">/</span>
+        <span>Apress errata</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="errata-splunk-certified-study-guide-deep-mehta-apress-2021-part-i">Errata: <em>Splunk Certified Study Guide</em> (Deep Mehta, Apress 2021), Part I</h1>
+<p>Every error below was verified by extracting the text from the PDF in this folder and reading the exact sentence. Quotes are literal. The book is still worth using for its structure and its worked UI walkthroughs. Its answer keys are not safe to memorise.</p>
+<p>Page numbers are the printed numbers. To open a page in a PDF viewer, add the offset: printed 1-73 is +20, 75-99 is +19, 101-123 is +18, 125-160 is +17. Part I ends at printed 160 (PDF 177), not printed 177.</p>
+<h2 id="answer-keys-that-contradict-the-books-own-text">Answer keys that contradict the book's own text<a class="anchor" href="#answer-keys-that-contradict-the-books-own-text" aria-label="Link to this section">#</a></h2>
+<p>These are the dangerous ones, because the body teaches the correct thing and the key then teaches the opposite.</p>
+<h3 id="chapter-3-question-c---the-field-extractor-one-way-door">Chapter 3, question C - the Field Extractor one-way door<a class="anchor" href="#chapter-3-question-c---the-field-extractor-one-way-door" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Once a regular expression is edited, can you go back to the Field Extractor UI? 1. True 2. False&quot;. Key: <strong>C: 1</strong> (True).</p>
+<p>The body of the same chapter, printed page 56, says: &quot;Once the regular expression is edited, you cannot go back to Field Extractor UI.&quot;</p>
+<p><strong>Correct answer: 2 (False).</strong> Once you hand-edit the regex in the Field Extractor, the interactive highlight-and-select UI is no longer available for that extraction.</p>
+<h3 id="chapter-3-question-d---delimiters-and-structured-data">Chapter 3, question D - delimiters and structured data<a class="anchor" href="#chapter-3-question-d---delimiters-and-structured-data" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Are delimiters mostly used in structured data? 1. True 2. False&quot;. Key: <strong>D: 2</strong> (False).</p>
+<p><strong>Correct answer: 1 (True).</strong> Delimiter-based extraction exists precisely for structured data (CSV, TSV, pipe-separated). The book itself keys the same fact correctly in Chapter 7 question I (&quot;Delimiters are used for ____ data&quot;, key I: 1, structured), so the book contradicts itself between chapters and Chapter 7 has the right version.</p>
+<h3 id="chapter-3-question-e---what-field-aliases-normalize-over">Chapter 3, question E - what field aliases normalize over<a class="anchor" href="#chapter-3-question-e---what-field-aliases-normalize-over" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Field aliases normalize data over which default fields? (Select all that apply.) 1. Host 2. Source 3. Source type 4. Events&quot;. Key: <strong>E: 1, 2, and 4</strong> (Host, Source, Events).</p>
+<p><strong>Correct answer: 1, 2, 3 (host, source, sourcetype).</strong> &quot;Events&quot; is not a default field and a field alias is scoped by host, source or sourcetype in the Splunk Web form. This one matters because scoping is exactly what the exam asks about in section 5.0.</p>
+<h3 id="chapter-4-question-b---are-field-values-case-sensitive">Chapter 4, question B - are field values case sensitive<a class="anchor" href="#chapter-4-question-b---are-field-values-case-sensitive" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;In Splunk, field values are case insensitive by default. 1. true 2. false&quot;. Key: <strong>b: 2</strong> (false, i.e. the book asserts field values ARE case sensitive by default).</p>
+<p>Chapter 2, printed page 30, says the opposite in prose: &quot;Field names in Splunk are case sensitive, but the field values are case insensitive.&quot; Chapter 4, printed page 76, says: &quot;Field values are case sensitive by default.&quot;</p>
+<p><strong>The book contradicts itself and neither statement is complete.</strong> The rule that actually holds is context dependent, so learn it as three separate facts rather than one: field NAMES are case sensitive everywhere; a bare search term or a <code>field=value</code> comparison in the <code>search</code> command is not case sensitive; a comparison inside <code>where</code> or <code>eval</code> IS case sensitive. See <code>topics/04-field-extractions.md</code> and <code>topics/02-filtering-and-formatting.md</code> for the verified statement of each. Treat any exam question phrased as a flat &quot;are field values case sensitive&quot; as asking about the <code>search</code> command unless it names <code>where</code> or <code>eval</code>.</p>
+<h3 id="chapter-4-question-c---tags-event-types-priority-and-colour">Chapter 4, question C - tags, event types, priority and colour<a class="anchor" href="#chapter-4-question-c---tags-event-types-priority-and-colour" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;In Splunk, tags use event types. You can set the priority and color based on an event's importance. 1. true 2. false&quot;. Key: <strong>c: 2</strong> (false).</p>
+<p>The same chapter walks you through creating an event type with a tag, the colour red, and priority 1.</p>
+<p>Two problems. The key contradicts the chapter's own worked example, and the question conflates tags with event types. Colour and priority are properties of an <strong>event type</strong>, not of a tag. Event types can carry tags. If a question like this appears on the real exam, the fact being tested is that event types have colour and priority and can be tagged.</p>
+<h3 id="chapter-5-question-b---the-data-model-and-pivot-relationship">Chapter 5, question B - the data model and Pivot relationship<a class="anchor" href="#chapter-5-question-b---the-data-model-and-pivot-relationship" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;What is the relationship between a data model and Pivot? 1. The data model provides a dataset for Pivot. ... 4. Pivot provides a dataset for the data model.&quot; Key: <strong>b: 4</strong>.</p>
+<p><strong>Correct answer: 1.</strong> The data model provides the dataset that Pivot consumes. Option 1 is even worded identically to the correct statement, so the key is simply the wrong number. This is objective 9.1 verbatim, so getting it backwards is expensive.</p>
+<h3 id="chapter-5-question-e---child-dataset-inheritance">Chapter 5, question E - child dataset inheritance<a class="anchor" href="#chapter-5-question-e---child-dataset-inheritance" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Child datasets inherit all datasets from the parent dataset. 1. true 2. false&quot;. Key: <strong>e: 2</strong> (false).</p>
+<p><strong>Correct answer: 1 (true)</strong>, for the concept being tested. A child dataset inherits all constraints and all fields from every ancestor and then narrows further. The question's wording is sloppy (a child inherits constraints and fields, not &quot;datasets&quot;), but the keyed answer teaches the wrong idea.</p>
+<h3 id="chapter-5-question-f---cim-data-model-acceleration">Chapter 5, question F - CIM data model acceleration<a class="anchor" href="#chapter-5-question-f---cim-data-model-acceleration" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Data models included in CIM are configured with data model acceleration turned on. 1. true 2. false&quot;. Key: <strong>f: 1</strong> (true).</p>
+<p>The body of the same chapter, printed page 120, says: &quot;Data models included in CIM are configured with data model acceleration turned off.&quot;</p>
+<p><strong>Correct answer: 2 (false).</strong> CIM data models ship with acceleration disabled. You enable it per model in the CIM add-on setup page.</p>
+<h3 id="chapter-1-question-a---on-premises-only">Chapter 1, question A - on-premises only<a class="anchor" href="#chapter-1-question-a---on-premises-only" aria-label="Link to this section">#</a></h3>
+<p>Question: &quot;Splunk Enterprise components can only be installed and administered on-premises. 1. true 2. false&quot;. Key: <strong>a: 1</strong> (true).</p>
+<p><strong>Correct answer: 2 (false).</strong> Splunk Cloud Platform exists, and the book's own Part II installs Splunk on an AWS EC2 instance.</p>
+<h2 id="wrong-content-in-the-chapter-2-function-tables">Wrong content in the Chapter 2 function tables<a class="anchor" href="#wrong-content-in-the-chapter-2-function-tables" aria-label="Link to this section">#</a></h2>
+<p>Chapter 2 is a set of reference tables rather than a taught progression, and several rows have the wrong example or the wrong description pasted in. Do not learn eval functions from these tables. Use <code>reference/eval-functions.md</code> instead.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Row</th>
+<th>What the book prints</th>
+<th>What is correct</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-9 (stats functions)</td>
+<td><code>var(field)</code></td>
+<td>Command shown as <code>|stats mode(field_name)</code></td>
+<td><code>|stats var(field_name)</code></td>
+</tr>
+<tr>
+<td>2-12 (&quot;timechart Functions&quot;)</td>
+<td>Whole table</td>
+<td>Every command written as <code>|stats per_day(...)</code> etc, under a heading that says timechart</td>
+<td>These are <code>stats</code>/<code>timechart</code> rate functions; the heading and the examples do not agree</td>
+</tr>
+<tr>
+<td>2-12</td>
+<td><code>per_minute(field)</code></td>
+<td>Command shown as <code>|stats per_day(field_name)</code></td>
+<td><code>|stats per_minute(field_name)</code></td>
+</tr>
+<tr>
+<td>2-16 (eval functions)</td>
+<td><code>coalesce(X,...)</code></td>
+<td>Described as &quot;it evaluates X if true, return Y; otherwise, it returns Z&quot;</td>
+<td>That is <code>if(X,Y,Z)</code>. <code>coalesce</code> returns the first non-null argument</td>
+</tr>
+<tr>
+<td>2-16</td>
+<td><code>null()</code></td>
+<td>Example shown as <code>| eval n=nullif(fielda,fieldB)</code></td>
+<td>That is <code>nullif</code>'s example. <code>null()</code> takes no arguments and returns null</td>
+</tr>
+</tbody>
+</table></div>
+<p>Chapter 2 also calls the field-selection command &quot;Field&quot;. The actual SPL command is <code>fields</code>.</p>
+<h2 id="invalid-spl-printed-as-examples">Invalid SPL printed as examples<a class="anchor" href="#invalid-spl-printed-as-examples" aria-label="Link to this section">#</a></h2>
+<p>Chapter 2's Boolean section prints two searches that will not run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-str">&quot;products&quot;</span><span class="t-pipe">|</span> <span class="t-opt">product_website</span><span class="t-op">=</span><span class="t-str">&quot;amazon&quot;</span> <span class="t-kw">AND</span> <span class="t-str">&quot;walmart&quot;</span></code></pre></div>
+<p>A bare <code>field=value</code> filter cannot follow a pipe. It needs <code>| search product_website=&quot;amazon&quot; AND product_website=&quot;walmart&quot;</code>, and as written the two conditions can never both be true for a single-valued field anyway.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-str">&quot;products&quot;</span><span class="t-pipe">|</span> <span class="t-field">error</span> <span class="t-field">NOT</span><span class="t-op">(</span><span class="t-num">400</span> <span class="t-kw">or</span> <span class="t-num">500</span><span class="t-op">)</span></code></pre></div>
+<p>Two faults: the same missing <code>search</code> command after the pipe, and a lowercase <code>or</code>. The same page states that Boolean operators must be capitalised.</p>
+<h2 id="chapter-7s-quotexam-setquot-and-how-to-use-it">Chapter 7's &quot;exam set&quot; and how to use it<a class="anchor" href="#chapter-7s-quotexam-setquot-and-how-to-use-it" aria-label="Link to this section">#</a></h2>
+<p>Nineteen questions labelled A through S on printed pages 155-158, with a bare answer key on 159 and no explanations. Its own key is mostly correct. Three problems with it as practice material:</p>
+<p><strong>Four questions are verbatim duplicates of earlier chapter questions.</strong> Q is Chapter 4's G, P is Chapter 4's F, R is Chapter 3's F, S is Chapter 5's A. So the effective count is 15 new questions.</p>
+<p><strong>Three questions test Admin knowledge, not Power User knowledge.</strong> A (forwarder, indexer, search head), B (what is on a standalone install), and C (the 500 MB per day trial limit) are SPLK-1003 material. They are not wrong, they are just off-blueprint for you.</p>
+<p><strong>Two questions are mis-worded even though the intended fact is right.</strong></p>
+<ul>
+<li>Question M, &quot;Tags are used for ____ pairs&quot;, is keyed 3 (both &quot;field/value&quot; and &quot;key/value&quot;). Splunk's term is field-value pair. On the real exam expect &quot;field-value pair&quot; as the only correct phrasing.</li>
+<li>Question R, &quot;Field aliases appear in all fields and interesting fields if they appear at least ____&quot;, is keyed 20%. The underlying fact is right, but the subject should be <em>fields</em>, not field aliases, and the 20% threshold governs the <strong>Interesting Fields</strong> list only. All Fields shows every field regardless of frequency.</li>
+</ul>
+<p><strong>Nothing in the set tests</strong> <code>eval</code>, <code>stats</code>, <code>chart</code> or <code>timechart</code> syntax, <code>rex</code>, field aliases, calculated fields, workflow action types, CIM, <code>top</code>/<code>rare</code>, or knowledge object precedence. Between them those account for well over half the real exam. Chapter 7 is a warm-up, not a mock.</p>
+<h2 id="version-drift-terminology-and-other-things-that-are-simply-old">Version drift, terminology, and other things that are simply old<a class="anchor" href="#version-drift-terminology-and-other-things-that-are-simply-old" aria-label="Link to this section">#</a></h2>
+<p>The book is from 2021 and its documentation links point at Splunk 6.1.1 through 7.3.1. Against 9.x and 10.x, several things it teaches no longer describe the product.</p>
+<ul>
+<li><strong>Every docs URL in the book is stale.</strong> <code>docs.splunk.com</code> now 301-redirects to <code>help.splunk.com</code> with restructured paths. Use <code>reference/doc-links.md</code> instead of the book's reference lists.</li>
+<li><strong>Deprecated terminology throughout</strong>: &quot;license master&quot; and &quot;slave&quot;, &quot;whitelist&quot; and &quot;blacklist&quot;, &quot;cluster master&quot;. Current Splunk uses manager and peer, allowlist and denylist. The exam uses current terminology.</li>
+<li><strong>The certification track described is the pre-2022 model.</strong> The book routes you through &quot;Splunk Fundamentals 1&quot; and &quot;Fundamentals 2&quot;, which Splunk retired. Its Admin exam facts (63 questions, $120) no longer match SPLK-1003 either.</li>
+<li><strong>Dashboards are Simple XML only.</strong> Dashboard Studio shipped in Splunk 8.2 and is the default authoring experience in 10.x. Chapter 6's <code>&lt;form&gt;</code> and <code>&lt;input&gt;</code> listings still work but are the legacy path.</li>
+<li><strong>CIM setup is described as &quot;Manage Apps, Splunk Common Information Model, indexes whitelist&quot;.</strong> Current CIM uses a per-data-model index allowlist on the CIM Setup page.</li>
+<li><strong>The book claims editing <code>macros.conf</code> requires a Splunk restart.</strong> For search-time knowledge objects a <code>debug/refresh</code> or an app reload is enough.</li>
+<li><strong>&quot;The maximum size of the data in the parsing pipeline is 128MB&quot;</strong> conflates queue sizing with a hard parsing limit.</li>
+</ul>
+<h2 id="chapter-level-scope-warning">Chapter-level scope warning<a class="anchor" href="#chapter-level-scope-warning" aria-label="Link to this section">#</a></h2>
+<p>Chapter 1 is roughly 80% Admin content. It opens with &quot;Overview of the Splunk <strong>Admin</strong> Exam&quot;, prints the full 17-section SPLK-1003 blueprint, and covers installing Splunk on macOS and Windows and hand-writing <code>props.conf</code> timestamp and line-breaking settings. None of that is on SPLK-1002.</p>
+<p>The book never prints the SPLK-1001 or SPLK-1002 blueprints anywhere. Instead it drops claims like &quot;you have covered 30% of the Power User blueprint&quot; or &quot;10% of Module 9&quot; without ever telling you what those modules are, and the percentages it quotes do not match the current blueprint. Use <code>00-exam-overview.md</code> for the real thing.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="../practice/weak-areas.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Weak areas</span></a><a class="pn pn-next" href="apress-part1-notes.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Apress part 1 notes</span></a></nav>
+      <p class="doc-foot">Built from <code>source-notes/apress-errata.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#answer-keys-that-contradict-the-books-own-text"><span class="toc-text">Answer keys that contradict the book&#x27;s own text</span><span class="mins">5 min</span></a>
+<a class="h3" href="#chapter-3-question-c---the-field-extractor-one-way-door"><span class="toc-text">Chapter 3, question C - the Field Extractor one-way door</span></a>
+<a class="h3" href="#chapter-3-question-d---delimiters-and-structured-data"><span class="toc-text">Chapter 3, question D - delimiters and structured data</span></a>
+<a class="h3" href="#chapter-3-question-e---what-field-aliases-normalize-over"><span class="toc-text">Chapter 3, question E - what field aliases normalize over</span></a>
+<a class="h3" href="#chapter-4-question-b---are-field-values-case-sensitive"><span class="toc-text">Chapter 4, question B - are field values case sensitive</span></a>
+<a class="h3" href="#chapter-4-question-c---tags-event-types-priority-and-colour"><span class="toc-text">Chapter 4, question C - tags, event types, priority and colour</span></a>
+<a class="h3" href="#chapter-5-question-b---the-data-model-and-pivot-relationship"><span class="toc-text">Chapter 5, question B - the data model and Pivot relationship</span></a>
+<a class="h3" href="#chapter-5-question-e---child-dataset-inheritance"><span class="toc-text">Chapter 5, question E - child dataset inheritance</span></a>
+<a class="h3" href="#chapter-5-question-f---cim-data-model-acceleration"><span class="toc-text">Chapter 5, question F - CIM data model acceleration</span></a>
+<a class="h3" href="#chapter-1-question-a---on-premises-only"><span class="toc-text">Chapter 1, question A - on-premises only</span></a>
+<a class="h2" href="#wrong-content-in-the-chapter-2-function-tables"><span class="toc-text">Wrong content in the Chapter 2 function tables</span><span class="mins">1 min</span></a>
+<a class="h2" href="#invalid-spl-printed-as-examples"><span class="toc-text">Invalid SPL printed as examples</span><span class="mins">1 min</span></a>
+<a class="h2" href="#chapter-7s-quotexam-setquot-and-how-to-use-it"><span class="toc-text">Chapter 7&#x27;s &amp;quot;exam set&amp;quot; and how to use it</span></a>
+<a class="h2" href="#version-drift-terminology-and-other-things-that-are-simply-old"><span class="toc-text">Version drift, terminology, and other things that are simply old</span><span class="mins">1 min</span></a>
+<a class="h2" href="#chapter-level-scope-warning"><span class="toc-text">Chapter-level scope warning</span><span class="mins">1 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">10 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

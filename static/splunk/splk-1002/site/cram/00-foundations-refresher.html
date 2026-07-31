@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>0.0 Foundations Refresher (cram) | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item current" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/00-foundations-refresher.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Foundations refresher</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/00-foundations-refresher.html">Study</a><a class="on" href="00-foundations-refresher.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="0.0-foundations-refresher-cram">0.0 Foundations Refresher (cram)</h1>
+<p>Off blueprint. Zero direct points. Everything here is assumed knowledge that blueprint questions are phrased in.</p>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">earliest</span><span class="t-op">=&lt;</span><span class="t-field">time_modifier</span><span class="t-op">&gt;</span> <span class="t-opt">latest</span><span class="t-op">=&lt;</span><span class="t-field">time_modifier</span><span class="t-op">&gt;</span>
+<span class="t-op">[</span><span class="t-op">+</span><span class="t-pipe">|</span><span class="t-op">-</span><span class="t-op">]</span><span class="t-op">&lt;</span><span class="t-field">time_integer</span><span class="t-op">&gt;&lt;</span><span class="t-field">time_unit</span><span class="t-op">&gt;</span>@<span class="t-op">&lt;</span><span class="t-field">time_unit</span><span class="t-op">&gt;</span>
+<span class="t-field">outer_search</span> <span class="t-op">[</span> <span class="t-field">generating_subsearch</span> <span class="t-pipe">|</span> <span class="t-cmd">format</span> <span class="t-opt">maxresults</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span> <span class="t-op">]</span>
+<span class="t-field">lookup</span> <span class="t-op">[</span><span class="t-opt">local</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">update</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">table</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">lkup-fld</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">evt-fld</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-kw">OUTPUT</span><span class="t-pipe">|</span><span class="t-kw">OUTPUTNEW</span> <span class="t-op">&lt;</span><span class="t-field">dest</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">inputlookup</span> <span class="t-op">[</span><span class="t-opt">append</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">strict</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">start</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">max</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">file</span><span class="t-op">&gt;</span><span class="t-pipe">|</span><span class="t-op">&lt;</span><span class="t-field">table</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">WHERE</span> <span class="t-op">&lt;</span><span class="t-field">q</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search mode</td>
+<td>Smart</td>
+</tr>
+<tr>
+<td>Smart on non-transforming search</td>
+<td>Field discovery ON, behaves as Verbose</td>
+</tr>
+<tr>
+<td>Smart on transforming search</td>
+<td>Field discovery OFF, behaves as Fast</td>
+</tr>
+<tr>
+<td>Fast mode fields returned</td>
+<td>Default (<code>host</code>, <code>source</code>, <code>sourcetype</code>) + index-time + fields named in the search</td>
+</tr>
+<tr>
+<td>Selected Fields at first run</td>
+<td><code>host</code>, <code>source</code>, <code>sourcetype</code></td>
+</tr>
+<tr>
+<td>Interesting Fields threshold</td>
+<td>Field present in &gt;= 20% of <strong>events returned by the search</strong></td>
+</tr>
+<tr>
+<td>Ad hoc search time range</td>
+<td>Last 24 hours</td>
+</tr>
+<tr>
+<td><code>latest</code> when omitted</td>
+<td><code>now()</code></td>
+</tr>
+<tr>
+<td>Snap direction</td>
+<td>Always DOWN (latest time not after the value)</td>
+</tr>
+<tr>
+<td>Order within <code>-2h@h</code></td>
+<td>Offset first, then snap</td>
+</tr>
+<tr>
+<td>Week snap codes</td>
+<td><code>@w0</code>/<code>@w7</code> = Sunday, <code>@w6</code> = Saturday</td>
+</tr>
+<tr>
+<td>Picker vs inline <code>earliest</code>/<code>latest</code></td>
+<td><strong>Inline wins</strong></td>
+</tr>
+<tr>
+<td>Subsearch <code>maxout</code></td>
+<td>10,000 results</td>
+</tr>
+<tr>
+<td>Subsearch <code>maxtime</code></td>
+<td>60 seconds, then silently finalized</td>
+</tr>
+<tr>
+<td><code>format</code> defaults</td>
+<td>AND within a row, OR between rows, wrapped in <code>( )</code>; output field is <code>search</code>; <code>maxresults=0</code>; <code>emptystr=&quot;NOT( )&quot;</code></td>
+</tr>
+<tr>
+<td>Lookups (off blueprint)</td>
+<td><code>lookup</code> with no OUTPUT clause outputs all non-match fields; <code>local</code>/<code>update</code> <code>false</code>; <code>inputlookup</code> <code>append=false</code>, <code>max=1000000000</code>; <code>outputlookup append=false</code> overwrites</td>
+</tr>
+<tr>
+<td>Report acceleration min events</td>
+<td>100,000 in the hot bucket covered by Summary Range; <code>max_summary_ratio</code> 10%</td>
+</tr>
+<tr>
+<td>Cron fields</td>
+<td>min 0-59, hour 0-23, dom 1-31, month 1-12, dow 0-6 (0 = Sunday)</td>
+</tr>
+<tr>
+<td>Sharing levels</td>
+<td><code>Owner</code> (Private), <code>App</code>, <code>All apps</code> (Global)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<p>Transforming command present? Yes: Smart runs Fast, discovery off, pipeline holds <strong>rows</strong> not events, <code>_raw</code> gone, <code>_time</code> survives only if the command emitted it. No: Smart runs Verbose, discovery on, pipeline holds events. Everything downstream follows from that one question.</p>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Smart is the default</strong>, and it flips to Fast behaviour the instant a transforming command appears.</li>
+<li><strong>Inline <code>earliest</code>/<code>latest</code> override the Time Range Picker</strong>, never the reverse. Time modifiers do not cross the subsearch boundary in either direction.</li>
+<li><strong>The subsearch runs FIRST</strong>, capped at 10,000 results and 60 seconds, and truncation is silent.</li>
+<li><strong><code>scanCount</code></strong> = read off disk, <strong><code>eventCount</code></strong> = matched the search terms, <strong><code>resultCount</code></strong> = rows returned. Sparse means <code>scanCount</code> &gt;&gt; <code>resultCount</code>.</li>
+<li><strong>Search-time sequence</strong>: field filters, inline extractions, transform extractions, automatic KV, field aliases, calculated fields, lookups, event types, tags. Calculated fields cannot see lookups; lookups cannot see event types or tags.</li>
+</ol>
+<p>Bonus: <code>table</code> and <code>append</code> are on the official <strong>transforming</strong> list. <code>sort</code>, <code>eventstats</code>, <code>transaction</code>, <code>dedup</code>, <code>join</code>, <code>union</code> are <strong>dataset processing</strong>, not streaming.</p>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-00-01 Smart not Fast is default. T-00-02 Smart discovery is conditional. T-00-03 Verbose kills report acceleration. T-00-04 20% is of returned events. T-00-05 search bar beats picker. T-00-06 snap rounds down only. T-00-07 offset before snap. T-00-08 subsearch runs first. T-00-09 10,000 / 60s. T-00-10 format is AND-in-row, OR-between-rows. T-00-11 <code>table</code> is transforming. T-00-12 <code>sort</code> is dataset processing. T-00-13 scanCount is not eventCount. T-00-14 App sharing is one app only. T-00-15 orphaned + private cannot be reassigned in the UI. T-00-16 three acceleration mechanisms are distinct. T-00-17 calculated fields cannot reference lookups. T-00-18 <code>_time</code> is epoch, displayed in user timezone.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-next" href="01-transforming-commands.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Transforming commands</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/00-foundations-refresher.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">3 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.0 Creating Tags and Event Types (10%) - cram | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/06-tags-and-event-types.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Tags and event types</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/06-tags-and-event-types.html">Study</a><a class="on" href="06-tags-and-event-types.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="6.0-creating-tags-and-event-types-10---cram">6.0 Creating Tags and Event Types- cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">tag</span><span class="t-op">=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span>
+<span class="t-field">tag::</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span>
+<span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-field">IP-</span><span class="t-op">*</span>
+<span class="t-field">tag::host</span><span class="t-op">=</span><span class="t-op">*</span><span class="t-field">local</span><span class="t-op">*</span>
+<span class="t-kw">NOT</span> <span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-op">*</span>
+<span class="t-opt">eventtype</span><span class="t-op">=&lt;</span><span class="t-field">name</span><span class="t-op">&gt;</span>
+<span class="t-opt">tag</span><span class="t-op">=</span><span class="t-field">router</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-field">SF</span> <span class="t-field">NOT</span> <span class="t-op">(</span><span class="t-opt">tag</span><span class="t-op">=</span><span class="t-field">Building1</span><span class="t-op">)</span></code></pre></div>
+<pre class="plain lang-ini"><code># tags.conf - one field-value pair per stanza, one tag per line, no quotes
+[&lt;fieldname&gt;=&lt;value&gt;]
+&lt;tag&gt; = &lt;enabled|disabled&gt;
+
+[eventtype=nessus]
+vulnerability = enabled</code></pre>
+<pre class="plain lang-ini"><code># eventtypes.conf
+[$EVENTTYPE]
+disabled = &lt;1|0&gt;
+search   = &lt;string&gt;
+description = &lt;string&gt;
+priority = &lt;integer&gt;
+color    = &lt;string&gt;</code></pre>
+<p>UI paths: Settings, Tags, (List by field-value pair | List by tag name | All unique tag objects). Event row, Actions arrow, Edit Tags. Save As, Event Type. Settings, Event Types, New. Event Actions, Build Event Type.</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Values</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>priority</code></td>
+<td>integer 1 to 10, <strong>1 = best, 10 = worst</strong></td>
+<td>none (attribute omitted)</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>none, et_blue, et_green, et_magenta, et_orange, et_purple, et_red, et_sky, et_teal, et_yellow</td>
+<td><code>none</code></td>
+</tr>
+<tr>
+<td><code>disabled</code> (eventtypes.conf)</td>
+<td>1 or 0</td>
+<td>none stated; &quot;set to 1 to disable&quot;, so no line means active</td>
+</tr>
+<tr>
+<td><code>search</code> (eventtypes.conf)</td>
+<td>no pipe after simple search, no subsearch, no <code>savedsearch</code></td>
+<td>none, required</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>free text</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>tags</code> (eventtypes.conf)</td>
+<td>free text</td>
+<td>none, <strong>DEPRECATED</strong>, use tags.conf</td>
+</tr>
+<tr>
+<td>tags.conf <code>&lt;tag&gt;</code></td>
+<td>enabled / disabled</td>
+<td>none stated; write it explicitly</td>
+</tr>
+<tr>
+<td>Event type Name</td>
+<td>unique string</td>
+<td>none, required</td>
+</tr>
+<tr>
+<td>Destination App</td>
+<td>app name</td>
+<td>current app context</td>
+</tr>
+<tr>
+<td>Tag name case</td>
+<td>value semantics, not case sensitive</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Field name case</td>
+<td>case sensitive</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Web-created objects land in</td>
+<td><code>$SPLUNK_HOME/etc/users/&lt;user&gt;/&lt;app&gt;/local/</code></td>
+<td>private</td>
+</tr>
+<tr>
+<td>Sharing</td>
+<td>Private, App, All apps</td>
+<td>Private</td>
+</tr>
+</tbody>
+</table></div>
+<p>Search-time order: field filters, inline extraction, transform extraction, auto KV, field aliases, calculated fields, lookups, <strong>event types (8)</strong>, <strong>tags (9)</strong>.</p>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name a set of values of one field</td>
+<td>Tag</td>
+</tr>
+<tr>
+<td>Many names on one value</td>
+<td>Multiple tags on one pair</td>
+</tr>
+<tr>
+<td>Name a whole event category</td>
+<td>Event type</td>
+</tr>
+<tr>
+<td>Classifier needs a pipe / stats / subsearch</td>
+<td>Report or macro, never an event type</td>
+</tr>
+<tr>
+<td>Reusable search fragment</td>
+<td>Search macro</td>
+</tr>
+<tr>
+<td>Saved search you run</td>
+<td>Report</td>
+</tr>
+<tr>
+<td>Two event types, one colour</td>
+<td>Better (lower) priority wins</td>
+</tr>
+<tr>
+<td>Restrict tag search to one field</td>
+<td><code>tag::&lt;field&gt;=</code></td>
+</tr>
+<tr>
+<td>Event type using a lookup output field</td>
+<td>Legal (7 before 8)</td>
+</tr>
+<tr>
+<td>Calculated field using <code>eventtype</code></td>
+<td>Impossible (6 before 8)</td>
+</tr>
+<tr>
+<td>Make a sourcetype CIM compliant</td>
+<td>Event type, then tag the event type</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>A tag attaches to a <strong>field-value pair</strong>, not to an event and not to a field.</li>
+<li>An event type search cannot contain a pipe after the simple search, a subsearch, or <code>savedsearch</code>.</li>
+<li>Priority is 1 to 10 and <strong>1 is best</strong>; it sets display order and decides which single colour renders.</li>
+<li><code>eventtype</code> is set at search time and becomes <strong>multivalue</strong> when an event matches two or more event types.</li>
+<li>Tags run <strong>last</strong> in the search-time sequence, immediately after event types, which is why <code>tag::eventtype=</code> works.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-06-01 tag targets field-value pair. T-06-02 double colon <code>tag::</code>. T-06-03 no pipe in event type. T-06-04 no <code>savedsearch</code> in event type. T-06-05 priority 1 is best. T-06-06 priority also drives colour. T-06-07 <code>eventtype</code> is multivalue. T-06-08 event type vs report. T-06-09 search-time sequence consequences. T-06-10 three Settings, Tags views and cross-app disable. T-06-11 <code>tags</code> attribute deprecated, use tags.conf. T-06-12 field names case sensitive, values not. T-06-13 Apress answer key error on question C. T-06-14 tagging does not change the field value.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="05-aliases-and-calculated-fields.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Aliases and calculated fields</span></a><a class="pn pn-next" href="07-macros.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Macros</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/06-tags-and-event-types.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">3 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

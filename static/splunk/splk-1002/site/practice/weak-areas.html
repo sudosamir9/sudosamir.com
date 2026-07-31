@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weak areas | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Practice and sources</summary>
+<a class="tree-item" href="README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item current" href="weak-areas.html" aria-current="page"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../practice/weak-areas.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Practice and sources</span><span class="sep">/</span>
+        <span>Weak areas</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="weak-areas">Weak areas</h1>
+<p>Regenerated from scratch after every attempt, not appended to. This file always describes current state, so an entry disappearing means it was fixed, not that it was forgotten.</p>
+<p>Nothing here yet. It populates after your first practice test goes through <code>practice/README.md</code>.</p>
+<h2 id="top-repeat-misses">Top repeat misses<a class="anchor" href="#top-repeat-misses" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Trap ID</th>
+<th>Section</th>
+<th>What you keep getting wrong</th>
+<th>Times</th>
+</tr>
+</thead>
+</table></div>
+<h2 id="sections-below-75">Sections below 75%<a class="anchor" href="#sections-below-75" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Weight</th>
+<th>Current rate</th>
+<th>Read</th>
+</tr>
+</thead>
+</table></div>
+<h2 id="reading-list">Reading list<a class="anchor" href="#reading-list" aria-label="Link to this section">#</a></h2>
+<p>Ordered, specific, file plus heading. Not &quot;re-read section 3&quot;, but &quot;read <code>topics/03-correlating-events.md</code>, the Decision rules table&quot;.</p>
+<ol>
+<li></li>
+</ol>
+<h2 id="predicted-weak-spots-before-any-data-exists">Predicted weak spots before any data exists<a class="anchor" href="#predicted-weak-spots-before-any-data-exists" aria-label="Link to this section">#</a></h2>
+<p>Until a real attempt fills this in, these are the areas that most commonly cost people this exam, based on the blueprint weights and on what the available study material under-serves. Treat this as a starting hypothesis to disprove, not as a finding.</p>
+<ul>
+<li><strong>3.6, transaction versus stats.</strong> The heaviest section is 15% and its hardest objective is a judgement call rather than a fact. Neither the Udemy course nor the Apress book does the comparison.</li>
+<li><strong>10.0, CIM.</strong> 10% of the exam with no official Splunk course behind it. Most candidates arrive knowing that CIM normalizes field names and nothing more specific.</li>
+<li><strong>7.3 and 7.4, macro arguments.</strong> The <code>name(n)</code> argument-count naming and <code>$arg$</code> substitution are tested character by character, and the course only shows a zero-argument macro.</li>
+<li><strong>8.3, POST workflow actions.</strong> Named everywhere, demonstrated almost nowhere.</li>
+<li><strong>5.0 versus 4.0 ordering.</strong> What a calculated field can and cannot see. This is really a question about search-time precedence wearing a different hat.</li>
+<li><strong>2.3, fillnull.</strong> A named objective with its own bullet that the course skips entirely.</li>
+</ul>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="tracker.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Attempt tracker</span></a><a class="pn pn-next" href="../source-notes/apress-errata.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Apress errata</span></a></nav>
+      <p class="doc-foot">Built from <code>practice/weak-areas.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#top-repeat-misses"><span class="toc-text">Top repeat misses</span></a>
+<a class="h2" href="#sections-below-75"><span class="toc-text">Sections below 75%</span></a>
+<a class="h2" href="#reading-list"><span class="toc-text">Reading list</span></a>
+<a class="h2" href="#predicted-weak-spots-before-any-data-exists"><span class="toc-text">Predicted weak spots before any data exists</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">2 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

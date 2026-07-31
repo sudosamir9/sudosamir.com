@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.0 Using the Common Information Model (CIM) Add-On | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="10-cim.html" aria-current="page"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../topics/10-cim.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>CIM</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="10-cim.html">Study</a><a class="" href="../cram/10-cim.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="10.0-using-the-common-information-model-cim-add-on-10">10.0 Using the Common Information Model (CIM) Add-On</h1>
+<p>The CIM is the only blueprint section with no dedicated Splunk course behind it, so the exam tests it as recall of a fixed body of facts: what the CIM is, exactly which knowledge objects the add-on ships, and the mechanical order of operations for making a vendor sourcetype CIM compliant.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Section: 10.0 Using the Common Information Model (CIM) Add-On</li>
+<li>Weight: 10% of the exam</li>
+<li>10.1 Describe the Splunk CIM</li>
+<li>10.2 List the knowledge objects included with the Splunk CIM Add-On</li>
+<li>10.3 Use the CIM Add-On to normalize data</li>
+</ul>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Sub-objective</th>
+<th>Udemy (Hailie Shaw)</th>
+<th>Apress (Deep Mehta, 2021)</th>
+<th>Honest note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.1 Describe the Splunk CIM</td>
+<td>Module 23A</td>
+<td>Chapter 5, &quot;Common Information Model in Splunk&quot; / &quot;Defining CIM in Splunk&quot;</td>
+<td>Apress is two pages and reduces the section to &quot;install the add-on and allowlist your index&quot;.</td>
+</tr>
+<tr>
+<td>10.2 List the knowledge objects included with the Splunk CIM Add-On</td>
+<td>Module 23A, partially 21A</td>
+<td>Not covered</td>
+<td>Neither source enumerates the knowledge objects, the model catalogue, or the tag requirements. This file is your only source for the list.</td>
+</tr>
+<tr>
+<td>10.3 Use the CIM Add-On to normalize data</td>
+<td>Module 23B, plus CIM Add-on Builder coverage</td>
+<td>Chapter 5, index allowlist only</td>
+<td>The Add-on Builder is a separate Splunkbase app and is not on the blueprint. Know that it exists and spend no more time on it.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two known defects to carry into the exam. Apress answer key F states that CIM data models ship accelerated; they do not, and T-10-02 covers why. Apress is also inconsistent on case sensitivity. Hold to what the docs support: CIM field names are case sensitive, the values you search often are not, and the 10.4 docs never state whether tag names are case sensitive, so do not answer as though they did.</p>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>The Splunk Common Information Model is &quot;a shared semantic model focused on extracting value from data&quot;. It is a naming contract: a set of field names, field values, and event tags that describe the least common denominator of a domain such as authentication, web traffic, or malware detection. If two vendors both log a failed login, CIM says both events must carry <code>tag=authentication</code>, a <code>user</code> field, a <code>src</code> field, and <code>action=failure</code>. A search written against those names then works against both vendors without modification.</p>
+<p>The CIM is implemented as an add-on: the Splunk Common Information Model Add-on, Splunkbase app ID 1621, installed to the directory <code>Splunk_SA_CIM</code>. The docs describe it as containing &quot;a collection of pre-configured data models that you can apply to your data at search time&quot;, and say that each model &quot;consists of a set of field names and tags that define the least common denominator of a domain of interest&quot;. Those two nouns, fields and event category tags, are the defining content of the add-on. Normalizing to one shared schema is what lets several apps read the same indexed data on one deployment, so the add-on coexists with everything else installed there. Install it on your search heads only, because everything it does happens at search time and there is nothing for an indexer or a forwarder to do with it. The data model JSON definitions live in <code>$SPLUNK_HOME/etc/apps/Splunk_SA_CIM/default/data/models</code>. The add-on is packaged with Splunk Enterprise Security and the Splunk App for PCI Compliance, which is why CIM compliance is a hard prerequisite for any ES content: ES correlation searches are written against CIM data models, so untagged or unmapped data is simply invisible to ES.</p>
+<p>The single most important structural fact is that the CIM is a search-time schema, described in the docs as schema-on-the-fly, that &quot;leaves the raw machine data intact&quot;. Installing the add-on changes nothing on disk, reindexes nothing, and rewrites no events. Everything it does is a knowledge object layered over data that was already indexed.</p>
+<div class="mermaid-wrap" style="min-height:318px"><div class="mermaid">flowchart TD
+    A[&quot;Raw vendor event, indexed as-is&lt;br/&gt;no CIM concerns at parse or index time&quot;] --&gt; B[&quot;Search-time field extraction&lt;br/&gt;props.conf EXTRACT / REPORT&quot;]
+    B --&gt; C[&quot;Field aliases&lt;br/&gt;vendor field renamed to CIM field name&quot;]
+    C --&gt; D[&quot;Calculated fields&lt;br/&gt;EVAL derives or normalizes a value&quot;]
+    D --&gt; E[&quot;Lookups&lt;br/&gt;add fields that cannot be extracted,&lt;br/&gt;normalize codes to prescribed values&quot;]
+    E --&gt; F[&quot;Event types&lt;br/&gt;saved search that names a subset of events&quot;]
+    F --&gt; G[&quot;Tags applied to the event type&lt;br/&gt;for example authentication&quot;]
+    G --&gt; H[&quot;Event now satisfies a CIM dataset constraint&quot;]
+    H --&gt; I[&quot;Pivot, datamodel, tstats, Enterprise Security&quot;]</div></div>
+<p>That order is not decorative. Splunk applies field aliases after key-value field extraction but before calculated fields, lookups, event types, and tags, so you cannot alias a calculated field, a lookup output field, an event type, or a tag. The CIM normalization procedure is this pipeline walked forwards.</p>
+<p>Keep the two roles apart. The add-on supplies the data models, already defined as JSON with their datasets, constraints, and field lists written; nobody creates them locally. The knowledge manager creates everything that maps a vendor sourcetype into those shipped models: field extractions, field aliases, calculated fields, lookups, event types, and tags. Saying the knowledge manager uses the CIM to create data models has the relationship backwards. The models are the contract, and the objects you build are how you satisfy it.</p>
+<h3 id="the-documented-normalization-procedure-objective-10.3">The documented normalization procedure (objective 10.3)<a class="anchor" href="#the-documented-normalization-procedure-objective-10.3" aria-label="Link to this section">#</a></h3>
+<p>The CIM manual sets normalization out as an eight-step procedure. Condensed, with the steps the exam draws on called out:</p>
+<ol>
+<li>Decide which data model and dataset your source belongs to, from the model catalogue.</li>
+<li>Consult the CIM data model reference tables for that dataset. This is the documented recommended approach, and the answer to any question of the form &quot;what should you consult before normalizing a source&quot;.</li>
+<li>Tag the events so they satisfy the dataset constraint, normally by defining an event type and tagging that.</li>
+<li>Compare the fields your source produces against the required and recommended lists, then normalize each one &quot;using a combination of field aliases, field extractions, and lookups&quot;, the docs' own wording, with its sub-steps in that order: alias, extraction, lookup. Add a calculated field where the value must be derived rather than found.</li>
+<li>Validate by running the dataset search or a Pivot and confirming the required fields are populated.</li>
+</ol>
+<p>Two object types stay outside this procedure: search macros and workflow actions. The add-on does ship macros, so &quot;does the add-on include macros&quot; is answered yes, but they report acceleration status and filter data out of models rather than populating a CIM field. Workflow actions have no CIM role at all. No step here touches index time.</p>
+<h3 id="knowledge-objects-the-add-on-ships-objective-10.2">Knowledge objects the add-on ships (objective 10.2)<a class="anchor" href="#knowledge-objects-the-add-on-ships-objective-10.2" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Knowledge object</th>
+<th>What the add-on ships</th>
+<th>Exam-relevant detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data models</td>
+<td>The CIM data models themselves, as JSON in <code>Splunk_SA_CIM/default/data/models</code></td>
+<td>26 model pages in the CIM 8.6 docs, two of them deprecated, plus the separately documented CIM Validation (S.o.S.) model. The docs publish no total, so learn names rather than a number</td>
+</tr>
+<tr>
+<td>Tags</td>
+<td>Tag definitions used as dataset constraints</td>
+<td>Tags are the entry condition for every event dataset</td>
+</tr>
+<tr>
+<td>Event types</td>
+<td>Event type definitions, including those used by the validation content</td>
+<td>TAs supply the event types for real vendor data; the CIM add-on supplies the models the tags point at</td>
+</tr>
+<tr>
+<td>Field aliases</td>
+<td>Aliases used inside the add-on's own content</td>
+<td>You add your own aliases in your TA, not in <code>Splunk_SA_CIM</code></td>
+</tr>
+<tr>
+<td>Calculated fields</td>
+<td>EVAL expressions used by model calculations</td>
+<td>Model-level calculations such as normalized severity</td>
+</tr>
+<tr>
+<td>Lookups</td>
+<td>Lookups backing normalization and filtering, including the assets and identities style categorization used by the CIM filter macros</td>
+<td>Used to map vendor codes to prescribed values</td>
+</tr>
+<tr>
+<td>Search macros</td>
+<td>Macros in <code>Splunk_SA_CIM/default/macros.conf</code>: <code>cim_datamodelinfo</code> and the CIM filter macros such as <code>cim_filter_known_scanners</code>. Index scoping is NOT a macro; it is the per-model Indexes allowlist on the CIM Setup page</td>
+<td>The docs say there is no need to modify the filter stanzas by hand. Answer &quot;does the add-on include search macros&quot; with yes, but do not name a <code>cim_&lt;model&gt;_indexes</code> macro: no 8.6 page documents one</td>
+</tr>
+<tr>
+<td>Reports and dashboards</td>
+<td>Validation content, reachable through Pivot on the CIM Validation (S.o.S.) model, plus the Data Model Audit dashboard for acceleration health</td>
+<td>Validation is a first-class use case of the add-on, not an afterthought. Data Model Audit is the only shipped dashboard. The add-on is not a library of report or dashboard templates: CIM-compliant dashboards come from Enterprise Security and the PCI Compliance app</td>
+</tr>
+<tr>
+<td>A custom search command</td>
+<td><code>datamodelsimple</code>, the add-on's custom command for CIM validation</td>
+<td>Ships with the add-on, not with core Splunk</td>
+</tr>
+<tr>
+<td>A common action model</td>
+<td>Support for custom alert actions, backed by the <code>cim_modactions</code> index</td>
+<td>The deprecated <code>cim_summary</code> index has been removed</td>
+</tr>
+</tbody>
+</table></div>
+<p>What the add-on does not ship is examined as often as what it does. No custom visualizations. No workflow actions. No index-time configuration of any kind. And no tsidx summaries, because column stores exist only after acceleration is switched on for a model, and every CIM model ships with acceleration off. Extractions and tags for your vendor data are not shipped either: the add-on defines the models your objects must satisfy, and the vendor's technology add-on, or you, supplies the rest.</p>
+<h3 id="the-cim-8.6-data-model-catalogue">The CIM 8.6 data model catalogue<a class="anchor" href="#the-cim-8.6-data-model-catalogue" aria-label="Link to this section">#</a></h3>
+<p>Every model below is an entry in the Data models section of the CIM 8.6 docs. The docs publish a page per model and state no total, so a memorised figure such as &quot;22 data models&quot; comes from an older release and is worth nothing in an answer option. Recognise the names; do not recite a count. The tag column is the constraint on the root event dataset unless stated otherwise. Child datasets inherit the parent constraint and add their own, so the Proxy dataset requires <code>web</code> and <code>proxy</code>, not <code>proxy</code> alone.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Data model</th>
+<th>One-line scope</th>
+<th>Root dataset tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alerts</td>
+<td>Alerts produced by alerting systems such as Nagios or NetCool</td>
+<td><code>alert</code></td>
+</tr>
+<tr>
+<td>Application State (deprecated)</td>
+<td>Service or process inventory and state; deprecated in 4.12.0, replaced by Endpoint</td>
+<td><code>(listening, port)</code>, <code>(process, report)</code>, <code>(service, report)</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Login activities from any data source</td>
+<td><code>authentication</code></td>
+</tr>
+<tr>
+<td>Certificates</td>
+<td>Key and certificate management events from secure servers and IAM systems</td>
+<td><code>certificate</code></td>
+</tr>
+<tr>
+<td>Change</td>
+<td>Create, read, update, and delete activities from any data source</td>
+<td><code>change</code></td>
+</tr>
+<tr>
+<td>Change Analysis (deprecated)</td>
+<td>CRUD activity; deprecated in 4.12.0, replaced by Change</td>
+<td><code>change</code></td>
+</tr>
+<tr>
+<td>Data Access</td>
+<td>Shared data access user activity, for detecting unauthorized access and exfiltration</td>
+<td><code>data</code>, <code>access</code></td>
+</tr>
+<tr>
+<td>Data Loss Prevention</td>
+<td>Events gathered from DLP tools</td>
+<td><code>dlp</code>, <code>incident</code></td>
+</tr>
+<tr>
+<td>Databases</td>
+<td>Events pertaining to structured and semi-structured data storage</td>
+<td><code>database</code></td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Email traffic, server to server or client to server</td>
+<td><code>email</code></td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Endpoint clients: processes, services, files, ports, registry</td>
+<td>Per dataset, see below</td>
+</tr>
+<tr>
+<td>Event Signatures</td>
+<td>Standard location to store Windows EventID data</td>
+<td><code>track_event_signatures</code></td>
+</tr>
+<tr>
+<td>Interprocess Messaging</td>
+<td>Transactional requests in programmatic interfaces, messaging queues, IPC and web interfaces</td>
+<td><code>messaging</code></td>
+</tr>
+<tr>
+<td>Intrusion Detection</td>
+<td>Attack detection events from network monitoring devices and apps</td>
+<td><code>ids</code>, <code>attack</code></td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>Common computer infrastructure components, plus network inventory and topology</td>
+<td><code>inventory</code> plus a component tag</td>
+</tr>
+<tr>
+<td>Java Virtual Machines (JVM)</td>
+<td>Generic Java server platforms</td>
+<td><code>jvm</code></td>
+</tr>
+<tr>
+<td>Malware</td>
+<td>Malware detection and endpoint protection management activity</td>
+<td><code>malware</code>, <code>attack</code> for Malware_Attacks</td>
+</tr>
+<tr>
+<td>Network Resolution (DNS)</td>
+<td>DNS traffic, server to server or client to server</td>
+<td><code>network</code>, <code>resolution</code>, <code>dns</code></td>
+</tr>
+<tr>
+<td>Network Sessions</td>
+<td>DHCP and VPN traffic, plus network inventory and topology</td>
+<td><code>network</code>, <code>session</code></td>
+</tr>
+<tr>
+<td>Network Traffic</td>
+<td>Flows of data across network infrastructure components</td>
+<td><code>network</code>, <code>communicate</code></td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Performance tracking data</td>
+<td><code>performance</code> plus a component tag</td>
+</tr>
+<tr>
+<td>Splunk Audit Logs</td>
+<td>Audit information for systems producing event logs</td>
+<td><code>modaction</code> for Modular_Actions; other datasets are search-constrained</td>
+</tr>
+<tr>
+<td>Ticket Management</td>
+<td>Service requests and their states in ITIL-influenced service desks, bug trackers, ticket systems, GRC systems</td>
+<td><code>ticketing</code></td>
+</tr>
+<tr>
+<td>Updates</td>
+<td>Patch management events from individual systems or central management tools</td>
+<td><code>update</code>, <code>status</code></td>
+</tr>
+<tr>
+<td>Vulnerabilities</td>
+<td>Vulnerability detection data</td>
+<td><code>report</code>, <code>vulnerability</code></td>
+</tr>
+<tr>
+<td>Web</td>
+<td>Web server and proxy server data in a security or operational context</td>
+<td><code>web</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Dataset-level tag detail for the models the exam is most likely to use:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td>Authentication</td>
+<td><code>authentication</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Default_Authentication</td>
+<td><code>default</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Insecure_Authentication</td>
+<td><code>cleartext</code> OR <code>insecure</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Privileged_Authentication</td>
+<td><code>privileged</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Failed_Authentication, Successful_Authentication</td>
+<td>Search-based on the result, not tag-based</td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Ports</td>
+<td><code>listening</code>, <code>port</code></td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Processes</td>
+<td><code>process</code>, <code>report</code></td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Services</td>
+<td><code>service</code>, <code>report</code></td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Filesystem</td>
+<td><code>endpoint</code>, <code>filesystem</code></td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Registry</td>
+<td><code>endpoint</code>, <code>registry</code></td>
+</tr>
+<tr>
+<td>Web</td>
+<td>Web / Proxy / Storage</td>
+<td><code>web</code> / <code>proxy</code> / <code>storage</code></td>
+</tr>
+<tr>
+<td>Change</td>
+<td>All_Changes / Auditing_Changes / Endpoint_Changes / Network_Changes / Account_Management / Instance_Changes</td>
+<td><code>change</code> / <code>audit</code> / <code>endpoint</code> / <code>network</code> / <code>account</code> / <code>instance</code></td>
+</tr>
+<tr>
+<td>Malware</td>
+<td>Malware_Attacks / Malware_Operations</td>
+<td><code>malware</code>,<code>attack</code> / <code>malware</code>,<code>operations</code></td>
+</tr>
+<tr>
+<td>Email</td>
+<td>All_Email / Delivery / Content / Filtering</td>
+<td><code>email</code> / <code>delivery</code> / <code>content</code> / <code>filter</code></td>
+</tr>
+<tr>
+<td>Network Sessions</td>
+<td>All_Sessions / Session_Start / Session_End / DHCP / VPN</td>
+<td><code>network</code>,<code>session</code> / <code>start</code> / <code>end</code> / <code>dhcp</code> / <code>vpn</code></td>
+</tr>
+<tr>
+<td>Updates</td>
+<td>Updates / Update_Errors</td>
+<td><code>update</code>,<code>status</code> / <code>update</code>,<code>error</code></td>
+</tr>
+<tr>
+<td>Ticket Management</td>
+<td>All_Ticket_Management / Change / Incident / Problem</td>
+<td><code>ticketing</code> / <code>change</code> / <code>incident</code> / <code>problem</code></td>
+</tr>
+<tr>
+<td>Certificates</td>
+<td>All_Certificates / SSL</td>
+<td><code>certificate</code> / <code>ssl</code> OR <code>tls</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="field-classification">Field classification<a class="anchor" href="#field-classification" aria-label="Link to this section">#</a></h3>
+<p>The reference tables are organised per data model, each with a tags table giving the dataset constraints, inherited tags included, and a fields table giving names, descriptions, and expected values. There is no such thing as a CIM event type reference table. One vocabulary note: the reference-table page records that &quot;object&quot; is the pre-6.5.0 name for &quot;dataset&quot;, so older material talking about data model objects means datasets. The tables mark fields as required, recommended, or optional. Required fields are the ones a dataset cannot be meaningfully used without; the 8.6 tables express this as &quot;required for pytest-splunk-addon&quot;. Recommended fields are described in the docs as &quot;both commonly available in data sources of the intended type, and highly useful for security monitoring and investigations&quot;, and are flagged as <code>recommended=true</code> in the model JSON. Optional fields add value where the source happens to carry them.</p>
+<p>Expected values are guidance, not enforcement. The docs say they are &quot;provided to help you make normalization decisions when developing add-ons&quot; and that they &quot;are not exhaustive or exclusive&quot;. The tables split them into values Enterprise Security expects and values the CIM itself uses as dataset constraints. Nothing in Splunk rejects an out-of-spec value; downstream apps such as Enterprise Security simply will not match it.</p>
+<p>A dataset is CIM compliant when both halves are true: the events carry the tags that constrain the dataset, and the required fields are populated with CIM-compliant names and values. Tagging alone puts events into the model with empty columns. Field mapping alone leaves the events outside the model entirely.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<p>There is no <code>cim</code> command. The section is examined through the commands you use to search and validate a CIM data model, plus the CIM Setup page.</p>
+<h3 id="datamodel">datamodel<a class="anchor" href="#datamodel" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">data</span> <span class="t-field">model</span> <span class="t-field">name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">dataset</span> <span class="t-field">name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">data</span> <span class="t-field">model</span> <span class="t-field">search</span> <span class="t-func">mode</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">strict_fields</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data model name</td>
+<td>string</td>
+<td>none</td>
+<td>Names the model. With no other argument, returns the JSON for that model. Omit entirely to list all models.</td>
+</tr>
+<tr>
+<td>dataset name</td>
+<td>string</td>
+<td>none</td>
+<td>Names a dataset inside the model. Must be given after the model name. Returns the JSON for that dataset.</td>
+</tr>
+<tr>
+<td>data model search mode</td>
+<td><code>search</code>, <code>flat</code>, <code>acceleration_search</code>, <code>search_string</code>, <code>flat_string</code>, <code>acceleration_search_string</code></td>
+<td>none (returns JSON when omitted)</td>
+<td><code>search</code> runs the dataset search as defined. <code>flat</code> runs it but strips the hierarchical prefix from field names. <code>acceleration_search</code> runs the search the search head uses to accelerate the model. The three <code>_string</code> variants return the search string instead of running it.</td>
+</tr>
+<tr>
+<td>strict_fields</td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>When true, returns only the default fields and the fields named in the constraints. When false, includes inherited and calculated fields.</td>
+</tr>
+<tr>
+<td>allow_old_summaries</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>When false, the search head ignores summary directories older than the current model definition, so results always reflect the current configuration.</td>
+</tr>
+<tr>
+<td>summariesonly</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>When false, returns results from both summarized and unsummarized data. When true, returns only data already summarized in TSIDX format for an accelerated model.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="tstats-against-a-data-model">tstats against a data model<a class="anchor" href="#tstats-against-a-data-model" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">prestats</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">stats-func</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">root_dataset</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">where</span> <span class="t-opt">nodename</span><span class="t-op">=&lt;</span><span class="t-field">lineage</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-cmd">WHERE</span> <span class="t-op">&lt;</span><span class="t-field">search</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">span</span><span class="t-op">=&lt;</span><span class="t-field">timespan</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>summariesonly</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>True restricts results to the accelerated summary only. This is the flag that makes a search fast and also the flag that returns zero rows against an unaccelerated model.</td>
+</tr>
+<tr>
+<td>allow_old_summaries</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>True permits summaries built under an older model definition.</td>
+</tr>
+<tr>
+<td>prestats</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>True emits prestats output for chaining into <code>chart</code>, <code>stats</code>, or <code>timechart</code>.</td>
+</tr>
+<tr>
+<td>FROM datamodel=</td>
+<td><code>&lt;model&gt;.&lt;root_dataset&gt;</code></td>
+<td>none</td>
+<td>Required to target a data model. The root dataset name is part of the reference.</td>
+</tr>
+<tr>
+<td>where nodename=</td>
+<td>dotted dataset lineage</td>
+<td>none</td>
+<td>Selects a child dataset, for example <code>nodename=Authentication.Failed_Authentication</code>.</td>
+</tr>
+<tr>
+<td>fillnull_value</td>
+<td>string</td>
+<td>none</td>
+<td>Value substituted for null field values in the output.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="datamodelsimple-custom-command-from-the-cim-add-on">datamodelsimple (custom command from the CIM add-on)<a class="anchor" href="#datamodelsimple-custom-command-from-the-cim-add-on" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=&lt;</span><span class="t-field">models</span><span class="t-pipe">|</span><span class="t-field">objects</span><span class="t-pipe">|</span><span class="t-field">attributes</span><span class="t-op">&gt;</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">model</span> <span class="t-field">name</span><span class="t-op">&gt;</span> <span class="t-opt">object</span><span class="t-op">=&lt;</span><span class="t-field">dataset</span> <span class="t-field">name</span><span class="t-op">&gt;</span> <span class="t-opt">nodename</span><span class="t-op">=&lt;</span><span class="t-field">dataset</span> <span class="t-field">lineage</span><span class="t-op">&gt;</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td><code>models</code>, <code>objects</code>, <code>attributes</code></td>
+<td>none, must be supplied</td>
+<td><code>models</code> lists model names, <code>objects</code> lists datasets in a model, <code>attributes</code> lists the field names available in a dataset.</td>
+</tr>
+<tr>
+<td>datamodel</td>
+<td>model name</td>
+<td>none</td>
+<td>Required for <code>objects</code> and <code>attributes</code>.</td>
+</tr>
+<tr>
+<td>object</td>
+<td>dataset name</td>
+<td>none</td>
+<td>Names the dataset for <code>attributes</code>.</td>
+</tr>
+<tr>
+<td>nodename</td>
+<td>dotted lineage</td>
+<td>none</td>
+<td>Addresses a child dataset, for example <code>Authentication.Failed_Authentication</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="from">from<a class="anchor" href="#from" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:</span><span class="t-op">&lt;</span><span class="t-field">datamodel_name</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">dataset_name</span><span class="t-op">&gt;</span></code></pre></div>
+<p>The <code>from</code> command accepts <code>datamodel</code>, <code>lookup</code>, and <code>savedsearch</code> as dataset types. Quotation marks are needed only when a name contains spaces.</p>
+<h3 id="cim-setup-page">CIM Setup page<a class="anchor" href="#cim-setup-page" aria-label="Link to this section">#</a></h3>
+<p>Navigate to Apps, then Manage Apps, then click <strong>Set up</strong> in the Splunk Common Information Model row. The direct URL is <code>https://&lt;your-splunk-host&gt;/en-US/app/search/cim_setup</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Indexes allowlist</td>
+<td>comma-delimited index names</td>
+<td>all indexes</td>
+<td>Constrains which indexes the selected data model searches. Written into the per-model index constraint macro in <code>Splunk_SA_CIM</code> macros. Index names defined only on indexers are accepted.</td>
+</tr>
+<tr>
+<td>Accelerate</td>
+<td>on / off, per data model</td>
+<td>off for every CIM data model</td>
+<td>Enables data model acceleration for the selected model.</td>
+</tr>
+<tr>
+<td>Backfill range</td>
+<td>time modifier</td>
+<td>none</td>
+<td>How far back to build column stores. Consult <code>datamodels.conf.spec</code> before setting it.</td>
+</tr>
+<tr>
+<td>Summary range</td>
+<td>time modifier</td>
+<td>none</td>
+<td>How long column stores are retained. Drives disk usage and indexer load.</td>
+</tr>
+<tr>
+<td>Max summarization search time</td>
+<td>seconds</td>
+<td>none</td>
+<td>Ceiling on how long one acceleration search may run.</td>
+</tr>
+<tr>
+<td>Max concurrent summarization searches</td>
+<td>integer</td>
+<td>none</td>
+<td>How many acceleration searches may run in parallel.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Required capability is <code>accelerate_datamodel</code> on add-on version 4.12.0 and above, or <code>admin_all_objects</code> on 4.11.0 and below. If Enterprise Security or the PCI Compliance app is installed, the Data Model Acceleration Enforcement modular input enforces acceleration and your manual changes on this page do not persist.</p>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p><code>| datamodel</code> with no arguments returns one row per data model with the model JSON in a single field. It is a generating command, so it must be first in the search, and the output is a single-column table of JSON text, not events. Naming a model, or a model and a dataset, narrows that to one JSON row. None of these forms touches your indexed data.</p>
+<p><code>| datamodel Authentication Authentication search</code> is the form that returns events. The output is the events that satisfy the dataset constraint, with data model fields presented under their fully qualified dotted names: <code>Authentication.action</code>, <code>Authentication.src</code>, <code>Authentication.user</code>. Internal fields such as <code>_time</code>, <code>_raw</code>, <code>host</code>, <code>source</code>, and <code>sourcetype</code> keep their bare names. Because the field names carry the dataset prefix, a naive <code>| table action</code> after <code>datamodel ... search</code> returns an empty column.</p>
+<p><code>| datamodel Authentication Authentication flat</code> returns the same rows with the prefix stripped, so the column is <code>action</code>. Use <code>flat</code> to feed the result into commands written for ordinary field names.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command form</th>
+<th>Row shape</th>
+<th>Column shape</th>
+<th>Streaming or transforming</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>| datamodel</code></td>
+<td>one row per model</td>
+<td>one JSON column</td>
+<td>generating, non-streaming</td>
+</tr>
+<tr>
+<td><code>| datamodel &lt;model&gt; &lt;dataset&gt;</code></td>
+<td>one row</td>
+<td>one JSON column</td>
+<td>generating, non-streaming</td>
+</tr>
+<tr>
+<td><code>| datamodel &lt;model&gt; &lt;dataset&gt; search</code></td>
+<td>one row per matching event</td>
+<td>dotted <code>Dataset.field</code> names plus internal fields</td>
+<td>generating, then streams events</td>
+</tr>
+<tr>
+<td><code>| datamodel &lt;model&gt; &lt;dataset&gt; flat</code></td>
+<td>one row per matching event</td>
+<td>bare field names</td>
+<td>generating, then streams events</td>
+</tr>
+<tr>
+<td><code>| tstats ... FROM datamodel=...</code></td>
+<td>one row per BY group</td>
+<td>the aggregate plus the BY fields, still dotted</td>
+<td>generating and transforming, returns a statistics table</td>
+</tr>
+<tr>
+<td><code>| datamodelsimple type=attributes ...</code></td>
+<td>one row per field</td>
+<td>a single name column</td>
+<td>generating, returns a table of names</td>
+</tr>
+</tbody>
+</table></div>
+<p>A concrete <code>tstats</code> result against the Web model:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Web.status</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>14238</td>
+</tr>
+<tr>
+<td>404</td>
+<td>611</td>
+</tr>
+<tr>
+<td>503</td>
+<td>87</td>
+</tr>
+</tbody>
+</table></div>
+<p>Note the dotted column name survives into the statistics table. <code>| rename Web.status AS status</code> is the usual next step.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>The Splunk tutorial dataset is used throughout: <code>access_combined_wcookie</code> for web traffic, <code>secure</code> for Linux authentication, and <code>vendor_sales</code> for the non-CIM counterexample.</p>
+<p><strong>1. Enumerate what the add-on gave you.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span></code></pre></div>
+<p>Returns one row per installed data model with its JSON, which is the fastest confirmation that <code>Splunk_SA_CIM</code> is present. Pair it with the add-on's own command for a clean list of names:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">models</span></code></pre></div>
+<p><strong>2. Read the contract before you normalize.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">objects</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">attributes</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Web</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Web.Web</span></code></pre></div>
+<p>The first returns the datasets in the Web model, the second the field names the Web dataset expects. This is the reference-table step done in SPL: reading the field list for the dataset you intend to map to.</p>
+<p><strong>3. Prove the tutorial web data is not yet in the Web model.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web</span> <span class="t-field">Web</span> <span class="t-field">search</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span></code></pre></div>
+<p>Returns <code>count=0</code> on a stock instance. The tutorial data has <code>status</code>, <code>clientip</code>, <code>action</code>, and <code>bytes</code> extracted, so the field half is largely satisfied, but nothing tags it <code>web</code>. This is the single most instructive search in the section: correct fields with no tag means the events are outside the model.</p>
+<p><strong>4. Tag it, then re-run.</strong></p>
+<p>Create an event type over the sourcetype and tag it <code>web</code>. The Lab below has the Splunk Web click path; the configuration file equivalent is:</p>
+<pre class="plain lang-ini"><code># eventtypes.conf
+[buttercup_web]
+search = sourcetype=access_combined_wcookie
+
+# tags.conf
+[eventtype=buttercup_web]
+web = enabled</code></pre>
+<p>Now the same validation search returns rows:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web</span> <span class="t-field">Web</span> <span class="t-field">search</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">Web.status</span></code></pre></div>
+<p><strong>5. Map a field the vendor named differently.</strong></p>
+<p>The Web dataset expects <code>src</code> for the client address. The tutorial data extracts <code>clientip</code>. A field alias fixes it without touching the raw event or the existing field:</p>
+<pre class="plain lang-ini"><code># props.conf
+[access_combined_wcookie]
+FIELDALIAS-cim_src = clientip AS src</code></pre>
+<p>The original <code>clientip</code> still exists after aliasing. Aliases add a name, they do not rename destructively.</p>
+<p><strong>6. Derive a value the vendor did not log, with a calculated field.</strong></p>
+<p>The Authentication dataset requires <code>action</code> with expected values <code>success</code>, <code>failure</code>, <code>pending</code>, <code>error</code>. Linux <code>secure</code> events say &quot;Accepted password&quot; or &quot;Failed password&quot; in the raw text. A calculated field normalizes it:</p>
+<pre class="plain lang-ini"><code># props.conf
+[secure]
+EVAL-action = case(match(_raw,&quot;(?i)Accepted&quot;),&quot;success&quot;, match(_raw,&quot;(?i)Failed&quot;),&quot;failure&quot;, true(),&quot;error&quot;)</code></pre>
+<p>Then validate the failed-login child dataset:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Failed_Authentication</span> <span class="t-field">search</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">Authentication.user</span><span class="t-op">,</span> <span class="t-field">Authentication.src</span></code></pre></div>
+<p><strong>7. Field-level validation with fieldsummary.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Successful_Authentication</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-op">*</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-op">-</span> <span class="t-field">date_</span><span class="t-op">*</span> <span class="t-field">host</span> <span class="t-field">index</span> <span class="t-field">punct</span> <span class="t-field">_raw</span> <span class="t-func">time</span><span class="t-op">*</span> <span class="t-field">splunk_server</span> <span class="t-field">sourcetype</span> <span class="t-field">source</span> <span class="t-field">eventtype</span> <span class="t-field">linecount</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fieldsummary</span></code></pre></div>
+<p>This is the docs' own validation pattern. <code>fieldsummary</code> gives you a per-field count and distinct-count, so a required CIM field sitting at <code>count=0</code> is immediately visible.</p>
+<p><strong>8. Accelerated search, and the trap inside it.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-opt">summariesonly</span><span class="t-op">=</span><span class="t-field">t</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Web.Web</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Web.Web</span> <span class="t-kw">BY</span> <span class="t-field">Web.status</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span></code></pre></div>
+<p>On a stock instance with acceleration disabled this returns zero rows even though example 4 returned data. Drop <code>summariesonly=t</code> and the same search returns results by falling back to raw events. Confirm acceleration status before blaming your tagging:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-pipe">|</span> <span class="t-macro">`cim_datamodelinfo`</span></code></pre></div>
+<p><strong>9. The counterexample.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web</span> <span class="t-field">Web</span> <span class="t-field">search</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span></code></pre></div>
+<p>Returns zero and always will. <code>vendor_sales</code> is transactional retail data with no CIM domain. Not every sourcetype belongs in a CIM model, and the docs explicitly warn against force-fitting a source into a model &quot;based solely on field name&quot;.</p>
+<p><strong>10. Find the recommended fields you have not mapped yet.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-pipe">|</span> <span class="t-cmd">rest</span> <span class="t-opt">splunk_server</span><span class="t-op">=</span><span class="t-field">local</span> <span class="t-opt">count</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-op">/</span><span class="t-field">services</span><span class="t-op">/</span><span class="t-field">data</span><span class="t-op">/</span><span class="t-field">models</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rename</span> <span class="t-field">title</span> <span class="t-kw">AS</span> <span class="t-field">model</span><span class="t-op">,</span> <span class="t-field">eai:data</span> <span class="t-kw">AS</span> <span class="t-field">data</span>
+<span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">data</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">objects</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">objects{}</span>
+<span class="t-pipe">|</span> <span class="t-cmd">mvexpand</span> <span class="t-field">objects</span>
+<span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">objects</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">object_name</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">objectName</span>
+<span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">objects</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">fields</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">fields{}</span>
+<span class="t-pipe">|</span> <span class="t-cmd">mvexpand</span> <span class="t-field">fields</span>
+<span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">fields</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">field_name</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">fieldName</span>
+<span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">fields</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">recommended</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">comment.recommended</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">recommended</span><span class="t-op">=</span><span class="t-kw">true</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">model</span><span class="t-op">,</span> <span class="t-field">object_name</span><span class="t-op">,</span> <span class="t-field">field_name</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-field">model</span><span class="t-op">,</span> <span class="t-field">object_name</span><span class="t-op">,</span> <span class="t-field">field_name</span></code></pre></div>
+<p>This is the docs' own prioritization search, reading the <code>recommended=true</code> flag straight out of the model JSON, which is where the classification actually lives.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Events have the right field names but do not appear in the model</td>
+<td>Missing or wrong tag. Tags are the entry condition for every event dataset. Fix the event type and tag first.</td>
+</tr>
+<tr>
+<td>Events appear in the model but the columns are empty</td>
+<td>Tagging is right, field mapping is missing. Add field aliases, extractions, or lookups.</td>
+</tr>
+<tr>
+<td>Vendor field has a different name, same meaning, and the value is already correct</td>
+<td>Field alias. Cheapest option, and it runs earliest in the pipeline.</td>
+</tr>
+<tr>
+<td>The value itself must be derived, converted, or normalized to a prescribed value</td>
+<td>Calculated field with EVAL.</td>
+</tr>
+<tr>
+<td>The value is not in the event at all, or is a code that must become a word</td>
+<td>Lookup.</td>
+</tr>
+<tr>
+<td>You need the field to exist before the alias applies</td>
+<td>Field extraction, because aliases run after extraction and cannot alias a calculated, lookup, event type, or tag value.</td>
+</tr>
+<tr>
+<td>Choosing between Change and Endpoint for a service start event</td>
+<td>Endpoint covers processes, services, files, ports and registry on the client. Administrative changes to infrastructure or to EDR systems go to Change.</td>
+</tr>
+<tr>
+<td>Choosing between Network Traffic and Intrusion Detection</td>
+<td>Network Traffic is connection-level flow, decided on TCP headers, destination, and ports at connection time. Intrusion Detection is attack detection from monitoring devices, decided mid-connection on traffic patterns.</td>
+</tr>
+<tr>
+<td>Choosing between Alerts and Intrusion Detection</td>
+<td>Alerts is for generic alerting systems such as Nagios or NetCool. Intrusion Detection is for attack-detection appliances.</td>
+</tr>
+<tr>
+<td>The model returns data but slowly, across every index</td>
+<td>Set the Indexes allowlist on the CIM Setup page for that model. Default is all indexes.</td>
+</tr>
+<tr>
+<td>You want <code>tstats summariesonly=t</code> to return rows</td>
+<td>The model must be accelerated. It is not, by default.</td>
+</tr>
+<tr>
+<td>You need to see whether a field extraction is missing across a whole model</td>
+<td>Pivot on the CIM Validation (S.o.S.) model, Missing Extractions dataset.</td>
+</tr>
+<tr>
+<td>You need to find events that should be tagged and are not</td>
+<td>Pivot on the CIM Validation (S.o.S.) model, Untagged Events dataset.</td>
+</tr>
+<tr>
+<td>You are asked what to consult before mapping a source</td>
+<td>The CIM data model reference tables for the target dataset. That is the documented recommended approach.</td>
+</tr>
+<tr>
+<td>You are asked which knowledge objects do the normalizing</td>
+<td>Field aliases, field extractions, and lookups, plus calculated fields where the value must be derived. Macros filter and report; workflow actions do nothing here.</td>
+</tr>
+<tr>
+<td>An answer option quotes a number of CIM data models or datasets</td>
+<td>Treat the number as noise. The 8.6 docs publish no count.</td>
+</tr>
+<tr>
+<td>You are asked where to install the add-on</td>
+<td>Search heads only.</td>
+</tr>
+<tr>
+<td>Your source genuinely has no matching model</td>
+<td>Do not force it. Extend a model with a custom field only if the model is otherwise right, and do not clone the model.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-10-01"><span class="tid">T-10-01</span> The exam offers &quot;the CIM normalizes data at index time&quot; or &quot;the CIM changes how events are stored&quot;. <span class="wrong">Wrong belief</span>: normalizing means rewriting. <span class="right">Correct fact</span>: the CIM is a search-time schema, schema-on-the-fly, and it &quot;leaves the raw machine data intact&quot;. Installing the add-on reindexes nothing and modifies no indexed event.</p>
+<p class="trap" id="T-10-02"><span class="tid">T-10-02</span> A question states that CIM data models are accelerated out of the box, or that installing the add-on immediately speeds up searches. This is the Apress answer key F error. <span class="right">Correct fact</span>: acceleration is disabled by default for every CIM data model, and you enable it per model on the CIM Setup page. A <code>tstats summariesonly=t</code> search against a stock CIM model returns zero rows.</p>
+<p class="trap" id="T-10-03"><span class="tid">T-10-03</span> A question implies that populating the CIM field names is sufficient for compliance. <span class="wrong">Wrong belief</span>: field mapping equals compliance. <span class="right">Correct fact</span>: tags are the constraint that admits events into an event dataset. Correct field names without the required tag put the events nowhere. Compliance requires both the tags and the populated required fields.</p>
+<p class="trap" id="T-10-04"><span class="tid">T-10-04</span> A distractor claims the default Indexes allowlist is empty, or that the model searches no indexes until you configure one. <span class="right">Correct fact</span>: by default each data model searches all indexes. Leaving it that way is a performance problem, not a functional one. The old term &quot;index whitelist&quot; is the same setting.</p>
+<p class="trap" id="T-10-05"><span class="tid">T-10-05</span> A question asks where the CIM add-on is installed and offers indexers, forwarders, or all tiers. <span class="right">Correct fact</span>: search heads only, because the add-on contains only search-time knowledge objects.</p>
+<p class="trap" id="T-10-06"><span class="tid">T-10-06</span> &quot;Compute Inventory&quot; appears as a data model name in an answer list. <span class="right">Correct fact</span>: the model is named Inventory in current CIM. &quot;Compute Inventory&quot; is the legacy documentation slug for that same page and is not the current model name. The same trap works with Application State and Change Analysis, both deprecated in add-on version 4.12.0 and replaced by Endpoint and Change respectively.</p>
+<p class="trap" id="T-10-07"><span class="tid">T-10-07</span> A question offers <code>| datamodel Web Web search | table action, status</code> as a working validation search. <span class="right">Correct fact</span>: <code>datamodel ... search</code> returns fields under their fully qualified dotted names, so the columns are <code>Web.action</code> and <code>Web.status</code>. The <code>flat</code> mode is what strips the prefix. The plain <code>table action</code> returns an empty column.</p>
+<p class="trap" id="T-10-08"><span class="tid">T-10-08</span> A distractor swaps the order of the search-time knowledge object pipeline, for example claiming you can create a field alias for a lookup output field or for a tag. <span class="right">Correct fact</span>: field aliases are applied after key-value field extraction but before calculated fields, lookups, event types, and tags. You cannot alias a calculated field, an event type, a tag, or a lookup-added field.</p>
+<p class="trap" id="T-10-09"><span class="tid">T-10-09</span> A question presents <code>datamodelsimple</code> as a core SPL command, or presents <code>datamodel</code> as something the CIM add-on installs. <span class="right">Correct fact</span>: <code>datamodel</code>, <code>tstats</code>, <code>pivot</code>, and <code>from</code> are core SPL. <code>datamodelsimple</code> is the custom command shipped inside <code>Splunk_SA_CIM</code> and does not exist without the add-on.</p>
+<p class="trap" id="T-10-10"><span class="tid">T-10-10</span> A distractor claims the CIM expected values are enforced, so an event with <code>action=denied</code> in the Authentication model will be rejected. <span class="right">Correct fact</span>: expected values are &quot;not exhaustive or exclusive&quot; and nothing rejects an out-of-spec value. The consequence is silent: Enterprise Security content that looks for <code>action=failure</code> simply will not match.</p>
+<p class="trap" id="T-10-11"><span class="tid">T-10-11</span> A question asks which model covers a Windows service being stopped and offers Application State. <span class="right">Correct fact</span>: Application State is deprecated; Endpoint's Services dataset, tagged <code>service</code> and <code>report</code>, is the current answer. Endpoint superseded Application State in 4.12.0.</p>
+<p class="trap" id="T-10-12"><span class="tid">T-10-12</span> A distractor states that a child dataset only needs its own tag. <span class="right">Correct fact</span>: child datasets inherit the parent constraint. The Web model's Proxy dataset requires <code>web</code> and <code>proxy</code>. The Endpoint model's Filesystem dataset requires <code>endpoint</code> and <code>filesystem</code>. Adding only the child tag leaves the event out of both datasets.</p>
+<p class="trap" id="T-10-13"><span class="tid">T-10-13</span> A question suggests cloning a CIM data model before extending it, &quot;to keep the original for record keeping&quot;. <span class="right">Correct fact</span>: the docs state that cloning the data model and keeping the original is not considered a best practice. Add the custom field to the model itself, or better, avoid extending at all if a field mapping will do.</p>
+<p class="trap" id="T-10-14"><span class="tid">T-10-14</span> A question conflates the CIM Add-on with the CIM Add-on Builder. <span class="right">Correct fact</span>: the Splunk Common Information Model Add-on (app 1621, <code>Splunk_SA_CIM</code>) supplies the models. The Splunk Add-on Builder is a separate app whose &quot;Map to data model&quot; step generates the mapping objects for a new sourcetype, and it needs the CIM add-on installed to map to CIM models. Only the first is on the blueprint.</p>
+<p class="trap" id="T-10-15"><span class="tid">T-10-15</span> A distractor names <code>cim_summary</code> as the index the add-on uses. <span class="right">Correct fact</span>: <code>cim_summary</code> is deprecated and has been removed. The index that matters now is <code>cim_modactions</code>, which supports common action model alerting and auditing.</p>
+<p class="trap" id="T-10-16"><span class="tid">T-10-16</span> An option states a count, &quot;the CIM contains 22 pre-configured data models&quot; or &quot;28 pre-configured datasets&quot;. <span class="wrong">Wrong belief</span>: the catalogue has a published size you are meant to know. <span class="right">Correct fact</span>: the 8.6 docs state no total for either, the catalogue has grown across releases, and any number in an option is inherited from older material. Judge the option on the model names it uses, not on its arithmetic.</p>
+<p class="trap" id="T-10-17"><span class="tid">T-10-17</span> An option says the add-on ships tsidx summary files, custom visualizations, or a library of CIM-compliant security dashboards. <span class="right">Correct fact</span>: none of those. Column stores exist only once acceleration is enabled, which it is not on a fresh install, and the one dashboard shipped is Data Model Audit for acceleration health. The polished CIM dashboards come from Enterprise Security and the PCI Compliance app.</p>
+<p class="trap" id="T-10-18"><span class="tid">T-10-18</span> A statement credits the knowledge manager with using the CIM to create data models, or says the CIM builds your field extractions for you. <span class="right">Correct fact</span>: the models ship as JSON in <code>Splunk_SA_CIM/default/data/models</code> and are not built locally, and the knowledge manager creates the objects that map data into them: extractions, aliases, calculated fields, lookups, event types, and tags.</p>
+<p class="trap" id="T-10-19"><span class="tid">T-10-19</span> A question asks which knowledge objects the CIM uses to normalize data and offers search macros or workflow actions. <span class="right">Correct fact</span>: the documented set is field aliases, field extractions, and lookups, alongside the event types and tags that admit events to a dataset, plus calculated fields for derived values. The shipped macros report acceleration status and filter data out of models, so &quot;the add-on includes macros&quot; is true while &quot;macros normalize data&quot; is false. Workflow actions are unrelated to the CIM.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded. If <code>Splunk_SA_CIM</code> is not installed, install app 1621 from Splunkbase first and restart.</p>
+<ol>
+<li>Confirm the add-on is present. Run <code>| datamodelsimple type=models</code> in Search and Reporting. If the command is unknown, the add-on is missing.</li>
+<li>Read the contract. Run <code>| datamodelsimple type=attributes datamodel=Web nodename=Web.Web</code> and note that <code>src</code>, <code>action</code>, <code>status</code>, and <code>url</code> are expected.</li>
+<li>Establish the baseline. Run <code>| datamodel Web Web search | search sourcetype=access_combined_wcookie | stats count</code>. Expect <code>0</code>.</li>
+<li>Create the event type. Settings, then Event types, then New Event Type. Name <code>buttercup_web</code>, search string <code>sourcetype=access_combined_wcookie</code>, app Search and Reporting.</li>
+<li>Tag it. Settings, then Tags, then List by tag name, then New. Tag name <code>web</code>, field-value pair <code>eventtype=buttercup_web</code>.</li>
+<li>Alias the client address. Settings, then Fields, then Field aliases, then New Field Alias. Name <code>cim_src</code>, applied to sourcetype <code>access_combined_wcookie</code>, with <code>clientip</code> becoming <code>src</code>.</li>
+<li>Set the index allowlist. Apps, then Manage Apps, then Set up on the Splunk Common Information Model row. Select the Web data model, type <code>main</code> into Indexes allowlist, save. Leave acceleration off.</li>
+<li>Verification search. Run:</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-16">Copy</button></div><pre id="spl-16"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web</span> <span class="t-field">Web</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span><span class="t-op">,</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">Web.src</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">distinct_sources</span> <span class="t-kw">BY</span> <span class="t-field">Web.status</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p>A non-zero <code>count</code> with a non-zero <code>distinct_sources</code> proves both halves: the tag admitted the events to the dataset, and the alias populated a required field. If <code>count</code> is non-zero but <code>distinct_sources</code> is <code>0</code>, the tag worked and the alias did not.</p>
+<ol start="9">
+<li>Optional, two minutes. Settings, then Data models, then CIM Validation (S.o.S.), then Pivot. Pick the Untagged Events dataset and split rows by sourcetype to see what else is a CIM candidate. Leave acceleration off.</li>
+</ol>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>Q1.</strong> A team installs the Splunk CIM Add-on on the search head. Immediately afterwards, which statement is true about their already-indexed firewall data?</p>
+<ul>
+<li>A. The events are reindexed so their fields match CIM names.</li>
+<li>B. The events are unchanged on disk and will not appear in any CIM data model until tags and field mappings are added.</li>
+<li>C. The events appear in the Network Traffic data model automatically because the add-on ships the model.</li>
+<li>D. The events appear in the model only after the Network Traffic model is accelerated.</li>
+</ul>
+<p><strong>Q2.</strong> Which set contains only knowledge objects that ship inside the CIM Add-on?</p>
+<ul>
+<li>A. Data models, tags, event types, field aliases, calculated fields, lookups, search macros, reports and dashboards.</li>
+<li>B. Data models, indexes, source types, forwarder inputs.</li>
+<li>C. Data models, index-time transforms, tags, summary indexes.</li>
+<li>D. Data models, tags, and the <code>datamodel</code> command.</li>
+</ul>
+<p><strong>Q3.</strong> Events from a new SSO product carry <code>user</code>, <code>src</code>, and <code>action=success</code>, and the search <code>| datamodel Authentication Authentication search | search sourcetype=sso</code> returns no results. What is the most likely cause?</p>
+<ul>
+<li>A. The Authentication data model is not accelerated.</li>
+<li>B. The <code>action</code> value must be <code>succeeded</code>, not <code>success</code>.</li>
+<li>C. The events are not tagged <code>authentication</code>.</li>
+<li>D. <code>src</code> must be aliased to <code>dest</code>.</li>
+</ul>
+<p><strong>Q4.</strong> Which command form returns web events with a column literally named <code>status</code> rather than <code>Web.status</code>?</p>
+<ul>
+<li>A. <code>| datamodel Web Web search</code></li>
+<li>B. <code>| datamodel Web Web flat</code></li>
+<li>C. <code>| datamodel Web Web search_string</code></li>
+<li>D. <code>| tstats count FROM datamodel=Web.Web BY status</code></li>
+</ul>
+<p><strong>Q5.</strong> A vendor logs a numeric result code that must become the CIM <code>action</code> value. Which knowledge object is the correct choice?</p>
+<ul>
+<li>A. Field alias, because the field needs a different name.</li>
+<li>B. Calculated field, because the value must be derived from the existing value.</li>
+<li>C. Tag, because <code>action</code> is a constraint field.</li>
+<li>D. Event type, because the value depends on which events matched.</li>
+</ul>
+<p><strong>Q6.</strong> On the CIM Setup page, what is the default Indexes allowlist for each data model, and why does it matter?</p>
+<ul>
+<li>A. Empty, so the model returns nothing until you configure it.</li>
+<li>B. <code>main</code> only, so data in other indexes is invisible to the model.</li>
+<li>C. All indexes, so the model searches more data than necessary and runs slowly.</li>
+<li>D. The indexes named in <code>cim_modactions</code>, which is set at install time.</li>
+</ul>
+<p><strong>Q7.</strong> Which pairing of data model and root dataset tag is correct?</p>
+<ul>
+<li>A. Malware / <code>endpoint</code></li>
+<li>B. Intrusion Detection / <code>ids</code> and <code>attack</code></li>
+<li>C. Vulnerabilities / <code>vuln</code></li>
+<li>D. Network Resolution (DNS) / <code>web</code></li>
+</ul>
+<p><strong>Q8.</strong> A search using <code>| tstats summariesonly=true count FROM datamodel=Authentication.Authentication BY Authentication.user</code> returns no rows, but <code>| datamodel Authentication Authentication search | stats count BY Authentication.user</code> returns thousands. What explains this?</p>
+<ul>
+<li>A. <code>tstats</code> cannot use the Authentication data model.</li>
+<li>B. The model is not accelerated, so there is no TSIDX summary for <code>summariesonly=true</code> to read.</li>
+<li>C. <code>Authentication.user</code> is not a valid field in <code>tstats</code>.</li>
+<li>D. <code>summariesonly=true</code> requires <code>allow_old_summaries=true</code> to be set as well.</li>
+</ul>
+<p><strong>Q9.</strong> A vendor sourcetype identifies the account holder only as a numeric <code>acct_id</code>, and a CSV file maps every id to the person's login name. The Authentication dataset needs the CIM <code>user</code> field populated. Which configuration follows the documented normalization procedure?</p>
+<ul>
+<li>A. <code>FIELDALIAS-user = acct_id AS user</code> in props.conf.</li>
+<li>B. <code>LOOKUP-user = acct_lookup acct_id OUTPUT login_name AS user</code> in props.conf.</li>
+<li>C. A search macro added to <code>Splunk_SA_CIM/default/macros.conf</code> that resolves the id.</li>
+<li>D. <code>TRANSFORMS-user = acct_lookup</code> in props.conf, so <code>user</code> is written into the event at index time.</li>
+</ul>
+<p><strong>Q10.</strong> Which statement about what the Splunk CIM Add-on installs is correct?</p>
+<ul>
+<li>A. Pre-configured data models, plus the field names and event category tags that define each domain.</li>
+<li>B. Pre-configured data models and their tsidx summaries, so <code>| tstats summariesonly=true</code> works as soon as the add-on is installed.</li>
+<li>C. Pre-configured data models and a set of custom visualizations for security dashboards.</li>
+<li>D. Empty data model shells, so the knowledge manager defines each dataset's constraints in the Data Model Editor before use.</li>
+</ul>
+<details><summary>Answers</summary>
+<p><strong>Q1: B.</strong> The CIM is a search-time schema; the docs state it leaves the raw machine data intact. Nothing enters a data model until the events satisfy the dataset constraint, which is a tag. A is wrong because installing a search-time add-on never triggers reindexing. C is wrong because the add-on ships the model definition, not membership: the model is empty of your data until you tag it. D is wrong because acceleration changes speed, not membership; an unaccelerated model still returns data through raw search.</p>
+<p><strong>Q2: A.</strong> That is precisely the knowledge object inventory the add-on carries, plus the custom <code>datamodelsimple</code> command and the common action model. B is wrong because indexes, source types, and inputs are not search-time knowledge objects and are not part of the add-on's normalization content. C is wrong because the CIM does nothing at index time, so index-time transforms are excluded, and the deprecated <code>cim_summary</code> summary index has been removed. D is wrong because <code>datamodel</code> is a core SPL command that exists without the add-on; the command the add-on adds is <code>datamodelsimple</code>.</p>
+<p><strong>Q3: C.</strong> Tags are the constraint that admits events into an event dataset. Correct field names with no tag means the events are outside the model. A is wrong because an unaccelerated model still returns results through <code>datamodel ... search</code>. B is wrong because <code>success</code> is the CIM expected value for the Authentication <code>action</code> field, and in any case expected values are not enforced. D is wrong because <code>src</code> and <code>dest</code> are distinct CIM fields with different meanings; aliasing one to the other would corrupt the mapping.</p>
+<p><strong>Q4: B.</strong> The <code>flat</code> search mode returns the same results as <code>search</code> except that it strips the hierarchical information from the field names. A returns fully qualified names such as <code>Web.status</code>. C returns the search string as text rather than running it, so it returns no events at all. D is wrong because <code>tstats</code> against a data model requires the dotted field name, so the BY clause would need <code>Web.status</code>.</p>
+<p><strong>Q5: B.</strong> A calculated field applies an EVAL expression at search time to derive a value from what is already in the event, which is exactly the code-to-word conversion described. A is wrong because a field alias only renames; it cannot change a value. C is wrong because tags mark events, not field values, and <code>action</code> is a field whose value must be populated. D is wrong because an event type names a set of events; it does not set a field value on them. A lookup would also be defensible if the mapping table were large, but among the options given, the derived-value case is the calculated field.</p>
+<p><strong>Q6: C.</strong> By default each data model searches all indexes, which is why the docs recommend constraining it. A is wrong because the model is fully functional with the default; the setting is a performance control, not a switch. B is wrong because no index is privileged by default. D is wrong because <code>cim_modactions</code> is the index for common action model alerting and auditing, unrelated to the allowlist.</p>
+<p><strong>Q7: B.</strong> The Intrusion Detection model's <code>IDS_Attacks</code> dataset is constrained by the tags <code>ids</code> and <code>attack</code>. A is wrong: <code>Malware_Attacks</code> uses <code>malware</code> and <code>attack</code>; <code>endpoint</code> belongs to the Endpoint model's Filesystem and Registry datasets and to the Change model's <code>Endpoint_Changes</code> dataset. C is wrong: the tag is <code>vulnerability</code>, together with <code>report</code>, not <code>vuln</code>. D is wrong: the DNS dataset uses <code>network</code>, <code>resolution</code>, and <code>dns</code>; <code>web</code> belongs to the Web model.</p>
+<p><strong>Q8: B.</strong> <code>summariesonly=true</code> restricts results to data already summarized in TSIDX format for an accelerated model, and CIM models are not accelerated by default, so the summary is empty. A is wrong because <code>tstats</code> works against any data model; it just needs a summary when <code>summariesonly=true</code>. C is wrong because <code>Authentication.user</code> is the correct fully qualified field reference for <code>tstats</code> against that model. D is wrong because <code>allow_old_summaries</code> controls whether stale summaries built under a previous model definition may be used; it cannot conjure a summary that was never built.</p>
+<p><strong>Q9: B.</strong> The documented step is to normalize with a combination of field aliases, field extractions, and lookups, and the lookup is the member of that set that supplies a value the event does not contain. A is wrong because an alias only adds a second name for the same value, so <code>user</code> would hold the numeric id. C is wrong on two counts: the shipped macros report acceleration status and filter data out of models rather than populating fields, and you do not edit files inside <code>Splunk_SA_CIM</code> to normalize your own source. D is wrong because CIM normalization is entirely search-time; an index-time value would also need reindexing to correct.</p>
+<p><strong>Q10: A.</strong> The docs describe the add-on as a collection of pre-configured data models applied at search time, each consisting of a set of field names and tags for a domain. B is wrong because tsidx column stores exist only after acceleration is enabled, and it is off for every CIM model by default, so a fresh install has nothing summarized. C is wrong because the add-on ships no custom visualizations; its one dashboard is Data Model Audit, and CIM-compliant security dashboards come from Enterprise Security and the PCI Compliance app. D is wrong because the models arrive fully defined as JSON under <code>Splunk_SA_CIM/default/data/models</code>; the knowledge manager builds the tags, event types, aliases, extractions, and lookups that map data into them.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/overview-of-the-splunk-common-information-model" target="_blank" rel="noopener">Overview of the Splunk Common Information Model</a> - the definition sentence, schema-on-the-fly, the add-on contents, the model path. Read first, 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/understand-and-use-the-common-information-model-add-on" target="_blank" rel="noopener">Understand and use the Common Information Model add-on</a> - fields plus event category tags, normalized at search time. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/install-the-splunk-common-information-model-add-on" target="_blank" rel="noopener">Install the Splunk Common Information Model Add-on</a> - search heads only, app 1621, <code>cim_modactions</code>, removal of <code>cim_summary</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/approaches-to-using-the-cim" target="_blank" rel="noopener">Approaches to using the CIM</a> - normalize, validate, report. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time" target="_blank" rel="noopener">Use the CIM to normalize data at search time</a> - the eight-step procedure, the alias / extraction / lookup ordering, the <code>recommended=true</code> REST search. The most exam-relevant page. 25 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/data-models" target="_blank" rel="noopener">Data models index</a> - the catalogue. Skim every model's tag table; do not memorize field lists. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/data-models/how-to-use-the-cim-data-model-reference-tables" target="_blank" rel="noopener">How to use the CIM data model reference tables</a> - tags tables, fields tables, and what required, recommended, and expected values mean. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-validate-your-data" target="_blank" rel="noopener">Use the CIM to validate your data</a> - <code>datamodelsimple</code> syntax, CIM Validation (S.o.S.) datasets. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/set-up-the-splunk-common-information-model-add-on" target="_blank" rel="noopener">Set up the Splunk Common Information Model Add-on</a> - the CIM Setup page, the allowlist default of all indexes, acceleration off by default. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/accelerate-cim-data-models" target="_blank" rel="noopener">Accelerate CIM data models</a> - acceleration parameters, <code>cim_datamodelinfo</code>, the ES enforcement caveat. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/datamodel" target="_blank" rel="noopener">datamodel command reference</a> - search modes and option defaults. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/tstats" target="_blank" rel="noopener">tstats command reference</a> - the <code>FROM datamodel=</code> clause and <code>summariesonly</code>. Data model portion only. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/match-ta-event-types-with-cim-data-models-to-accelerate-searches" target="_blank" rel="noopener">Match TA event types with CIM data models to accelerate searches</a> - how a TA's <code>eventtypes.conf</code> plus <code>tags.conf</code> produces model membership. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-filters-to-exclude-data" target="_blank" rel="noopener">Use the CIM Filters to exclude data</a> - <code>cim_filter_known_scanners</code> and where the macros live. Read last, 5 minutes.</li>
+</ol>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="09-data-models-and-pivot.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Data models and pivot</span></a></nav>
+      <p class="doc-foot">Built from <code>topics/10-cim.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#blueprint-mapping"><span class="toc-text">Blueprint mapping</span><span class="mins">2 min</span></a>
+<a class="h2" href="#what-it-is"><span class="toc-text">What it is</span><span class="mins">12 min</span></a>
+<a class="h3" href="#the-documented-normalization-procedure-objective-10.3"><span class="toc-text">The documented normalization procedure (objective 10.3)</span></a>
+<a class="h3" href="#knowledge-objects-the-add-on-ships-objective-10.2"><span class="toc-text">Knowledge objects the add-on ships (objective 10.2)</span></a>
+<a class="h3" href="#the-cim-8.6-data-model-catalogue"><span class="toc-text">The CIM 8.6 data model catalogue</span></a>
+<a class="h3" href="#field-classification"><span class="toc-text">Field classification</span></a>
+<a class="h2" href="#syntax-and-options"><span class="toc-text">Syntax and options</span><span class="mins">4 min</span></a>
+<a class="h3" href="#datamodel"><span class="toc-text">datamodel</span></a>
+<a class="h3" href="#tstats-against-a-data-model"><span class="toc-text">tstats against a data model</span></a>
+<a class="h3" href="#datamodelsimple-custom-command-from-the-cim-add-on"><span class="toc-text">datamodelsimple (custom command from the CIM add-on)</span></a>
+<a class="h3" href="#from"><span class="toc-text">from</span></a>
+<a class="h3" href="#cim-setup-page"><span class="toc-text">CIM Setup page</span></a>
+<a class="h2" href="#result-contract"><span class="toc-text">Result contract</span><span class="mins">2 min</span></a>
+<a class="h2" href="#worked-examples"><span class="toc-text">Worked examples</span><span class="mins">4 min</span></a>
+<a class="h2" href="#decision-rules"><span class="toc-text">Decision rules</span><span class="mins">3 min</span></a>
+<a class="h2" href="#traps"><span class="toc-text">Traps</span><span class="mins">6 min</span></a>
+<a class="h2" href="#lab"><span class="toc-text">Lab</span><span class="mins">2 min</span></a>
+<a class="h2" href="#self-check"><span class="toc-text">Self-check</span><span class="mins">8 min</span></a>
+<a class="h2" href="#docs"><span class="toc-text">Docs</span><span class="mins">1 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">44 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+<script src="../mermaid-init.js"></script>
+</body>
+</html>

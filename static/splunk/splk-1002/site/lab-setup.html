@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab setup | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item current" href="lab-setup.html" aria-current="page"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../lab-setup.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Start here</span><span class="sep">/</span>
+        <span>Lab setup</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="lab-setup">Lab setup</h1>
+<p>One-time setup on your local Splunk Enterprise 10.x. Every lab in the topic files assumes this is done. Budget about twenty minutes.</p>
+<p>You need three indexes, the Splunk tutorial data, one JSON dataset for the CIM lab, and the CIM add-on.</p>
+<h2 id="what-data-you-already-have">What data you already have<a class="anchor" href="#what-data-you-already-have" aria-label="Link to this section">#</a></h2>
+<p>The Udemy course materials in <code>/mnt/c/Academy/splunk-materials/</code> contain the Splunk tutorial dataset, which is the same Buttercup Games data every Splunk doc example uses. That is convenient, because it means the worked examples in the topic files run unmodified.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Path (WSL)</th>
+<th>Path (Windows)</th>
+<th>What it is</th>
+<th>Sourcetype to assign</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>splunk resources Udemy/sample_logs_generic/www1/access.log</code>, and the same under <code>www2/</code> and <code>www3/</code></td>
+<td><code>C:\Academy\splunk-materials\splunk resources Udemy\sample_logs_generic\www1\access.log</code></td>
+<td>Apache access logs with a <code>JSESSIONID</code> cookie. The session id is what makes the transaction labs work</td>
+<td><code>access_combined_wcookie</code></td>
+</tr>
+<tr>
+<td><code>sample_logs_generic/www1/secure.log</code>, <code>www2/</code>, <code>www3/</code>, <code>mailsv/secure.log</code></td>
+<td>as above</td>
+<td>Linux <code>sshd</code> auth logs, successes and failures</td>
+<td><code>secure</code></td>
+</tr>
+<tr>
+<td><code>sample_logs_generic/vendor_sales/vendor_sales.log</code></td>
+<td>as above</td>
+<td><code>VendorID=</code> / <code>Code=</code> / <code>AcctID=</code> records, structured and delimited</td>
+<td><code>vendor_sales</code></td>
+</tr>
+<tr>
+<td><code>Final_Lab_Apps_and_sample_logs/sample_logs.txt</code></td>
+<td>as above</td>
+<td>~6 MB of JSON network flow records with <code>src_ip</code>, <code>dest_ip</code>, <code>bytes_in</code>, <code>protocol_stack</code></td>
+<td><code>network_flow</code> (you will create this)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code>._</code> prefixed files in those folders are macOS resource forks. Ignore them, and do not index them.</p>
+<p><strong>One important gotcha.</strong> These log files carry fixed timestamps from September 2022. If you search &quot;Last 24 hours&quot; you will get nothing. Every lab search either uses <strong>All time</strong> or sets <code>earliest=0</code>. If you would rather have data with current timestamps, download <code>tutorialdata.zip</code> fresh from the Splunk Search Tutorial, which generates timestamps relative to the download date. Either works. The fixed-timestamp version is actually easier to reason about when you are testing <code>maxspan</code> and <code>maxpause</code> behaviour, because the data does not move under you.</p>
+<h2 id="step-1-create-the-indexes">Step 1: create the indexes<a class="anchor" href="#step-1-create-the-indexes" aria-label="Link to this section">#</a></h2>
+<p>Settings, Indexes, New Index. Create three, all defaults otherwise:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Index name</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tutorial</code></td>
+<td>The Buttercup Games web, security and sales data</td>
+</tr>
+<tr>
+<td><code>netflow</code></td>
+<td>The JSON network flow data, used by the CIM lab</td>
+</tr>
+<tr>
+<td><code>scratch</code></td>
+<td>Anything you want to throw away</td>
+</tr>
+</tbody>
+</table></div>
+<p>Or from the CLI, if you prefer:</p>
+<pre class="plain lang-bash"><code>splunk add index tutorial
+splunk add index netflow
+splunk add index scratch</code></pre>
+<h2 id="step-2-load-the-web-access-data">Step 2: load the web access data<a class="anchor" href="#step-2-load-the-web-access-data" aria-label="Link to this section">#</a></h2>
+<p>Settings, Add Data, Upload. Do this once per <code>access.log</code> file (there are three, under <code>www1</code>, <code>www2</code> and <code>www3</code>).</p>
+<ol>
+<li>Select <code>www1/access.log</code>.</li>
+<li>On Set Source Type, choose <strong>Web</strong>, then <code>access_combined_wcookie</code>. Confirm the preview shows one event per line with a timestamp of <code>01/Sep/2022:18:22:16</code> format. If the timestamp column is blank, the sourcetype is wrong.</li>
+<li>Next. On Input Settings set <strong>Host, Segment in path</strong> is not available for an upload, so set <strong>Host, Constant value</strong> to <code>www1</code>. Repeat with <code>www2</code> and <code>www3</code> for the other two files. Getting three distinct hosts matters, because several labs split by host.</li>
+<li>Index: <code>tutorial</code>.</li>
+<li>Review, Submit.</li>
+</ol>
+<p>Verify:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">tutorial</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">host</span></code></pre></div>
+<p>You should get three rows, <code>www1</code>, <code>www2</code> and <code>www3</code>, with a few hundred thousand events between them.</p>
+<h2 id="step-3-load-the-security-and-sales-data">Step 3: load the security and sales data<a class="anchor" href="#step-3-load-the-security-and-sales-data" aria-label="Link to this section">#</a></h2>
+<p>Same Upload flow.</p>
+<ul>
+<li>The four <code>secure.log</code> files: sourcetype <code>secure</code>, host <code>www1</code> / <code>www2</code> / <code>www3</code> / <code>mailsv</code>, index <code>tutorial</code>.</li>
+<li><code>vendor_sales.log</code>: sourcetype <code>vendor_sales</code>, host <code>vendor_sales</code>, index <code>tutorial</code>.</li>
+</ul>
+<p>Verify:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">tutorial</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">sourcetype</span></code></pre></div>
+<p>Three sourcetypes: <code>access_combined_wcookie</code>, <code>secure</code>, <code>vendor_sales</code>.</p>
+<h2 id="step-4-load-the-json-network-flow-data">Step 4: load the JSON network flow data<a class="anchor" href="#step-4-load-the-json-network-flow-data" aria-label="Link to this section">#</a></h2>
+<p>This one gets its own index and its own sourcetype because the CIM lab in <code>topics/10-cim.md</code> normalizes it against the Network Traffic data model.</p>
+<p>Settings, Add Data, Upload, select <code>Final_Lab_Apps_and_sample_logs/sample_logs.txt</code>.</p>
+<p>On Set Source Type the auto-detection will probably guess <code>_json</code>. Do not accept it. The first few lines of the file are malformed (they start with <code>host={&quot;endtime&quot;: ...</code>), so a strict JSON sourcetype will drop them. Instead:</p>
+<ol>
+<li>Click <strong>New Source Type</strong>, name it <code>network_flow</code>.</li>
+<li>Set Event Breaks to <strong>Every Line</strong>.</li>
+<li>Set Timestamp to <strong>Advanced</strong>, with <code>Timestamp prefix</code> of <code>&quot;timestamp&quot;:&quot;</code> and a <code>Timestamp format</code> of <code>%Y-%m-%dT%H:%M:%S.%6NZ</code>.</li>
+<li>Save, then set Index to <code>netflow</code>.</li>
+</ol>
+<p>Verify:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">netflow</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<p>You should see JSON events with a parsed <code>_time</code>. The <code>src_ip</code>, <code>dest_ip</code> and <code>bytes_in</code> fields will be auto-extracted as key-value pairs from the JSON.</p>
+<h2 id="step-5-install-the-cim-add-on">Step 5: install the CIM add-on<a class="anchor" href="#step-5-install-the-cim-add-on" aria-label="Link to this section">#</a></h2>
+<p>Section 10.0 is 10% of the exam and you cannot practice it without the add-on.</p>
+<p><strong>Online:</strong> Apps, Find More Apps, search &quot;Splunk Common Information Model&quot;, install <code>Splunk_SA_CIM</code>. Restart if prompted.</p>
+<p><strong>Offline:</strong> download the <code>Splunk_SA_CIM</code> package from Splunkbase (app 1621) on another machine, then Apps, Manage Apps, Install app from file.</p>
+<p>After installing, do the setup step, because leaving it at the default is the thing the exam asks about:</p>
+<ol>
+<li>Apps, Manage Apps, find Splunk Common Information Model, click <strong>Set up</strong>.</li>
+<li>For the <strong>Network Traffic</strong> data model, set the index allowlist to <code>netflow</code>.</li>
+<li>For <strong>Authentication</strong>, set it to <code>tutorial</code>.</li>
+<li>For <strong>Web</strong>, set it to <code>tutorial</code>.</li>
+<li>Leave acceleration off for now. <code>topics/10-cim.md</code> has you turn it on deliberately so you can see the difference.</li>
+</ol>
+<p>The three add-ons in <code>splunk resources Udemy/splunk TAs/</code> (<code>Splunk_TA_nix</code>, <code>Splunk_TA_windows</code>, the Fortinet FortiGate TA) are all CIM-compliant, so installing one and reading its <code>props.conf</code> is a good way to see how a real add-on does its aliases, calculated fields, event types and tags. That is optional, and it is a reading exercise rather than a lab.</p>
+<h2 id="step-6-create-a-working-app">Step 6: create a working app<a class="anchor" href="#step-6-create-a-working-app" aria-label="Link to this section">#</a></h2>
+<p>Do not put your lab knowledge objects in Search &amp; Reporting. Several labs are about permissions and app scoping, and having them mixed into the default app makes that impossible to observe.</p>
+<p>Apps, Manage Apps, Create app. Name <code>splk1002</code>, folder name <code>splk1002</code>, template <code>barebones</code>, visible.</p>
+<p>Switch to it before starting any lab. Everything you create (extractions, aliases, calculated fields, event types, tags, macros, workflow actions, data models) goes here, which also means you can delete the app at the end and get a clean instance back.</p>
+<h2 id="verification">Verification<a class="anchor" href="#verification" aria-label="Link to this section">#</a></h2>
+<p>Run this before starting the first lab. All four rows should be non-zero.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-pipe">|</span> <span class="t-cmd">union</span>
+    <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">tutorial</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">dataset</span><span class="t-op">=</span><span class="t-str">&quot;web&quot;</span><span class="t-op">]</span>
+    <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">tutorial</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">dataset</span><span class="t-op">=</span><span class="t-str">&quot;security&quot;</span><span class="t-op">]</span>
+    <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">tutorial</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">dataset</span><span class="t-op">=</span><span class="t-str">&quot;sales&quot;</span><span class="t-op">]</span>
+    <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">netflow</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">dataset</span><span class="t-op">=</span><span class="t-str">&quot;netflow&quot;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">dataset</span> <span class="t-func">count</span></code></pre></div>
+<p>And confirm the add-on is present and its data models are visible:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span></code></pre></div>
+<p>You should see the CIM models (Authentication, Network_Traffic, Web and the rest) in the output.</p>
+<h2 id="if-something-is-wrong">If something is wrong<a class="anchor" href="#if-something-is-wrong" aria-label="Link to this section">#</a></h2>
+<p><strong>No events after upload.</strong> Almost always the time range. Set All time, or add <code>earliest=0</code>.</p>
+<p><strong>Timestamps all show the upload time.</strong> The sourcetype did not recognise the timestamp format, so Splunk fell back to the index time. Re-check the sourcetype on Set Source Type, and look at the preview pane before submitting rather than after.</p>
+<p><strong>One host for everything.</strong> You accepted the default host, which is the Splunk server name. Delete and re-upload with a constant host value, or set the host per event with a search-time override. Several labs split by host so it is worth fixing properly.</p>
+<p><strong><code>| datamodel</code> shows nothing.</strong> The add-on is installed but not visible from the app you are in. Either switch to the Search app to check, or set the CIM app's permissions to share globally.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="00-exam-overview.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Exam overview</span></a><a class="pn pn-next" href="cram/all-in-one.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Final review sheet</span></a></nav>
+      <p class="doc-foot">Built from <code>lab-setup.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#what-data-you-already-have"><span class="toc-text">What data you already have</span></a>
+<a class="h2" href="#step-1-create-the-indexes"><span class="toc-text">Step 1: create the indexes</span></a>
+<a class="h2" href="#step-2-load-the-web-access-data"><span class="toc-text">Step 2: load the web access data</span></a>
+<a class="h2" href="#step-3-load-the-security-and-sales-data"><span class="toc-text">Step 3: load the security and sales data</span></a>
+<a class="h2" href="#step-4-load-the-json-network-flow-data"><span class="toc-text">Step 4: load the JSON network flow data</span></a>
+<a class="h2" href="#step-5-install-the-cim-add-on"><span class="toc-text">Step 5: install the CIM add-on</span></a>
+<a class="h2" href="#step-6-create-a-working-app"><span class="toc-text">Step 6: create a working app</span></a>
+<a class="h2" href="#verification"><span class="toc-text">Verification</span></a>
+<a class="h2" href="#if-something-is-wrong"><span class="toc-text">If something is wrong</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">6 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="search-index.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

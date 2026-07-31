@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference: CIM data model catalogue | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Reference</summary>
+<a class="tree-item" href="knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item current" href="cim-data-models.html" aria-current="page"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../reference/cim-data-models.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>CIM data models</span>
+        
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="reference-cim-data-model-catalogue">Reference: CIM data model catalogue</h1>
+<p>This is the lookup table for section 10.0. The concepts, the normalization procedure, and the search-time pipeline are taught in <code>topics/10-cim.md</code> and are not repeated here. What follows is the catalogue: every model, the tags that admit events to it, the field lists for the six models the exam draws from most, and the searches that prove compliance. Everything below tracks CIM 8.6 on Splunk Enterprise 10.4.</p>
+<p>Two reading rules before the tables. Tags are the entry condition: a dataset returns nothing for your events until the events carry every tag in its constraint, and child datasets inherit the parent constraint rather than replacing it. Fields are the payload: an event admitted by tags but missing the required fields appears in the dataset with empty columns, which reads as &quot;the model is broken&quot; and is actually &quot;the mapping is incomplete&quot;.</p>
+<h2 id="1.-master-catalogue">1. Master catalogue<a class="anchor" href="#1.-master-catalogue" aria-label="Link to this section">#</a></h2>
+<p>Twenty-six documented models in CIM 8.6, two of them deprecated. The Typical sources column is practitioner guidance, not a docs claim; every other column comes from the CIM 8.6 data model reference pages.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Dataset(s)</th>
+<th>Required tags</th>
+<th>What data belongs here</th>
+<th>Typical sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alerts</td>
+<td>Alerts</td>
+<td><code>alert</code></td>
+<td>Alerts from alerting and monitoring systems, not from security appliances</td>
+<td>Nagios, NetCool, Zabbix</td>
+</tr>
+<tr>
+<td>Application State (deprecated)</td>
+<td>Ports, Processes, Services</td>
+<td>Ports <code>listening</code>,<code>port</code>; Processes <code>process</code>,<code>report</code>; Services <code>service</code>,<code>report</code></td>
+<td>Deprecated in 4.12.0, replaced by Endpoint. Present for backwards compatibility only</td>
+<td>Map nothing new here</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Authentication, Default_Authentication, Insecure_Authentication, Privileged_Authentication, Failed_Authentication, Successful_Authentication</td>
+<td><code>authentication</code> on the root</td>
+<td>Login activity from any source, successful or not, interactive or service</td>
+<td>Linux <code>secure</code>, Windows Security log, Okta, Azure AD, CloudTrail sign-ins</td>
+</tr>
+<tr>
+<td>Certificates</td>
+<td>All_Certificates, SSL</td>
+<td>All_Certificates <code>certificate</code>; SSL <code>ssl</code> OR <code>tls</code></td>
+<td>Key and certificate management from secure servers and IAM systems</td>
+<td>Zeek <code>x509</code> and <code>ssl</code>, Windows CA, Venafi</td>
+</tr>
+<tr>
+<td>Change</td>
+<td>All_Changes, Auditing_Changes, Endpoint_Changes, Network_Changes, Account_Management, Instance_Changes</td>
+<td>All_Changes <code>change</code>; Auditing_Changes <code>audit</code>; Endpoint_Changes <code>endpoint</code>; Network_Changes <code>network</code>; Account_Management <code>account</code>; Instance_Changes <code>instance</code></td>
+<td>Create, read, update and delete activity against any managed object</td>
+<td>CloudTrail, Azure Activity Log, Windows account management, firewall rule edits</td>
+</tr>
+<tr>
+<td>Change Analysis (deprecated)</td>
+<td>All_Changes and children</td>
+<td><code>change</code></td>
+<td>Deprecated in 4.12.0, replaced by Change</td>
+<td>Map nothing new here</td>
+</tr>
+<tr>
+<td>Data Access</td>
+<td>Data_Access</td>
+<td><code>data</code>,<code>access</code></td>
+<td>Shared data access by users, for unauthorized-access and exfiltration detection</td>
+<td>SharePoint, Box, file server auditing</td>
+</tr>
+<tr>
+<td>Databases</td>
+<td>All_Databases, Database_Instance, Instance_Stats, Session_Info, Lock_Info, Database_Query, Tablespace, Query_Stats</td>
+<td>All_Databases <code>database</code>; then <code>instance</code>, <code>stats</code>, <code>session</code>, <code>lock</code>, <code>query</code>, <code>tablespace</code></td>
+<td>Structured and semi-structured data storage events and statistics</td>
+<td>Oracle, SQL Server, MySQL, DB Connect</td>
+</tr>
+<tr>
+<td>Data Loss Prevention</td>
+<td>DLP_Incidents</td>
+<td><code>dlp</code>,<code>incident</code></td>
+<td>Incidents raised by DLP tooling</td>
+<td>Symantec DLP, Forcepoint, Microsoft Purview</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>All_Email, Delivery, Content, Filtering</td>
+<td>All_Email <code>email</code>; Delivery <code>delivery</code>; Content <code>content</code>; Filtering <code>filter</code></td>
+<td>Email traffic, server to server or client to server, plus filtering verdicts</td>
+<td>Exchange message tracking, Postfix, Proofpoint</td>
+</tr>
+<tr>
+<td>Endpoint</td>
+<td>Ports, Processes, Services, Filesystem, Registry</td>
+<td>Ports <code>listening</code>,<code>port</code>; Processes <code>process</code>,<code>report</code>; Services <code>service</code>,<code>report</code>; Filesystem <code>endpoint</code>,<code>filesystem</code>; Registry <code>endpoint</code>,<code>registry</code></td>
+<td>Endpoint client state and activity: processes, services, files, listening ports, registry</td>
+<td>Sysmon, osquery, CrowdStrike, auditd</td>
+</tr>
+<tr>
+<td>Event Signatures</td>
+<td>Event_Signatures</td>
+<td><code>track_event_signatures</code></td>
+<td>Standard location for Windows EventID data</td>
+<td>Windows event logs via the Microsoft Windows add-on</td>
+</tr>
+<tr>
+<td>Interprocess Messaging</td>
+<td>All_Interprocess_Messaging</td>
+<td><code>messaging</code></td>
+<td>Transactional requests across programmatic interfaces, queues, IPC and web interfaces</td>
+<td>RabbitMQ, Kafka, API gateways</td>
+</tr>
+<tr>
+<td>Intrusion Detection</td>
+<td>IDS_Attacks</td>
+<td><code>ids</code>,<code>attack</code></td>
+<td>Attack detection from network and host monitoring devices and applications</td>
+<td>Snort, Suricata, Palo Alto threat logs</td>
+</tr>
+<tr>
+<td>Inventory</td>
+<td>All_Inventory, CPU, Memory, Network, Storage, OS, User, Default_Accounts, Virtual_OS, Snapshot, Tools</td>
+<td><code>inventory</code> plus a component tag: <code>cpu</code>, <code>memory</code>, <code>network</code>, <code>storage</code>, OS <code>system</code>,<code>version</code>, <code>user</code>, Default_Accounts <code>default</code>, <code>virtual</code>, <code>snapshot</code>, <code>tools</code></td>
+<td>Inventory of computer infrastructure components, plus network inventory and topology</td>
+<td>CMDB exports, vCenter, AWS Config</td>
+</tr>
+<tr>
+<td>Java Virtual Machines (JVM)</td>
+<td>JVM, Threading, Runtime, OS, Compilation, Classloading, Memory</td>
+<td>JVM <code>jvm</code>; then <code>threading</code>, <code>runtime</code>, <code>os</code>, <code>compilation</code>, <code>classloading</code>, <code>memory</code></td>
+<td>Generic Java server platform telemetry</td>
+<td>JMX inputs, Tomcat, WebLogic</td>
+</tr>
+<tr>
+<td>Malware</td>
+<td>Malware_Attacks, Malware_Operations</td>
+<td>Malware_Attacks <code>malware</code>,<code>attack</code>; Malware_Operations <code>malware</code>,<code>operations</code></td>
+<td>Malware detections, and the health of the endpoint protection estate</td>
+<td>Symantec Endpoint Protection, Defender, McAfee ePO</td>
+</tr>
+<tr>
+<td>Network Resolution (DNS)</td>
+<td>DNS</td>
+<td><code>network</code>,<code>resolution</code>,<code>dns</code></td>
+<td>DNS traffic, server to server or client to server</td>
+<td>Zeek <code>dns</code>, Windows DNS logs, Infoblox</td>
+</tr>
+<tr>
+<td>Network Sessions</td>
+<td>All_Sessions, Session_Start, Session_End, DHCP, VPN</td>
+<td>All_Sessions <code>network</code>,<code>session</code>; Session_Start <code>start</code>; Session_End <code>end</code>; DHCP <code>dhcp</code>; VPN <code>vpn</code></td>
+<td>DHCP and VPN session assignment and teardown, plus network inventory and topology</td>
+<td>ISC and Windows DHCP, AnyConnect, GlobalProtect</td>
+</tr>
+<tr>
+<td>Network Traffic</td>
+<td>All_Traffic</td>
+<td><code>network</code>,<code>communicate</code></td>
+<td>Connection-level flows across network infrastructure</td>
+<td>Firewall traffic logs, NetFlow, Zeek <code>conn</code>, VPC Flow Logs</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>All_Performance, CPU, Facilities, Memory, Storage, Network, OS, Uptime, Timesync</td>
+<td>All_Performance <code>performance</code> plus one of <code>cpu</code>, <code>facilities</code>, <code>memory</code>, <code>storage</code>, <code>network</code>, or (<code>os</code> with (<code>uptime</code> OR (<code>time</code>,<code>synchronize</code>)))</td>
+<td>Performance tracking metrics for hosts, storage and facilities</td>
+<td>Unix and Linux add-on, perfmon, SNMP polling</td>
+</tr>
+<tr>
+<td>Splunk Audit Logs</td>
+<td>Modular_Actions, Modular Action Invocations, View_Activity, Datamodel_Acceleration, Search_Activity, Scheduler_Activity, Web_Service_Errors</td>
+<td>Modular_Actions <code>modaction</code>; Modular Action Invocations <code>invocation</code>; the remaining datasets are search-constrained, not tag-constrained</td>
+<td>Audit information for systems that produce event logs, including Splunk's own</td>
+<td><code>index=_audit</code>, <code>index=_internal</code></td>
+</tr>
+<tr>
+<td>Ticket Management</td>
+<td>All_Ticket_Management, Change, Incident, Problem</td>
+<td>All_Ticket_Management <code>ticketing</code>; Change <code>change</code>; Incident <code>incident</code>; Problem <code>problem</code></td>
+<td>Service requests and their state in ITIL-influenced desks, bug trackers, ticket systems and GRC platforms</td>
+<td>ServiceNow, Jira, Remedy, Archer</td>
+</tr>
+<tr>
+<td>Updates</td>
+<td>Updates, Update_Errors</td>
+<td>Updates <code>update</code>,<code>status</code>; Update_Errors <code>update</code>,<code>error</code></td>
+<td>Patch management events from individual systems or central management tools</td>
+<td>WSUS, SCCM, yum and apt history, Jamf</td>
+</tr>
+<tr>
+<td>Vulnerabilities</td>
+<td>Vulnerabilities</td>
+<td><code>report</code>,<code>vulnerability</code></td>
+<td>Vulnerability detection results</td>
+<td>Nessus, Qualys, Rapid7, image scanners</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>Web, Proxy, Storage</td>
+<td>Web <code>web</code>; Proxy <code>proxy</code>; Storage <code>storage</code></td>
+<td>Web server and proxy server data in a security or operational context, plus cloud object storage access</td>
+<td>Apache, nginx, IIS, Blue Coat, Zscaler, S3 access logs</td>
+</tr>
+</tbody>
+</table></div>
+<p>Deprecated does not mean deleted: Application State and Change Analysis still ship, still appear in <code>| datamodel</code>, and still return data if something is tagged for them. CIM Validation (S.o.S.) ships with the add-on but is not an entry in the Data models section, so it is not one of the twenty-six.</p>
+<h2 id="2.-field-classification-semantics">2. Field classification semantics<a class="anchor" href="#2.-field-classification-semantics" aria-label="Link to this section">#</a></h2>
+<p>The CIM reference tables sort every field into required, recommended or optional. The three words mean different things to compliance testing, to Enterprise Security content, and to whether your event shows up at all.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>What the docs mark</th>
+<th>What it means in practice</th>
+<th>Consequence of leaving it empty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td>The 8.6 tables carry the phrase &quot;required for pytest-splunk-addon&quot;</td>
+<td>The minimum field set a dataset cannot be meaningfully used without. This is the set an add-on must populate to pass Splunk's own add-on test suite</td>
+<td>The event is still in the dataset (tags decide that) but the column is null. Any downstream search, correlation rule or Pivot that filters or splits on that field drops the event silently</td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td>Flagged <code>recommended=true</code> in the model JSON under <code>comment.recommended</code></td>
+<td>Fields that are &quot;both commonly available in data sources of the intended type, and highly useful for security monitoring and investigations&quot;. This is the prioritization list for mapping work</td>
+<td>The dataset still works. ES content that pivots on the field loses your source. Map these second</td>
+</tr>
+<tr>
+<td>Optional</td>
+<td>Everything else in the table</td>
+<td>Value-add where the source happens to carry it</td>
+<td>No compliance impact</td>
+</tr>
+</tbody>
+</table></div>
+<p>A field can carry both marks: <code>action</code>, <code>app</code> and <code>user</code> in Authentication are flagged required and are also flagged recommended in the model JSON. The tables below place each field in one bucket only, taking the highest mark.</p>
+<p>Required here is a documentation classification in the CIM reference tables, not the Required flag in the Data Model Editor described in <code>topics/09-data-models-and-pivot.md</code>. That flag really does filter events out of a dataset. The CIM tables' required column is a mapping target for add-on authors and for Splunk's own add-on test suite, and membership of a CIM dataset is decided by tags. Same word, two mechanisms, and the exam can ask about either.</p>
+<p>Required does not mean enforced. Nothing in Splunk rejects an event with a missing required field or an out-of-spec value, because expected values are &quot;not exhaustive or exclusive&quot;. The failure mode is always silence, and that silent removal is the exam's favourite consequence. Say Authentication events arrive tagged correctly with no <code>user</code>: <code>| datamodel Authentication Authentication search | stats count</code> returns a healthy number, while <code>| tstats count FROM datamodel=Authentication.Authentication BY Authentication.user</code> returns nulls. The event was admitted and then dropped by every consumer that needed the field, which is why validation searches count by field rather than counting rows.</p>
+<p>Fields ending <code>_bunit</code>, <code>_category</code> or <code>_priority</code>, plus <code>cim_entity_zone</code> and <code>tag</code>, are auto-provided by Enterprise Security's asset and identity framework. The docs tell you not to extract them yourself.</p>
+<h2 id="3.-the-six-models-in-detail">3. The six models in detail<a class="anchor" href="#3.-the-six-models-in-detail" aria-label="Link to this section">#</a></h2>
+<p>Each block gives the dataset tags, the field list split three ways, and a mock of a compliant event. Auto-provided fields are omitted throughout: every model here carries <code>tag</code>, <code>cim_entity</code> or <code>cim_entity_zone</code>, and the <code>_bunit</code>, <code>_category</code> and <code>_priority</code> variants of whichever of <code>dest</code>, <code>src</code>, <code>dvc</code>, <code>user</code> and <code>src_user</code> it defines. In the mocks, the <code>eval tag=</code> line documents the constraint so the whole contract reads in one block; real membership comes from <code>tags.conf</code> on an event type, never from <code>eval</code>.</p>
+<h3 id="3.1-authentication">3.1 Authentication<a class="anchor" href="#3.1-authentication" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td><code>authentication</code></td>
+</tr>
+<tr>
+<td>Default_Authentication</td>
+<td><code>authentication</code>,<code>default</code></td>
+</tr>
+<tr>
+<td>Insecure_Authentication</td>
+<td><code>authentication</code> plus (<code>cleartext</code> OR <code>insecure</code>)</td>
+</tr>
+<tr>
+<td>Privileged_Authentication</td>
+<td><code>authentication</code>,<code>privileged</code></td>
+</tr>
+<tr>
+<td>Failed_Authentication</td>
+<td>Search-constrained on the result, not tag-constrained</td>
+</tr>
+<tr>
+<td>Successful_Authentication</td>
+<td>Search-constrained on the result, not tag-constrained</td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>action</code>, <code>app</code>, <code>user</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>dest</code>, <code>src</code>, <code>src_user</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td><code>authentication_method</code>, <code>authentication_service</code>, <code>dest_nt_domain</code>, <code>duration</code>, <code>process</code>, <code>reason_id</code>, <code>response_time</code>, <code>result</code>, <code>signature</code>, <code>signature_id</code>, <code>src_nt_domain</code>, <code>src_user_id</code>, <code>src_user_role</code>, <code>src_user_type</code>, <code>user_agent</code>, <code>user_id</code>, <code>user_role</code>, <code>user_type</code>, <code>vendor_account</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>action</code> is <code>success</code>, <code>failure</code>, <code>pending</code> or <code>error</code>. <code>app</code> examples are <code>ssh</code>, <code>splunk</code>, <code>win:local</code>, <code>signin.amazonaws.com</code>. <code>authentication_service</code> examples are <code>Okta</code>, <code>ActiveDirectory</code>, <code>AzureAD</code>. <code>user_type</code> examples are <code>IAMUser</code>, <code>Admin</code>, <code>System</code>.</p>
+<p>The distinction that gets tested: <code>user</code> is the account being authenticated, <code>src_user</code> is the account requesting the authentication on someone else's behalf. A <code>sudo</code> or <code>runas</code> event populates both, and Privileged_Authentication is the dataset that cares.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;failure&quot;</span><span class="t-op">,</span> <span class="t-opt">app</span><span class="t-op">=</span><span class="t-str">&quot;ssh&quot;</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;jdoe&quot;</span><span class="t-op">,</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;10.3.7.44&quot;</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;app01.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">src_user</span><span class="t-op">=</span><span class="t-str">&quot;-&quot;</span><span class="t-op">,</span> <span class="t-opt">signature</span><span class="t-op">=</span><span class="t-str">&quot;Failed password&quot;</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;OpenSSH&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;authentication&quot;</span></code></pre></div>
+<h3 id="3.2-network-traffic">3.2 Network Traffic<a class="anchor" href="#3.2-network-traffic" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All_Traffic</td>
+<td><code>network</code>,<code>communicate</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>action</code>, <code>app</code>, <code>dest</code>, <code>dest_zone</code>, <code>dvc</code>, <code>src</code>, <code>src_translated_ip</code>, <code>src_zone</code>, <code>transport</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>bytes</code>, <code>bytes_in</code>, <code>bytes_out</code>, <code>dest_port</code>, <code>rule</code>, <code>src_port</code>, <code>user</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td><code>channel</code>, <code>dest_interface</code>, <code>dest_ip</code>, <code>dest_mac</code>, <code>dest_translated_ip</code>, <code>dest_translated_port</code>, <code>direction</code>, <code>duration</code>, <code>dvc_ip</code>, <code>dvc_mac</code>, <code>dvc_zone</code>, <code>flow_id</code>, <code>icmp_code</code>, <code>icmp_type</code>, <code>packets</code>, <code>packets_in</code>, <code>packets_out</code>, <code>process_guid</code>, <code>process_id</code>, <code>protocol</code>, <code>protocol_version</code>, <code>response_time</code>, <code>rule_id</code>, <code>session_id</code>, <code>src_interface</code>, <code>src_ip</code>, <code>src_mac</code>, <code>src_translated_port</code>, <code>ssid</code>, <code>tcp_flag</code>, <code>tos</code>, <code>ttl</code>, <code>vendor_account</code>, <code>vlan</code>, <code>wifi</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>action</code> is <code>allowed</code>, <code>blocked</code> or <code>teardown</code>. <code>transport</code> is <code>icmp</code>, <code>tcp</code> or <code>udp</code>, lowercase. <code>direction</code> is <code>inbound</code> or <code>outbound</code>. <code>protocol</code> is lowercase, for example <code>ip</code>, <code>appletalk</code>, <code>ipx</code>. MAC addresses are lowercase and colon-separated. <code>icmp_type</code> runs <code>0</code> to <code>254</code>. <code>wifi</code> takes <code>802.11a</code>, <code>802.11b</code>, <code>802.11g</code>, <code>802.11n</code>.</p>
+<p>Two required fields catch people out. <code>src_translated_ip</code> is required even when there is no NAT, and <code>dest_zone</code> and <code>src_zone</code> are required even in a flat network. Firewall add-ons usually fill them; a hand-rolled mapping usually does not.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;allowed&quot;</span><span class="t-op">,</span> <span class="t-opt">app</span><span class="t-op">=</span><span class="t-str">&quot;https&quot;</span><span class="t-op">,</span> <span class="t-opt">transport</span><span class="t-op">=</span><span class="t-str">&quot;tcp&quot;</span><span class="t-op">,</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;10.3.7.44&quot;</span><span class="t-op">,</span> <span class="t-opt">src_port</span><span class="t-op">=</span><span class="t-num">51422</span><span class="t-op">,</span> <span class="t-opt">src_zone</span><span class="t-op">=</span><span class="t-str">&quot;trust&quot;</span><span class="t-op">,</span> <span class="t-opt">src_translated_ip</span><span class="t-op">=</span><span class="t-str">&quot;203.0.113.9&quot;</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;93.184.216.34&quot;</span><span class="t-op">,</span> <span class="t-opt">dest_port</span><span class="t-op">=</span><span class="t-num">443</span><span class="t-op">,</span> <span class="t-opt">dest_zone</span><span class="t-op">=</span><span class="t-str">&quot;untrust&quot;</span><span class="t-op">,</span> <span class="t-opt">dvc</span><span class="t-op">=</span><span class="t-str">&quot;fw01.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">bytes_in</span><span class="t-op">=</span><span class="t-num">1420</span><span class="t-op">,</span> <span class="t-opt">bytes_out</span><span class="t-op">=</span><span class="t-num">8830</span><span class="t-op">,</span> <span class="t-opt">bytes</span><span class="t-op">=</span><span class="t-num">10250</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;Palo Alto PA-3220&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;network communicate&quot;</span></code></pre></div>
+<h3 id="3.3-web">3.3 Web<a class="anchor" href="#3.3-web" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web</td>
+<td><code>web</code></td>
+</tr>
+<tr>
+<td>Proxy</td>
+<td><code>web</code>,<code>proxy</code></td>
+</tr>
+<tr>
+<td>Storage</td>
+<td><code>web</code>,<code>storage</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>action</code>, <code>bytes</code>, <code>bytes_in</code>, <code>bytes_out</code>, <code>category</code>, <code>dest</code>, <code>dest_port</code>, <code>http_user_agent</code>, <code>http_user_agent_length</code>, <code>src</code>, <code>status</code>, <code>url</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>http_content_type</code>, <code>http_method</code>, <code>http_referrer</code>, <code>http_referrer_domain</code>, <code>url_domain</code>, <code>user</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td><code>app</code>, <code>cached</code>, <code>cookie</code>, <code>dest_ip</code>, <code>duration</code>, <code>response_time</code>, <code>site</code>, <code>src_ip</code>, <code>storage_name</code>, <code>uri_path</code>, <code>uri_query</code>, <code>url_length</code></td>
+</tr>
+<tr>
+<td>Storage dataset only</td>
+<td><code>error_code</code>, <code>operation</code>, <code>storage_dataset</code>, <code>storage_name</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>http_method</code> is <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>DELETE</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>CONNECT</code> or <code>TRACE</code>. <code>status</code> is an HTTP status code in the 100 to 511 range, and it is a string in CIM, not a number. <code>cached</code> is boolean, accepting <code>true</code>, <code>false</code>, <code>1</code> or <code>0</code>. Storage examples: <code>error_code</code> such as <code>NoSuchBucket</code>, <code>operation</code> such as <code>REST.PUT.OBJECT</code>.</p>
+<p>The Proxy dataset defines no fields of its own; it inherits the whole Web field set and adds only the <code>proxy</code> tag requirement. A proxy log therefore needs both <code>web</code> and <code>proxy</code>, never <code>proxy</code> alone.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;allowed&quot;</span><span class="t-op">,</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;10.3.7.44&quot;</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;www.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">dest_port</span><span class="t-op">=</span><span class="t-num">443</span><span class="t-op">,</span> <span class="t-opt">http_method</span><span class="t-op">=</span><span class="t-str">&quot;GET&quot;</span><span class="t-op">,</span> <span class="t-opt">http_user_agent</span><span class="t-op">=</span><span class="t-str">&quot;Mozilla/5.0&quot;</span><span class="t-op">,</span> <span class="t-opt">http_user_agent_length</span><span class="t-op">=</span><span class="t-num">11</span><span class="t-op">,</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-str">&quot;200&quot;</span><span class="t-op">,</span> <span class="t-opt">url</span><span class="t-op">=</span><span class="t-str">&quot;https://www.example.com/cart&quot;</span><span class="t-op">,</span> <span class="t-opt">url_domain</span><span class="t-op">=</span><span class="t-str">&quot;www.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">category</span><span class="t-op">=</span><span class="t-str">&quot;Shopping&quot;</span><span class="t-op">,</span> <span class="t-opt">bytes_in</span><span class="t-op">=</span><span class="t-num">380</span><span class="t-op">,</span> <span class="t-opt">bytes_out</span><span class="t-op">=</span><span class="t-num">42109</span><span class="t-op">,</span> <span class="t-opt">bytes</span><span class="t-op">=</span><span class="t-num">42489</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;Apache httpd&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;web&quot;</span></code></pre></div>
+<h3 id="3.4-change">3.4 Change<a class="anchor" href="#3.4-change" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>All_Changes</td>
+<td><code>change</code></td>
+</tr>
+<tr>
+<td>Auditing_Changes</td>
+<td><code>change</code>,<code>audit</code></td>
+</tr>
+<tr>
+<td>Endpoint_Changes</td>
+<td><code>change</code>,<code>endpoint</code></td>
+</tr>
+<tr>
+<td>Network_Changes</td>
+<td><code>change</code>,<code>network</code></td>
+</tr>
+<tr>
+<td>Account_Management</td>
+<td><code>change</code>,<code>account</code></td>
+</tr>
+<tr>
+<td>Instance_Changes</td>
+<td><code>change</code>,<code>instance</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required (All_Changes)</td>
+<td><code>action</code>, <code>change_type</code>, <code>command</code>, <code>dest</code>, <code>dvc</code>, <code>image_id</code>, <code>object</code>, <code>object_attrs</code>, <code>object_category</code>, <code>object_id</code>, <code>object_path</code>, <code>status</code>, <code>user</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Recommended (All_Changes)</td>
+<td><code>result</code>, <code>src</code>, <code>user_name</code></td>
+</tr>
+<tr>
+<td>Optional (All_Changes)</td>
+<td><code>result_id</code>, <code>user_agent</code>, <code>user_type</code>, <code>vendor_account</code>, <code>vendor_region</code></td>
+</tr>
+<tr>
+<td>Account_Management adds</td>
+<td>Recommended: <code>dest_nt_domain</code>, <code>src_nt_domain</code>, <code>src_user</code>, <code>src_user_name</code>. Optional: <code>src_user_type</code></td>
+</tr>
+<tr>
+<td>Network_Changes adds</td>
+<td>Optional: <code>dest_ip_range</code>, <code>dest_port_range</code>, <code>direction</code>, <code>rule_action</code>, <code>src_ip_range</code>, <code>src_port_range</code>, <code>device_restarts</code></td>
+</tr>
+<tr>
+<td>Auditing_Changes, Endpoint_Changes, Instance_Changes</td>
+<td>No dataset-specific fields; they narrow All_Changes by tag only</td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>action</code> is <code>acl_modified</code>, <code>cleared</code>, <code>created</code>, <code>deleted</code>, <code>modified</code>, <code>stopped</code>, <code>lockout</code>, <code>read</code>, <code>logoff</code>, <code>updated</code>, <code>started</code>, <code>restarted</code> or <code>unlocked</code>. <code>status</code> is <code>success</code> or <code>failure</code>. IP ranges use CIDR notation, for example <code>203.0.113.5/32</code>. Port ranges accept a single port, a hyphenated range such as <code>8000-8080</code>, or a comma list such as <code>80,443</code>.</p>
+<p>Change is the only one of these six models where <code>action</code> and <code>status</code> are both required and mean different things: <code>action</code> is what was attempted, <code>status</code> is whether it worked. Authentication folds both into <code>action</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;modified&quot;</span><span class="t-op">,</span> <span class="t-opt">change_type</span><span class="t-op">=</span><span class="t-str">&quot;AWS Security Group&quot;</span><span class="t-op">,</span> <span class="t-opt">command</span><span class="t-op">=</span><span class="t-str">&quot;AuthorizeSecurityGroupIngress&quot;</span><span class="t-op">,</span> <span class="t-opt">object</span><span class="t-op">=</span><span class="t-str">&quot;sg-0a1b2c3d&quot;</span><span class="t-op">,</span> <span class="t-opt">object_category</span><span class="t-op">=</span><span class="t-str">&quot;security_group&quot;</span><span class="t-op">,</span> <span class="t-opt">object_id</span><span class="t-op">=</span><span class="t-str">&quot;sg-0a1b2c3d&quot;</span><span class="t-op">,</span> <span class="t-opt">object_attrs</span><span class="t-op">=</span><span class="t-str">&quot;ingress&quot;</span><span class="t-op">,</span> <span class="t-opt">object_path</span><span class="t-op">=</span><span class="t-str">&quot;/ec2/sg-0a1b2c3d&quot;</span><span class="t-op">,</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-str">&quot;success&quot;</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;arn:aws:iam::111122223333:user/jdoe&quot;</span><span class="t-op">,</span> <span class="t-opt">user_name</span><span class="t-op">=</span><span class="t-str">&quot;jdoe&quot;</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;ec2.eu-west-1.amazonaws.com&quot;</span><span class="t-op">,</span> <span class="t-opt">dvc</span><span class="t-op">=</span><span class="t-str">&quot;cloudtrail&quot;</span><span class="t-op">,</span> <span class="t-opt">image_id</span><span class="t-op">=</span><span class="t-str">&quot;ami-0abc&quot;</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;AWS CloudTrail&quot;</span><span class="t-op">,</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;203.0.113.9&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;change network&quot;</span></code></pre></div>
+<h3 id="3.5-malware">3.5 Malware<a class="anchor" href="#3.5-malware" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malware_Attacks</td>
+<td><code>malware</code>,<code>attack</code></td>
+</tr>
+<tr>
+<td>Malware_Operations</td>
+<td><code>malware</code>,<code>operations</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields (Malware_Attacks)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>action</code>, <code>category</code>, <code>dest</code>, <code>file_name</code>, <code>file_path</code>, <code>signature</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>date</code>, <code>severity</code>, <code>user</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td><code>dest_ip</code>, <code>dest_requires_av</code>, <code>file_hash</code>, <code>severity_id</code>, <code>signature_id</code>, <code>src</code>, <code>src_ip</code>, <code>src_user</code>, <code>url</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields (Malware_Operations)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>dest</code>, <code>signature_version</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>dest_nt_domain</code>, <code>product_version</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td><code>dest_requires_av</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>action</code> is <code>allowed</code>, <code>blocked</code> or <code>deferred</code>. <code>severity</code> is <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code> or <code>informational</code>. <code>category</code> carries the vendor's classification, for example <code>keylogger</code> or <code>ad-supported program</code>. <code>signature</code> is the detection name, for example <code>Trojan.Vundo</code>, <code>Spyware.Gaobot</code>, <code>W32.Nimbda</code>.</p>
+<p>The two datasets answer different questions and share almost no required fields. Malware_Attacks is &quot;what did the product catch&quot;. Malware_Operations is &quot;is the product healthy and current&quot;, which is why its required set is <code>dest</code>, <code>signature_version</code> and <code>vendor_product</code> and it has no <code>action</code> at all. In Malware_Attacks, <code>src</code> is the DAT relay or the sender, not the attacker's host.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;blocked&quot;</span><span class="t-op">,</span> <span class="t-opt">category</span><span class="t-op">=</span><span class="t-str">&quot;keylogger&quot;</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;ws-4417.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">file_name</span><span class="t-op">=</span><span class="t-str">&quot;invoice.scr&quot;</span><span class="t-op">,</span> <span class="t-opt">file_path</span><span class="t-op">=</span><span class="t-str">&quot;C:\\Users\\jdoe\\Downloads\\invoice.scr&quot;</span><span class="t-op">,</span> <span class="t-opt">signature</span><span class="t-op">=</span><span class="t-str">&quot;Trojan.Vundo&quot;</span><span class="t-op">,</span> <span class="t-opt">severity</span><span class="t-op">=</span><span class="t-str">&quot;high&quot;</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;jdoe&quot;</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;Symantec Endpoint Protection&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;malware attack&quot;</span></code></pre></div>
+<h3 id="3.6-intrusion-detection">3.6 Intrusion Detection<a class="anchor" href="#3.6-intrusion-detection" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDS_Attacks</td>
+<td><code>ids</code>,<code>attack</code></td>
+</tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Required</td>
+<td><code>action</code>, <code>category</code>, <code>dvc</code>, <code>ids_type</code>, <code>severity</code>, <code>signature</code>, <code>transport</code></td>
+</tr>
+<tr>
+<td>Recommended</td>
+<td><code>dest</code>, <code>dest_port</code>, <code>file_hash</code>, <code>file_name</code>, <code>file_path</code>, <code>severity_id</code>, <code>signature_id</code>, <code>src</code>, <code>src_port</code>, <code>user</code>, <code>vendor_product</code></td>
+</tr>
+<tr>
+<td>Optional</td>
+<td>Everything else the 8.6 Intrusion Detection table lists, none of which the exam draws from</td>
+</tr>
+</tbody>
+</table></div>
+<p>Expected values: <code>action</code> is <code>allowed</code> or <code>blocked</code>, with no <code>deferred</code> and no <code>teardown</code>. <code>ids_type</code> is <code>network</code>, <code>host</code>, <code>application</code> or <code>wireless</code>. <code>severity</code> is <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code> or <code>informational</code>. <code>transport</code> is <code>icmp</code>, <code>tcp</code> or <code>udp</code>.</p>
+<p>Note what is required here and nowhere else: <code>ids_type</code> and <code>severity</code>. Note also what is not required: <code>dest</code> and <code>src</code> are only recommended, because a host IDS event may have no network endpoints at all. <code>dvc</code> is required because the model is about which sensor made the detection.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;blocked&quot;</span><span class="t-op">,</span> <span class="t-opt">category</span><span class="t-op">=</span><span class="t-str">&quot;spyware&quot;</span><span class="t-op">,</span> <span class="t-opt">dvc</span><span class="t-op">=</span><span class="t-str">&quot;ids01.example.com&quot;</span><span class="t-op">,</span> <span class="t-opt">ids_type</span><span class="t-op">=</span><span class="t-str">&quot;network&quot;</span><span class="t-op">,</span> <span class="t-opt">severity</span><span class="t-op">=</span><span class="t-str">&quot;high&quot;</span><span class="t-op">,</span> <span class="t-opt">signature</span><span class="t-op">=</span><span class="t-str">&quot;ET TROJAN Observed DNS Query to .top domain&quot;</span><span class="t-op">,</span> <span class="t-opt">transport</span><span class="t-op">=</span><span class="t-str">&quot;tcp&quot;</span><span class="t-op">,</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;10.3.7.44&quot;</span><span class="t-op">,</span> <span class="t-opt">src_port</span><span class="t-op">=</span><span class="t-num">51422</span><span class="t-op">,</span> <span class="t-opt">dest</span><span class="t-op">=</span><span class="t-str">&quot;198.51.100.7&quot;</span><span class="t-op">,</span> <span class="t-opt">dest_port</span><span class="t-op">=</span><span class="t-num">80</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;jdoe&quot;</span><span class="t-op">,</span> <span class="t-opt">vendor_product</span><span class="t-op">=</span><span class="t-str">&quot;Suricata&quot;</span><span class="t-op">,</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-str">&quot;ids attack&quot;</span></code></pre></div>
+<h2 id="4.-knowledge-objects-the-add-on-ships-objective-10.2">4. Knowledge objects the add-on ships (objective 10.2)<a class="anchor" href="#4.-knowledge-objects-the-add-on-ships-objective-10.2" aria-label="Link to this section">#</a></h2>
+<p>Objective 10.2 asks you to list them. The list is closed and short, and the exam builds distractors by adding index-time objects to it.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Knowledge object</th>
+<th>What ships</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data models</td>
+<td>The CIM model definitions as JSON in <code>$SPLUNK_HOME/etc/apps/Splunk_SA_CIM/default/data/models</code></td>
+</tr>
+<tr>
+<td>Tags</td>
+<td>The tag definitions used as dataset constraints</td>
+</tr>
+<tr>
+<td>Event types</td>
+<td>Event type definitions, including those backing the validation content</td>
+</tr>
+<tr>
+<td>Field aliases</td>
+<td>Aliases used by the add-on's own content</td>
+</tr>
+<tr>
+<td>Calculated fields</td>
+<td>EVAL expressions backing model-level calculations</td>
+</tr>
+<tr>
+<td>Lookups</td>
+<td>Lookups backing normalization and the CIM filter macros</td>
+</tr>
+<tr>
+<td>Search macros</td>
+<td><code>cim_datamodelinfo</code> and the CIM filter macros such as <code>cim_filter_known_scanners</code>, in <code>Splunk_SA_CIM</code> macros. The docs name no per-model index macro; index scoping is the Indexes allowlist on the CIM Setup page, see section 5</td>
+</tr>
+<tr>
+<td>Reports and dashboards</td>
+<td>Validation content reachable through Pivot on the CIM Validation (S.o.S.) model, and the Data Model Audit dashboard</td>
+</tr>
+<tr>
+<td>A custom search command</td>
+<td><code>datamodelsimple</code>, for CIM validation</td>
+</tr>
+<tr>
+<td>A common action model</td>
+<td>Support for custom alert actions, backed by the <code>cim_modactions</code> index</td>
+</tr>
+</tbody>
+</table></div>
+<p>Not on the list, and therefore always a wrong answer: indexes (other than <code>cim_modactions</code>), source types, inputs, index-time transforms, props settings for parsing, and summary indexes. The retired <code>cim_summary</code> index has been removed.</p>
+<h2 id="5.-the-per-model-indexes-allowlist">5. The per-model Indexes allowlist<a class="anchor" href="#5.-the-per-model-indexes-allowlist" aria-label="Link to this section">#</a></h2>
+<p>Every CIM data model constrains itself to a set of indexes, and the control is the <strong>Indexes allowlist</strong> field on the CIM Setup page: pick a model, type a comma-delimited list, save. The docs describe the field and its effect (&quot;Restricts the index attribute of the data model to specified index values to improve performance&quot;) but do <strong>not</strong> document where the setting is persisted, and they name no macro as the mechanism.</p>
+<p>That last point is worth stating plainly, because older material and several practice tests assert a <code>cim_&lt;Model_Name&gt;_indexes</code> macro convention. <strong>No 8.6 documentation page names such a macro.</strong> Treat the Indexes allowlist as the documented interface and do not answer an exam question by asserting a macro name. The macros the add-on documentably ships are <code>cim_datamodelinfo</code> and the <code>cim_filter_*</code> CIM Filter macros, both in <code>Splunk_SA_CIM/default/macros.conf</code>.</p>
+<p>Why it matters. The default for every model is all indexes. A CIM data model search is a tag lookup across whatever it is allowed to see, so an unconstrained Network Traffic model asks every index in the deployment whether it holds anything tagged <code>network</code> and <code>communicate</code>. On a real deployment that multiplies the work by the number of indexes that will never match, and acceleration reruns the same scan on a schedule.</p>
+<p>Two consequences the exam can reach. A new index is not picked up automatically, so someone must add it to the allowlist or the model silently misses the data. And index names defined only on indexers are accepted here even though the search head cannot resolve them, so a typo produces no error and no data. The companion macro <code>cim_datamodelinfo</code>, run on its own as a generating search, reports acceleration status, which is off by default for every CIM model.</p>
+<h2 id="6.-validation-recipes">6. Validation recipes<a class="anchor" href="#6.-validation-recipes" aria-label="Link to this section">#</a></h2>
+<p>Five ways to ask &quot;is my data in this model&quot;, in rising order of what they assume.</p>
+<p><strong>Read the contract without touching data.</strong> If <code>datamodelsimple</code> is unrecognized, the add-on is not installed on this search head.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">objects</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Authentication</span>
+<span class="t-pipe">|</span> <span class="t-cmd">datamodelsimple</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">attributes</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Authentication</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Authentication.Authentication</span></code></pre></div>
+<p><strong>Return the events the dataset actually contains.</strong> This works whether or not the model is accelerated, because it falls back to raw search. Field names come back fully qualified as <code>Dataset.field</code>; swap <code>search</code> for <code>flat</code> to strip the prefix.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Authentication</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">Authentication.action</span><span class="t-op">,</span> <span class="t-field">Authentication.user</span></code></pre></div>
+<p><strong>Check whether the required fields are populated.</strong> The docs' own pattern, and the one that catches silent removal.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Successful_Authentication</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-op">*</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-op">-</span> <span class="t-field">date_</span><span class="t-op">*</span> <span class="t-field">host</span> <span class="t-field">index</span> <span class="t-field">punct</span> <span class="t-field">_raw</span> <span class="t-func">time</span><span class="t-op">*</span> <span class="t-field">splunk_server</span> <span class="t-field">sourcetype</span> <span class="t-field">source</span> <span class="t-field">eventtype</span> <span class="t-field">linecount</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fieldsummary</span></code></pre></div>
+<p>A required CIM field sitting at <code>count=0</code> is the finding. Row count alone would have looked healthy.</p>
+<p><strong>Query the acceleration summary.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-opt">summariesonly</span><span class="t-op">=</span><span class="t-field">t</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Network_Traffic.All_Traffic</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Network_Traffic.All_Traffic</span> <span class="t-kw">BY</span> <span class="t-field">All_Traffic.action</span><span class="t-op">,</span> <span class="t-field">_time</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span></code></pre></div>
+<p><code>summariesonly=t</code> reads only the TSIDX summary. Against a stock CIM model, which is not accelerated, this returns zero rows no matter how good your tagging is. Drop the flag to fall back to raw data, and check acceleration with <code>cim_datamodelinfo</code> before blaming the mapping. Model names with spaces use underscores in the <code>datamodel=</code> reference: <code>Network_Traffic</code>, <code>Intrusion_Detection</code>, <code>Network_Resolution</code>.</p>
+<p><strong>Treat the dataset as a table.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:Malware.Malware_Attacks</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">action</span><span class="t-op">,</span> <span class="t-field">signature</span></code></pre></div>
+<p><code>from</code> uses a colon between <code>datamodel</code> and the model name, then a dot between the model and the dataset. It returns bare field names, not dotted ones, which is the practical reason to reach for it over <code>datamodel ... search</code>.</p>
+<p><strong>The validation dashboards.</strong> Settings, then Data models, then CIM Validation (S.o.S.), then Pivot from the Actions column. The model provides top-level datasets plus Missing Extractions searches (events in a model with required fields absent) and Untagged Events searches (events that look like CIM candidates and carry no tag). Do not accelerate this model; the docs warn that accelerating CIM Validation (S.o.S.) might cause issues. Separately, the Data Model Audit dashboard in Search and Reporting reports acceleration health and summary size.</p>
+<h2 id="7.-cross-model-field-quick-reference">7. Cross-model field quick reference<a class="anchor" href="#7.-cross-model-field-quick-reference" aria-label="Link to this section">#</a></h2>
+<p>The field names repeat across models, which is exactly why tags exist as constraints. This table is scoped to what the CIM 8.6 pages confirm.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Models</th>
+<th>Constrained values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>action</code></td>
+<td>Authentication, Change, Data Access, Data Loss Prevention, Email, Endpoint, Intrusion Detection, Malware, Network Sessions, Network Traffic, Performance, Web</td>
+<td>Differs per model, see the table below</td>
+</tr>
+<tr>
+<td><code>app</code></td>
+<td>Alerts, Authentication, Data Access, Data Loss Prevention, Network Traffic, Splunk Audit Logs, Web</td>
+<td>Free text. Authentication examples: <code>ssh</code>, <code>splunk</code>, <code>win:local</code>, <code>signin.amazonaws.com</code></td>
+</tr>
+<tr>
+<td><code>dest</code></td>
+<td>Alerts, Authentication, Certificates, Change, Data Access, Data Loss Prevention, Databases, Email, Endpoint, Event Signatures, Interprocess Messaging, Intrusion Detection, Inventory, Malware, Network Resolution (DNS), Network Traffic, Performance, Ticket Management, Updates, Vulnerabilities, Web</td>
+<td>Free text. Populate from <code>dest_host</code>, <code>dest_ip</code> or <code>dest_nt_host</code>, most specific first</td>
+</tr>
+<tr>
+<td><code>dest_ip</code></td>
+<td>Inventory, Network Sessions, Network Traffic</td>
+<td>IPv4 or IPv6</td>
+</tr>
+<tr>
+<td><code>dest_port</code></td>
+<td>Certificates, Endpoint, Intrusion Detection, Network Resolution (DNS), Network Traffic, Web</td>
+<td>Numeric only, no protocol name</td>
+</tr>
+<tr>
+<td><code>src</code></td>
+<td>Required in Network Traffic and Web. Recommended in Authentication, Change, Intrusion Detection. Optional in Malware_Attacks</td>
+<td>Free text. Populate from <code>src_host</code>, <code>src_ip</code> or <code>src_nt_host</code></td>
+</tr>
+<tr>
+<td><code>src_ip</code></td>
+<td>Optional in Network Traffic and Web</td>
+<td>IPv4 or IPv6</td>
+</tr>
+<tr>
+<td><code>src_port</code></td>
+<td>Recommended in Network Traffic and Intrusion Detection</td>
+<td>Numeric only</td>
+</tr>
+<tr>
+<td><code>user</code></td>
+<td>Required in Authentication and Change. Recommended in Intrusion Detection, Malware_Attacks, Network Traffic, Web</td>
+<td>Free text</td>
+</tr>
+<tr>
+<td><code>src_user</code></td>
+<td>Recommended in Authentication and in Change Account_Management. Optional in Malware_Attacks</td>
+<td>The account requesting on another's behalf, not the account being acted on</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Required in Change and in Web</td>
+<td>Change: <code>success</code>, <code>failure</code>. Web: HTTP status code as a string, 100 to 511</td>
+</tr>
+<tr>
+<td><code>signature</code></td>
+<td>Required in Intrusion Detection and Malware_Attacks. Optional in Authentication</td>
+<td>Vendor detection name, for example <code>Trojan.Vundo</code></td>
+</tr>
+<tr>
+<td><code>vendor_product</code></td>
+<td>Required in Change and Malware_Operations. Recommended in Intrusion Detection, Malware_Attacks, Network Traffic, Web</td>
+<td>Vendor and product together, for example <code>Symantec AntiVirus</code></td>
+</tr>
+<tr>
+<td><code>bytes</code>, <code>bytes_in</code>, <code>bytes_out</code></td>
+<td>Network Traffic, Web</td>
+<td>Numeric. <code>bytes</code> is the total, and CIM expects it to equal <code>bytes_in</code> plus <code>bytes_out</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>Authentication, Certificates, Databases, Email, Interprocess Messaging, Network Resolution (DNS), Network Sessions, Network Traffic, Splunk Audit Logs, Web</td>
+<td>Seconds</td>
+</tr>
+</tbody>
+</table></div>
+<p>The complete cross-model membership rows for <code>src</code>, <code>src_ip</code>, <code>src_port</code>, <code>user</code>, <code>src_user</code>, <code>status</code>, <code>signature</code> and <code>vendor_product</code> on the &quot;CIM fields per associated data model&quot; page could not be read; the entries above are compiled from the six per-model field tables instead, so treat them as a floor rather than an exhaustive list <code>[verify]</code>.</p>
+<h3 id="allowed-values-of-action-by-model">Allowed values of <code>action</code>, by model<a class="anchor" href="#allowed-values-of-action-by-model" aria-label="Link to this section">#</a></h3>
+<p>The single highest-yield table in this file. Same field name, different vocabulary, and a value that is legal in one model is meaningless in another.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Allowed values of <code>action</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td><code>success</code>, <code>failure</code>, <code>pending</code>, <code>error</code></td>
+</tr>
+<tr>
+<td>Network Traffic</td>
+<td><code>allowed</code>, <code>blocked</code>, <code>teardown</code></td>
+</tr>
+<tr>
+<td>Intrusion Detection</td>
+<td><code>allowed</code>, <code>blocked</code></td>
+</tr>
+<tr>
+<td>Malware (Malware_Attacks)</td>
+<td><code>allowed</code>, <code>blocked</code>, <code>deferred</code></td>
+</tr>
+<tr>
+<td>Change</td>
+<td><code>acl_modified</code>, <code>cleared</code>, <code>created</code>, <code>deleted</code>, <code>modified</code>, <code>stopped</code>, <code>lockout</code>, <code>read</code>, <code>logoff</code>, <code>updated</code>, <code>started</code>, <code>restarted</code>, <code>unlocked</code></td>
+</tr>
+<tr>
+<td>Web</td>
+<td>No prescribed value list in the CIM 8.6 Web table; <code>action</code> is required but the values are left to the source</td>
+</tr>
+</tbody>
+</table></div>
+<p>Prescribed values of <code>action</code> for Data Access, Data Loss Prevention, Email, Endpoint, Network Sessions and Performance were not read from the docs in this pass <code>[verify]</code>.</p>
+<h2 id="8.-traps">8. Traps<a class="anchor" href="#8.-traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-CIM-01"><span class="tid">T-CIM-01</span> An event tagged <code>proxy</code> is missing from the Web model's Proxy dataset. <span class="wrong">Wrong belief</span>: the child tag is the whole constraint. <span class="right">Correct fact</span>: Proxy needs <code>web</code> and <code>proxy</code>, because child datasets inherit the parent constraint. Same shape for Endpoint Filesystem, Malware_Attacks, and Change Network_Changes.</p>
+<p class="trap" id="T-CIM-02"><span class="tid">T-CIM-02</span> An answer offers <code>action=denied</code> or <code>action=deny</code> for a Network Traffic firewall event. <span class="right">Correct fact</span>: Network Traffic prescribes <code>allowed</code>, <code>blocked</code> and <code>teardown</code>. Splunk does not reject <code>denied</code>, it just never matches ES content. Same trap with <code>action=failed</code> instead of <code>failure</code> in Authentication.</p>
+<p class="trap" id="T-CIM-03"><span class="tid">T-CIM-03</span> <code>action=teardown</code> or <code>action=deferred</code> appears on an Intrusion Detection event. <span class="right">Correct fact</span>: Intrusion Detection allows only <code>allowed</code> and <code>blocked</code>. <code>teardown</code> belongs to Network Traffic and <code>deferred</code> to Malware_Attacks.</p>
+<p class="trap" id="T-CIM-04"><span class="tid">T-CIM-04</span> A distractor claims Malware_Operations requires <code>action</code> and <code>signature</code>. <span class="right">Correct fact</span>: it requires <code>dest</code>, <code>signature_version</code> and <code>vendor_product</code>, and has no <code>action</code> field at all. It describes the health of the protection deployment, not a detection.</p>
+<p class="trap" id="T-CIM-05"><span class="tid">T-CIM-05</span> A Network Traffic mapping is presented as complete with <code>src</code>, <code>dest</code>, <code>transport</code>, <code>action</code> and ports. <span class="right">Correct fact</span>: the required set also contains <code>app</code>, <code>dvc</code>, <code>src_zone</code>, <code>dest_zone</code> and <code>src_translated_ip</code>, which are required even with no segmentation and no NAT.</p>
+<p class="trap" id="T-CIM-06"><span class="tid">T-CIM-06</span> A question asks which field records whether a change succeeded and offers <code>action</code>. <span class="right">Correct fact</span>: in Change, <code>action</code> is what was attempted and <code>status</code> carries <code>success</code> or <code>failure</code>. Only in Authentication does <code>action</code> itself carry the outcome.</p>
+<p class="trap" id="T-CIM-07"><span class="tid">T-CIM-07</span> An answer treats Web <code>status</code> as a number and writes <code>| where Web.status &gt; 400</code>. <span class="right">Correct fact</span>: CIM types Web <code>status</code> as a string. <code>| search Web.status=4*</code> or an explicit <code>tonumber()</code> is the honest form.</p>
+<p class="trap" id="T-CIM-08"><span class="tid">T-CIM-08</span> A question claims an event missing a required field is excluded from the data model. <span class="right">Correct fact</span>: tags decide membership, fields do not. The event sits in the dataset with a null column and disappears only from searches that use that field. Nothing warns.</p>
+<p class="trap" id="T-CIM-09"><span class="tid">T-CIM-09</span> A distractor says required fields are the ones flagged <code>recommended=true</code> in the model JSON. <span class="right">Correct fact</span>: two separate marks. <code>recommended=true</code> flags recommended fields; required is marked in the 8.6 tables as &quot;required for pytest-splunk-addon&quot;. Many fields carry both.</p>
+<p class="trap" id="T-CIM-10"><span class="tid">T-CIM-10</span> A <code>tstats</code> example reads <code>FROM datamodel=Network Traffic.All_Traffic</code>. <span class="right">Correct fact</span>: the reference uses the internal name, so spaces become underscores: <code>Network_Traffic</code>, <code>Intrusion_Detection</code>, <code>Network_Resolution</code>. The spaced display name belongs in the UI, not the search.</p>
+<p class="trap" id="T-CIM-11"><span class="tid">T-CIM-11</span> An answer offers <code>| from datamodel.Web.Web</code> or <code>| from datamodel:Web:Web</code>. <span class="right">Correct fact</span>: the syntax is <code>| from datamodel:&lt;model&gt;.&lt;dataset&gt;</code>, colon after <code>datamodel</code>, dot between model and dataset. Quotation marks only when a name contains spaces.</p>
+<p class="trap" id="T-CIM-12"><span class="tid">T-CIM-12</span> An answer states that setting the Indexes allowlist is required before a CIM model returns data, or that new indexes join it automatically. <span class="right">Correct fact</span>: the default is all indexes, so the allowlist is purely a performance control, and new indexes must be added by hand.</p>
+<p class="trap" id="T-CIM-13"><span class="tid">T-CIM-13</span> A Windows service state change is offered as either Endpoint or Change. <span class="right">Correct fact</span>: Endpoint's Services dataset (<code>service</code>,<code>report</code>) records observed service state on a client; Change's Endpoint_Changes (<code>change</code>,<code>endpoint</code>) records an administrative modification. Observation goes to Endpoint, administration to Change.</p>
+<p class="trap" id="T-CIM-14"><span class="tid">T-CIM-14</span> A distractor lists CIM Validation (S.o.S.) among the documented models, or names Compute Inventory as current. <span class="right">Correct fact</span>: the Data models section documents twenty-six models, two deprecated. CIM Validation (S.o.S.) is documented on the validation page, and Compute Inventory is the legacy slug for Inventory.</p>
+<p class="trap" id="T-CIM-15"><span class="tid">T-CIM-15</span> A DHCP lease or VPN connection is offered as Network Traffic. <span class="right">Correct fact</span>: Network Sessions covers DHCP (<code>network</code>,<code>session</code>,<code>dhcp</code>) and VPN (<code>network</code>,<code>session</code>,<code>vpn</code>). A VPN tunnel's payload flows are Network Traffic; the tunnel establishment is Network Sessions.</p>
+<p class="trap" id="T-CIM-16"><span class="tid">T-CIM-16</span> An answer claims <code>bytes</code> is unrelated to <code>bytes_in</code> and <code>bytes_out</code>. <span class="right">Correct fact</span>: all three are required in Web and recommended in Network Traffic, and CIM expects <code>bytes</code> to be the sum. <code>EVAL-bytes = bytes_in + bytes_out</code> is the normal way to satisfy it.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="regex-for-splunk.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Regex for Splunk</span></a><a class="pn pn-next" href="glossary.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Glossary</span></a></nav>
+      <p class="doc-foot">Built from <code>reference/cim-data-models.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#1.-master-catalogue"><span class="toc-text">1. Master catalogue</span><span class="mins">6 min</span></a>
+<a class="h2" href="#2.-field-classification-semantics"><span class="toc-text">2. Field classification semantics</span><span class="mins">2 min</span></a>
+<a class="h2" href="#3.-the-six-models-in-detail"><span class="toc-text">3. The six models in detail</span><span class="mins">7 min</span></a>
+<a class="h3" href="#3.1-authentication"><span class="toc-text">3.1 Authentication</span></a>
+<a class="h3" href="#3.2-network-traffic"><span class="toc-text">3.2 Network Traffic</span></a>
+<a class="h3" href="#3.3-web"><span class="toc-text">3.3 Web</span></a>
+<a class="h3" href="#3.4-change"><span class="toc-text">3.4 Change</span></a>
+<a class="h3" href="#3.5-malware"><span class="toc-text">3.5 Malware</span></a>
+<a class="h3" href="#3.6-intrusion-detection"><span class="toc-text">3.6 Intrusion Detection</span></a>
+<a class="h2" href="#4.-knowledge-objects-the-add-on-ships-objective-10.2"><span class="toc-text">4. Knowledge objects the add-on ships (objective 10.2)</span><span class="mins">1 min</span></a>
+<a class="h2" href="#5.-the-per-model-indexes-allowlist"><span class="toc-text">5. The per-model Indexes allowlist</span><span class="mins">2 min</span></a>
+<a class="h2" href="#6.-validation-recipes"><span class="toc-text">6. Validation recipes</span><span class="mins">2 min</span></a>
+<a class="h2" href="#7.-cross-model-field-quick-reference"><span class="toc-text">7. Cross-model field quick reference</span><span class="mins">3 min</span></a>
+<a class="h3" href="#allowed-values-of-action-by-model"><span class="toc-text">Allowed values of action, by model</span></a>
+<a class="h2" href="#8.-traps"><span class="toc-text">8. Traps</span><span class="mins">3 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">26 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

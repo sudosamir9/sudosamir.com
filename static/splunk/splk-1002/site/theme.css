@@ -1,0 +1,615 @@
+/* SPLK-1002 study site.
+   Direction: a reference manual for a pipe-delimited query language. The pipe is the
+   structural device, headings are monospace because the subject is code, and the one
+   loud element is the SPL search bar. Everything else stays quiet. */
+
+:root {
+  --paper:        #f4f6f9;
+  --paper-raised: #ffffff;
+  --paper-sunk:   #eaeef3;
+  --ink:          #1b2028;
+  --ink-soft:     #4a5462;
+  --ink-faint:    #5f6b7c;
+  --rule:         #dbe1e9;
+  --rule-strong:  #c3ccd8;
+
+  --emerald:  #0b7a55;   /* commands, verified, primary */
+  --indigo:   #4f4fc4;   /* functions, structure, the pipe motif */
+  --amber:    #a8620a;   /* traps, warnings */
+  --rust:     #b03a2e;   /* strings */
+  --teal:     #0d6f7a;   /* numbers */
+  --slate:    #37506e;   /* clause keywords */
+
+  --bar-bg:     #ffffff;
+  --bar-chrome: #f0f3f7;
+
+  --shadow-sm: 0 1px 2px rgba(20,28,40,.06), 0 1px 1px rgba(20,28,40,.04);
+  --shadow-md: 0 2px 6px rgba(20,28,40,.07), 0 8px 24px rgba(20,28,40,.06);
+
+  --mono: ui-monospace, "Cascadia Code", "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  --rail: 300px;      /* left: the guide's manual tree */
+  --rail-r: 272px;    /* right: on this page */
+  --shell-max: 2100px;  /* only bites on ultrawide; 1080p and 1440p use the full window */
+
+  --splunk-green:      #3f8140;   /* results table header, matching Splunk's Statistics tab */
+  --splunk-green-dark: #2f6231;
+  --zebra:             #f7f8fa;
+  --inline-code:       #c7254e;   /* Splunk docs render inline code in this rose */
+}
+
+/* Dark palette. Applied when the reader asks for it, or by system preference when
+   they have expressed no preference. The single source of truth is the data-theme
+   attribute, which the inline head script sets before first paint. */
+
+:root[data-theme="dark"] {
+  --paper:        #12151c;
+  --paper-raised: #191d26;
+  --paper-sunk:   #0d1015;
+  --ink:          #e3e8ef;
+  --ink-soft:     #a6b0be;
+  --ink-faint:    #8b95a5;
+  --rule:         #262c38;
+  --rule-strong:  #38404f;
+
+  --emerald:  #46c88f;
+  --indigo:   #9a9aff;
+  --amber:    #e3a44f;
+  --rust:     #f08a7a;
+  --teal:     #56c2cf;
+  --slate:    #9db6d8;
+
+  --bar-bg:     #1b212c;
+  --bar-chrome: #232936;
+
+  --splunk-green:      #3d7a3f;
+  --splunk-green-dark: #2f5f31;
+  --zebra:             #1c212b;
+  --inline-code:       #ff9db1;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.3);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.68 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- shell ---------- */
+
+/* Three columns, like the Splunk docs: manual tree, content, on-this-page. The whole
+   shell is capped and centred so the content sits in the middle of a wide screen
+   instead of hugging the left edge. */
+.shell {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr) var(--rail-r);
+  max-width: var(--shell-max); margin: 0 auto;
+}
+
+.rail {
+  scrollbar-gutter: stable;
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto; overscroll-behavior: contain;
+  padding: 0 1rem 3rem 1.5rem;
+  border-right: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+/* right rail: on this page */
+.rail-right {
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto; overscroll-behavior: contain;
+  padding: 2.5rem 1.5rem 3rem 1.25rem;
+  border-left: 1px solid var(--rule);
+  background: var(--paper);
+}
+.onpage-title {
+  font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-faint); margin: 0 0 .9rem;
+}
+
+.rail-head { padding-top: 1.75rem; margin-bottom: 1.5rem; }
+.rail-eyebrow {
+  font: 600 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-faint); display: block; margin-bottom: .5rem;
+}
+.rail-title { font: 600 15px/1.35 var(--mono); letter-spacing: -.01em; color: var(--ink); margin: 0; }
+.rail-weight {
+  display: inline-block; margin-top: .6rem;
+  font: 600 11px/1 var(--mono); letter-spacing: .06em;
+  color: var(--emerald); background: color-mix(in srgb, var(--emerald) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--emerald) 30%, transparent);
+  padding: .3rem .5rem; border-radius: 3px;
+}
+
+/* ---------- reading progress ---------- */
+
+.progress { position: fixed; inset: 0 0 auto 0; height: 2px; background: transparent; z-index: 30; }
+.progress-bar { height: 100%; width: 0; background: var(--emerald); transition: width .1s linear; }
+@media (prefers-reduced-motion: reduce) { .progress-bar { transition: none; } }
+
+/* ---------- search ---------- */
+
+.search { position: relative; margin-top: 1.25rem; }
+.search input {
+  width: 100%; padding: .5rem 1.9rem .5rem .6rem;
+  font: 500 13px/1.4 var(--sans); color: var(--ink);
+  background: var(--paper-raised); border: 1px solid var(--rule-strong); border-radius: 4px;
+}
+.search input::placeholder { color: var(--ink-faint); }
+.search input:focus { border-color: var(--emerald); }
+.search-key {
+  position: absolute; right: .45rem; top: .45rem; pointer-events: none;
+  font: 600 10px/1 var(--mono); color: var(--ink-faint);
+  border: 1px solid var(--rule-strong); border-radius: 3px; padding: .2rem .3rem;
+}
+.search input:focus ~ .search-key { display: none; }
+.search-results {
+  position: absolute; z-index: 25; left: 0; right: 0; top: calc(100% + .35rem);
+  max-height: 60vh; overflow-y: auto;
+  background: var(--paper-raised); border: 1px solid var(--rule-strong);
+  border-radius: 4px; box-shadow: var(--shadow-md);
+}
+.sr-item { display: block; padding: .45rem .6rem; text-decoration: none; border-bottom: 1px solid var(--rule); line-height: 1.4; }
+.sr-item:last-child { border-bottom: none; }
+.sr-item:hover { background: color-mix(in srgb, var(--emerald) 8%, transparent); }
+.sr-item.sel { background: color-mix(in srgb, var(--emerald) 16%, transparent); box-shadow: inset 3px 0 0 var(--emerald); }
+.sr-top { display: flex; align-items: baseline; gap: .4rem; }
+.sr-title { font: 600 12.5px/1.4 var(--sans); color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* traps carry the same amber signal in search as they do in the page */
+.sr-item.sr-trap { border-left: 3px solid var(--amber); }
+.sr-item.sr-trap .sr-title { font-family: var(--mono); font-size: 11.5px; color: var(--amber); }
+.sr-sec { margin-left: auto; flex: none; font: 500 10px/1.4 var(--mono); color: var(--ink-faint); white-space: nowrap; }
+/* block, or the inline span inherits the body line-height and the snippet sprawls */
+.sr-desc { display: block; font: 400 11.5px/1.45 var(--sans); color: var(--ink-faint); margin-top: .15rem; }
+.sr-empty { padding: .6rem; font: 500 12px/1.4 var(--sans); color: var(--ink-faint); }
+
+/* ---------- previous / next ---------- */
+
+.prevnext { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 3.5rem; }
+.pn {
+  display: block; padding: .8rem .9rem; text-decoration: none;
+  border: 1px solid var(--rule-strong); border-radius: 5px; background: var(--paper-raised);
+}
+.pn:hover { border-color: var(--emerald); }
+.pn-next { grid-column: 2; text-align: right; }
+.pn-rel { display: block; font: 600 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+.pn-sec { display: block; margin-top: .45rem; font: 600 10.5px/1 var(--mono); color: var(--emerald); }
+.pn-label { display: block; margin-top: .2rem; font: 600 13.5px/1.35 var(--sans); color: var(--ink); }
+
+/* ---------- left rail: the guide's manual tree ---------- */
+nav.tree { margin-top: 1.25rem; }
+.tree-item {
+  display: block; padding: .4rem .5rem .4rem .6rem;
+  border-left: 2px solid transparent; border-radius: 0 3px 3px 0;
+  color: var(--ink-soft); text-decoration: none;
+}
+.tree-item:hover { background: var(--paper-sunk); color: var(--ink); }
+.tree-item.current { border-left-color: var(--emerald); background: color-mix(in srgb, var(--emerald) 8%, transparent); }
+.tree-sec {
+  display: block; font: 600 10px/1.4 var(--mono); letter-spacing: .1em;
+  color: var(--ink-faint); text-transform: uppercase;
+}
+.tree-item.current .tree-sec { color: var(--emerald); }
+/* Label and badge sit on one flex row so a long label cannot collide with the badge. */
+.tree-label {
+  display: flex; align-items: baseline; gap: .4rem;
+  font: 500 13px/1.4 var(--sans);
+}
+.tree-item.current .tree-label { font-weight: 650; color: var(--ink); }
+.tree-item.unbuilt .tree-label { color: var(--ink-faint); }
+.tree-item.unbuilt .tree-label::after {
+  content: "md"; flex: none; margin-left: auto;
+  font: 600 9px/1 var(--mono); letter-spacing: .08em;
+  color: var(--ink-faint); border: 1px solid var(--rule); border-radius: 2px; padding: .15rem .25rem;
+}
+
+.onpage-meta {
+  margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: .4rem;
+}
+.onpage-weight { font: 600 11px/1 var(--mono); letter-spacing: .06em; color: var(--emerald); }
+.onpage-time { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--ink-faint); }
+/* per-section reading time, right-aligned against the outline entry */
+/* padding rather than gap: the label is an anonymous flex item and the auto margin
+   swallows the gap, leaving the time jammed against the title */
+.mins { margin-left: auto; padding-left: .6rem; font: 500 10px/1.4 var(--mono); color: var(--ink-faint); white-space: nowrap; }
+nav.toc a.active .mins { color: var(--emerald); }
+
+nav.toc { margin-top: 1.25rem; }
+nav.toc a {
+  display: flex; align-items: baseline; position: relative;
+  padding: .3rem 0 .3rem 1.1rem;
+  color: var(--ink-soft); text-decoration: none;
+  font: 500 13.5px/1.4 var(--sans);
+  border-left: 2px solid transparent;
+  transition: color .12s, border-color .12s;
+}
+nav.toc a.h3 { padding-left: 2rem; font-size: 12.5px; color: var(--ink-faint); }
+/* the pipe motif: every nav item is a stage in a pipeline */
+nav.toc a.h2::before {
+  content: "|"; position: absolute; left: .35rem; top: .3rem;
+  font: 600 13px/1.4 var(--mono); color: var(--rule-strong);
+  transition: color .12s;
+}
+nav.toc a:hover { color: var(--ink); }
+nav.toc a.active { color: var(--emerald); border-left-color: var(--emerald); font-weight: 600; }
+nav.toc a.active::before { color: var(--emerald); }
+
+.rail-foot { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.rail-foot a { display: block; color: var(--ink-faint); text-decoration: none; font: 500 12.5px/1.9 var(--sans); }
+.rail-foot a:hover { color: var(--emerald); }
+
+.theme-toggle {
+  margin-top: 1rem; width: 100%;
+  font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-soft); background: var(--paper-raised);
+  border: 1px solid var(--rule-strong); border-radius: 4px;
+  padding: .55rem; cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+/* ---------- content ---------- */
+
+main { padding: 2.5rem 3.25rem 6rem; min-width: 0; }
+/* Prose is never wrapped to a measure. Every block fills the content column, the same
+   way tables, SPL panels and diagrams already do. A paragraph is one line of text that
+   breaks where the window ends, nowhere else. */
+.doc { max-width: 100%; margin: 0 auto; }
+
+/* breadcrumb + version, echoing the Splunk docs header */
+.crumbs {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  margin: 0 0 1.25rem; font: 500 12.5px/1.5 var(--sans); color: var(--ink-faint);
+}
+.crumbs a { color: var(--ink-faint); text-decoration: none; }
+.crumbs a:hover { color: var(--emerald); text-decoration: underline; }
+.crumbs .sep { color: var(--rule-strong); }
+.crumbs .ver {
+  margin-left: auto; font: 600 10.5px/1 var(--mono); letter-spacing: .06em;
+  color: var(--ink-soft); background: var(--paper-raised);
+  border: 1px solid var(--rule-strong); border-radius: 3px; padding: .3rem .5rem;
+}
+
+/* hover anchors on headings, like most docs sites */
+h2, h3 { position: relative; }
+.anchor {
+  position: absolute; left: -1.15rem; top: 0;
+  color: var(--rule-strong); text-decoration: none; opacity: 0;
+  font: 500 .8em/inherit var(--mono); transition: opacity .12s;
+}
+h2:hover .anchor, h3:hover .anchor, .anchor:focus { opacity: 1; }
+.anchor:hover { color: var(--emerald); }
+
+h1 {
+  font: 600 clamp(23px, 2.4vw, 28px)/1.25 var(--mono);
+  letter-spacing: -.025em; margin: 0 0 .4rem; color: var(--ink);
+}
+h2 {
+  font: 600 21px/1.3 var(--mono); letter-spacing: -.015em;
+  margin: 3.25rem 0 1rem; padding-top: 1.25rem;
+  border-top: 1px solid var(--rule); color: var(--ink); scroll-margin-top: 1.5rem;
+}
+h2:first-of-type { border-top: none; padding-top: 0; margin-top: 2rem; }
+h3 {
+  font: 600 15.5px/1.35 var(--mono); letter-spacing: -.005em;
+  margin: 2.25rem 0 .75rem; color: var(--ink); scroll-margin-top: 1.5rem;
+}
+h4 { font: 600 14px/1.4 var(--mono); margin: 1.5rem 0 .5rem; color: var(--ink-soft); }
+
+p { margin: 0 0 1.1rem; }
+strong { font-weight: 650; color: var(--ink); }
+
+a { color: var(--emerald); text-decoration-color: color-mix(in srgb, var(--emerald) 35%, transparent); text-underline-offset: 2px; }
+a:hover { text-decoration-color: currentColor; }
+
+ul, ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+li { margin-bottom: .4rem; }
+
+blockquote {
+  margin: 1.5rem 0; padding: .9rem 1.1rem;
+  border-left: 3px solid var(--indigo);
+  background: color-mix(in srgb, var(--indigo) 6%, transparent);
+  color: var(--ink-soft); font-size: 15.5px;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* Inline code picks up the rose the Splunk docs use, so a field or command name is
+   visibly not prose even mid-sentence. */
+/* B2: mono plus rose already carry the signal. The chip's border and fill put ~7px of
+   dead space before every following comma, and there are 904 chips on one page. */
+code {
+  font: 500 .9em/1.5 var(--mono);
+  color: var(--inline-code); background: none; border: none;
+  padding: 0 .06em;
+}
+/* B1: without this, code inside a pre inherits the chip above and the SPL search bar,
+   the one element allowed to be loud, renders smaller than the prose around it. */
+.spl pre code, pre.plain code, .mermaid code {
+  font: inherit; background: none; border: 0; padding: 0; color: inherit;
+}
+th code, .results code { color: inherit; background: none; border: none; padding: 0; }
+a code { color: inherit; }
+
+/* ---------- the signature: SPL as a Splunk search bar ---------- */
+
+.spl {
+  margin: 1.5rem 0 1.75rem;
+  border: 1px solid var(--rule-strong); border-radius: 6px;
+  background: var(--bar-bg); box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.spl-chrome {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .45rem .7rem; background: var(--bar-chrome);
+  border-bottom: 1px solid var(--rule);
+}
+.spl-glass {
+  width: 13px; height: 13px; flex: none; color: var(--ink-faint);
+}
+.spl-label {
+  font: 600 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.spl-spacer { flex: 1; }
+.spl-time {
+  font: 500 11px/1 var(--mono); color: var(--ink-soft);
+  background: var(--paper-raised); border: 1px solid var(--rule-strong);
+  border-radius: 3px; padding: .3rem .5rem;
+}
+.spl-copy {
+  font: 600 10.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-soft); background: var(--paper-raised);
+  border: 1px solid var(--rule-strong); border-radius: 3px;
+  padding: .32rem .55rem; cursor: pointer;
+}
+.spl-copy:hover { color: var(--emerald); border-color: var(--emerald); }
+.spl-copy.done { color: var(--emerald); border-color: var(--emerald); }
+.spl pre {
+  margin: 0; padding: .9rem 1.05rem;
+  font: 500 15px/1.7 var(--mono);
+  overflow-x: auto; white-space: pre; tab-size: 2;
+}
+
+/* SPL tokens */
+.t-cmd    { color: var(--emerald); font-weight: 650; }
+.t-func   { color: var(--indigo); }
+.t-kw     { color: var(--slate); font-weight: 650; text-transform: uppercase; }
+.t-str    { color: var(--rust); }
+.t-num    { color: var(--teal); }
+.t-opt    { color: var(--ink-soft); }
+.t-field  { color: var(--ink); }
+.t-op     { color: var(--ink-faint); }
+.t-macro  { color: var(--indigo); font-weight: 600; }
+.t-comment{ color: var(--ink-faint); font-style: italic; }
+.t-pipe   { color: var(--indigo); font-weight: 700; padding: 0 .1em; }
+
+/* plain / ini fences */
+pre.plain {
+  margin: 1.5rem 0; padding: .85rem 1rem;
+  background: var(--paper-sunk); border: 1px solid var(--rule);
+  border-radius: 6px; overflow-x: auto;
+  font: 500 13.5px/1.65 var(--mono); color: var(--ink-soft);
+}
+
+/* ---------- tables ---------- */
+
+.tw { overflow-x: auto; margin: 1.5rem 0; }
+table { border-collapse: collapse; font-size: 14.5px; }
+/* B7: width:100% inside overflow-x:auto gives the wrapper nothing to scroll, so wide
+   tables compress instead. exam-traps.md is 367 rows and tracker.md is 17 columns. */
+.tw > table { width: 100%; }
+.tw.wide > table { width: max-content; min-width: 100%; }
+.tw.wide { max-height: 78vh; }
+.tw thead th { position: sticky; top: 0; z-index: 2; background: var(--paper); }
+th, td { text-align: left; vertical-align: top; padding: .55rem .7rem; border-bottom: 1px solid var(--rule); }
+th {
+  font: 600 11.5px/1.3 var(--mono); letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink-faint); border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+}
+tbody tr:hover { background: color-mix(in srgb, var(--indigo) 4%, transparent); }
+td code { font-size: .85em; }
+
+/* A results table, styled like the Statistics tab in the Splunk docs: green header row
+   with white type, zebra striping, ruled cells. */
+.results { border: 1px solid var(--rule-strong); border-radius: 4px; overflow: hidden; background: var(--paper-raised); }
+.results-head {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .45rem .7rem; background: var(--bar-chrome); border-bottom: 1px solid var(--rule);
+  font: 600 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint);
+}
+.results table { font-variant-numeric: tabular-nums; border-collapse: collapse; }
+.results th {
+  background: var(--splunk-green); color: #fff;
+  font: 600 12.5px/1.4 var(--sans); letter-spacing: .01em; text-transform: none;
+  border: 1px solid var(--splunk-green-dark); border-bottom: none;
+  padding: .6rem .75rem; white-space: nowrap;
+}
+.results td {
+  border: 1px solid var(--rule); padding: .55rem .75rem;
+  font: 500 13.5px/1.5 var(--mono); color: var(--ink);
+}
+.results tbody tr:nth-child(even) { background: var(--zebra); }
+.results tbody tr:hover { background: color-mix(in srgb, var(--splunk-green) 8%, transparent); }
+/* Numeric columns align right, and their headers follow, or the header floats away
+   from the values beneath it. */
+.results th:not(:first-child), .results td:not(:first-child) { text-align: right; }
+.results td:first-child { color: var(--ink-soft); }
+
+/* ---------- traps ---------- */
+
+.trap {
+  margin: 0 0 .9rem; padding: .8rem 1rem .8rem 1.1rem;
+  border-left: 3px solid var(--amber);
+  border-radius: 0 4px 4px 0;
+}
+/* B4: 24 tinted blocks in a row is wallpaper, and exam-traps.md has 292. The rule and
+   the badge carry the signal without colour. */
+.trap .wrong, .trap .right {
+  font: 600 .78em/1 var(--mono); letter-spacing: .06em; text-transform: uppercase;
+}
+.trap .wrong { color: var(--amber); }
+.trap .right { color: var(--emerald); }
+.trap .tid {
+  display: inline-block; margin-right: .5rem;
+  font: 700 11px/1 var(--mono); letter-spacing: .06em;
+  color: #8a4d00; background: color-mix(in srgb, var(--amber) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber) 32%, transparent);
+  padding: .25rem .4rem; border-radius: 3px; vertical-align: 1px;
+}
+
+/* ---------- self-check ---------- */
+
+details {
+  margin: 1.5rem 0; padding: .9rem 1.1rem;
+  background: var(--paper-raised); border: 1px solid var(--rule-strong); border-radius: 6px;
+}
+summary {
+  cursor: pointer; font: 600 12px/1 var(--mono);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--emerald);
+}
+summary::marker { color: var(--ink-faint); }
+details[open] summary { margin-bottom: 1rem; padding-bottom: .8rem; border-bottom: 1px solid var(--rule); }
+
+/* ---------- mermaid ---------- */
+
+.mermaid-wrap {
+  margin: 1.5rem 0; padding: 1.1rem; overflow-x: auto;
+  background: var(--paper-raised); border: 1px solid var(--rule); border-radius: 6px;
+}
+/* Unrendered, the diagram source reads as a code block. Rendered, it is an SVG and these
+   text rules stop applying. */
+.mermaid { font: 500 12.5px/1.6 var(--mono); color: var(--ink-faint); white-space: pre; overflow-x: auto; }
+.mermaid[data-processed] { white-space: normal; text-align: center; }
+.mermaid svg { max-width: 100%; height: auto; }
+
+/* ---------- footer ---------- */
+
+.doc-foot {
+  margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
+  font: 500 13px/1.7 var(--sans); color: var(--ink-faint);
+}
+.doc-foot a { color: var(--ink-soft); }
+
+/* ---------- a11y + responsive ---------- */
+
+:focus-visible { outline: 2px solid var(--emerald); outline-offset: 2px; border-radius: 2px; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 20;
+  background: var(--emerald); color: #fff; padding: .6rem 1rem;
+  font: 600 13px/1 var(--sans); border-radius: 0 0 4px 0;
+}
+.skip:focus { left: 0; }
+
+/* Drop the right rail first: the guide tree is more useful than the page outline when
+   space is tight, and the outline is reachable by scrolling anyway. */
+@media (max-width: 1320px) {
+  .shell { grid-template-columns: var(--rail) minmax(0, 1fr); }
+  .rail-right { display: none; }
+}
+
+@media (max-width: 1020px) {
+  .shell { grid-template-columns: 1fr; }
+  .rail { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--rule); padding: 1.25rem 1.25rem 1.5rem; }
+  nav.tree { max-height: 260px; overflow-y: auto; }
+  main { padding: 1.75rem 1.25rem 4rem; }
+  body { font-size: 16px; }
+  .anchor { display: none; }
+}
+
+@media print {
+  :root, :root[data-theme="dark"] {
+    --paper:#fff; --paper-raised:#fff; --paper-sunk:#f4f4f4; --ink:#111; --ink-soft:#333;
+    --ink-faint:#555; --rule:#ccc; --rule-strong:#999; --bar-bg:#fff; --bar-chrome:#f4f4f4;
+    color-scheme: light;
+  }
+  .spl, .trap, .results, .tw, details, .mermaid-wrap { break-inside: avoid; }
+  .spl pre { white-space: pre-wrap; }
+  .tw { max-height: none; }
+  .rail, .rail-right, .spl-copy, .theme-toggle, .anchor, .crumbs { display: none; }
+  .shell { display: block; max-width: none; }
+  main { padding: 0; }
+  .doc { max-width: none; }
+}
+
+/* ---------- rail groups, 43 pages ---------- */
+
+.rail-title a { color: inherit; text-decoration: none; }
+.rail-title a:hover { color: var(--emerald); }
+.search {
+  position: sticky; top: 0; z-index: 5; background: var(--paper);
+  margin: 0 -1rem .25rem -1.5rem; padding: .35rem 1rem .6rem 1.5rem;
+}
+
+.tree-group { margin-bottom: .35rem; }
+.tree-group > summary {
+  cursor: pointer; list-style: none; padding: .45rem .3rem;
+  font: 600 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tree-group > summary::-webkit-details-marker { display: none; }
+.tree-group > summary::before { content: "+ "; font-weight: 700; }
+.tree-group[open] > summary::before { content: "- "; }
+.tree-group > summary:hover { color: var(--ink); }
+
+/* one flex row per page: number, label, weight, cram chip. Half the height of the
+   stacked version, which matters at 43 rows. */
+.tree-item {
+  display: flex; align-items: flex-start; gap: .45rem;
+  padding: .28rem .4rem .28rem .5rem;
+  border-left: 2px solid transparent; border-radius: 0 3px 3px 0;
+  color: var(--ink-soft); text-decoration: none; font: 500 12.5px/1.45 var(--sans);
+}
+.tree-item:hover { background: var(--paper-sunk); color: var(--ink); }
+.tree-item.current { border-left-color: var(--emerald); background: color-mix(in srgb, var(--emerald) 9%, transparent); }
+.tree-item.current .tree-label { font-weight: 650; color: var(--ink); }
+.tree-sec { flex: none; width: 2.5em; font: 600 10px/1.75 var(--mono); color: var(--ink-faint); }
+.tree-item.current .tree-sec { color: var(--emerald); }
+.tree-label { flex: 1; min-width: 0; overflow-wrap: break-word; }
+.tree-wt { flex: none; font: 600 10px/1.75 var(--mono); color: var(--ink-faint); }
+.tree-chip {
+  flex: none; margin-top: .18rem; font: 600 8.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint); border: 1px solid var(--rule); border-radius: 2px; padding: .15rem .22rem;
+}
+
+/* ---------- Study / Cram control ---------- */
+
+.seg { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 4px; overflow: hidden; }
+.seg a {
+  padding: .25rem .6rem; text-decoration: none;
+  font: 600 10.5px/1.5 var(--mono); letter-spacing: .06em;
+  color: var(--ink-soft); background: var(--paper-raised);
+}
+.seg a + a { border-left: 1px solid var(--rule-strong); }
+.seg a:hover { color: var(--ink); }
+.seg a.on { background: var(--emerald); color: #fff; }
+
+/* ---------- search additions ---------- */
+
+.sr-group {
+  margin: 0; padding: .35rem .6rem .2rem;
+  font: 600 9.5px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-faint); background: var(--paper-sunk); position: sticky; top: 0;
+}
+.sr-item.sr-cmd .sr-title { font-family: var(--mono); color: var(--emerald); font-size: 11.5px; }
+.toc-text { min-width: 0; }
+
+/* SPL time modifiers: -24h@h is one idea, not three tokens */
+.t-time { color: var(--teal); font-weight: 600; }
+
+/* nested lists were adding a full paragraph gap at every level */
+ul ul, ol ol, ul ol, ol ul { margin-bottom: 0; margin-top: .3rem; }

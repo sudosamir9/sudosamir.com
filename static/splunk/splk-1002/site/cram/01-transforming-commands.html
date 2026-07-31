@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cram: 1.0 Using Transforming Commands for Visualizations | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/01-transforming-commands.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Transforming commands</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/01-transforming-commands.html">Study</a><a class="on" href="01-transforming-commands.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="cram-1.0-using-transforming-commands-for-visualizations-5">Cram: 1.0 Using Transforming Commands for Visualizations</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">chart</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">chart-options</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">agg</span><span class="t-op">=&lt;</span><span class="t-field">term</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">stats-agg-term</span><span class="t-op">&gt;</span><span class="t-pipe">|</span><span class="t-op">&lt;</span><span class="t-field">sparkline-agg-term</span><span class="t-op">&gt;</span><span class="t-pipe">|</span><span class="t-str">&quot;(&quot;</span><span class="t-op">&lt;</span><span class="t-field">eval-expr</span><span class="t-op">&gt;</span><span class="t-str">&quot;)&quot;</span><span class="t-op">)</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span>
+      <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">row-split</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">column-split</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-pipe">|</span> <span class="t-op">[</span><span class="t-kw">OVER</span> <span class="t-op">&lt;</span><span class="t-field">row-split</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">column-split</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">dedup_splitvals</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+
+<span class="t-field">timechart</span> <span class="t-op">[</span><span class="t-opt">sep</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">format</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">partial</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">cont</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">limit</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">agg</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">bin-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span>
+      <span class="t-op">(</span> <span class="t-op">&lt;</span><span class="t-field">single-agg</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">split-by-clause</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">eval-expr</span><span class="t-op">&gt;</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">split-by-clause</span><span class="t-op">&gt;</span> <span class="t-op">)</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">dedup_splitvals</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+
+<span class="t-field">top</span>  <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">N</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">top-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span>  <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">rare</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">rare-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span>       <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">untable</span>  <span class="t-op">&lt;</span><span class="t-field">x-field</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-name-field</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-data-field</span><span class="t-op">&gt;</span>
+<span class="t-field">xyseries</span> <span class="t-op">[</span><span class="t-opt">grouped</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">x-field</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-name-field</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-data-field</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-opt">sep</span><span class="t-op">=</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">format</span><span class="t-op">=</span><span class="t-op">]</span></code></pre></div>
+<p><code>chart BY a b</code> is identical to <code>chart OVER a BY b</code>. <code>a</code> = row-split = first column = X-axis. <code>b</code> = column-split = data series.</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>chart</th>
+<th>timechart</th>
+<th>top</th>
+<th>rare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit</code></td>
+<td><code>top 10</code> (columns; only with a column-split; <code>0</code> = all)</td>
+<td><code>top10</code> split values (<code>0</code> = all, no filtering)</td>
+<td><code>10</code> (<code>0</code> = all to <code>maxresultrows</code>)</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>&lt;N&gt;</code> positional</td>
+<td>n/a</td>
+<td>n/a</td>
+<td><code>10</code></td>
+<td>not documented</td>
+</tr>
+<tr>
+<td><code>useother</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td>not documented</td>
+</tr>
+<tr>
+<td><code>otherstr</code></td>
+<td><code>OTHER</code></td>
+<td><code>OTHER</code></td>
+<td><code>OTHER</code></td>
+<td>not documented</td>
+</tr>
+<tr>
+<td><code>usenull</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>nullstr</code></td>
+<td><code>NULL</code></td>
+<td><code>NULL</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>cont</code></td>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>bins</code></td>
+<td><code>300</code> (max, not target)</td>
+<td><code>100</code> (max, not target)</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>span</code></td>
+<td>none</td>
+<td>none (falls back to <code>bins=100</code> or picker preset)</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>partial</code></td>
+<td>not available</td>
+<td><code>true</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>fixedrange</code></td>
+<td>not available</td>
+<td><code>true</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>dedup_splitvals</code></td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>sep</code> / <code>format</code></td>
+<td>no default stated</td>
+<td>no default stated</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>countfield</code> / <code>percentfield</code></td>
+<td>n/a</td>
+<td>n/a</td>
+<td><code>count</code> / <code>percent</code></td>
+<td><code>count</code> / <code>percent</code></td>
+</tr>
+<tr>
+<td><code>showcount</code> / <code>showperc</code></td>
+<td>n/a</td>
+<td>n/a</td>
+<td><code>true</code> / <code>true</code></td>
+<td><code>true</code> / <code>true</code></td>
+</tr>
+<tr>
+<td><code>start</code>, <code>end</code>, <code>aligntime</code>, <code>agg</code></td>
+<td>none</td>
+<td>none (+ <code>minspan</code> none)</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td><code>grouped</code> (xyseries)</td>
+<td><code>false</code> (streaming; <code>true</code> = transforming)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Max results</td>
+<td></td>
+<td></td>
+<td>50,000 (<code>maxresultrows</code>, <code>[top]</code>)</td>
+<td>50,000 (<code>[rare]</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Default <code>timechart</code> spans with no <code>span=</code>: 15m gives 10s, 60m gives 1m, 4h gives 5m, 24h gives 30m, 7d gives 1d, 30d gives 1d, previous year gives 1mon.</p>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<p>X-axis must be time, use <code>timechart</code> (only one BY field). X-axis is any other field, use <code>chart</code> (<code>OVER</code> row-split, <code>BY</code> column-split). One row per unique field combination, use <code>stats</code> (any number of BY fields). Pie needs exactly 2 columns. Column/bar/line need 2+ columns, area needs 3+. Scatter needs 3 columns in marker, X, Y order (<code>table</code> fixes order). Single value with sparkline and trend arrow needs <code>timechart</code>, <code>stats</code> gives neither. Trellis needs a transforming command last plus the split field in results. <code>stats</code> shape to <code>chart</code> shape use <code>xyseries x y n</code>, reverse with <code>untable</code>.</p>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>limit</code> caps COLUMNS (series) on <code>chart</code>/<code>timechart</code>, not rows; default is top 10, and excess values pool into <code>OTHER</code> because <code>useother=true</code>.</li>
+<li><code>NULL</code> comes from <code>usenull</code> (events missing the split field); <code>OTHER</code> comes from <code>useother</code> (values excluded by limit or where-clause). Both default true on <code>chart</code> and <code>timechart</code>.</li>
+<li><code>bins</code> default is 300 on <code>chart</code> and 100 on <code>timechart</code>, and it is a maximum, not a target. If both <code>bins</code> and <code>span</code> are given to <code>timechart</code>, <code>span</code> wins and <code>bins</code> is ignored.</li>
+<li><code>timechart</code> accepts exactly one BY field because <code>_time</code> is already the row-split; <code>chart</code> accepts two; <code>stats</code> accepts many. <code>partial</code> and <code>fixedrange</code> exist only on <code>timechart</code>.</li>
+<li><code>useother</code> defaults to <code>false</code> on <code>top</code>. Put <code>span</code>/<code>bins</code> BEFORE the split-by field or they bin the split field instead of time. Same field cannot be both a function argument and the split field.</li>
+</ol>
+<p>Extras: <code>sparkline()</code> works with <code>chart</code> and <code>stats</code> only, never <code>timechart</code>. <code>per_day/per_hour/per_minute/per_second</code> are <code>timechart</code>-only aggregations and do NOT set the span. Only week spans work with snap-to-time (<code>span=w@w1</code>). An explicit <code>&lt;where-clause&gt;</code> makes <code>limit</code> and <code>agg</code> ignored. <code>table</code> is a transforming command; <code>untable</code> and <code>xyseries</code> (with <code>grouped=false</code>) are streaming.</p>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-01-01 limit caps columns. T-01-02 timechart takes one BY field. T-01-03 OVER vs BY ordering. T-01-04 NULL vs OTHER. T-01-05 bins 300 vs 100. T-01-06 span beats bins. T-01-07 top useother=false. T-01-08 rare has no documented useother. T-01-09 partial/fixedrange are timechart only. T-01-10 stats BY a b vs chart BY a b. T-01-11 field reused in function and split. T-01-12 span placement before split-by. T-01-13 week-only snap-to spans. T-01-14 table is transforming but aggregates nothing. T-01-15 sparkline excludes timechart. T-01-16 per_* do not set span. T-01-17 limit=0 means all. T-01-18 xyseries is streaming by default. T-01-19 where-clause disables limit and agg. T-01-20 rare has no positional N.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="00-foundations-refresher.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Foundations refresher</span></a><a class="pn pn-next" href="02-filtering-and-formatting.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Filtering and formatting</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/01-transforming-commands.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">5% of the exam</span>
+      <span class="onpage-time">4 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

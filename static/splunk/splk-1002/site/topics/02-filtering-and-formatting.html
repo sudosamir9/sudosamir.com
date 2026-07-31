@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.0 Filtering and Formatting Results | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="02-filtering-and-formatting.html" aria-current="page"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../topics/02-filtering-and-formatting.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Filtering and formatting</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="02-filtering-and-formatting.html">Study</a><a class="" href="../cram/02-filtering-and-formatting.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="2.0-filtering-and-formatting-results-10">2.0 Filtering and Formatting Results</h1>
+<p>Section 2.0 is the SPL-mechanics core of the Power User exam: create a field with <code>eval</code>, cut a result set down with <code>search</code> or <code>where</code>, and patch the holes sparse data leaves with <code>fillnull</code>. The 10% weight goes almost entirely on knowing which of those three to reach for when a question describes a filtering problem in English.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<p>Official section: 2.0 Filtering and Formatting Results, 10%.</p>
+<p>Sub-objectives, verbatim from the official blueprint:</p>
+<ul>
+<li>2.1 The eval command</li>
+<li>2.2 Use the search and where commands to filter results</li>
+<li>2.3 The fillnull command</li>
+</ul>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Sub-objective</th>
+<th>Udemy (Hailie Shaw, &quot;Splunk: Zero to Power User&quot;)</th>
+<th>Apress (Deep Mehta, 2021)</th>
+<th>Where the secondary sources fail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.1 eval</td>
+<td>Modules 11A, 11B</td>
+<td>Chapter 2, eval function tables</td>
+<td>Apress Table 2-16 describes <code>coalesce</code> as if it were <code>if()</code> and <code>null()</code> as if it were <code>nullif()</code>. Both wrong. Udemy is demo-heavy and never enumerates signatures.</td>
+</tr>
+<tr>
+<td>2.2 search and where</td>
+<td>Modules 8A, 8B</td>
+<td>Chapter 2 (<code>where</code>, plus <code>dedup</code>, <code>head</code>, <code>tail</code>)</td>
+<td>Apress mixes in commands that are not on the 2.0 blueprint and contradicts itself on field-value case sensitivity.</td>
+</tr>
+<tr>
+<td>2.3 fillnull</td>
+<td>No dedicated module</td>
+<td>Absent from the book entirely</td>
+<td><code>fillnull</code> and <code>fieldformat</code> are both missing from Apress. This file is the only source.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>fieldformat</code> and <code>filldown</code> are not named in the blueprint but sit directly adjacent to <code>eval</code> and <code>fillnull</code>, so question writers use them as distractors. Both are covered here.</p>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>Everything in section 2.0 happens at search time, after events are retrieved and after search-time field extraction. Nothing here changes what is stored on disk.</p>
+<p>The base search, the terms before the first pipe, is the only part that filters against the index itself: it is event-generating and decides which buckets and raw events are read at all. Every <code>search</code>, <code>where</code>, <code>eval</code>, <code>fillnull</code>, <code>fieldformat</code>, and <code>filldown</code> after the first pipe works on results already read off disk. Hence the performance argument for this section: a filter moved earlier prunes disk reads, a filter left later prunes only rows in memory.</p>
+<div class="mermaid-wrap" style="min-height:340px"><div class="mermaid">flowchart TD
+  A[&quot;Index buckets: rawdata + tsidx&quot;] --&gt; B[&quot;Base search: terms, field-value pairs, time range&lt;br/&gt;event-generating, filters against the index&quot;]
+  B --&gt; C[&quot;Search-time extraction, aliases, calculated fields, lookups, eventtypes, tags&quot;]
+  C --&gt; D[&quot;eval: create or overwrite one field per row&quot;]
+  D --&gt; E[&quot;where: keep rows where a Boolean eval expression is TRUE&quot;]
+  E --&gt; F[&quot;search after a pipe: keep rows matching terms or field-value pairs&quot;]
+  F --&gt; G[&quot;stats / chart / timechart: transforming, drops _raw&quot;]
+  G --&gt; H[&quot;fillnull: replace null cells with a constant&quot;]
+  H --&gt; I[&quot;fieldformat: change rendered appearance only, put it last&quot;]
+  I --&gt; J[&quot;Statistics tab, Events tab, export&quot;]</div></div>
+<p>Three different questions: <code>eval</code> answers &quot;what value should this row carry&quot;, <code>search</code> and <code>where</code> answer &quot;should this row survive&quot;, <code>fillnull</code> answers &quot;what should an empty cell say&quot;. <code>fieldformat</code> answers &quot;how should this look on screen without changing what it is&quot;.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<h3 id="eval">eval<a class="anchor" href="#eval" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">eval</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">[</span><span class="t-str">&quot;,&quot;</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span></code></pre></div>
+<p>Four kinds of work go through this one command: calculations with the arithmetic operators, type conversion with <code>tonumber</code> and <code>tostring</code>, display formatting with the <code>tostring</code> formats and <code>strftime</code>, and conditional logic with <code>if</code>, <code>case</code>, <code>validate</code>, and <code>coalesce</code>. It cannot assign a Boolean, and it cannot remove a field, which is the job of <code>fields -</code>. The nearest it gets is assigning <code>null()</code>, which clears a value, and a field left null on every row falls out of the results.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;field&gt;</code></td>
+<td>Destination field name, bare or single-quoted</td>
+<td>none (required)</td>
+<td>Receives the result. Overwrites the field if it exists, creates and appends a new column if it does not.</td>
+</tr>
+<tr>
+<td><code>&lt;expression&gt;</code></td>
+<td>Values, variables, operators, evaluation functions</td>
+<td>none (required)</td>
+<td>Evaluated per row. Case sensitive. Syntax is checked before the search runs; an invalid expression throws an exception rather than returning zero results.</td>
+</tr>
+<tr>
+<td>Comma between assignments</td>
+<td><code>,</code></td>
+<td>none</td>
+<td>Chains assignments in one command, processed left to right, so a later assignment can reference a field an earlier one created.</td>
+</tr>
+<tr>
+<td>Single quotation marks</td>
+<td><code>'server-1'</code>, <code>'Last.Name'</code>, <code>'Account ID'</code></td>
+<td>none</td>
+<td>Required when a field name contains a non-alphanumeric character other than underscore, starts with a numeral, or contains a space.</td>
+</tr>
+<tr>
+<td>Double quotation marks</td>
+<td><code>&quot;server-&quot;</code></td>
+<td>none</td>
+<td>Required for literal strings. An unquoted bare word is read as a field name.</td>
+</tr>
+<tr>
+<td>Curly braces on the left</td>
+<td><code>{aName}=aValue</code></td>
+<td>none</td>
+<td>Dynamic field-name creation: the value of <code>aName</code> becomes the new field's name. Unbounded recursion errors out and the search does not complete.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Operators shared by <code>eval</code> and <code>where</code>: arithmetic <code>+ - * / %</code>, concatenation <code>.</code>, Boolean <code>AND OR NOT XOR &lt; &gt; &lt;= &gt;= != = == LIKE</code>. <code>+</code> adds two numbers or concatenates two strings; the other arithmetic operators need two numbers. The period concatenates strings and numbers, reading both as strings. <code>=</code> and <code>==</code> are synonyms; convention reserves <code>=</code> for assignment and <code>==</code> for comparison. <code>LIKE</code> takes two strings, <code>%</code> matching many characters and <code>_</code> matching exactly one, so <code>field LIKE &quot;a%b_&quot;</code> matches <code>a</code>, anything, <code>b</code>, then exactly one character.</p>
+<p>Numeric behaviour: values are double-precision floating point, division by zero yields a null field, NaN renders as <code>&quot;nan&quot;</code>, infinities as <code>&quot;inf&quot;</code> and <code>&quot;-inf&quot;</code>. Results are rounded to the precision of the least-precise input unless you use <code>exact()</code>; <code>sigfig()</code> sets significant digits. Precision limit is 17 significant digits, range -2^53+1 to 2^53-1.</p>
+<h3 id="evaluation-functions">Evaluation functions<a class="anchor" href="#evaluation-functions" aria-label="Link to this section">#</a></h3>
+<p>All functions below work with <code>eval</code>, <code>fieldformat</code>, and <code>where</code>, and inside eval expressions in other commands, except where noted.</p>
+<p>Comparison and conditional:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Signature</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>case(&lt;condition&gt;,&lt;value&gt;,...)</code></td>
+<td>Value paired with the first TRUE condition. NULL if none is TRUE.</td>
+</tr>
+<tr>
+<td><code>cidrmatch(&lt;cidr&gt;,&lt;ip&gt;)</code></td>
+<td>TRUE if <code>&lt;ip&gt;</code> is in the subnet. Subnet first. Both args are strings; literals need double quotes. IPv4 and IPv6.</td>
+</tr>
+<tr>
+<td><code>coalesce(&lt;values&gt;)</code></td>
+<td>The first argument that is not NULL. One or more args. No condition, no branches.</td>
+</tr>
+<tr>
+<td><code>false()</code></td>
+<td>FALSE. No arguments.</td>
+</tr>
+<tr>
+<td><code>if(&lt;predicate&gt;,&lt;true_value&gt;,&lt;false_value&gt;)</code></td>
+<td>Second arg when the predicate is TRUE, third otherwise. Exactly three args.</td>
+</tr>
+<tr>
+<td><code>in(&lt;field&gt;,&lt;list&gt;)</code></td>
+<td>TRUE if the field matches one listed value. Quoted values, no wildcards. Under <code>eval</code> it must sit inside <code>case</code>, <code>if</code>, or <code>validate</code>.</td>
+</tr>
+<tr>
+<td><code>like(&lt;str&gt;,&lt;pattern&gt;)</code></td>
+<td>TRUE on a case-sensitive match. <code>%</code> many characters, <code>_</code> one. Pattern is a double-quoted string.</td>
+</tr>
+<tr>
+<td><code>lookup(&quot;&lt;table&gt;&quot;,json_object(...),json_array(...))</code></td>
+<td>Output fields as a JSON object. Splunk Enterprise only, CSV lookups only. A quoted string not ending <code>.csv</code> is treated as a globally shared lookup definition.</td>
+</tr>
+<tr>
+<td><code>match(&lt;str&gt;,&lt;regex&gt;)</code></td>
+<td>TRUE if the regex matches any substring. Anchor with <code>^</code> and <code>$</code> for a full match.</td>
+</tr>
+<tr>
+<td><code>null()</code></td>
+<td>NULL. No arguments. Assigning it clears a field value.</td>
+</tr>
+<tr>
+<td><code>nullif(&lt;field1&gt;,&lt;field2&gt;)</code></td>
+<td>NULL when the two values are equal, otherwise the value of <code>&lt;field1&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>searchmatch(&lt;search_str&gt;)</code></td>
+<td>TRUE if the event matches the search string. Under <code>eval</code> it must sit inside <code>if</code>. Literal search strings only, not saved-search names.</td>
+</tr>
+<tr>
+<td><code>true()</code></td>
+<td>TRUE. No arguments. The standard <code>case</code> default.</td>
+</tr>
+<tr>
+<td><code>validate(&lt;condition&gt;,&lt;value&gt;,...)</code></td>
+<td>Value paired with the first FALSE condition. NULL if all are TRUE. Documented as the opposite of <code>case</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Conversion: <code>ipmask(&lt;mask&gt;,&lt;ip&gt;)</code>, <code>printf(&lt;format&gt;,&lt;arguments&gt;)</code>, <code>toarray(&lt;value&gt;)</code>, <code>tobool(&lt;value&gt;)</code>, <code>todouble(&lt;value&gt;,&lt;base&gt;)</code>, <code>toint(&lt;value&gt;,&lt;base&gt;)</code>, <code>tomv(&lt;value&gt;)</code>, <code>tonumber(&lt;str&gt;,&lt;base&gt;)</code>, <code>toobject(&lt;value&gt;)</code>, <code>tostring(&lt;value&gt;,&lt;format&gt;)</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Optional arg</th>
+<th>Default</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tonumber</code></td>
+<td><code>&lt;base&gt;</code></td>
+<td>10</td>
+<td>Base 2 to 36 inclusive. A string with a period becomes a double, otherwise an integer. Leading or trailing spaces return NULL; unparseable text such as <code>tonumber(&quot;seven&quot;)</code> raises an error.</td>
+</tr>
+<tr>
+<td><code>tostring</code></td>
+<td><code>&lt;format&gt;</code></td>
+<td>none</td>
+<td>Exactly four formats: <code>&quot;binary&quot;</code> (<code>tostring(9,&quot;binary&quot;)</code> returns <code>1001</code>), <code>&quot;hex&quot;</code>, <code>&quot;commas&quot;</code> (rounds to two decimal places when the number has a decimal), <code>&quot;duration&quot;</code> (seconds to <code>HH:MM:SS</code>). Only integers from 0 to 2^53-1 are accepted as input to the format, so <code>tostring(&quot;5&quot;,&quot;binary&quot;)</code> is not supported. Booleans become the strings <code>True</code> and <code>False</code>. The docs warn that values converted under <code>eval</code> &quot;might not sort as expected because they are converted to ASCII&quot; and point at <code>fieldformat</code> instead.</td>
+</tr>
+<tr>
+<td><code>toint</code> / <code>todouble</code></td>
+<td><code>&lt;base&gt;</code></td>
+<td>10</td>
+<td>Base 2 to 36. <code>toint</code> floors a double rather than rounding.</td>
+</tr>
+<tr>
+<td><code>printf</code></td>
+<td>precision</td>
+<td>6 for <code>%a %A %e %E %f %F</code></td>
+<td><code>%C</code>, <code>%n</code>, <code>%S</code>, and <code>%&lt;num&gt;$</code> are unsupported.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Text: <code>len(&lt;str&gt;)</code> (alias <code>length</code>), <code>lower(&lt;str&gt;)</code>, <code>ltrim(&lt;str&gt;,&lt;trim_chars&gt;)</code>, <code>replace(&lt;str&gt;,&lt;regex&gt;,&lt;replacement&gt;)</code>, <code>rtrim(&lt;str&gt;,&lt;trim_chars&gt;)</code>, <code>spath(&lt;value&gt;,&lt;path&gt;)</code>, <code>substr(&lt;str&gt;,&lt;start&gt;,&lt;length&gt;)</code>, <code>trim(&lt;str&gt;,&lt;trim_chars&gt;)</code>, <code>upper(&lt;str&gt;)</code>, <code>urldecode(&lt;url&gt;)</code>. Defaults: <code>ltrim</code>, <code>rtrim</code>, and <code>trim</code> strip spaces and tabs when <code>&lt;trim_chars&gt;</code> is omitted; <code>substr</code> returns the rest of the string when <code>&lt;length&gt;</code> is omitted and indexes from 1 with negative indexes counting from the end; <code>len</code> counts UTF-8 code points; <code>replace</code> is PCRE and replaces every occurrence, with <code>\1</code> and <code>\2</code> for capture groups. Only <code>lower</code> and <code>upper</code> support multivalue fields.</p>
+<p>Multivalue: <code>commands(&lt;value&gt;)</code>, <code>mvappend(&lt;values&gt;)</code>, <code>mvcount(&lt;mv&gt;)</code>, <code>mvdedup(&lt;mv&gt;)</code>, <code>mvfilter(&lt;predicate&gt;)</code>, <code>mvfind(&lt;mv&gt;,&lt;regex&gt;)</code>, <code>mvindex(&lt;mv&gt;,&lt;start&gt;,&lt;end&gt;)</code>, <code>mvjoin(&lt;mv&gt;,&lt;delim&gt;)</code>, <code>mvmap(&lt;mv&gt;,&lt;expression&gt;)</code>, <code>mvrange(&lt;start&gt;,&lt;end&gt;,&lt;step&gt;)</code>, <code>mvreverse(&lt;value&gt;)</code>, <code>mvsort(&lt;mv&gt;)</code>, <code>mvzip(&lt;mv_left&gt;,&lt;mv_right&gt;,&lt;delim&gt;)</code>, <code>mv_to_json_array(&lt;field&gt;,&lt;infer_types&gt;)</code>, <code>split(&lt;str&gt;,&lt;delim&gt;)</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Optional arg</th>
+<th>Default</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mvindex</code></td>
+<td><code>&lt;end&gt;</code></td>
+<td>none, returns the single value at <code>&lt;start&gt;</code></td>
+<td>Indexes from 0, <code>-1</code> is the last value, out-of-range returns NULL.</td>
+</tr>
+<tr>
+<td><code>mvzip</code></td>
+<td><code>&lt;delim&gt;</code></td>
+<td><code>,</code></td>
+<td>Pairs first with first, second with second.</td>
+</tr>
+<tr>
+<td><code>mvrange</code></td>
+<td><code>&lt;step&gt;</code></td>
+<td>none</td>
+<td><code>&lt;end&gt;</code> is excluded. A timespan step such as <code>&quot;7d&quot;</code> makes start and end UNIX times.</td>
+</tr>
+<tr>
+<td><code>mvcount</code></td>
+<td>none</td>
+<td>none</td>
+<td>Number of values, <code>1</code> for a single value, NULL when the field has no values.</td>
+</tr>
+<tr>
+<td><code>mvfilter</code></td>
+<td>none</td>
+<td>none</td>
+<td>The predicate may reference only one field. NULLs survive unless you add <code>isnotnull()</code>.</td>
+</tr>
+<tr>
+<td><code>mv_to_json_array</code></td>
+<td><code>&lt;infer_types&gt;</code></td>
+<td><code>false</code></td>
+<td><code>true()</code> strips one layer of quoting and infers JSON types.</td>
+</tr>
+<tr>
+<td><code>split</code></td>
+<td>none</td>
+<td>none</td>
+<td>Returns a multivalue field. <code>&quot;&quot;</code> splits into one value per character. In 10.4 this is catalogued under multivalue functions, not text functions.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Date and time: <code>now()</code>, <code>relative_time(&lt;time&gt;,&lt;specifier&gt;)</code>, <code>strftime(&lt;time&gt;,&lt;format&gt;)</code>, <code>strptime(&lt;str&gt;,&lt;format&gt;)</code>, <code>time()</code>. <code>now()</code> returns the time the search started (or the scheduled run time for a scheduled search) in UNIX seconds, and is constant across the result set. <code>time()</code> returns wall-clock UNIX time with microsecond resolution and differs per row, because it is evaluated as each result passes through. <code>strftime()</code> needs UNIX seconds, so millisecond or nanosecond inputs must be divided down first. <code>strptime()</code> parses a string into UNIX seconds, requires a day component, requires a date of 1 January 1971 or later, and does nothing if pointed at <code>_time</code>, which is already UNIX time.</p>
+<p>Informational: <code>isarray</code>, <code>isbool</code>, <code>isdouble</code>, <code>isint</code>, <code>ismv</code>, <code>isnotnull</code>, <code>isnull</code>, <code>isnum</code>, <code>isobject</code>, <code>isstr</code>, all taking one value, plus <code>typeof(&lt;value&gt;)</code>. Every <code>is*</code> function returns a Boolean, so <code>where</code> can use them directly but <code>eval</code> must wrap them in <code>if</code>, <code>case</code>, or <code>validate</code>. <code>typeof()</code> returns a string (<code>Number</code>, <code>String</code>, <code>Bool</code>, or <code>Invalid</code>), so <code>eval</code> can assign it directly.</p>
+<p>Mathematical: <code>abs(&lt;num&gt;)</code>, <code>ceiling(&lt;num&gt;)</code> (alias <code>ceil</code>), <code>exact(&lt;expression&gt;)</code>, <code>exp(&lt;num&gt;)</code>, <code>floor(&lt;num&gt;)</code>, <code>ln(&lt;num&gt;)</code>, <code>log(&lt;num&gt;,&lt;base&gt;)</code>, <code>pi()</code>, <code>pow(&lt;num&gt;,&lt;exp&gt;)</code>, <code>round(&lt;num&gt;,&lt;precision&gt;)</code>, <code>sigfig(&lt;num&gt;)</code>, <code>sqrt(&lt;num&gt;)</code>, <code>sum(&lt;num&gt;,...)</code>. <code>log()</code> defaults to base 10, <code>round()</code> defaults to an integer and rejects a negative precision, <code>pi()</code> returns 11 digits.</p>
+<h3 id="where">where<a class="anchor" href="#where" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-cmd">where</span> <span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;eval-expression&gt;</code></td>
+<td>Mathematical, concatenation, comparison, Boolean, or function call</td>
+<td>none (required)</td>
+<td>Keeps only results for which the expression returns TRUE. Case sensitive. Invalid syntax throws an exception before the search runs.</td>
+</tr>
+</tbody>
+</table></div>
+<p>No other arguments. Quoting is identical to <code>eval</code>: unquoted bare word is a field name, double-quoted token is a literal string, single quotation marks for field names starting with a numeral or containing non-alphanumeric characters. The only wildcard mechanism is <code>like()</code> or the <code>LIKE</code> operator with <code>%</code> and <code>_</code>.</p>
+<h3 id="search">search<a class="anchor" href="#search" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-cmd">search</span> <span class="t-op">&lt;</span><span class="t-field">logical-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;comparison-expression&gt;</code></td>
+<td><code>&lt;field&gt;&lt;op&gt;&lt;value&gt;</code> with <code>=</code> <code>!=</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code>, or <code>&lt;field&gt; IN (&lt;value-list&gt;)</code></td>
+<td>none</td>
+<td><code>=</code> and <code>!=</code> compare string values, so <code>&quot;1&quot;</code> does not match <code>&quot;1.0&quot;</code>. <code>&lt; &lt;= &gt; &gt;=</code> compare numbers numerically and everything else lexicographically.</td>
+</tr>
+<tr>
+<td><code>&lt;index-expression&gt;</code></td>
+<td>Quoted phrase, bare term, or search modifier</td>
+<td>none</td>
+<td>Bare terms and quoted phrases match against <code>_raw</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;search-modifier&gt;</code></td>
+<td><code>sourcetype=</code>, <code>host=</code>, <code>hosttag=</code>, <code>source=</code>, <code>savedsearch=</code> (or <code>savedsplunk=</code>), <code>eventtype=</code>, <code>eventtypetag=</code>, <code>splunk_server=</code></td>
+<td>none</td>
+<td><code>splunk_server=local</code> means the search head. Tags use <code>tag::&lt;field&gt;=&lt;string&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>IN</code> operator</td>
+<td><code>field IN (v1, v2, ...)</code></td>
+<td>none</td>
+<td>Available with <code>search</code> and <code>tstats</code>. Accepts the <code>*</code> wildcard in the value list, unlike the <code>in()</code> function. Combines with <code>NOT</code>.</td>
+</tr>
+<tr>
+<td><code>timeformat</code></td>
+<td>strftime format string</td>
+<td><code>%m/%d/%Y:%H:%M:%S</code></td>
+<td>Format of the <code>starttime</code> and <code>endtime</code> terms.</td>
+</tr>
+<tr>
+<td><code>&lt;time-modifier&gt;</code></td>
+<td><code>starttime=</code>, <code>endtime=</code>, <code>earliest=</code>, <code>latest=</code></td>
+<td>none</td>
+<td><code>starttime</code> and <code>endtime</code> must match <code>timeformat</code>.</td>
+</tr>
+<tr>
+<td><code>TERM(&lt;term&gt;)</code></td>
+<td>One indexed term</td>
+<td>none</td>
+<td>Matches a whole term in the index, ignoring minor breakers such as periods. Does not work for terms not bounded by major breakers.</td>
+</tr>
+<tr>
+<td><code>CASE(&lt;term&gt;)</code></td>
+<td>A term or field value</td>
+<td>none</td>
+<td>Forces a case-sensitive match. Searches are case-insensitive by default.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The implied <code>search</code> at the start of every search is event-generating. After a pipe it is distributable streaming, and the terms it can use depend on what reached it: with <code>_raw</code> present you can use bare keywords, but transforming commands such as <code>stats</code> and <code>chart</code> do not pass <code>_raw</code> down, so only field-value pairs on surviving fields work.</p>
+<h3 id="fillnull">fillnull<a class="anchor" href="#fillnull" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-cmd">fillnull</span> <span class="t-op">[</span><span class="t-opt">value</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td><code>value=&lt;string&gt;</code></td>
+<td><code>0</code></td>
+<td>The string written into each null cell the command touches.</td>
+</tr>
+<tr>
+<td><code>&lt;field-list&gt;</code></td>
+<td>Space-delimited field names</td>
+<td>none, meaning all fields</td>
+<td>Restricts the fill. A named field that does not exist is created and filled. No wildcards.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both arguments are optional, so bare <code>fillnull</code> is legal and fills every field with <code>0</code>. With a field list it is distributable streaming; with no field list it is a dataset processing command, because it must see the whole result set to know which columns exist. Splunk cannot distinguish a null value from a field absent from the schema, and a field is only in the schema if it has at least one non-null value somewhere in the result set.</p>
+<h3 id="filldown">filldown<a class="anchor" href="#filldown" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-cmd">filldown</span> <span class="t-op">&lt;</span><span class="t-field">wc-field-list</span><span class="t-op">&gt;</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;wc-field-list&gt;</code></td>
+<td>Space-delimited field names, <code>*</code> wildcards allowed, for example <code>score*</code></td>
+<td>none, meaning all fields</td>
+<td>Replaces each null with the last non-null value seen above it in that field. Leaves the cell NULL when there is no previous value.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="fieldformat">fieldformat<a class="anchor" href="#fieldformat" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-cmd">fieldformat</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;field&gt;</code></td>
+<td>Name of a new or existing field, not wildcarded</td>
+<td>none (required)</td>
+<td>Receives the rendered output.</td>
+</tr>
+<tr>
+<td><code>&lt;eval-expression&gt;</code></td>
+<td>Any eval expression</td>
+<td>none (required)</td>
+<td>Exactly one per command. Formatting several fields takes several <code>fieldformat</code> commands.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Distributable streaming, appearance only. Later commands see the original value, so place <code>fieldformat</code> as late as possible. It does not apply to export commands such as <code>outputcsv</code> and <code>outputlookup</code>, which write the underlying data.</p>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Streaming class</th>
+<th>Rows</th>
+<th>Columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eval</code></td>
+<td>Distributable streaming</td>
+<td>Unchanged, one to one</td>
+<td>Adds one column per assignment or overwrites an existing one. Never removes a column.</td>
+</tr>
+<tr>
+<td><code>where</code></td>
+<td>Distributable streaming</td>
+<td>Subset</td>
+<td>Unchanged. Never adds, removes, or renames a field.</td>
+</tr>
+<tr>
+<td><code>search</code> after a pipe</td>
+<td>Distributable streaming</td>
+<td>Subset</td>
+<td>Unchanged.</td>
+</tr>
+<tr>
+<td><code>fillnull</code></td>
+<td>Distributable streaming with a field list, dataset processing without</td>
+<td>Unchanged</td>
+<td>Unchanged, unless a named field did not exist, in which case one column is added.</td>
+</tr>
+<tr>
+<td><code>filldown</code></td>
+<td>Not listed in the command-types tables</td>
+<td>Unchanged</td>
+<td>Unchanged.</td>
+</tr>
+<tr>
+<td><code>fieldformat</code></td>
+<td>Distributable streaming</td>
+<td>Unchanged</td>
+<td>Unchanged in count; the named column renders differently while its stored value is untouched.</td>
+</tr>
+</tbody>
+</table></div>
+<p>There are six command types: distributable streaming, centralized streaming, transforming, generating, orchestrating, and dataset processing. &quot;Report generating&quot; is not one of them. Everything in this section is distributable streaming apart from <code>fillnull</code> with no field list. The docs define the class by where the work can run: &quot;A distributable streaming command runs on the indexer or the search head, depending on where in the search the command is invoked. Any distributable streaming command that comes after a non-streaming command in the search is processed on the search head.&quot; So <code>| eval</code> early in a pipeline spreads across the indexers, while the same <code>| eval</code> after <code>stats</code> runs on the search head alone. Position changes the machine, never the classification. Compare centralized streaming, which &quot;only works on the search head&quot; wherever it sits, <code>transaction</code> being the command the exam sets against <code>eval</code>.</p>
+<p>A <code>fillnull</code> shape, starting from <code>| timechart count by categoryId</code>:</p>
+<div class="tw wide"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>ACCESSORIES</th>
+<th>ARCADE</th>
+<th>SHOOTER</th>
+<th>STRATEGY</th>
+<th>TEE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021-03-17</td>
+<td>5</td>
+<td>17</td>
+<td>6</td>
+<td>32</td>
+<td></td>
+</tr>
+<tr>
+<td>2021-03-16</td>
+<td></td>
+<td>63</td>
+<td>39</td>
+<td>127</td>
+<td>56</td>
+</tr>
+</tbody>
+</table></div>
+<p>After <code>| fillnull</code>:</p>
+<div class="tw wide"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>ACCESSORIES</th>
+<th>ARCADE</th>
+<th>SHOOTER</th>
+<th>STRATEGY</th>
+<th>TEE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021-03-17</td>
+<td>5</td>
+<td>17</td>
+<td>6</td>
+<td>32</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2021-03-16</td>
+<td>0</td>
+<td>63</td>
+<td>39</td>
+<td>127</td>
+<td>56</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two things the exam checks there: the fill value is <code>0</code>, not a blank and not the word <code>null</code>, and the row and column counts do not change.</p>
+<p>Type contract for <code>eval</code>: an expression can produce a number or a string, and either can be assigned. It cannot produce a Boolean. <code>| eval flag = isnull(x)</code> fails; <code>| eval flag = if(isnull(x), &quot;yes&quot;, &quot;no&quot;)</code> works, and <code>| eval flag = tostring(isnull(x))</code> works and yields the strings <code>True</code> or <code>False</code>.</p>
+<p>Storage contract for <code>eval</code>: the result goes into a field in the search results and nowhere else, never into an index, a KV Store collection, or a database. The column lives only for the length of the pipeline unless a later command such as <code>outputlookup</code> or <code>collect</code> carries it out, and it cannot be used in the base search of the next search you run, because it does not exist until the pipeline builds it. A calculated field (section 5) is what makes the same expression available before the first pipe.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>All examples use the Splunk tutorial dataset (Buttercup Games), sourcetypes <code>access_combined_wcookie</code>, <code>vendor_sales</code>, and <code>secure</code>.</p>
+<h3 id="1.-derive-a-field-then-filter-on-it">1. Derive a field, then filter on it<a class="anchor" href="#1.-derive-a-field-then-filter-on-it" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">revenue</span> <span class="t-op">=</span> <span class="t-field">price</span> <span class="t-op">*</span> <span class="t-field">quantity</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">revenue</span> <span class="t-op">&gt;</span> <span class="t-num">100</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">clientip</span> <span class="t-field">productId</span> <span class="t-field">price</span> <span class="t-field">quantity</span> <span class="t-field">revenue</span></code></pre></div>
+<p>The base search filters at the index. <code>eval</code> adds one column to every row with no change to the row count; <code>where</code> then drops rows with no change to the column set. <code>revenue &gt; 100</code> cannot go in the base search, because <code>revenue</code> does not exist until <code>eval</code> creates it.</p>
+<h3 id="2.-categorise-with-case-and-give-it-a-default">2. Categorise with case, and give it a default<a class="anchor" href="#2.-categorise-with-case-and-give-it-a-default" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">status_class</span> <span class="t-op">=</span> <span class="t-func">case</span><span class="t-op">(</span><span class="t-field">status</span> <span class="t-op">&lt;</span> <span class="t-num">300</span><span class="t-op">,</span> <span class="t-str">&quot;success&quot;</span><span class="t-op">,</span>
+                           <span class="t-field">status</span> <span class="t-op">&lt;</span> <span class="t-num">400</span><span class="t-op">,</span> <span class="t-str">&quot;redirect&quot;</span><span class="t-op">,</span>
+                           <span class="t-field">status</span> <span class="t-op">&lt;</span> <span class="t-num">500</span><span class="t-op">,</span> <span class="t-str">&quot;client error&quot;</span><span class="t-op">,</span>
+                           <span class="t-func">true</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;server error&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">status_class</span></code></pre></div>
+<p><code>case</code> tests strictly first to last and returns the value paired with the first TRUE condition, so the ordering of the ranges is doing real work. Without the <code>true()</code> pair, a status of 500 or above yields NULL and <code>stats count BY status_class</code> silently drops those rows.</p>
+<h3 id="3.-coalesce-versus-if-versus-nullif-on-one-screen">3. coalesce versus if versus nullif on one screen<a class="anchor" href="#3.-coalesce-versus-if-versus-nullif-on-one-screen" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-kw">OR</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">ip</span>         <span class="t-op">=</span> <span class="t-func">coalesce</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">,</span> <span class="t-field">VendorIP</span><span class="t-op">,</span> <span class="t-str">&quot;unknown&quot;</span><span class="t-op">)</span><span class="t-op">,</span>
+       <span class="t-opt">is_local</span>   <span class="t-op">=</span> <span class="t-func">if</span><span class="t-op">(</span><span class="t-func">cidrmatch</span><span class="t-op">(</span><span class="t-str">&quot;87.194.0.0/16&quot;</span><span class="t-op">,</span> <span class="t-field">ip</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;local&quot;</span><span class="t-op">,</span> <span class="t-str">&quot;remote&quot;</span><span class="t-op">)</span><span class="t-op">,</span>
+       <span class="t-opt">changed_ip</span> <span class="t-op">=</span> <span class="t-func">nullif</span><span class="t-op">(</span><span class="t-field">ip</span><span class="t-op">,</span> <span class="t-field">clientip</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">sourcetype</span> <span class="t-field">clientip</span> <span class="t-field">VendorIP</span> <span class="t-field">ip</span> <span class="t-field">is_local</span> <span class="t-field">changed_ip</span></code></pre></div>
+<p><code>coalesce</code> walks its arguments and returns the first non-NULL one; it tests no condition. <code>if</code> takes exactly three arguments and branches on a Boolean. <code>nullif</code> returns NULL when its two arguments are equal and otherwise returns the first, so <code>changed_ip</code> is populated only where <code>ip</code> came from somewhere other than <code>clientip</code>. These are the three functions Apress Table 2-16 conflates.</p>
+<h3 id="4.-compare-two-fields-which-only-where-can-do">4. Compare two fields, which only where can do<a class="anchor" href="#4.-compare-two-fields-which-only-where-can-do" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">user</span> <span class="t-op">!=</span> <span class="t-field">src_user</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">user</span> <span class="t-field">src_user</span></code></pre></div>
+<p><code>sourcetype=secure user!=src_user</code> does not work: the <code>search</code> command reads <code>src_user</code> as the literal string value <code>src_user</code>. Only <code>where</code> treats an unquoted bare word on the right-hand side as a field reference.</p>
+<h3 id="5.-wildcards-on-both-sides-of-the-search-and-where-line">5. Wildcards on both sides of the search and where line<a class="anchor" href="#5.-wildcards-on-both-sides-of-the-search-and-where-line" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">referer_domain</span><span class="t-op">=</span><span class="t-op">*</span><span class="t-field">buttercup</span><span class="t-op">*</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-func">like</span><span class="t-op">(</span><span class="t-field">useragent</span><span class="t-op">,</span> <span class="t-str">&quot;Mozilla%&quot;</span><span class="t-op">)</span> <span class="t-kw">AND</span> <span class="t-kw">NOT</span> <span class="t-func">like</span><span class="t-op">(</span><span class="t-field">useragent</span><span class="t-op">,</span> <span class="t-str">&quot;%MSIE%&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">referer_domain</span></code></pre></div>
+<p>The base search uses <code>*</code> because <code>search</code> supports the asterisk in field values. <code>where</code> has no asterisk wildcard, so it needs <code>like()</code> or the <code>LIKE</code> operator with <code>%</code> and <code>_</code>. <code>like()</code> matches case-sensitively, so <code>like(useragent, &quot;mozilla%&quot;)</code> returns nothing here.</p>
+<h3 id="6.-fill-the-holes-then-format-the-display">6. Fill the holes, then format the display<a class="anchor" href="#6.-fill-the-holes-then-format-the-display" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1d</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">price</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span> <span class="t-kw">BY</span> <span class="t-field">product_name</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fillnull</span> <span class="t-opt">value</span><span class="t-op">=</span><span class="t-num">0</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fieldformat</span> <span class="t-opt">revenue</span> <span class="t-op">=</span> <span class="t-str">&quot;$&quot;</span> <span class="t-op">.</span> <span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span></code></pre></div>
+<p><code>timechart</code> leaves a null wherever a product had no sales that day. <code>fillnull value=0</code> writes <code>0</code> into those cells. <code>fieldformat</code> renders <code>revenue</code> as <code>$1,234.56</code> on the Statistics tab while the underlying number is untouched, so a later <code>sort - revenue</code> or a CSV export still sees the number.</p>
+<p>Swap that last line for <code>| eval revenue = &quot;$&quot; . tostring(revenue, &quot;commas&quot;)</code> and the display is identical but <code>revenue</code> is now a string. <code>sort</code> auto-detects its collation, numeric for numbers, IP order for addresses, lexicographical for everything else, and lexicographical order works on the first character: the docs' example is 10, 9, 70, 100 sorting as 10, 100, 70, 9. So sort while the values are numeric and convert afterwards, or leave the number alone and let <code>fieldformat</code> do the display.</p>
+<h3 id="7.-multivalue-and-text-functions-in-one-eval-chain">7. Multivalue and text functions in one eval chain<a class="anchor" href="#7.-multivalue-and-text-functions-in-one-eval-chain" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">path_parts</span> <span class="t-op">=</span> <span class="t-func">split</span><span class="t-op">(</span><span class="t-field">uri_path</span><span class="t-op">,</span> <span class="t-str">&quot;/&quot;</span><span class="t-op">)</span><span class="t-op">,</span>
+       <span class="t-opt">depth</span>      <span class="t-op">=</span> <span class="t-func">mvcount</span><span class="t-op">(</span><span class="t-field">path_parts</span><span class="t-op">)</span><span class="t-op">,</span>
+       <span class="t-opt">leaf</span>       <span class="t-op">=</span> <span class="t-func">mvindex</span><span class="t-op">(</span><span class="t-field">path_parts</span><span class="t-op">,</span> <span class="t-op">-</span><span class="t-num">1</span><span class="t-op">)</span><span class="t-op">,</span>
+       <span class="t-opt">first_char</span> <span class="t-op">=</span> <span class="t-func">substr</span><span class="t-op">(</span><span class="t-field">leaf</span><span class="t-op">,</span> <span class="t-num">1</span><span class="t-op">,</span> <span class="t-num">1</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">uri_path</span> <span class="t-field">depth</span> <span class="t-field">leaf</span> <span class="t-field">first_char</span></code></pre></div>
+<p>One command, four comma-separated assignments processed left to right, so each references what the previous ones created. The two index bases are the pairing the exam uses: <code>mvindex</code> counts from 0 with <code>-1</code> as the last value, <code>substr</code> counts from 1.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Command</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The filter can be expressed as terms or field-value pairs on indexed data</td>
+<td>Base search, before the first pipe</td>
+<td>Only the base search prunes what is read off disk.</td>
+</tr>
+<tr>
+<td>Field compared to a literal, later in the pipeline</td>
+<td><code>search</code> or <code>where</code>, either works</td>
+<td><code>| search status=404</code> and <code>| where status=404</code> return the same rows.</td>
+</tr>
+<tr>
+<td>One field compared to another field</td>
+<td><code>where</code></td>
+<td><code>search</code> reads the right-hand bare word as a literal value.</td>
+</tr>
+<tr>
+<td>The predicate needs <code>cidrmatch</code>, <code>like</code>, <code>isnull</code>, <code>match</code>, <code>in</code>, or any evaluation function</td>
+<td><code>where</code></td>
+<td><code>search</code> has no evaluation functions.</td>
+</tr>
+<tr>
+<td>The predicate needs arithmetic, for example <code>distance/time &gt; 100</code></td>
+<td><code>where</code></td>
+<td><code>search</code> cannot compute.</td>
+</tr>
+<tr>
+<td>Wildcard match</td>
+<td><code>search</code> with <code>*</code>, or <code>where</code> with <code>like()</code> and <code>%</code></td>
+<td>Different characters, different commands. <code>where</code> has no <code>*</code>.</td>
+</tr>
+<tr>
+<td>Case-sensitive value match</td>
+<td><code>where</code>, or <code>search</code> with <code>CASE()</code></td>
+<td>Plain <code>search</code> is case-insensitive on field values.</td>
+</tr>
+<tr>
+<td>Exclude events, and events missing the field must survive</td>
+<td><code>NOT field=&quot;value&quot;</code></td>
+<td><code>NOT</code> returns everything except matches, including events with no value in that field.</td>
+</tr>
+<tr>
+<td>Exclude events, and events missing the field must not survive</td>
+<td><code>field!=&quot;value&quot;</code></td>
+<td><code>!=</code> only returns events that have a value in the field.</td>
+</tr>
+<tr>
+<td>Empty cells need a constant placeholder</td>
+<td><code>fillnull</code></td>
+<td>Default <code>0</code>.</td>
+</tr>
+<tr>
+<td>Empty cells need the previous row's value</td>
+<td><code>filldown</code></td>
+<td>Fills with the last non-null value above.</td>
+</tr>
+<tr>
+<td>Display differently, calculate and export unchanged</td>
+<td><code>fieldformat</code></td>
+<td>Rendering only.</td>
+</tr>
+<tr>
+<td>Display differently and have it stick downstream</td>
+<td><code>eval</code></td>
+<td>Actually changes the value, including for <code>outputcsv</code> and <code>outputlookup</code>.</td>
+</tr>
+<tr>
+<td>Numbers must be both ordered and shown as text</td>
+<td><code>sort</code> first, then <code>eval ... tostring()</code>, or keep the number and use <code>fieldformat</code></td>
+<td>Strings sort as ASCII, so converting before sorting reorders the rows.</td>
+</tr>
+<tr>
+<td>Same expression needed across many searches</td>
+<td>Calculated field (blueprint section 5)</td>
+<td>Moves the expression into configuration; the field becomes directly searchable, which an in-pipeline <code>eval</code> result is not.</td>
+</tr>
+<tr>
+<td>A Boolean result must land in a field</td>
+<td>Wrap it in <code>if()</code>, <code>case()</code>, <code>validate()</code>, or <code>tostring()</code></td>
+<td><code>eval</code> cannot assign a Boolean.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Boolean precedence differs by command, and the exam knows it:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Order</th>
+<th><code>search</code> command</th>
+<th><code>eval</code> and <code>where</code> commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Expressions within parentheses</td>
+<td>Expressions within parentheses</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NOT clauses</td>
+<td>NOT clauses</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OR clauses</td>
+<td>AND clauses</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AND clauses</td>
+<td>OR clauses</td>
+</tr>
+<tr>
+<td>5</td>
+<td>XOR not supported</td>
+<td>XOR clauses</td>
+</tr>
+</tbody>
+</table></div>
+<p>Operators must be capitalised: <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>XOR</code>. <code>AND</code> is implied between terms, so <code>web error</code> is <code>web AND error</code>. <code>NOT</code> applies only to the term immediately following it unless you use parentheses.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-02-01"><span class="tid">T-02-01</span> Comparing two fields in <code>search</code>. <span class="wrong">Wrong belief</span>: <code>index=web clientip=ipaddress</code> finds events where the two fields hold the same value. Correct: the <code>search</code> command expects a field compared to a literal and reads <code>ipaddress</code> as the string <code>ipaddress</code>. Use <code>| where clientip=ipaddress</code>, and for the negative form either <code>| where fieldA!=fieldB</code> or <code>| where NOT fieldA=fieldB</code>.</p>
+<p class="trap" id="T-02-02"><span class="tid">T-02-02</span> Boolean precedence is uniform. <span class="wrong">Wrong belief</span>: <code>AND</code> always binds tighter than <code>OR</code>. Correct: <code>search</code> evaluates OR before AND, so <code>host=&quot;www1&quot; AND status=200 OR action=&quot;addtocart&quot;</code> runs as <code>host=&quot;www1&quot; AND (status=200 OR action=&quot;addtocart&quot;)</code>. <code>eval</code> and <code>where</code> evaluate AND before OR, so the same expression under <code>where</code> runs as <code>(host=&quot;www1&quot; AND status=200) OR action=&quot;addtocart&quot;</code>. Different results. <code>search</code> also has no <code>XOR</code>; <code>eval</code> and <code>where</code> do.</p>
+<p class="trap" id="T-02-03"><span class="tid">T-02-03</span> <code>NOT</code> equals <code>!=</code>. <span class="wrong">Wrong belief</span>: <code>NOT status=404</code> and <code>status!=404</code> return the same events. Correct: <code>status!=404</code> returns only events that have a <code>status</code> field with a different value, dropping events with no <code>status</code> at all. <code>NOT status=404</code> returns everything except the matches, including events with no <code>status</code>. Corollary: <code>NOT field=*</code> returns events where the field is null or undefined, and <code>field!=*</code> never returns anything.</p>
+<p class="trap" id="T-02-04"><span class="tid">T-02-04</span> Case sensitivity is uniform. <span class="wrong">Wrong belief</span>: SPL is either all case sensitive or all not. Correct: for <code>search</code>, field names are case sensitive but field values are not, and searches are case-insensitive by default unless wrapped in <code>CASE()</code>. <code>eval</code> and <code>where</code> are case sensitive throughout, being eval expressions, and <code>like()</code> matches case-sensitively. Apress contradicts itself here; trust the doc split.</p>
+<p class="trap" id="T-02-05"><span class="tid">T-02-05</span> <code>coalesce</code> is a conditional. <span class="wrong">Wrong belief</span>, and the exact Apress Table 2-16 error: <code>coalesce(X,Y)</code> behaves like <code>if(X,Y,...)</code>. Correct: <code>coalesce(&lt;values&gt;)</code> takes one or more arguments and returns the first that is not NULL. No test expression, no branches. <code>if(&lt;predicate&gt;,&lt;true_value&gt;,&lt;false_value&gt;)</code> is the conditional and takes exactly three arguments.</p>
+<p class="trap" id="T-02-06"><span class="tid">T-02-06</span> <code>null()</code> takes arguments. <span class="wrong">Wrong belief</span>, the second Apress Table 2-16 error: <code>null()</code> behaves like <code>nullif()</code>. Correct: <code>null()</code> takes no arguments and returns NULL, clearing a field value when assigned. <code>nullif(&lt;field1&gt;,&lt;field2&gt;)</code> takes two fields and returns NULL when they are equal, otherwise the value of <code>&lt;field1&gt;</code>.</p>
+<p class="trap" id="T-02-07"><span class="tid">T-02-07</span> <code>case</code> supplies a default. <span class="wrong">Wrong belief</span>: a value matching no condition falls through to the last value listed. Correct: <code>case</code> returns NULL when no condition is TRUE. The documented default idiom is a final <code>true(), &quot;&lt;default&gt;&quot;</code> pair. The mirror function is <code>validate</code>, which returns the value for the first FALSE condition and defaults to NULL when all are TRUE.</p>
+<p class="trap" id="T-02-08"><span class="tid">T-02-08</span> <code>eval</code> can store a Boolean. <span class="wrong">Wrong belief</span>: <code>| eval matched = isnull(user)</code> puts <code>true</code> or <code>false</code> in <code>matched</code>. Correct: the result of an eval expression cannot be a Boolean and this errors. Wrap it in <code>if()</code>, <code>case()</code>, or <code>validate()</code>, or convert with <code>tostring()</code>. The same restriction hits <code>in()</code>, <code>like()</code>, <code>cidrmatch()</code>, <code>searchmatch()</code>, and the whole <code>is*</code> family under <code>eval</code>. Under <code>where</code> they are used directly, because <code>where</code> wants a Boolean.</p>
+<p class="trap" id="T-02-09"><span class="tid">T-02-09</span> Wildcards in <code>where</code>. <span class="wrong">Wrong belief</span>: <code>| where useragent=&quot;Mozilla*&quot;</code> filters on a prefix. Correct: <code>where</code> has no asterisk wildcard and <code>*</code> is a literal character there. Use <code>like(useragent, &quot;Mozilla%&quot;)</code> or <code>useragent LIKE &quot;Mozilla%&quot;</code>.</p>
+<p class="trap" id="T-02-10"><span class="tid">T-02-10</span> <code>IN</code> operator equals <code>in()</code> function. <span class="wrong">Wrong belief</span>: they are the same and both take wildcards. Correct: the <code>IN</code> operator works with <code>search</code> and <code>tstats</code> and accepts <code>*</code> in the value list, for example <code>status IN (40*, 500)</code>. The <code>in()</code> function works with <code>eval</code>, <code>where</code>, and <code>fieldformat</code>, requires quoted values, and accepts no wildcards; under <code>eval</code> it must be nested in <code>case</code>, <code>if</code>, or <code>validate</code>.</p>
+<p class="trap" id="T-02-11"><span class="tid">T-02-11</span> <code>fillnull</code> default value. <span class="wrong">Wrong belief</span>: the default is <code>NULL</code>, an empty string, or <code>N/A</code>. Correct: the default is <code>0</code>. Bare <code>| fillnull</code> writes <code>0</code> into every null cell of every field. <code>value=</code> precedes the field list in the syntax.</p>
+<p class="trap" id="T-02-12"><span class="tid">T-02-12</span> <code>fillnull</code> accepts wildcards in its field list. <span class="wrong">Wrong belief</span>: <code>| fillnull value=0 bytes*</code> fills every field starting with <code>bytes</code>. Correct: <code>fillnull</code> takes a plain <code>&lt;field-list&gt;</code> with no wildcard support, and naming a field that does not exist creates it, so <code>bytes*</code> would create a literal field named <code>bytes*</code>. <code>filldown</code> is the command whose <code>&lt;wc-field-list&gt;</code> does accept <code>*</code>.</p>
+<p class="trap" id="T-02-13"><span class="tid">T-02-13</span> <code>fillnull</code> and <code>filldown</code> are the same. <span class="wrong">Wrong belief</span>: both write a constant. Correct: <code>fillnull</code> writes one constant everywhere; <code>filldown</code> copies the last non-null value seen above that row and leaves the cell NULL when there is no previous value.</p>
+<p class="trap" id="T-02-14"><span class="tid">T-02-14</span> <code>fillnull</code> can resurrect an all-null field. <span class="wrong">Wrong belief</span>: <code>| eval test2=null() | fillnull value=NULL</code> produces a <code>test2</code> column of <code>NULL</code> strings. Correct: a field exists in the schema only if it has at least one non-null value in the result set, so an all-null field is invisible to <code>fillnull</code> and drops out of the results. The exception is naming it explicitly in the field list, which creates it.</p>
+<p class="trap" id="T-02-15"><span class="tid">T-02-15</span> <code>fieldformat</code> changes the value. <span class="wrong">Wrong belief</span>: <code>| fieldformat bytes=tostring(bytes,&quot;commas&quot;) | sort - bytes</code> sorts on the formatted value, and a later <code>outputcsv</code> writes the commas. Correct: <code>fieldformat</code> changes rendering only; later commands and export commands such as <code>outputcsv</code> and <code>outputlookup</code> see the original value. Use <code>eval</code> when the change must persist, and place <code>fieldformat</code> last. One expression per <code>fieldformat</code> command, so three fields take three commands.</p>
+<p class="trap" id="T-02-16"><span class="tid">T-02-16</span> Index bases agree. <span class="wrong">Wrong belief</span>: multivalue and string indexing start at the same place. Correct: <code>mvindex()</code> and <code>mvfind()</code> index from 0, with <code>-1</code> as the last value and NULL for out-of-range indexes. <code>substr()</code> indexes from 1 with SQLite semantics, negative indexes counting from the end and the length argument optional.</p>
+<p class="trap" id="T-02-17"><span class="tid">T-02-17</span> <code>eval</code> and calculated fields are the same object. <span class="wrong">Wrong belief</span>: &quot;create a field with an eval expression&quot; always means the <code>eval</code> command. Correct: the <code>eval</code> command creates a field for one search only; a calculated field defined in <code>props.conf</code> or through Settings creates it for every search touching that source type, and the result is directly searchable in the base search, which an in-pipeline <code>eval</code> result is not. Calculated fields are section 5, but the wording bleeds into section 2 questions.</p>
+<p class="trap" id="T-02-18"><span class="tid">T-02-18</span> <code>search</code> after a transforming command still matches keywords. <span class="wrong">Wrong belief</span>: <code>| stats count BY host | search error</code> finds rows whose events contained <code>error</code>. Correct: <code>stats</code> and <code>chart</code> do not pass <code>_raw</code> down the pipeline, so a later <code>search</code> can only use field-value pairs on the surviving fields. Bare keywords have nothing to match.</p>
+<p class="trap" id="T-02-19"><span class="tid">T-02-19</span> <code>tostring</code> formats. <span class="wrong">Wrong belief</span>: <code>tostring(x,&quot;commas&quot;)</code> preserves all decimals, or any format keyword is accepted, or the list stops at three. Correct: there are exactly four, <code>&quot;binary&quot;</code>, <code>&quot;hex&quot;</code>, <code>&quot;commas&quot;</code>, and <code>&quot;duration&quot;</code>. <code>&quot;commas&quot;</code> rounds to two decimal places, <code>&quot;duration&quot;</code> converts seconds to <code>HH:MM:SS</code>, and <code>&quot;binary&quot;</code> renders the number in base 2, so <code>tostring(9,&quot;binary&quot;)</code> gives <code>1001</code>. <code>&quot;decimal&quot;</code> is not a format. A currency symbol is not a format option either, so concatenate it: <code>&quot;$&quot; . tostring(x,&quot;commas&quot;)</code>.</p>
+<p class="trap" id="T-02-20"><span class="tid">T-02-20</span> Convert first, sort second. <span class="wrong">Wrong belief</span>: <code>| eval size = tostring(bytes,&quot;commas&quot;) | sort - size</code> still orders by size, because the number survives underneath. Correct: <code>tostring</code> returns a string and the assignment overwrites the field with it, so <code>sort</code> uses lexicographical collation and orders on the first character. Sort while the values are numeric and convert afterwards, or use <code>fieldformat</code> and never convert. Same trap in currency dress: <code>| eval price = &quot;$&quot; . price</code> makes every value start with punctuation.</p>
+<p class="trap" id="T-02-21"><span class="tid">T-02-21</span> <code>eval</code> results persist. <span class="wrong">Wrong belief</span>: the field an <code>eval</code> creates is written to the index, a KV Store collection, or a lookup, so the next search can filter on it. Correct: it lands in a field in the search results only and is gone when the search ends, so naming it in a new base search matches nothing. Only a calculated field, or an explicit <code>outputlookup</code> or <code>collect</code>, makes the value outlive the search.</p>
+<p class="trap" id="T-02-22"><span class="tid">T-02-22</span> Command class changes with position. <span class="wrong">Wrong belief</span>: <code>eval</code> turns into a transforming command once it creates a column or once it follows <code>stats</code>, or it is &quot;report generating&quot;. Correct: <code>eval</code> is distributable streaming wherever it sits. Position changes only the machine, a distributable streaming command running on the indexers unless it follows a non-streaming command, in which case the search head takes it. &quot;Report generating&quot; is not one of the six command types.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Assumes the tutorial data is loaded on a single-node Splunk Enterprise 10.x instance. Budget fifteen minutes.</p>
+<p>Step 1. Click <strong>Search</strong> in the App bar to start a new search, and set the time range picker to <strong>All time</strong>.</p>
+<p>Step 2, create versus overwrite:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">bytes_kb</span> <span class="t-op">=</span> <span class="t-func">round</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">/</span><span class="t-num">1024</span><span class="t-op">,</span> <span class="t-num">2</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-opt">bytes</span> <span class="t-op">=</span> <span class="t-field">bytes</span> <span class="t-op">.</span> <span class="t-str">&quot; bytes&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">clientip</span> <span class="t-field">bytes</span> <span class="t-field">bytes_kb</span></code></pre></div>
+<p>On the Statistics tab, <code>bytes_kb</code> is a new column and <code>bytes</code> now holds a string, because the second assignment overwrote it. Swap the two assignments and re-run: <code>bytes_kb</code> breaks, because the division now runs on a string. That is the left-to-right rule.</p>
+<p>Step 3, <code>search</code> versus <code>where</code> on two fields. Run both and compare counts:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-field">src_user</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-16">Copy</button></div><pre id="spl-16"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">secure</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-field">src_user</span></code></pre></div>
+<p>The first returns nothing, because it looks for the literal value <code>src_user</code>.</p>
+<p>Step 4, <code>NOT</code> versus <code>!=</code>. Run both and compare:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-17">Copy</button></div><pre id="spl-17"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-kw">NOT</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-18">Copy</button></div><pre id="spl-18"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-field">action</span><span class="t-op">!=</span><span class="t-str">&quot;purchase&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span></code></pre></div>
+<p>The <code>NOT</code> form is larger, because it also returns events with no <code>action</code> field at all.</p>
+<p>Step 5, <code>fillnull</code> on a sparse table. Run <code>sourcetype=vendor_sales | timechart span=1d count BY categoryId</code>, note the blank cells, then append <code>| fillnull</code> and re-run. Every blank now reads <code>0</code> and the row and column counts are unchanged.</p>
+<p>Step 6, <code>fieldformat</code> versus <code>eval</code>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-19">Copy</button></div><pre id="spl-19"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">price</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span> <span class="t-kw">BY</span> <span class="t-field">product_name</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fieldformat</span> <span class="t-opt">revenue</span> <span class="t-op">=</span> <span class="t-str">&quot;$&quot;</span> <span class="t-op">.</span> <span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">revenue</span></code></pre></div>
+<p>The column displays as currency and the sort is still numerically correct. Replace <code>fieldformat</code> with <code>eval</code> and re-run: the display is identical but the order breaks, <code>sort</code> now comparing <code>$9.99</code> and <code>$1,204.50</code> as strings.</p>
+<p>Step 7, surface a computed field in the Events tab:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-20">Copy</button></div><pre id="spl-20"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">network</span> <span class="t-op">=</span> <span class="t-func">if</span><span class="t-op">(</span><span class="t-func">cidrmatch</span><span class="t-op">(</span><span class="t-str">&quot;182.236.164.11/16&quot;</span><span class="t-op">,</span> <span class="t-field">clientip</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;local&quot;</span><span class="t-op">,</span> <span class="t-str">&quot;other&quot;</span><span class="t-op">)</span></code></pre></div>
+<p>In the fields sidebar, click on the <strong>network</strong> field. In the popup, next to <strong>Selected</strong> click <strong>Yes</strong> and close the popup. The value now appears inline under each event.</p>
+<p>Verification search, proving the whole section at once:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-21">Copy</button></div><pre id="spl-21"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">price</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">tier</span> <span class="t-op">=</span> <span class="t-func">case</span><span class="t-op">(</span><span class="t-field">revenue</span> <span class="t-op">&gt;</span> <span class="t-num">10000</span><span class="t-op">,</span> <span class="t-str">&quot;high&quot;</span><span class="t-op">,</span> <span class="t-field">revenue</span> <span class="t-op">&gt;</span> <span class="t-num">1000</span><span class="t-op">,</span> <span class="t-str">&quot;mid&quot;</span><span class="t-op">,</span> <span class="t-func">true</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;low&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">tier</span> <span class="t-op">!=</span> <span class="t-str">&quot;low&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fillnull</span> <span class="t-opt">value</span><span class="t-op">=</span><span class="t-field">unverified</span> <span class="t-field">note</span>
+<span class="t-pipe">|</span> <span class="t-cmd">fieldformat</span> <span class="t-opt">revenue</span> <span class="t-op">=</span> <span class="t-str">&quot;$&quot;</span> <span class="t-op">.</span> <span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">categoryId</span> <span class="t-func">count</span> <span class="t-field">revenue</span> <span class="t-field">tier</span> <span class="t-field">note</span></code></pre></div>
+<p>Expected shape: fewer rows than <code>stats</code> produced, a <code>tier</code> column holding only <code>high</code> and <code>mid</code>, a <code>note</code> column that did not exist before and reads <code>unverified</code> on every row, and <code>revenue</code> rendered with a dollar sign and commas.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>Q1.</strong> Which search returns events where the value of <code>src_ip</code> equals the value of <code>dest_ip</code>?</p>
+<p>A. <code>index=network src_ip=dest_ip</code>
+B. <code>index=network | search src_ip=dest_ip</code>
+C. <code>index=network | where src_ip=dest_ip</code>
+D. <code>index=network | where src_ip=&quot;dest_ip&quot;</code></p>
+<p><strong>Q2.</strong> A <code>timechart</code> produces a table with blank cells. Which command replaces every blank cell in every column with 0, using the fewest arguments?</p>
+<p>A. <code>| fillnull value=0</code>
+B. <code>| fillnull</code>
+C. <code>| filldown</code>
+D. <code>| fillnull value=NULL</code></p>
+<p><strong>Q3.</strong> What does <code>| eval x = case(status==200, &quot;OK&quot;, status==404, &quot;Not found&quot;)</code> put in <code>x</code> for an event with <code>status=500</code>?</p>
+<p>A. The string <code>500</code>
+B. The string <code>Not found</code>
+C. NULL, so <code>x</code> has no value on that row
+D. The string <code>OK</code></p>
+<p><strong>Q4.</strong> Which statement about <code>fieldformat</code> is correct?</p>
+<p>A. It changes the underlying value, so later commands and <code>outputcsv</code> see the formatted version.
+B. It changes only how the value renders; later commands and <code>outputcsv</code> see the original value.
+C. It accepts multiple comma-separated expressions in one command, like <code>eval</code>.
+D. It supports wildcarded field names, so <code>fieldformat total*=tostring(total,&quot;commas&quot;)</code> formats several fields at once.</p>
+<p><strong>Q5.</strong> How do you filter on a prefix with the <code>where</code> command?</p>
+<p>A. <code>| where useragent=&quot;Mozilla*&quot;</code>
+B. <code>| where like(useragent, &quot;Mozilla%&quot;)</code>
+C. <code>| where match(useragent, &quot;Mozilla*&quot;)</code>
+D. <code>| where useragent IN (Mozilla*)</code></p>
+<p><strong>Q6.</strong> How do <code>sourcetype=secure NOT user=&quot;root&quot;</code> and <code>sourcetype=secure user!=&quot;root&quot;</code> differ?</p>
+<p>A. They are identical; <code>NOT</code> is shorthand for <code>!=</code>.
+B. The <code>NOT</code> form also returns events that have no <code>user</code> field.
+C. The <code>!=</code> form also returns events that have no <code>user</code> field.
+D. The <code>!=</code> form is case sensitive and the <code>NOT</code> form is not.</p>
+<p><strong>Q7.</strong> Which function returns the first argument that is not NULL?</p>
+<p>A. <code>if(X,Y,Z)</code>
+B. <code>nullif(X,Y)</code>
+C. <code>coalesce(X,...)</code>
+D. <code>validate(X,Y,...)</code></p>
+<p><strong>Q8.</strong> For a multivalue field <code>parts</code> holding five values, which expression returns the last value?</p>
+<p>A. <code>mvindex(parts, 5)</code>
+B. <code>mvindex(parts, 4)</code>
+C. <code>mvindex(parts, -1)</code>
+D. Both B and C</p>
+<p><strong>Q9.</strong> A search ends with these three commands:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-22">Copy</button></div><pre id="spl-22"><code><span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">price</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span> <span class="t-kw">BY</span> <span class="t-field">product_name</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">revenue</span> <span class="t-op">=</span> <span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">revenue</span></code></pre></div>
+<p>What does the <code>sort</code> produce?</p>
+<p>A. Rows ordered from highest revenue to lowest, because <code>sort</code> reads the number behind the formatted value.
+B. Rows ordered lexicographically on the formatted text, so a row reading <code>9.99</code> can sit above one reading <code>1,204.50</code>.
+C. An error, because <code>sort</code> cannot order a field that <code>eval</code> created.
+D. Rows ordered numerically, because <code>&quot;commas&quot;</code> only inserts separators and leaves the value a number.</p>
+<p><strong>Q10.</strong> A colleague runs and saves this search:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-23">Copy</button></div><pre id="spl-23"><code><span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">bytes_kb</span> <span class="t-op">=</span> <span class="t-func">round</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">/</span><span class="t-num">1024</span><span class="t-op">,</span> <span class="t-num">2</span><span class="t-op">)</span></code></pre></div>
+<p>The next day you open a new search and run <code>sourcetype=access_combined_wcookie bytes_kb&gt;10</code>. What happens?</p>
+<p>A. It returns the events whose <code>bytes_kb</code> exceeds 10, because <code>eval</code> wrote the field into the index.
+B. It returns no events, because <code>bytes_kb</code> exists only inside the pipeline that builds it.
+C. It returns an error, because <code>&gt;</code> is not a valid operator in a base search.
+D. It returns every event in that source type, because a base search ignores a field it does not recognise.</p>
+<details><summary>Answers</summary>
+<p><strong>Q1: C.</strong> <code>where</code> uses eval expression syntax, where an unquoted bare word on the right is a field name, so it compares the two fields. A is wrong because the <code>search</code> command expects a field compared to a literal and reads <code>dest_ip</code> as the string value <code>dest_ip</code>; the docs say so explicitly under &quot;Comparing two fields&quot;. B is wrong for the same reason, since <code>search</code> after a pipe behaves like the implied <code>search</code>. D is wrong because the double quotation marks make <code>dest_ip</code> a literal, so it filters for events where <code>src_ip</code> holds the text <code>dest_ip</code>.</p>
+<p><strong>Q2: B.</strong> Bare <code>fillnull</code> applies the default <code>0</code> to all fields, so it is both correct and shortest. A is behaviourally correct but not the fewest arguments. C is wrong because <code>filldown</code> copies the last non-null value from above, so a blank under a <code>63</code> becomes <code>63</code>, not <code>0</code>. D writes the literal string <code>NULL</code>, not zero.</p>
+<p><strong>Q3: C.</strong> <code>case</code> returns NULL when no condition is TRUE, which is why the documented idiom adds a final <code>true(), &quot;&lt;default&gt;&quot;</code> pair. A is wrong because <code>case</code> never falls back to the input value. B and D are wrong because <code>status=500</code> satisfies neither <code>status==404</code> nor <code>status==200</code>.</p>
+<p><strong>Q4: B.</strong> The docs state that <code>fieldformat</code> changes the appearance without changing the underlying value, that later commands cannot modify the formatted results, and that export commands retain the original data format. A is the inversion and describes <code>eval</code>. C is wrong because only one eval expression is allowed per <code>fieldformat</code> command. D is wrong because the <code>&lt;field&gt;</code> argument is documented as non-wildcarded.</p>
+<p><strong>Q5: B.</strong> <code>where</code> supports wildcards only through <code>like()</code>, with <code>%</code> for multiple characters. A is wrong because <code>where</code> has no asterisk wildcard and treats <code>*</code> as a literal. C is wrong because <code>match()</code> takes a regular expression, in which <code>*</code> means &quot;zero or more of the preceding character&quot;, so <code>&quot;Mozilla*&quot;</code> matches <code>Mozill</code> followed by any number of <code>a</code> characters; the correct regex form is <code>match(useragent, &quot;^Mozilla&quot;)</code>. D is wrong because the wildcard-capable <code>IN</code> operator belongs to <code>search</code> and <code>tstats</code>, and the <code>in()</code> function used by <code>where</code> takes quoted values with no wildcards.</p>
+<p><strong>Q6: B.</strong> With <code>NOT</code>, every event is returned except those containing the specified value, including events with no value in the field. With <code>!=</code>, only events that have a value in the field and whose value differs are returned. A is wrong because the counts differ whenever the field is sparse. C reverses the behaviour. D is wrong because neither form changes case handling; <code>search</code> field values are case-insensitive in both.</p>
+<p><strong>Q7: C.</strong> <code>coalesce(&lt;values&gt;)</code> returns the first argument that is not NULL. A is wrong: <code>if</code> is a three-argument conditional branching on a Boolean and never inspects for NULL. B is wrong: <code>nullif</code> returns NULL when the two values are equal and otherwise the first value, close to the opposite behaviour. D is wrong: <code>validate</code> returns the value paired with the first FALSE condition and is documented as the opposite of <code>case</code>. A and B are precisely the two functions Apress Table 2-16 wrongly maps onto <code>coalesce</code> and <code>null</code>.</p>
+<p><strong>Q8: D.</strong> Multivalue indexes start at 0, so five values occupy indexes 0 through 4 and index 4 is the last; separately, <code>-1</code> is documented as the last value. Both work, which is why D beats B or C alone. A is wrong because index 5 is out of range and out-of-range indexes return NULL. The function that starts at 1 is <code>substr</code>, not <code>mvindex</code>.</p>
+<p><strong>Q9: B.</strong> <code>tostring</code> returns a string and the assignment overwrites <code>revenue</code> with it, so by the time <code>sort</code> runs the field holds text, and lexicographical collation orders on the first character: the docs' example is 10, 9, 70, 100 sorting as 10, 100, 70, 9. Descending, <code>9.99</code> outranks <code>1,204.50</code>. A is wrong because nothing keeps the original number once <code>eval</code> overwrites the field, which is why the docs warn that values converted this way &quot;might not sort as expected because they are converted to ASCII&quot;. C is wrong because <code>sort</code> orders any field in the result set, including one <code>eval</code> just created. D is wrong because every <code>tostring</code> format returns a string, <code>&quot;commas&quot;</code> included. Fix it by sorting before converting, or by using <code>| fieldformat revenue = tostring(revenue, &quot;commas&quot;)</code>, which changes the rendering while <code>sort</code> keeps seeing a number.</p>
+<p><strong>Q10: B.</strong> An <code>eval</code> result is stored in a field in the search results and nowhere else, so it is gone when the search ends. The new base search asks the index for events carrying a <code>bytes_kb</code> above 10, no event has that field, and zero events come back. A is wrong because <code>eval</code> writes nothing to an index, a KV Store collection, or a database. C is wrong because <code>&gt;</code> is a documented comparison operator for the <code>search</code> command, alongside <code>=</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, and <code>&gt;=</code>. D is wrong because an unmatched field-value term filters events out rather than being ignored. Filtering on the derived value before the first pipe takes a calculated field, which applies at search time to every search on that source type and is directly searchable.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<p>Read in this order.</p>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval" target="_blank" rel="noopener">eval</a> - the whole page: Usage (create versus overwrite, no Boolean assignment), the operator table, Boolean expressions, Field names, and the ten basic examples. 25 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions" target="_blank" rel="noopener">Comparison and Conditional functions</a> - <code>case</code>, <code>coalesce</code>, <code>if</code>, <code>in</code>, <code>like</code>, <code>match</code>, <code>null</code>, <code>nullif</code>, <code>true</code>, <code>validate</code>. This is the page that corrects Apress Table 2-16. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/where" target="_blank" rel="noopener">where</a> - the quoting table and the three-row comparison against <code>search</code>. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/search" target="_blank" rel="noopener">search</a> - Usage: the implied search command, using search later in the pipeline, Boolean expressions, Comparing two fields, the IN operator, and example 6 on <code>NOT</code> versus <code>!=</code>. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/expressions-and-predicates/difference-between-and-not" target="_blank" rel="noopener">Difference between != and NOT</a> - the Ponies.csv example, framed exactly as the exam frames it. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/expressions-and-predicates/boolean-expressions-with-logical-operators" target="_blank" rel="noopener">Boolean expressions with logical operators</a> - the precedence table and the two AND/OR examples. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/fillnull" target="_blank" rel="noopener">fillnull</a> - syntax, the default of 0, and the section on fields needing at least one non-null value. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/filldown" target="_blank" rel="noopener">filldown</a> - one short page, read purely to fix the contrast. 3 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/fieldformat" target="_blank" rel="noopener">fieldformat</a> - the Description paragraphs on export and pipeline position, plus the supported-function table. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/conversion-functions" target="_blank" rel="noopener">Conversion functions</a> - <code>tostring</code> formats and <code>tonumber</code> base handling. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/text-functions" target="_blank" rel="noopener">Text functions</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/multivalue-eval-functions" target="_blank" rel="noopener">Multivalue eval functions</a> - signatures and index bases; note that <code>split</code> lives on the multivalue page. 15 minutes for both.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/informational-functions" target="_blank" rel="noopener">Informational functions</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/date-and-time-functions" target="_blank" rel="noopener">Date and Time functions</a> - skim signatures, read the <code>now()</code> versus <code>time()</code> distinction properly. 12 minutes for both.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/quick-reference/command-types" target="_blank" rel="noopener">Command types</a> - locate <code>eval</code>, <code>where</code>, <code>search</code>, <code>fillnull</code>, and <code>fieldformat</code>, and memorise the <code>fillnull</code> split. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/mathematical-functions" target="_blank" rel="noopener">Mathematical functions</a> - skim signatures plus the two defaults worth knowing, <code>log</code> base 10 and <code>round</code> to integer. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/sort" target="_blank" rel="noopener">sort</a> - Usage only: collation auto-detection and the lexicographical ordering of 10, 9, 70, 100. 4 minutes.</li>
+</ol>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="01-transforming-commands.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Transforming commands</span></a><a class="pn pn-next" href="03-correlating-events.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Correlating events</span></a></nav>
+      <p class="doc-foot">Built from <code>topics/02-filtering-and-formatting.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#blueprint-mapping"><span class="toc-text">Blueprint mapping</span><span class="mins">2 min</span></a>
+<a class="h2" href="#what-it-is"><span class="toc-text">What it is</span><span class="mins">1 min</span></a>
+<a class="h2" href="#syntax-and-options"><span class="toc-text">Syntax and options</span><span class="mins">11 min</span></a>
+<a class="h3" href="#eval"><span class="toc-text">eval</span></a>
+<a class="h3" href="#evaluation-functions"><span class="toc-text">Evaluation functions</span></a>
+<a class="h3" href="#where"><span class="toc-text">where</span></a>
+<a class="h3" href="#search"><span class="toc-text">search</span></a>
+<a class="h3" href="#fillnull"><span class="toc-text">fillnull</span></a>
+<a class="h3" href="#filldown"><span class="toc-text">filldown</span></a>
+<a class="h3" href="#fieldformat"><span class="toc-text">fieldformat</span></a>
+<a class="h2" href="#result-contract"><span class="toc-text">Result contract</span><span class="mins">3 min</span></a>
+<a class="h2" href="#worked-examples"><span class="toc-text">Worked examples</span><span class="mins">3 min</span></a>
+<a class="h3" href="#1.-derive-a-field-then-filter-on-it"><span class="toc-text">1. Derive a field, then filter on it</span></a>
+<a class="h3" href="#2.-categorise-with-case-and-give-it-a-default"><span class="toc-text">2. Categorise with case, and give it a default</span></a>
+<a class="h3" href="#3.-coalesce-versus-if-versus-nullif-on-one-screen"><span class="toc-text">3. coalesce versus if versus nullif on one screen</span></a>
+<a class="h3" href="#4.-compare-two-fields-which-only-where-can-do"><span class="toc-text">4. Compare two fields, which only where can do</span></a>
+<a class="h3" href="#5.-wildcards-on-both-sides-of-the-search-and-where-line"><span class="toc-text">5. Wildcards on both sides of the search and where line</span></a>
+<a class="h3" href="#6.-fill-the-holes-then-format-the-display"><span class="toc-text">6. Fill the holes, then format the display</span></a>
+<a class="h3" href="#7.-multivalue-and-text-functions-in-one-eval-chain"><span class="toc-text">7. Multivalue and text functions in one eval chain</span></a>
+<a class="h2" href="#decision-rules"><span class="toc-text">Decision rules</span><span class="mins">3 min</span></a>
+<a class="h2" href="#traps"><span class="toc-text">Traps</span><span class="mins">7 min</span></a>
+<a class="h2" href="#lab"><span class="toc-text">Lab</span><span class="mins">2 min</span></a>
+<a class="h2" href="#self-check"><span class="toc-text">Self-check</span><span class="mins">7 min</span></a>
+<a class="h2" href="#docs"><span class="toc-text">Docs</span><span class="mins">2 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">41 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+<script src="../mermaid-init.js"></script>
+</body>
+</html>

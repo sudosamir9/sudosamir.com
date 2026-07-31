@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.0 Filtering and Formatting Results (10%) - cram | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/02-filtering-and-formatting.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Filtering and formatting</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/02-filtering-and-formatting.html">Study</a><a class="on" href="02-filtering-and-formatting.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="2.0-filtering-and-formatting-results-10---cram">2.0 Filtering and Formatting Results- cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">eval</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">[</span><span class="t-str">&quot;,&quot;</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span>
+<span class="t-kw">where</span> <span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span>
+<span class="t-field">search</span> <span class="t-op">&lt;</span><span class="t-field">logical-expression</span><span class="t-op">&gt;</span>
+<span class="t-field">fillnull</span> <span class="t-op">[</span><span class="t-opt">value</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">filldown</span> <span class="t-op">&lt;</span><span class="t-field">wc-field-list</span><span class="t-op">&gt;</span>
+<span class="t-field">fieldformat</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Signatures: <code>case(&lt;condition&gt;,&lt;value&gt;,...)</code>, <code>if(&lt;predicate&gt;,&lt;true&gt;,&lt;false&gt;)</code>, <code>coalesce(&lt;values&gt;)</code>, <code>nullif(&lt;f1&gt;,&lt;f2&gt;)</code>, <code>null()</code>, <code>true()</code>, <code>validate(&lt;condition&gt;,&lt;value&gt;,...)</code>, <code>in(&lt;field&gt;,&lt;list&gt;)</code>, <code>like(&lt;str&gt;,&lt;pattern&gt;)</code>, <code>match(&lt;str&gt;,&lt;regex&gt;)</code>, <code>cidrmatch(&lt;cidr&gt;,&lt;ip&gt;)</code>, <code>tostring(&lt;value&gt;,&lt;format&gt;)</code>, <code>tonumber(&lt;str&gt;,&lt;base&gt;)</code>, <code>mvindex(&lt;mv&gt;,&lt;start&gt;,&lt;end&gt;)</code>, <code>substr(&lt;str&gt;,&lt;start&gt;,&lt;length&gt;)</code>, <code>split(&lt;str&gt;,&lt;delim&gt;)</code>, <code>strftime(&lt;time&gt;,&lt;format&gt;)</code>, <code>strptime(&lt;str&gt;,&lt;format&gt;)</code>, <code>typeof(&lt;value&gt;)</code>.</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Default / limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fillnull value=</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>fillnull</code> field list</td>
+<td>all fields; no wildcards; a named missing field is created</td>
+</tr>
+<tr>
+<td><code>fillnull</code> command type</td>
+<td>distributable streaming with a field list, dataset processing without</td>
+</tr>
+<tr>
+<td><code>filldown</code> field list</td>
+<td>all fields; <code>*</code> wildcards allowed; no previous value leaves NULL</td>
+</tr>
+<tr>
+<td><code>fieldformat</code> expressions per command</td>
+<td>exactly 1</td>
+</tr>
+<tr>
+<td><code>eval</code> / <code>where</code> / <code>fieldformat</code> / <code>search</code> after a pipe</td>
+<td>distributable streaming</td>
+</tr>
+<tr>
+<td><code>search</code> as first command</td>
+<td>event-generating</td>
+</tr>
+<tr>
+<td><code>search timeformat</code></td>
+<td><code>%m/%d/%Y:%H:%M:%S</code></td>
+</tr>
+<tr>
+<td><code>case</code> / <code>validate</code> with no match</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td><code>tostring</code> formats</td>
+<td><code>binary</code>, <code>hex</code>, <code>commas</code> (2 decimals), <code>duration</code> (<code>HH:MM:SS</code>)</td>
+</tr>
+<tr>
+<td><code>tonumber</code> / <code>toint</code> / <code>todouble</code> base</td>
+<td>10, range 2 to 36</td>
+</tr>
+<tr>
+<td><code>printf</code> precision for <code>%f</code>, <code>%e</code>, <code>%a</code></td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>ltrim</code> / <code>rtrim</code> / <code>trim</code> chars</td>
+<td>spaces and tabs</td>
+</tr>
+<tr>
+<td><code>substr</code> length</td>
+<td>rest of string; index starts at <strong>1</strong></td>
+</tr>
+<tr>
+<td><code>mvindex</code> end</td>
+<td>none; index starts at <strong>0</strong>, <code>-1</code> is last, out of range is NULL</td>
+</tr>
+<tr>
+<td><code>mvzip</code> delimiter</td>
+<td><code>,</code></td>
+</tr>
+<tr>
+<td><code>mvrange</code> end value</td>
+<td>excluded</td>
+</tr>
+<tr>
+<td><code>mv_to_json_array</code> infer_types</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>log</code> base</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>round</code> precision</td>
+<td>integer; negative precision rejected</td>
+</tr>
+<tr>
+<td>eval numeric precision</td>
+<td>17 significant digits, -2^53+1 to 2^53-1; division by zero gives null</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filter on indexed terms or field-value pairs</td>
+<td>base search, before first pipe</td>
+</tr>
+<tr>
+<td>Field vs literal, mid-pipeline</td>
+<td><code>search</code> or <code>where</code></td>
+</tr>
+<tr>
+<td>Field vs field</td>
+<td><code>where</code> only</td>
+</tr>
+<tr>
+<td>Evaluation function or arithmetic in the predicate</td>
+<td><code>where</code> only</td>
+</tr>
+<tr>
+<td>Wildcard</td>
+<td><code>search</code> uses <code>*</code>; <code>where</code> uses <code>like()</code> with <code>%</code> and <code>_</code></td>
+</tr>
+<tr>
+<td>Case-sensitive match</td>
+<td><code>where</code>, or <code>search</code> with <code>CASE()</code></td>
+</tr>
+<tr>
+<td>Keep events missing the field</td>
+<td><code>NOT field=&quot;v&quot;</code></td>
+</tr>
+<tr>
+<td>Drop events missing the field</td>
+<td><code>field!=&quot;v&quot;</code></td>
+</tr>
+<tr>
+<td>Constant in empty cells</td>
+<td><code>fillnull</code></td>
+</tr>
+<tr>
+<td>Previous row's value in empty cells</td>
+<td><code>filldown</code></td>
+</tr>
+<tr>
+<td>Display only, value unchanged for sort and export</td>
+<td><code>fieldformat</code></td>
+</tr>
+<tr>
+<td>Value actually changed, including export</td>
+<td><code>eval</code></td>
+</tr>
+<tr>
+<td>Boolean result into a field</td>
+<td>wrap in <code>if</code>, <code>case</code>, <code>validate</code>, or <code>tostring</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>fillnull</code> default value is <code>0</code>, not blank and not <code>NULL</code>; bare <code>| fillnull</code> fills every field.</li>
+<li><code>search</code> cannot compare two fields; it reads the right-hand bare word as a literal string. <code>where</code> can.</li>
+<li>Boolean precedence: <code>search</code> does OR before AND; <code>eval</code> and <code>where</code> do AND before OR. <code>search</code> has no <code>XOR</code>.</li>
+<li><code>NOT field=&quot;v&quot;</code> keeps events with no <code>v</code> field; <code>field!=&quot;v&quot;</code> drops them. <code>NOT field=*</code> returns null-field events; <code>field!=*</code> returns nothing.</li>
+<li><code>eval</code> cannot assign a Boolean; <code>coalesce</code> returns the first non-NULL argument; <code>nullif</code> returns NULL when two fields match; <code>case</code> returns NULL with no default.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-02-01 two-field compare in <code>search</code>; T-02-02 Boolean precedence by command; T-02-03 <code>NOT</code> vs <code>!=</code>; T-02-04 case sensitivity split (field names yes, <code>search</code> values no, <code>where</code> yes); T-02-05 <code>coalesce</code> is not <code>if</code>; T-02-06 <code>null()</code> is not <code>nullif()</code>; T-02-07 <code>case</code> defaults to NULL; T-02-08 <code>eval</code> cannot store a Boolean; T-02-09 no <code>*</code> wildcard in <code>where</code>; T-02-10 <code>IN</code> operator vs <code>in()</code> function; T-02-11 <code>fillnull</code> default <code>0</code>; T-02-12 no wildcards in <code>fillnull</code> field list; T-02-13 <code>fillnull</code> vs <code>filldown</code>; T-02-14 all-null field is invisible to <code>fillnull</code>; T-02-15 <code>fieldformat</code> does not change the value or exports; T-02-16 <code>mvindex</code> from 0, <code>substr</code> from 1; T-02-17 <code>eval</code> command vs calculated field; T-02-18 no <code>_raw</code> after a transforming command; T-02-19 <code>tostring</code> format keywords.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="01-transforming-commands.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Transforming commands</span></a><a class="pn pn-next" href="03-correlating-events.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Correlating events</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/02-filtering-and-formatting.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">4 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>

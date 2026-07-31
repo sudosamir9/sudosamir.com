@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>0.0 Foundations Refresher | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item current" href="00-foundations-refresher.html" aria-current="page"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../topics/00-foundations-refresher.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Foundations refresher</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="00-foundations-refresher.html">Study</a><a class="" href="../cram/00-foundations-refresher.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="0.0-foundations-refresher-0">0.0 Foundations Refresher</h1>
+<p>Assumed knowledge: everything SPLK-1002 expects you to already own from SPLK-1001 and from daily Splunk use, plus four large topics that carry zero direct blueprint weight. Nothing here is a blueprint objective, so nothing here earns a point on its own. It earns points indirectly, because roughly a third of real blueprint questions are phrased using this vocabulary and will be unanswerable if the vocabulary is shaky.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<p>SPLK-1002 has no section 0.0. This file has no official weight and no sub-objectives. It exists because the exam is written for candidates who hold or could hold SPLK-1001, and because the blueprint sections silently depend on the following.</p>
+<p>What is here and why:</p>
+<ul>
+<li>Areas 1 to 5 and 9 (search modes, fields sidebar, time, command types, subsearches, search jobs and the Job Inspector) are <strong>assumed prerequisites</strong>. A blueprint question can be built on top of them. Example: a 3.0 transaction question that hinges on whether <code>transaction</code> is streaming, or a 5.0 field-alias question that hinges on the search-time sequence.</li>
+<li>Areas 6, 7, 8 and 10 (lookups, reports and alerts, dashboards, knowledge object management) are <strong>off blueprint</strong> and are not tested directly on SPLK-1002. Lookups belong to SPLK-1001 and SPLK-1004; alerting and dashboards to SPLK-1001 and the admin track. They are here in tight summary form because they are useful at work and because knowing they are off blueprint is the fastest way to stop over-studying them.</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Udemy &quot;Splunk: Zero to Power User&quot; (Hailie Shaw)</th>
+<th>Apress &quot;Splunk Certified Study Guide&quot; (Mehta, 2021)</th>
+<th>Honest note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search modes</td>
+<td>Covered in the Search app modules</td>
+<td>Chapter 2 (User exam material)</td>
+<td>Both are correct in outline. Neither states the Smart mode transforming/non-transforming switch precisely, which is the single most testable fact in this file.</td>
+</tr>
+<tr>
+<td>Fields sidebar</td>
+<td>Covered early, correctly</td>
+<td>Chapter 2</td>
+<td>Apress states the 20% rule. Udemy demonstrates it without naming the threshold.</td>
+</tr>
+<tr>
+<td>Time modifiers</td>
+<td>Covered</td>
+<td>Chapter 2 and Chapter 3</td>
+<td>Both are thin on snap-to. Neither gives the full unit alias table. Verify all unit spellings against the docs.</td>
+</tr>
+<tr>
+<td>Command types</td>
+<td>Barely covered</td>
+<td>Barely covered</td>
+<td>Both weak. This is the biggest gap in the secondary sources and it feeds directly into 3.0 and 4.0 questions.</td>
+</tr>
+<tr>
+<td>Subsearches</td>
+<td>Covered</td>
+<td>Chapter 4</td>
+<td>Apress states the limits inconsistently across chapters. Trust 10,000 results and 60 seconds from the docs.</td>
+</tr>
+<tr>
+<td>Lookups</td>
+<td>Five-plus lessons, heavy</td>
+<td>Chapter 5</td>
+<td>Massively over-covered relative to SPLK-1002 value. Off blueprint.</td>
+</tr>
+<tr>
+<td>Reports and alerts</td>
+<td>Several lessons</td>
+<td>Chapter 4</td>
+<td>Off blueprint. Apress mixes SPLK-1001 and SPLK-1003 alert content together.</td>
+</tr>
+<tr>
+<td>Dashboards</td>
+<td>Several lessons</td>
+<td>Chapter 4</td>
+<td>Off blueprint and written against Simple XML only, which is now the legacy framework in 10.x.</td>
+</tr>
+<tr>
+<td>Search jobs and the Job Inspector</td>
+<td>Brief</td>
+<td>Brief</td>
+<td>Both thin. The scanCount vs eventCount distinction is worth knowing and neither states it. Courseware counts three components; the docs name two sections plus a header strip.</td>
+</tr>
+<tr>
+<td>Knowledge object permissions</td>
+<td>Covered</td>
+<td>Chapter 5</td>
+<td>Apress predates the current Reassign Knowledge Objects page layout. Use the 10.x click-path below.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Errata warning that applies to this whole file: the Apress book has at least nine wrong answer keys and contradicts itself on field-value case sensitivity. Where it disagrees with anything below, the docs win.</p>
+<h2 id="1.-search-modes">1. Search modes<a class="anchor" href="#1.-search-modes" aria-label="Link to this section">#</a></h2>
+<p>The single most testable item in this file. Three modes, one default, and one conditional behaviour.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Field discovery</th>
+<th>Fields returned</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fast</td>
+<td>Off for event searches</td>
+<td>Default fields (<code>host</code>, <code>source</code>, <code>sourcetype</code>), index-time fields, and only those search-time fields you explicitly name in the search</td>
+<td>Prioritises performance. Non-transforming searches still show an event list and timeline. Transforming searches go straight to the visualisation or table.</td>
+</tr>
+<tr>
+<td>Smart (default)</td>
+<td>Conditional</td>
+<td>Conditional</td>
+<td>Switches between Fast and Verbose based on whether the search contains a transforming command.</td>
+</tr>
+<tr>
+<td>Verbose</td>
+<td>On</td>
+<td>All discoverable fields: default, index-time, and every search-time extraction</td>
+<td>Returns the event list and the report table or visualisation. Slowest.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The Smart mode rule, stated exactly:</p>
+<ul>
+<li>Search contains <strong>no</strong> transforming command (an event search): field discovery is <strong>on</strong>, Smart behaves as if it were in <strong>Verbose</strong> mode.</li>
+<li>Search <strong>does</strong> contain a transforming command (a report search): field discovery is <strong>off</strong>, Smart behaves as if it were in <strong>Fast</strong> mode, skipping event list generation and jumping to the results.</li>
+</ul>
+<div class="mermaid-wrap" style="min-height:208px"><div class="mermaid">flowchart TD
+    A[&quot;Search submitted in Smart mode&quot;] --&gt; B{&quot;Does the pipeline contain&lt;br/&gt;a transforming command?&quot;}
+    B -- No --&gt; C[&quot;Field discovery ON&lt;br/&gt;Behaves like Verbose&lt;br/&gt;Events tab populated&quot;]
+    B -- Yes --&gt; D[&quot;Field discovery OFF&lt;br/&gt;Behaves like Fast&lt;br/&gt;Statistics tab populated&quot;]</div></div>
+<p>Two consequences the exam likes:</p>
+<ol>
+<li>In Fast mode a field you did not name in the search will not appear in the fields sidebar, even though the extraction exists and is correctly configured. The extraction is not broken; the mode is suppressing discovery.</li>
+<li>Reports cannot benefit from report acceleration when you run them in Verbose mode. Turning acceleration on and then switching the mode to Verbose silently returns the report to non-accelerated speed.</li>
+</ol>
+<p>All reports run in Smart mode after they are first created.</p>
+<p>UI path: the mode selector sits directly under the search bar, to the left of the search action buttons.</p>
+<h2 id="2.-the-fields-sidebar">2. The fields sidebar<a class="anchor" href="#2.-the-fields-sidebar" aria-label="Link to this section">#</a></h2>
+<p>Three groupings, one threshold.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Grouping</th>
+<th>Contents</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selected Fields</td>
+<td>Fields shown under each event in the events list</td>
+<td>Starts as <code>host</code>, <code>source</code>, <code>sourcetype</code> by default. You add to it.</td>
+</tr>
+<tr>
+<td>Interesting Fields</td>
+<td>Fields the platform thinks are worth surfacing</td>
+<td>A field appears here when it is present in <strong>at least 20% of the events returned by the search</strong>.</td>
+</tr>
+<tr>
+<td>All Fields</td>
+<td>Everything, via the <code>All Fields</code> link at the top of the sidebar</td>
+<td>Opens the Select Fields dialog, which lists each field with its number of unique values and its type (<code>String</code> or <code>Number</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<p>The 20% threshold is computed against the events <strong>returned by the current search</strong>, not against the index and not against the source type. Narrow the search and a field that was below threshold can cross it, and the reverse.</p>
+<p>In the sidebar itself, string fields are marked with a lowercase <code>a</code> and numeric fields with a <code>#</code>. [verify]</p>
+<p>Two facts that follow from the mode section: in Fast mode the Interesting Fields list is close to empty because discovery is off; in Verbose mode it is at its fullest. The 20% rule does not change with mode, but the candidate pool of fields does.</p>
+<h2 id="3.-time">3. Time<a class="anchor" href="#3.-time" aria-label="Link to this section">#</a></h2>
+<p><code>_time</code> is stored as UNIX time, an integer count of seconds since 00:00:00 UTC on 1 January 1970, and rendered in human-readable form for display. Because the stored value is absolute, the same search returns the same events regardless of viewer time zone. The exception is any range that references a local calendar boundary, for example <code>Since 00:00:00</code> or <code>@d</code>: midnight happens at a different absolute instant in San Francisco than in Tokyo, so those ranges genuinely return different events for different users.</p>
+<p>Default time range for an ad hoc search in Search and Reporting: Last 24 hours.</p>
+<h3 id="time-range-picker">Time range picker<a class="anchor" href="#time-range-picker" aria-label="Link to this section">#</a></h3>
+<p>Categories: Presets, Relative, Real-time, Date Range, Date and Time Range, Advanced. The Advanced tab takes UNIX time or relative time notation in its Earliest and Latest fields and renders the resulting timestamp underneath so you can check it.</p>
+<h3 id="inline-modifiers">Inline modifiers<a class="anchor" href="#inline-modifiers" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Applies to</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>earliest</code></td>
+<td><code>_time</code></td>
+<td>Start of the range.</td>
+</tr>
+<tr>
+<td><code>latest</code></td>
+<td><code>_time</code></td>
+<td>End of the range. Defaults to <code>now()</code> when omitted.</td>
+</tr>
+<tr>
+<td><code>_index_earliest</code></td>
+<td><code>_indextime</code></td>
+<td>Start of the range by index time, not event time.</td>
+</tr>
+<tr>
+<td><code>_index_latest</code></td>
+<td><code>_indextime</code></td>
+<td>End of the range by index time.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Precedence: a time range specified in the search bar or in a saved search <strong>overrides</strong> the time range selected in the Time Range Picker. Select Last 24 hours in the picker, type <code>earliest=-30m latest=now</code>, and you get 30 minutes.</p>
+<p><code>latest</code> is exclusive at the boundary. With <code>latest=02:00:00</code>, events timestamped before 02:00:00 are included and an event at exactly 02:00:00 is not.</p>
+<h3 id="relative-time-syntax">Relative time syntax<a class="anchor" href="#relative-time-syntax" aria-label="Link to this section">#</a></h3>
+<pre class="plain"><code>[+|-]&lt;time_integer&gt;&lt;time_unit&gt;@&lt;time_unit&gt;</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Valid abbreviations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subseconds</td>
+<td><code>us</code>, <code>ms</code>, <code>cs</code>, <code>ds</code></td>
+</tr>
+<tr>
+<td>Second</td>
+<td><code>s</code>, <code>sec</code>, <code>secs</code>, <code>second</code>, <code>seconds</code></td>
+</tr>
+<tr>
+<td>Minute</td>
+<td><code>m</code>, <code>min</code>, <code>mins</code>, <code>minute</code>, <code>minutes</code></td>
+</tr>
+<tr>
+<td>Hour</td>
+<td><code>h</code>, <code>hr</code>, <code>hrs</code>, <code>hour</code>, <code>hours</code></td>
+</tr>
+<tr>
+<td>Day</td>
+<td><code>d</code>, <code>day</code>, <code>days</code></td>
+</tr>
+<tr>
+<td>Week</td>
+<td><code>w</code>, <code>week</code>, <code>weeks</code></td>
+</tr>
+<tr>
+<td>Month</td>
+<td><code>mon</code>, <code>month</code>, <code>months</code></td>
+</tr>
+<tr>
+<td>Quarter</td>
+<td><code>q</code>, <code>qtr</code>, <code>qtrs</code>, <code>quarter</code>, <code>quarters</code></td>
+</tr>
+<tr>
+<td>Year</td>
+<td><code>y</code>, <code>yr</code>, <code>yrs</code>, <code>year</code>, <code>years</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Snap-to rules:</p>
+<ul>
+<li><code>@</code> separates the offset from the snap unit. Snapping always rounds <strong>down</strong>, to the latest time that is not after the specified time. There is no rounding up.</li>
+<li>The offset on the left of <code>@</code> is applied before the snap on the right. <code>-2h@h</code> means &quot;go back two hours, then snap to the top of that hour&quot;.</li>
+<li>You can chain a further offset after the snap. <code>@d-2h</code> means &quot;snap to the beginning of today, then subtract two hours&quot;, which is 10 PM yesterday.</li>
+<li>Day-of-week snapping uses <code>@w0</code> through <code>@w7</code>, where <code>w0</code> and <code>w7</code> are Sunday and <code>w6</code> is Saturday.</li>
+<li><code>earliest=1 latest=now()</code> is an effective all-time search, starting at the epoch.</li>
+</ul>
+<p>Worth memorising as a shape: <code>earliest=-5d@w1 latest=@w6</code> is Monday to Saturday of the past business week.</p>
+<h3 id="now-and-relative-time">now() and relative_time()<a class="anchor" href="#now-and-relative-time" aria-label="Link to this section">#</a></h3>
+<p><code>now()</code> is an eval function returning the current time as an epoch integer. <code>relative_time(&lt;epoch_time&gt;, &lt;relative_time_specifier&gt;)</code> applies the same relative syntax to an arbitrary epoch value and returns an epoch integer. They live in <code>eval</code> and <code>where</code>, not in the time modifier slot.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">age_seconds</span> <span class="t-op">=</span> <span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span> <span class="t-op">-</span> <span class="t-field">_time</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">start_of_day</span> <span class="t-op">=</span> <span class="t-func">relative_time</span><span class="t-op">(</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;@d&quot;</span><span class="t-op">)</span></code></pre></div>
+<h2 id="4.-command-types">4. Command types<a class="anchor" href="#4.-command-types" aria-label="Link to this section">#</a></h2>
+<p>Six types. They are not mutually exclusive: a command can be both generating and transforming, and several commands appear on two lists.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+<th>Where it runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distributable streaming</td>
+<td>Operates on each event as it is returned, one event in, one or zero events out</td>
+<td>Indexers, when every preceding command is also distributable streaming; otherwise the search head</td>
+</tr>
+<tr>
+<td>Centralized streaming</td>
+<td>Applies a transformation to each event but order matters</td>
+<td>Search head only</td>
+</tr>
+<tr>
+<td>Transforming</td>
+<td>Orders the results into a data table, turning event values into the numbers a visualisation needs</td>
+<td>Search head</td>
+</tr>
+<tr>
+<td>Generating</td>
+<td>Returns or generates results rather than consuming them</td>
+<td>Depends on the command</td>
+</tr>
+<tr>
+<td>Orchestrating</td>
+<td>Controls some aspect of how the search is processed without directly affecting the final result set</td>
+<td>Varies</td>
+</tr>
+<tr>
+<td>Dataset processing</td>
+<td>Requires the entire dataset before it can run</td>
+<td>Search head</td>
+</tr>
+</tbody>
+</table></div>
+<p>Verbatim lists from the 10.4 command types quick reference:</p>
+<ul>
+<li><strong>Transforming</strong>: <code>addtotals</code>, <code>anomalydetection</code>, <code>append</code>, <code>associate</code>, <code>chart</code>, <code>cofilter</code>, <code>contingency</code>, <code>history</code>, <code>makecontinuous</code>, <code>mvcombine</code>, <code>rare</code>, <code>stats</code>, <code>table</code>, <code>timechart</code>, <code>top</code>, <code>xyseries</code></li>
+<li><strong>Generating</strong>: <code>datamodel</code>, <code>dbinspect</code>, <code>eventcount</code>, <code>from</code>, <code>gentimes</code>, <code>history</code>, <code>inputcsv</code>, <code>inputlookup</code>, <code>loadjob</code>, <code>makeresults</code>, <code>metadata</code>, <code>metasearch</code>, <code>mstats</code>, <code>multisearch</code>, <code>pivot</code>, <code>rest</code>, <code>search</code>, <code>searchtxn</code>, <code>set</code>, <code>tstats</code>, <code>typeahead</code>, <code>walklex</code></li>
+<li><strong>Orchestrating</strong>: <code>localop</code>, <code>lookup</code>, <code>noop</code>, <code>redistribute</code>, <code>require</code></li>
+<li><strong>Dataset processing</strong>: <code>anomalousvalue</code>, <code>anomalydetection</code>, <code>append</code>, <code>appendcols</code>, <code>appendpipe</code>, <code>bin</code>, <code>cluster</code>, <code>concurrency</code>, <code>datamodel</code>, <code>dedup</code>, <code>eventstats</code>, <code>fieldsummary</code>, <code>fillnull</code>, <code>from</code>, <code>join</code>, <code>map</code>, <code>outlier</code>, <code>reverse</code>, <code>sort</code>, <code>tail</code>, <code>transaction</code>, <code>union</code></li>
+</ul>
+<p>Distributable streaming examples named in the search manual: <code>eval</code>, <code>fields</code>, <code>makemv</code>, <code>rename</code>, <code>regex</code>, <code>replace</code>, <code>strcat</code>, <code>typer</code>, <code>where</code>. Centralized streaming examples: <code>head</code>, <code>streamstats</code>, and certain modes of <code>dedup</code> and <code>cluster</code>.</p>
+<p>Why the distinction decides pipeline order:</p>
+<div class="mermaid-wrap" style="min-height:230px"><div class="mermaid">flowchart LR
+    A[&quot;Retrieval&lt;br/&gt;index=... terms&quot;] --&gt; B[&quot;Distributable streaming&lt;br/&gt;eval, fields, rename, where&quot;]
+    B --&gt; C[&quot;Transforming&lt;br/&gt;stats, chart, timechart, top&quot;]
+    C --&gt; D[&quot;Post-transform commands&lt;br/&gt;operate on ROWS, not events&quot;]
+    D --&gt; E[&quot;Output&quot;]</div></div>
+<p>Once a transforming command runs, the pipeline no longer holds events. It holds a result table. Commands after that point see only the fields the transforming command emitted. <code>_raw</code> is gone. <code>_time</code> survives only if the transforming command produced it (<code>timechart</code> does, <code>stats count by host</code> does not). This is the mechanism behind a very large share of exam distractors across sections 3.0 and 4.0.</p>
+<p>Generating commands that generate events, rather than reporting on an index, must be first in the search and are written with a leading pipe: <code>| inputlookup</code>, <code>| makeresults</code>, <code>| tstats</code>. <code>search</code> is a generating command too, which is why a bare search string works without a leading pipe.</p>
+<h2 id="5.-subsearches">5. Subsearches<a class="anchor" href="#5.-subsearches" aria-label="Link to this section">#</a></h2>
+<p>Syntax: enclose the inner search in square brackets inside the outer search.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-op">[</span> <span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span> <span class="t-pipe">|</span> <span class="t-cmd">top</span> <span class="t-opt">limit</span><span class="t-op">=</span><span class="t-num">1</span> <span class="t-field">product_name</span> <span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-field">product_name</span> <span class="t-op">]</span></code></pre></div>
+<p>Execution order: when a search contains a subsearch, the subsearch typically <strong>runs first</strong>. Its output is turned into a search-term string, and that string is substituted into the outer search before the outer search runs. The outer search never sees the subsearch as a pipeline stage.</p>
+<p>Defaults:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxout</code> (<code>[subsearch]</code> in <code>limits.conf</code>)</td>
+<td>10,000 results</td>
+<td>The subsearch returns at most this many results. Individual commands can override the effective default when they invoke a subsearch.</td>
+</tr>
+<tr>
+<td><code>maxtime</code> (<code>[subsearch]</code> in <code>limits.conf</code>)</td>
+<td>60 seconds</td>
+<td>A subsearch that runs longer than this has its results automatically finalized, meaning silently truncated.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The first command in a subsearch must be a generating command (<code>search</code>, <code>eventcount</code>, <code>inputlookup</code>, <code>tstats</code> and so on), with <code>foreach</code> as the exception.</p>
+<h3 id="the-format-command">The format command<a class="anchor" href="#the-format-command" aria-label="Link to this section">#</a></h3>
+<p><code>format</code> is what converts subsearch rows into the boolean search string. Its defaults define the shape of that string.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mvsep</code></td>
+<td><code>&quot;OR&quot;</code></td>
+<td>Separator between values of a multivalue field</td>
+</tr>
+<tr>
+<td><code>maxresults</code></td>
+<td><code>0</code> (no limit)</td>
+<td>Caps the rows converted</td>
+</tr>
+<tr>
+<td>row prefix</td>
+<td><code>&quot;(&quot;</code></td>
+<td>Opens each row</td>
+</tr>
+<tr>
+<td>column prefix</td>
+<td><code>&quot;(&quot;</code></td>
+<td>Opens the whole set</td>
+</tr>
+<tr>
+<td>column separator</td>
+<td><code>&quot;AND&quot;</code></td>
+<td>Joins fields within one row</td>
+</tr>
+<tr>
+<td>column end</td>
+<td><code>&quot;)&quot;</code></td>
+<td>Closes each row</td>
+</tr>
+<tr>
+<td>row separator</td>
+<td><code>&quot;OR&quot;</code></td>
+<td>Joins rows</td>
+</tr>
+<tr>
+<td>row end</td>
+<td><code>&quot;)&quot;</code></td>
+<td>Closes the whole set</td>
+</tr>
+<tr>
+<td><code>emptystr</code></td>
+<td><code>&quot;NOT( )&quot;</code></td>
+<td>Emitted when there is nothing to format</td>
+</tr>
+</tbody>
+</table></div>
+<p>Result contract for <code>format</code>: it collapses all input rows into <strong>one row, one field, named <code>search</code></strong>. Default output shape, given two rows of host, source and sourcetype:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-op">(</span> <span class="t-op">(</span> <span class="t-opt">host</span><span class="t-op">=</span><span class="t-str">&quot;mylaptop&quot;</span> <span class="t-kw">AND</span> <span class="t-opt">source</span><span class="t-op">=</span><span class="t-str">&quot;syslog.log&quot;</span> <span class="t-kw">AND</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-str">&quot;syslog&quot;</span> <span class="t-op">)</span> <span class="t-field">OR</span> <span class="t-op">(</span> <span class="t-opt">host</span><span class="t-op">=</span><span class="t-str">&quot;bobslaptop&quot;</span> <span class="t-kw">AND</span> <span class="t-opt">source</span><span class="t-op">=</span><span class="t-str">&quot;bob-syslog.log&quot;</span> <span class="t-kw">AND</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-str">&quot;syslog&quot;</span> <span class="t-op">)</span> <span class="t-op">)</span></code></pre></div>
+<p>That is: AND within a row, OR between rows.</p>
+<p>Why subsearches are a performance trap: the truncation at 10,000 results and at 60 seconds is silent. A subsearch that returns 10,000 of 40,000 distinct values produces an outer search that is wrong rather than slow, and nothing in the UI says so. The fixes are to narrow the subsearch time range, add <code>| format maxresults=&lt;n&gt;</code> so the truncation is yours, or restructure with <code>stats</code>.</p>
+<p>Time ranges do not cross the boundary: time modifiers in the base search do not apply to the subsearch, and vice versa. The Time Range Picker applies to a subsearch only when the subsearch has no inline modifiers of its own.</p>
+<h2 id="6.-lookups-off-blueprint">6. Lookups (OFF BLUEPRINT)<a class="anchor" href="#6.-lookups-off-blueprint" aria-label="Link to this section">#</a></h2>
+<p>Not an SPLK-1002 objective. SPLK-1001 and SPLK-1004 material. Summary only.</p>
+<p>Four types:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Backing store</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSV (file-based)</td>
+<td>A <code>.csv</code> or <code>.csv.gz</code> file</td>
+<td>Small, relatively static tables</td>
+</tr>
+<tr>
+<td>KV Store</td>
+<td>A collection in the App Key Value Store</td>
+<td>Large tables, or tables that change frequently</td>
+</tr>
+<tr>
+<td>External (scripted)</td>
+<td>A Python script or binary executable</td>
+<td>Values that must be fetched live, for example DNS</td>
+</tr>
+<tr>
+<td>Geospatial</td>
+<td>A KMZ or KML file of geographic feature collections</td>
+<td>Matching coordinates to regions for choropleth maps</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three distinct objects, routinely conflated:</p>
+<ol>
+<li><strong>Lookup table file</strong>: the data itself. Uploaded at <code>Settings &gt; Lookups &gt; Lookup table files</code>.</li>
+<li><strong>Lookup definition</strong>: names the lookup, points at a table file or collection, sets the matching rules (case sensitivity, wildcards, time-based matching). One table file can back several definitions. Created at <code>Settings &gt; Lookups &gt; Lookup definitions</code>.</li>
+<li><strong>Automatic lookup</strong>: binds a definition to a host, source or source type so it applies to every search without anyone typing <code>lookup</code>. Created at <code>Settings &gt; Lookups &gt; Automatic lookups</code>.</li>
+</ol>
+<p>Commands:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-cmd">lookup</span> <span class="t-op">[</span><span class="t-opt">local</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">update</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">lookup-table-name</span><span class="t-op">&gt;</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">lookup-field</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">event-field</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">)</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-kw">OUTPUT</span> <span class="t-pipe">|</span> <span class="t-field">OUTPUTNEW</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">lookup-destfield</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">event-destfield</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">)</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local</code></td>
+<td><code>false</code></td>
+<td><code>true</code> forces the lookup to run on the search head only</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><code>false</code></td>
+<td>For real-time searches, refreshes the lookup when the table changes. Implies <code>local=true</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT</code></td>
+<td>none</td>
+<td>Output fields overwrite fields already on the event</td>
+</tr>
+<tr>
+<td><code>OUTPUTNEW</code></td>
+<td>none</td>
+<td>The lookup is not performed for events in which the output fields already exist</td>
+</tr>
+<tr>
+<td>Neither clause</td>
+<td>(this is the default)</td>
+<td>All fields in the lookup table that are not match fields become output fields</td>
+</tr>
+</tbody>
+</table></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">inputlookup</span> <span class="t-op">[</span><span class="t-opt">append</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">strict</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">start</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">max</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">filename</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">tablename</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">WHERE</span> <span class="t-op">&lt;</span><span class="t-field">search-query</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>append</code> defaults to <code>false</code>, <code>strict</code> to <code>false</code>, <code>start</code> to <code>0</code>, <code>max</code> to <code>1000000000</code>.</p>
+<p><code>outputlookup</code> writes results to a static lookup table or KV store collection. <code>append</code> defaults to <code>false</code>, which <strong>overwrites</strong> the target: fields that are not in the current search results are removed from the file. <code>override_if_empty</code> defaults to <code>true</code>, <code>createinapp</code> to <code>true</code>, <code>output_format</code> to <code>splunk_sv_csv</code>.</p>
+<p>Where lookups sit in the search-time sequence, in order:</p>
+<ol>
+<li>Field filters</li>
+<li>Inline field extractions</li>
+<li>Field extractions using field transforms</li>
+<li>Automatic key-value field extraction</li>
+<li>Field aliasing</li>
+<li>Calculated fields</li>
+<li><strong>Lookups</strong></li>
+<li>Event types</li>
+<li>Tags</li>
+</ol>
+<p>Each stage can reference fields produced by stages above it and cannot reference stages below it. Calculated fields cannot reference lookups. Lookups can reference field aliases and calculated fields, and cannot reference event types or tags. This ordering is genuinely on the blueprint under 5.0, so it is the one part of the lookup story that pays.</p>
+<h2 id="7.-reports-and-alerts-off-blueprint">7. Reports and alerts (OFF BLUEPRINT)<a class="anchor" href="#7.-reports-and-alerts-off-blueprint" aria-label="Link to this section">#</a></h2>
+<p>Not an SPLK-1002 objective. Summary only.</p>
+<p>A <strong>saved search</strong> is the underlying object. Saving a search as a <strong>report</strong> makes it re-runnable and shareable. Saving it as an <strong>alert</strong> attaches a schedule or a real-time search plus a trigger condition plus alert actions. Reports and alerts are both listed at <code>Settings &gt; Searches, reports, and alerts</code>, and reports also appear on the Reports tab of the Search app.</p>
+<p>Four ways to create a report: from Search via <code>Save As &gt; Report</code>, from Pivot, via <code>Settings &gt; Searches, reports, and alerts &gt; New Report</code>, and by converting an inline-search dashboard panel.</p>
+<p>Alert types: <strong>scheduled</strong> and <strong>real-time</strong>. Real-time alerts use either <strong>per-result</strong> triggering (the search runs continuously and every matching result triggers) or <strong>rolling time window</strong> triggering (trigger when N events occur within a window that rolls forward, for example three failed logins in ten minutes). Real-time with per-result triggering is the most resource-demanding option, and the docs caution against it in high availability deployments because results can be incomplete.</p>
+<p>Trigger conditions for scheduled alerts are built-in result and field count options, plus a custom condition written as a secondary search. The UI names them Number of Results, Number of Hosts, Number of Sources, and Custom. [verify] <code>Number of Hosts</code> and <code>Custom</code> are confirmed verbatim in the 10.4 docs; the other two option labels are not.</p>
+<p>Throttling, also called suppression, stops an alert firing repeatedly. Two shapes: throttle the whole alert for a time period, or throttle per result by naming one or more comma-separated fields, in which case events with the same value across all named fields are suppressed for the period. There is no documented default throttle value. Throttling is off unless configured.</p>
+<p>Cron: five fields separated by spaces.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Field</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Minute</td>
+<td>0-59</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hour</td>
+<td>0-23</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Day of the month</td>
+<td>1-31</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Month</td>
+<td>1-12</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Day of the week</td>
+<td>0-6, where 0 is Sunday</td>
+</tr>
+</tbody>
+</table></div>
+<p>Special characters: <code>*</code>, <code>,</code>, <code>-</code>, <code>/</code>. Examples: <code>5 9 * * *</code> runs at 09:05 daily. <code>*/20 * * * 1-5</code> runs every 20 minutes, Monday to Friday. <code>0 9 1-7 * *</code> runs at 09:00 on the first seven days of each month.</p>
+<p>Schedule dropdown options for a report: Run every hour, Run every day, Run every week, Run every month, Run on Cron Schedule. Schedule Window defaults to No Window and needs <code>edit_search_schedule_window</code>. Schedule Priority defaults to Default and needs <code>edit_search_schedule_priority</code>.</p>
+<p>Three acceleration mechanisms, which are three different things:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>What it accelerates</th>
+<th>Where the summary lives</th>
+<th>Requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Report acceleration</td>
+<td>One saved report</td>
+<td><code>.tsidx</code> summary files alongside the index buckets</td>
+<td>Search must use a transforming command; any commands before the first transforming command must be streamable; the search cannot use event sampling. A summary is built only when the hot bucket covered by the chosen Summary Range holds at least <strong>100,000</strong> events. <code>max_summary_ratio</code> default is 10% of the source bucket size.</td>
+</tr>
+<tr>
+<td>Data model acceleration</td>
+<td>Every search against an accelerated data model, and <code>tstats</code> against it</td>
+<td>High-performance analytics store, also <code>.tsidx</code>, alongside buckets</td>
+<td>Data model must be accelerated; only fields in the model are covered</td>
+</tr>
+<tr>
+<td>Summary indexing</td>
+<td>A scheduled search whose reduced output is written into a separate index</td>
+<td>A normal Splunk index that you nominate</td>
+<td>You build and maintain it. Supports event and metric data, where the other two are event-only</td>
+</tr>
+</tbody>
+</table></div>
+<p>Report and data model acceleration are automatic once turned on. Summary indexing is a pipeline you own. Reports cannot benefit from report acceleration when run in Verbose mode. Reports created from Pivot cannot be accelerated. Summary Range is chosen from a dropdown offering 1 Day, 7 Days, 1 Month, 3 Months, 1 Year and All Time. [verify] Only 7 Days and 1 Month appear verbatim in the 10.4 pages fetched.</p>
+<h2 id="8.-dashboards-off-blueprint">8. Dashboards (OFF BLUEPRINT)<a class="anchor" href="#8.-dashboards-off-blueprint" aria-label="Link to this section">#</a></h2>
+<p>Not an SPLK-1002 objective. Very tight summary.</p>
+<p>Splunk 10.x ships two dashboard frameworks side by side. <strong>Classic Splunk Dashboards (Simple XML)</strong> is the legacy framework, defined in XML, with a row and column layout, and full support for custom JavaScript and CSS. <strong>Splunk Dashboard Studio</strong> is the current framework, with absolute (free-form) and grid layouts, additional visualisation types (shapes, lines, text boxes, custom icons, parallel coordinates, Sankey, timelines), dashboard defaults, SVG choropleth maps, and per-visualisation PNG export. Studio does not support custom JavaScript or CSS, and does not support certain Simple XML token functions including <code>unset</code> and <code>condition</code>. A conversion path exists from Simple XML to Studio; components convert fully, partially, or not at all.</p>
+<p>Panels come from either an <strong>inline search</strong> (the SPL lives in the dashboard definition, so editing it edits only that panel) or a <strong>report</strong> (the panel references a saved report, so editing the report changes every panel that references it). Converting between the two is a supported operation in both frameworks.</p>
+<p><strong>Tokens</strong> are <code>$name$</code> placeholders that inputs set and searches consume, giving dropdowns, text boxes, time pickers and radio inputs that reparameterise panel searches. Token names and functions differ between Simple XML and Dashboard Studio. <strong>Drilldowns</strong> are the click-through behaviour of a panel: run a search, go to a dashboard, go to a URL, or set a token another panel reads.</p>
+<h2 id="9.-the-job-inspector">9. The Job Inspector<a class="anchor" href="#9.-the-job-inspector" aria-label="Link to this section">#</a></h2>
+<h3 id="what-a-search-job-is">What a search job is<a class="anchor" href="#what-a-search-job-is" aria-label="Link to this section">#</a></h3>
+<p>A job is the unit of work Splunk creates when a search runs. The docs are deliberately broad about what counts: &quot;Each time you run a search, create a pivot, open a report, or load a dashboard panel, the Splunk software creates a job in the system.&quot; Typing SPL into the search bar is only one of those four. A job kicked off by a report, by an alert's scheduled search, or by a six-panel dashboard is the same kind of object, and that dashboard creates six of them.</p>
+<p>Each job produces a <strong>search artifact</strong>, &quot;the results and associated metadata that are returned at the time that the ad hoc search or saved search was run&quot;. The artifact is what the Jobs page lists, what a shared job link resolves to, and what the Job Inspector reads. On the host, a running job appears as a child process of <code>splunkd</code> named <code>splunkd search</code>, so jobs are visible in <code>ps</code> output as well as in Splunk Web.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ad hoc job lifetime</td>
+<td>10 minutes</td>
+<td>After this the artifact expires and the results are gone</td>
+</tr>
+<tr>
+<td>Shared job lifetime</td>
+<td>7 days</td>
+<td>Sharing a job automatically extends its lifetime to 7 days</td>
+</tr>
+<tr>
+<td><code>srchJobsQuota</code></td>
+<td>3</td>
+<td>Concurrent historical searches a user holding the role may run</td>
+</tr>
+<tr>
+<td><code>srchDiskQuota</code></td>
+<td>100 MB</td>
+<td>Disk space the role's job artifacts may occupy</td>
+</tr>
+</tbody>
+</table></div>
+<p>Jobs are therefore subject to quotas, though a quota is a role setting that constrains jobs and never a definition of one. A capability is likewise a role authorisation with no connection to jobs.</p>
+<p>The Job menu on a completed search offers four actions: Edit Job Settings, Send Job to Background, Inspect Job, and Delete Job.</p>
+<h3 id="what-the-job-inspector-shows">What the Job Inspector shows<a class="anchor" href="#what-the-job-inspector-shows" aria-label="Link to this section">#</a></h3>
+<p>Open it after running a search: <code>Job &gt; Inspect Job</code>. It opens in a separate window and reports on the job whether or not it succeeded. You can inspect any job &quot;as long as the search job has not expired (which means that the search artifact still exists). The search does not need to be running to access the Search Job Inspector.&quot; Finished, failed and in-flight searches are all inspectable; an expired artifact is not.</p>
+<p>Its stated purpose is to &quot;take a closer look at what your search is doing and see where the Splunk software is spending most of its time&quot;, which covers both raw performance and the cost of your knowledge objects, since lookups, event types and tags each get their own line in the costs.</p>
+<p>Two halves:</p>
+<ul>
+<li><strong>Execution costs</strong>: the search processing components that ran, each with its duration in seconds, how many times it was invoked, and its input and output event counts. This is where you find out that <code>command.search.lookups</code> or a regex is eating the search.</li>
+<li><strong>Search job properties</strong>: the job metadata, including time bounds, state flags (<code>isDone</code>, <code>isFailed</code>, <code>isPaused</code>) and the count fields below.</li>
+</ul>
+<p>Above those two sits a header strip carrying the information message, the SID, a <code>search.log</code> link and a Job Details Dashboard link. The 10.4 docs name only the two sections as &quot;the key information that the Search Job Inspector displays&quot;; courseware routinely counts the header as a third component and says the Inspector contains three. Both describe one screen: two data sections under one header. Recognise either phrasing. The Job Details Dashboard behind that link is a separate condensed view with four sections of its own: Summary, Search Strings, Search Costs, and Indexers.</p>
+<p>The three counts, which are not synonyms:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scanCount</code></td>
+<td>The number of events that are scanned or read off disk</td>
+</tr>
+<tr>
+<td><code>eventCount</code></td>
+<td>The number of events returned by the search, that is the subset of scanned events that actually matches the search terms</td>
+</tr>
+<tr>
+<td><code>resultCount</code></td>
+<td>The total number of results returned by the search</td>
+</tr>
+</tbody>
+</table></div>
+<p>For <strong>dense</strong> searches <code>scanCount</code> and <code>resultCount</code> are similar. For <strong>sparse</strong> searches <code>scanCount</code> is much greater than the result count. Judge performance on <code>scanCount</code> per second rather than <code>resultCount</code> per second; the docs put a healthy rate at roughly 10,000 to 20,000 events scanned per second.</p>
+<p>A transforming search makes <code>resultCount</code> a row count rather than an event count, which is why <code>resultCount</code> of 8 alongside a <code>scanCount</code> of two million is completely normal for <code>stats count by status</code>.</p>
+<h2 id="10.-knowledge-object-management">10. Knowledge object management<a class="anchor" href="#10.-knowledge-object-management" aria-label="Link to this section">#</a></h2>
+<p>Every knowledge object has an owner, an app context, and a sharing level.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Sharing level</th>
+<th>UI label under &quot;Display For&quot;</th>
+<th>Who sees it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Private</td>
+<td><code>Owner</code></td>
+<td>The owner only</td>
+</tr>
+<tr>
+<td>App</td>
+<td><code>App</code></td>
+<td>Everyone with access to the app the object lives in</td>
+</tr>
+<tr>
+<td>Global</td>
+<td><code>All apps</code></td>
+<td>Everyone, in every app</td>
+</tr>
+</tbody>
+</table></div>
+<p>Permissions dialog: for each role, and for <code>Everyone</code>, you grant <code>Read</code>, <code>Write</code>, both, or neither. Read means view and use the object without being able to change its definition. Write means view, use and update it.</p>
+<p>Who can change permissions: by default the <code>admin</code> role can change permissions on any knowledge object, and the <code>power</code> role can change permissions only on objects it owns. Other roles gain the ability by being granted write permission on the app the object lives in.</p>
+<p>Click-path: <code>Settings</code>, then the settings page for the object type (for example <code>Settings &gt; Fields &gt; Field aliases</code>), find the object row, then <code>Edit &gt; Edit Permissions</code> or the <code>Permissions</code> link in the Sharing column. Set <code>Display For</code>, set the role matrix, <code>Save</code>.</p>
+<p><strong>Orphaned knowledge objects</strong> arise when the owner's account is deactivated or removed and their objects stay in the system with an owner that no longer resolves. The damage is scheduling: the scheduler cannot run a scheduled report on behalf of a nonexistent owner, so scheduled reports and alerts stop firing and dependent dashboards go stale. Splunk raises a notification linking to the Orphaned Scheduled Searches, Reports, and Alerts dashboard. Objects orphaned by the removal of a user in a third-party authentication system are not always detected.</p>
+<p>Fix: <code>Settings &gt; All configurations &gt; Reassign Knowledge Objects</code>. The page filters by owner status, object type, app and free text, works with search head clustering, and reassigns both owned and orphaned objects. It <strong>cannot</strong> reassign a knowledge object that is both orphaned and privately shared. For those, either temporarily recreate the invalid owner account, reassign, then deactivate it again, or move the stanza between configuration files by hand.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A field extraction &quot;does not work&quot; but the config looks right</td>
+<td>Check the search mode first. Fast mode returns only fields you explicitly named.</td>
+</tr>
+<tr>
+<td>You need every field visible for exploration</td>
+<td>Verbose. Accept the cost and accept losing report acceleration.</td>
+</tr>
+<tr>
+<td>You are building a report you intend to accelerate</td>
+<td>Smart or Fast. Never Verbose.</td>
+</tr>
+<tr>
+<td>Picker says one range, search bar says another</td>
+<td>The search bar wins.</td>
+</tr>
+<tr>
+<td>You need &quot;since midnight local&quot;</td>
+<td><code>@d</code>. Understand that this is local-calendar dependent and differs by user time zone.</td>
+</tr>
+<tr>
+<td>You need &quot;the last full hour&quot;</td>
+<td><code>-1h@h</code> to <code>@h</code>, not <code>-1h</code> to <code>now</code>.</td>
+</tr>
+<tr>
+<td>A command must come before another</td>
+<td>If the earlier one is transforming, the later one operates on rows, not events.</td>
+</tr>
+<tr>
+<td>You want a command to run on the indexers</td>
+<td>It and everything before it must be distributable streaming.</td>
+</tr>
+<tr>
+<td>Subsearch returns &quot;some&quot; of the expected values</td>
+<td>Assume you hit 10,000 results or 60 seconds. Verify before blaming the SPL.</td>
+</tr>
+<tr>
+<td>You must know how many events were read versus matched</td>
+<td><code>scanCount</code> is read off disk, <code>eventCount</code> is matched, <code>resultCount</code> is rows out.</td>
+</tr>
+<tr>
+<td>You need to know which knowledge object is making a search slow</td>
+<td>Job Inspector, Execution costs half. Search job properties tells you the shape of the search, not the cost per component.</td>
+</tr>
+<tr>
+<td><code>Inspect Job</code> on an old ad hoc search shows nothing</td>
+<td>The artifact expired. Ad hoc jobs live 10 minutes by default; sharing a job extends it to 7 days.</td>
+</tr>
+<tr>
+<td>A scheduled report stopped running after a leaver</td>
+<td>Orphaned object. Reassign Knowledge Objects.</td>
+</tr>
+<tr>
+<td>A lookup needs to reference an event type</td>
+<td>Impossible. Lookups run before event types in the search-time sequence.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-00-01"><span class="tid">T-00-01</span> Fast is the default search mode. Wrong. <strong>Smart</strong> is the default. Fast is one end of the spectrum, Verbose is the other, Smart sits in the middle and is what every new search and every saved report uses.</p>
+<p class="trap" id="T-00-02"><span class="tid">T-00-02</span> Smart mode always discovers all fields. Wrong. Smart mode discovers all fields only for <strong>non-transforming</strong> searches. The moment the pipeline contains a transforming command, Smart turns field discovery off and behaves like Fast. A question that shows <code>index=web | stats count by host</code> and asks what the fields sidebar contains in Smart mode is testing exactly this.</p>
+<p class="trap" id="T-00-03"><span class="tid">T-00-03</span> Verbose mode is just Smart mode plus more fields, so it is always safe. Wrong in one specific way: a report running in Verbose mode cannot use report acceleration. Switching an accelerated report to Verbose silently reverts it to full-scan speed.</p>
+<p class="trap" id="T-00-04"><span class="tid">T-00-04</span> Interesting Fields means fields present in at least 20% of the events in the index, or in the source type. Wrong. The threshold is 20% of <strong>the events returned by the search</strong>. Change the search and the list changes.</p>
+<p class="trap" id="T-00-05"><span class="tid">T-00-05</span> The Time Range Picker overrides <code>earliest</code> and <code>latest</code> in the search bar because the picker is the more &quot;explicit&quot; user action. Wrong, and backwards. The time range specified in the search bar or in a saved search <strong>overrides</strong> the picker.</p>
+<p class="trap" id="T-00-06"><span class="tid">T-00-06</span> Snapping with <code>@</code> rounds to the nearest boundary. Wrong. Snapping always rounds <strong>down</strong>, to the latest time that is not after the specified time. <code>-30m@h</code> at 14:50 gives 14:00, never 15:00.</p>
+<p class="trap" id="T-00-07"><span class="tid">T-00-07</span> In <code>-2h@h</code> the snap happens first and then the offset. Wrong. The offset on the left of <code>@</code> is applied before the snap on the right. A further offset written after the snap unit, as in <code>@d-2h</code>, is applied after the snap. Both forms exist and they mean different things.</p>
+<p class="trap" id="T-00-08"><span class="tid">T-00-08</span> A subsearch runs last, or runs as a stage in the outer pipeline. Wrong. The subsearch runs <strong>first</strong>, and its results are substituted into the outer search before the outer search executes.</p>
+<p class="trap" id="T-00-09"><span class="tid">T-00-09</span> Subsearch limits are 50,000 results and 30 seconds, or the limits do not apply to <code>inputlookup</code>. Wrong. The documented defaults are <strong>10,000 results</strong> and <strong>60 seconds</strong>, and exceeding either causes silent finalization, not an error.</p>
+<p class="trap" id="T-00-10"><span class="tid">T-00-10</span> The <code>format</code> command joins rows with AND and fields within a row with OR. Wrong, and backwards. The default is <strong>AND within a row, OR between rows</strong>, with the whole set wrapped in parentheses. The output lands in a single field named <code>search</code>.</p>
+<p class="trap" id="T-00-11"><span class="tid">T-00-11</span> <code>table</code> is a formatting command, not a transforming command. On the exam, <code>table</code> appears in the official <strong>transforming</strong> commands list alongside <code>stats</code>, <code>chart</code>, <code>timechart</code>, <code>top</code> and <code>rare</code>. Related trap: <code>append</code> appears on both the transforming list and the dataset processing list, and <code>history</code> appears on both the transforming and generating lists. The types are not mutually exclusive.</p>
+<p class="trap" id="T-00-12"><span class="tid">T-00-12</span> <code>sort</code> is a streaming command because it seems to process events one at a time. Wrong. <code>sort</code> is a <strong>dataset processing</strong> command: it needs the entire dataset before it can produce a first result. So are <code>eventstats</code>, <code>transaction</code>, <code>dedup</code>, <code>join</code> and <code>union</code>.</p>
+<p class="trap" id="T-00-13"><span class="tid">T-00-13</span> <code>scanCount</code> and <code>eventCount</code> are the same number. Wrong. <code>scanCount</code> is events read off disk. <code>eventCount</code> is the subset of those that matched the search terms. In a sparse search <code>scanCount</code> is far larger.</p>
+<p class="trap" id="T-00-14"><span class="tid">T-00-14</span> Setting a knowledge object to App sharing makes it visible in every app. Wrong. App sharing exposes it to users of the <strong>one app it lives in</strong>. Visibility everywhere requires <code>All apps</code>, which the docs call global.</p>
+<p class="trap" id="T-00-15"><span class="tid">T-00-15</span> Reassign Knowledge Objects can fix any orphaned object. Wrong. It cannot reassign an object that is both <strong>orphaned and privately shared</strong>. Those need the owner account temporarily recreated or a manual configuration file edit.</p>
+<p class="trap" id="T-00-16"><span class="tid">T-00-16</span> Report acceleration, data model acceleration and summary indexing are three names for the same feature. Wrong. Three separate mechanisms with three separate storage models. Report acceleration needs a transforming search with only streamable commands before the transform and at least 100,000 events in the covered hot bucket. Data model acceleration accelerates a model. Summary indexing is a scheduled search you build that writes into an index you nominate.</p>
+<p class="trap" id="T-00-17"><span class="tid">T-00-17</span> Calculated fields can call a lookup, since both happen at search time. Wrong. The search-time sequence puts calculated fields at step 6 and lookups at step 7. Calculated fields cannot reference lookups, event types or tags. Lookups can reference calculated fields.</p>
+<p class="trap" id="T-00-18"><span class="tid">T-00-18</span> <code>_time</code> is stored in the indexer's local time zone. Wrong. <code>_time</code> is stored as UNIX epoch seconds, an absolute value, and rendered in the viewing user's time zone. Two users in different zones searching the same absolute range see the same events with different displayed timestamps.</p>
+<p class="trap" id="T-00-19"><span class="tid">T-00-19</span> A job only exists when a user types SPL into the search bar, so dashboards and reports have nothing to inspect. Wrong. Running a search, creating a pivot, opening a report and loading a dashboard panel each create a job, which is why a six-panel dashboard creates six of them and why every one of them shows up on the host as a <code>splunkd search</code> child process.</p>
+<p class="trap" id="T-00-20"><span class="tid">T-00-20</span> The Search Job Inspector only works on a search that is still running, so you have to catch a slow search in the act. Wrong. Any job whose artifact has not expired can be inspected, running or not, succeeded or failed. What defeats you is expiry: an ad hoc job lives 10 minutes by default, and sharing it extends the lifetime to 7 days.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.</p>
+<p><strong>Part 1, search modes and the sidebar (5 minutes).</strong></p>
+<p>Set the time range picker to <code>All time</code>, set the mode selector to <code>Verbose</code>, and run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span></code></pre></div>
+<p>Note how many entries are under Interesting Fields. Switch the mode selector to <code>Fast</code> and re-run the same search. Count again. Now run this in Fast mode:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-field">action</span><span class="t-op">,</span> <span class="t-field">productId</span></code></pre></div>
+<p><code>action</code> and <code>productId</code> now appear because you named them explicitly. Nothing about the extraction changed; the mode did.</p>
+<p><strong>Part 2, the Smart mode switch (3 minutes).</strong></p>
+<p>Set the mode to <code>Smart</code>. Run each of these and watch which tab is selected by default and what the sidebar holds:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">vendor_sales</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">price</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-field">revenue</span> <span class="t-kw">by</span> <span class="t-field">product_name</span></code></pre></div>
+<p>The first lands on Events with a full sidebar (Verbose behaviour). The second lands on Statistics with field discovery off (Fast behaviour).</p>
+<p><strong>Part 3, time modifiers versus the picker (3 minutes).</strong></p>
+<p>Set the picker to <code>Last 15 minutes</code>, then run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-time">-30d@d</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-func">now</span></code></pre></div>
+<p>You get 30 days of data despite the picker. The search bar wins. Now compare the two snap forms:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">offset_then_snap</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-func">relative_time</span><span class="t-op">(</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;-2h@h&quot;</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;%F %T&quot;</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-opt">snap_then_offset</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-func">relative_time</span><span class="t-op">(</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;@d-2h&quot;</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;%F %T&quot;</span><span class="t-op">)</span></code></pre></div>
+<p><strong>Part 4, Job Inspector (2 minutes).</strong></p>
+<p>Run a deliberately sparse search over all time and inspect it:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">503</span></code></pre></div>
+<p>Open <code>Job &gt; Inspect Job</code>. Record <code>scanCount</code>, <code>eventCount</code> and <code>resultCount</code> from Search job properties. Then run a dense equivalent and compare:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span></code></pre></div>
+<p><strong>Part 5, permissions (2 minutes).</strong></p>
+<p>Go to <code>Settings &gt; Searches, reports, and alerts</code>. Pick any object you own, choose <code>Edit &gt; Edit Permissions</code>, and read the <code>Display For</code> row. Confirm the three values are <code>Owner</code>, <code>App</code> and <code>All apps</code>. Do not save a change.</p>
+<p><strong>Verification search.</strong> This proves the mode and time-modifier behaviour without depending on a screenshot:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">main</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined_wcookie</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-time">-30d@d</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-time">@d</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">as</span> <span class="t-field">events</span><span class="t-op">,</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-field">unique_clients</span><span class="t-op">,</span> <span class="t-func">min</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-func">first</span><span class="t-op">,</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-func">last</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">first</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-func">first</span><span class="t-op">,</span> <span class="t-str">&quot;%F %T&quot;</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-opt">last</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-func">last</span><span class="t-op">,</span> <span class="t-str">&quot;%F %T&quot;</span><span class="t-op">)</span></code></pre></div>
+<p>If <code>last</code> is midnight of today rather than the current clock time, <code>@d</code> snapped down correctly and <code>latest</code> behaved exclusively.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>Q1.</strong> A user reports that a search-time field extraction they configured is not appearing in the fields sidebar. The search is <code>index=web sourcetype=apache</code> and the mode selector shows Fast. What is the most likely explanation?</p>
+<ul>
+<li>A. The extraction is written against the wrong source type.</li>
+<li>B. Fast mode disables field discovery, so only default fields, index-time fields, and search-time fields named in the search are returned.</li>
+<li>C. The field appears in fewer than 20% of events, so it is filtered out of the sidebar entirely.</li>
+<li>D. Search-time extractions never appear in the sidebar, only index-time fields do.</li>
+</ul>
+<p><strong>Q2.</strong> In Smart mode, which search will have field discovery turned OFF?</p>
+<ul>
+<li>A. <code>index=main sourcetype=access_combined_wcookie action=purchase</code></li>
+<li>B. <code>index=main sourcetype=access_combined_wcookie | fields clientip</code></li>
+<li>C. <code>index=main sourcetype=access_combined_wcookie | stats count by status</code></li>
+<li>D. <code>index=main sourcetype=access_combined_wcookie | eval is_error = if(status &gt;= 500, 1, 0)</code></li>
+</ul>
+<p><strong>Q3.</strong> The Time Range Picker is set to Last 7 days. The search bar contains <code>index=main earliest=-1h latest=now</code>. What range is searched?</p>
+<ul>
+<li>A. Last 7 days, because the picker is evaluated after the search string.</li>
+<li>B. The last hour, because a time range in the search bar overrides the picker.</li>
+<li>C. The intersection is empty, so the search returns an error.</li>
+<li>D. Last 7 days for the base search and the last hour for any subsearch.</li>
+</ul>
+<p><strong>Q4.</strong> At 14:50 on a Wednesday, what instant does <code>-1d@w1</code> resolve to?</p>
+<ul>
+<li>A. 14:50 on Tuesday.</li>
+<li>B. 00:00 on Tuesday.</li>
+<li>C. 00:00 on the Monday of the current week.</li>
+<li>D. 00:00 on the Monday of the previous week.</li>
+</ul>
+<p><strong>Q5.</strong> A subsearch is expected to produce about 35,000 distinct <code>clientip</code> values, and the outer search returns fewer events than expected. Nothing in the UI shows an error. What is the most likely cause?</p>
+<ul>
+<li>A. The subsearch ran after the outer search and its results arrived too late.</li>
+<li>B. The subsearch hit the default <code>maxout</code> of 10,000 results and was silently truncated.</li>
+<li>C. The <code>format</code> command joined the values with AND instead of OR.</li>
+<li>D. The subsearch inherited the outer search's time range and found nothing.</li>
+</ul>
+<p><strong>Q6.</strong> Which of these is a dataset processing command rather than a streaming command?</p>
+<ul>
+<li>A. <code>eval</code></li>
+<li>B. <code>rename</code></li>
+<li>C. <code>sort</code></li>
+<li>D. <code>where</code></li>
+</ul>
+<p><strong>Q7.</strong> In the Job Inspector, a search shows <code>scanCount</code> of 2,400,000 and <code>resultCount</code> of 6. What does this tell you?</p>
+<ul>
+<li>A. The search failed and returned partial results.</li>
+<li>B. It is a sparse search, or a transforming search, or both. <code>scanCount</code> counts events read off disk while <code>resultCount</code> counts rows returned.</li>
+<li>C. <code>resultCount</code> should always equal <code>scanCount</code>, so the index is corrupt.</li>
+<li>D. 2,399,994 events were dropped by a <code>dedup</code>.</li>
+</ul>
+<p><strong>Q8.</strong> An analyst leaves the company and their account is deactivated. Their private scheduled report stops running. Which statement is correct?</p>
+<ul>
+<li>A. The report is automatically reassigned to the <code>admin</code> user after 24 hours.</li>
+<li>B. <code>Settings &gt; All configurations &gt; Reassign Knowledge Objects</code> will fix it directly, because that page handles all orphaned objects.</li>
+<li>C. The object is orphaned and privately shared, so the Reassign page cannot fix it. You must temporarily recreate the owner account or edit the configuration file.</li>
+<li>D. Private objects cannot be scheduled, so the premise is impossible.</li>
+</ul>
+<p><strong>Q9.</strong> A dashboard panel running <code>index=main sourcetype=access_combined_wcookie | lookup product_lookup productId OUTPUT product_name | stats count by product_name</code> takes 40 seconds. You need to know whether the lookup or the base retrieval is responsible. Where do you look?</p>
+<ul>
+<li>A. Search job properties, comparing <code>scanCount</code> with <code>resultCount</code>.</li>
+<li>B. Execution costs, reading the duration and invocation count of each processing component, including <code>command.search.lookups</code>.</li>
+<li>C. The fields sidebar, which lists which knowledge object contributed each field.</li>
+<li>D. Nowhere. Loading a dashboard panel does not create a job, so there is no artifact to inspect.</li>
+</ul>
+<p><strong>Q10.</strong> A user runs an ad hoc search, reads the results, and leaves the tab open without saving or sharing anything. Twenty-five minutes later they choose <code>Job &gt; Inspect Job</code> and are told the job no longer exists. Which statement explains this?</p>
+<ul>
+<li>A. The Search Job Inspector only works while a search is running, so it had to be inspected during execution.</li>
+<li>B. The default lifetime of an ad hoc job is 10 minutes, so the artifact expired. Sharing the job would have extended its lifetime to 7 days.</li>
+<li>C. <code>srchDiskQuota</code> defaults to 100 MB, and once a role passes it Splunk deletes that role's oldest artifacts first.</li>
+<li>D. Job artifacts survive until the search head restarts, so the instance must have restarted.</li>
+</ul>
+<details><summary>Answers</summary>
+<p><strong>Q1: B.</strong> Fast mode turns field discovery off and returns only default fields (<code>host</code>, <code>source</code>, <code>sourcetype</code>), index-time fields, and search-time fields explicitly named in the search. The extraction is fine; the mode is suppressing it. A is wrong because a wrong source type would also break the extraction in Verbose mode, and the question gives no evidence of that. The mode is the differentiating detail. C is wrong because the 20% rule governs whether a field lands in <strong>Interesting Fields</strong>, not whether it exists in the sidebar at all. A sub-20% field still appears under All Fields. C is a real concept applied to the wrong question. D is wrong: search-time extracted fields are exactly what the sidebar surfaces in Verbose and Smart-on-event-search modes.</p>
+<p><strong>Q2: C.</strong> Smart mode turns field discovery off and behaves like Fast whenever the search contains a transforming command. <code>stats</code> is transforming. A is a plain event search with no pipeline, so Smart behaves like Verbose with discovery on. B uses <code>fields</code>, which is distributable streaming, not transforming. Discovery stays on. D uses <code>eval</code>, which is distributable streaming. Discovery stays on. B and D are the good distractors here because both add a pipe, and the presence of a pipe is not what matters.</p>
+<p><strong>Q3: B.</strong> A time range specified in the Search bar or in a saved search overrides the range selected in the Time Range Picker. A inverts the documented precedence. C invents an intersection semantic that does not exist; there is no error, the search bar simply wins. D is a distorted version of a real fact: time modifiers in the base search genuinely do not apply to subsearches. But that does not make the picker govern the base search, and the question has no subsearch.</p>
+<p><strong>Q4: C.</strong> Two steps, in order. The offset on the left of <code>@</code> is applied first: <code>-1d</code> from Wednesday 14:50 gives Tuesday 14:50. Then <code>@w1</code> snaps to Monday, and snapping always rounds <strong>down</strong> to the latest matching time that is not after the current value. The most recent Monday at or before Tuesday is the Monday of the current week, at 00:00. A ignores the snap entirely and keeps the 14:50 clock time. Snapping always zeroes the smaller units. B applies <code>@d</code> semantics instead of <code>@w1</code>, snapping to the start of the offset day rather than back to Monday. D rounds the wrong way, treating the snap as if it had to move to a Monday strictly before the current week. Snapping never skips past the nearest qualifying boundary below.</p>
+<p><strong>Q5: B.</strong> The default <code>maxout</code> for a subsearch is 10,000 results. Exceeding it truncates the results with no error, so the outer search runs against an incomplete value list and legitimately returns fewer events. The parallel trap is <code>maxtime</code> at 60 seconds, which finalizes the subsearch the same way. A reverses the execution order: the subsearch runs first. C describes a real <code>format</code> behaviour but backwards. The default is AND within a row and OR between rows, which is what you want for a one-field subsearch anyway. D is wrong: time modifiers do not cross the subsearch boundary in either direction.</p>
+<p><strong>Q6: C.</strong> <code>sort</code> is a dataset processing command. It cannot emit a first result until it has seen the entire dataset. A, B and D are all distributable streaming commands named as such in the search manual: one event in, one or zero events out, and they can run on the indexers. This question is testing whether &quot;processes each event&quot; is being confused with &quot;can emit results before seeing them all&quot;.</p>
+<p><strong>Q7: B.</strong> <code>scanCount</code> is the number of events scanned or read off disk. <code>resultCount</code> is the total number of results returned. For a sparse search <code>scanCount</code> is much greater than the result count, and for a transforming search <code>resultCount</code> is a row count. Six rows out of 2.4 million scanned events is normal for something like <code>stats count by status</code>. A is wrong: nothing about that ratio indicates failure. Job state is reported separately by <code>isFailed</code>. C states the dense-search relationship (<code>scanCount</code> roughly equals <code>resultCount</code>) as if it were universal. It only holds for dense, non-transforming searches. D confuses <code>dedup</code> filtering with the scan-versus-result distinction. <code>dedup</code> would reduce <code>eventCount</code>, and the question gives no <code>dedup</code>.</p>
+<p><strong>Q8: C.</strong> When the owner's account is deactivated the object becomes orphaned. The Reassign Knowledge Objects page handles owned and orphaned objects, but it explicitly cannot reassign an object that is both orphaned and privately shared. The documented workarounds are to temporarily recreate the invalid owner, reassign, then deactivate the account again, or to move the stanza between configuration files. A invents an automatic reassignment that does not exist. B is the trap: the Reassign page is the right tool for orphaned objects in general, and it is only the private sharing that defeats it. D is false. Private objects can be scheduled; that is precisely what creates the orphaned scheduled search problem and the Orphaned Scheduled Searches, Reports, and Alerts dashboard.</p>
+<p><strong>Q9: B.</strong> Execution costs is the half of the Job Inspector that breaks the job down by search processing component, giving each one a duration, an invocation count and input and output event counts, which is exactly how you separate <code>command.search.lookups</code> from the retrieval components. A names a real pair of properties, but <code>scanCount</code> against <code>resultCount</code> tells you the shape of the search, dense or sparse or transforming, not where the time went. C is not a diagnostic surface at all; the sidebar groups fields by Selected, Interesting and All, and says nothing about cost or origin. D is false on its premise: loading a dashboard panel creates a job just as running a search does, and that job can be inspected like any other.</p>
+<p><strong>Q10: B.</strong> The default lifetime of an ad hoc job is 10 minutes, after which the search artifact expires and there is nothing left to inspect. Sharing the job extends that lifetime to 7 days automatically. A states the opposite of the rule: the docs say the search does not need to be running for the Inspector to work, only that the artifact still exists. C quotes a real setting with the right default, 100 MB of job artifacts per role, but a disk quota is not what removes one small idle job after ten minutes, and the eviction order it describes is invented. D invents a persistence model; artifacts expire on their own lifetime regardless of process uptime.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<p>Read in this order.</p>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/use-the-search-app/search-modes" target="_blank" rel="noopener">Search modes</a> - the Smart mode transforming versus non-transforming switch, and the Verbose plus report acceleration warning. 10 minutes, and re-read it.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/quick-reference/command-types" target="_blank" rel="noopener">Command types</a> - the six types and the verbatim command lists. Skim the definitions, then read the lists carefully looking for commands on two lists. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/search-overview/types-of-commands" target="_blank" rel="noopener">Types of commands</a> - the same taxonomy from the search manual side, with the streaming versus non-streaming reasoning. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/time-format-variables-and-modifiers/time-modifiers" target="_blank" rel="noopener">Time modifiers</a> - the unit alias table, snap-to, <code>@w0</code> to <code>@w7</code>, and every example. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/specify-time-ranges/specify-time-modifiers-in-your-search" target="_blank" rel="noopener">Specify time modifiers in your search</a> - precedence over the Time Range Picker and the subsearch boundary rule. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/specify-time-ranges/about-searching-with-time" target="_blank" rel="noopener">About searching with time</a> - <code>_time</code> as UNIX epoch and why calendar-boundary ranges differ per time zone. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/about-subsearches" target="_blank" rel="noopener">About subsearches</a> - execution order, <code>maxout</code> 10,000, <code>maxtime</code> 60 seconds, the <code>format</code> recommendation. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/format" target="_blank" rel="noopener">format</a> - the default delimiters and the single <code>search</code> field it produces. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-tutorial/10.4/part-4-searching-the-tutorial-data/use-fields-to-search" target="_blank" rel="noopener">Use fields to search</a> - Selected, Interesting and All Fields, and the 20% rule. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/manage-jobs/view-search-job-properties" target="_blank" rel="noopener">View search job properties</a> - execution costs, search job properties, the not-expired access rule, <code>scanCount</code>, <code>eventCount</code>, <code>resultCount</code>, dense versus sparse, and the four sections of the Job Details dashboard. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/manage-jobs/about-jobs-and-job-management" target="_blank" rel="noopener">About jobs and job management</a> - what creates a job, the search artifact, the 10 minute and 7 day lifetimes, the Job menu, <code>srchJobsQuota</code> and <code>srchDiskQuota</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations</a> - the nine-stage order. This one is genuinely on the blueprint under 5.0. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions" target="_blank" rel="noopener">Manage knowledge object permissions</a> - Owner, App, All apps, and who may change what. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-orphaned-knowledge-objects" target="_blank" rel="noopener">Manage orphaned knowledge objects</a> - how they arise and the Reassign page limitation. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-lookups-in-splunk-web/about-lookups" target="_blank" rel="noopener">About lookups</a> - off blueprint. Skim the four types and the file versus definition versus automatic distinction only. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/alert-and-respond/alerting-manual/10.4/choose-an-alert-type/alert-type-and-triggering-scenarios" target="_blank" rel="noopener">Alert type and triggering scenarios</a> - off blueprint. Skim scheduled versus real-time and the two real-time triggering shapes. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-data-summaries-to-accelerate-searches/overview-of-summary-based-search-acceleration" target="_blank" rel="noopener">Overview of summary-based search acceleration</a> - off blueprint. Read only the comparison of the three mechanisms. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/dashboard-studio/10.4/introduction-to-splunk-dashboard-studio/what-is-splunk-dashboard-studio" target="_blank" rel="noopener">What is Splunk Dashboard Studio?</a> - off blueprint. Skim for the Studio versus Simple XML differences only. 5 minutes.</li>
+</ol>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-next" href="01-transforming-commands.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Transforming commands</span></a></nav>
+      <p class="doc-foot">Built from <code>topics/00-foundations-refresher.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#blueprint-mapping"><span class="toc-text">Blueprint mapping</span><span class="mins">3 min</span></a>
+<a class="h2" href="#1.-search-modes"><span class="toc-text">1. Search modes</span><span class="mins">2 min</span></a>
+<a class="h2" href="#2.-the-fields-sidebar"><span class="toc-text">2. The fields sidebar</span><span class="mins">1 min</span></a>
+<a class="h2" href="#3.-time"><span class="toc-text">3. Time</span><span class="mins">3 min</span></a>
+<a class="h3" href="#time-range-picker"><span class="toc-text">Time range picker</span></a>
+<a class="h3" href="#inline-modifiers"><span class="toc-text">Inline modifiers</span></a>
+<a class="h3" href="#relative-time-syntax"><span class="toc-text">Relative time syntax</span></a>
+<a class="h3" href="#now-and-relative-time"><span class="toc-text">now() and relative_time()</span></a>
+<a class="h2" href="#4.-command-types"><span class="toc-text">4. Command types</span><span class="mins">2 min</span></a>
+<a class="h2" href="#5.-subsearches"><span class="toc-text">5. Subsearches</span><span class="mins">2 min</span></a>
+<a class="h3" href="#the-format-command"><span class="toc-text">The format command</span></a>
+<a class="h2" href="#6.-lookups-off-blueprint"><span class="toc-text">6. Lookups (OFF BLUEPRINT)</span><span class="mins">3 min</span></a>
+<a class="h2" href="#7.-reports-and-alerts-off-blueprint"><span class="toc-text">7. Reports and alerts (OFF BLUEPRINT)</span><span class="mins">4 min</span></a>
+<a class="h2" href="#8.-dashboards-off-blueprint"><span class="toc-text">8. Dashboards (OFF BLUEPRINT)</span><span class="mins">1 min</span></a>
+<a class="h2" href="#9.-the-job-inspector"><span class="toc-text">9. The Job Inspector</span><span class="mins">4 min</span></a>
+<a class="h3" href="#what-a-search-job-is"><span class="toc-text">What a search job is</span></a>
+<a class="h3" href="#what-the-job-inspector-shows"><span class="toc-text">What the Job Inspector shows</span></a>
+<a class="h2" href="#10.-knowledge-object-management"><span class="toc-text">10. Knowledge object management</span><span class="mins">2 min</span></a>
+<a class="h2" href="#decision-rules"><span class="toc-text">Decision rules</span><span class="mins">2 min</span></a>
+<a class="h2" href="#traps"><span class="toc-text">Traps</span><span class="mins">5 min</span></a>
+<a class="h2" href="#lab"><span class="toc-text">Lab</span><span class="mins">2 min</span></a>
+<a class="h2" href="#self-check"><span class="toc-text">Self-check</span><span class="mins">10 min</span></a>
+<a class="h2" href="#docs"><span class="toc-text">Docs</span><span class="mins">2 min</span></a>
+    </nav>
+    <div class="onpage-meta">
+      
+      <span class="onpage-time">48 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+<script src="../mermaid-init.js"></script>
+</body>
+</html>

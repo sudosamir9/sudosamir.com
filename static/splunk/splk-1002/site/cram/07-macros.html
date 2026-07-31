@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.0 Creating and Using Macros (10%) - cram | SPLK-1002</title>
+<script>(function(){var s=localStorage.getItem("splk-theme");
+if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+document.documentElement.dataset.theme=s;})();</script>
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body>
+<a class="skip" href="#doc">Skip to content</a>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<div class="shell">
+  <aside class="rail" aria-label="Study guide contents">
+    <div class="rail-head">
+      <span class="rail-eyebrow">SPLK-1002</span>
+      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
+    </div>
+    <div class="search">
+      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
+             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
+      <kbd class="search-key">/</kbd>
+      <div class="search-results" id="results" role="listbox" hidden></div>
+    </div>
+    <nav class="tree">
+<details class="tree-group" open>
+<summary>Start here</summary>
+<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
+<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
+<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
+<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+</details>
+<details class="tree-group" open>
+<summary>Sections</summary>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item current" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+</details>
+<details class="tree-group">
+<summary>Reference</summary>
+<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
+<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
+<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
+<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
+<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
+<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
+<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
+<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
+<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
+<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
+<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+</details>
+<details class="tree-group">
+<summary>Practice and sources</summary>
+<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
+<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
+<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
+<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
+<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
+<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+</details>
+    </nav>
+    <div class="rail-foot">
+      <a href="../../cram/07-macros.md">Markdown source</a>
+      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+    </div>
+  </aside>
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Macros</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/07-macros.html">Study</a><a class="on" href="07-macros.html">Cram</a></div>
+        <span class="ver">Splunk Enterprise 10.4</span>
+      </div>
+<h1 id="7.0-creating-and-using-macros-10---cram">7.0 Creating and Using Macros- cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-macro">`mymacro`</span>
+<span class="t-macro">`argmacro(120,300)`</span>
+<span class="t-macro">`argmacro(lo=120,hi=300)`</span>
+<span class="t-macro">`argmacro(hi=300,lo=120)`</span>
+<span class="t-pipe">|</span> <span class="t-macro">`mygeneratingmacro`</span>
+<span class="t-macro">`mymacro(&quot;He said \&quot;hello!\&quot;&quot;)`</span></code></pre></div>
+<pre class="plain lang-ini"><code>[bc_status_band(2)]
+args = lo, hi
+definition = index=main sourcetype=access_combined_wcookie status&gt;=$lo$ status&lt;$hi$
+validation = isnum($lo$) AND isnum($hi$)
+errormsg = Both lo and hi must be numeric HTTP status codes.
+iseval = false
+description = Web access events in a half-open status range.</code></pre>
+<ul>
+<li>UI path: Settings, Advanced search, Search macros, New.</li>
+<li>Name carries the argument COUNT: two arguments means <code>mymacro(2)</code>.</li>
+<li>Arguments field: bare names, comma-delimited, in order, no dollar signs.</li>
+<li>Definition: tokens as <code>$argname$</code>. Literal dollar sign: <code>$$</code> [verify].</li>
+<li>Preview expansion: Control-Shift-E (Command-Shift-E on macOS).</li>
+</ul>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Invocation delimiter</td>
+<td>Backtick, both sides</td>
+</tr>
+<tr>
+<td>Stanza name form</td>
+<td><code>&lt;name&gt;</code> or <code>&lt;name&gt;(&lt;numargs&gt;)</code></td>
+</tr>
+<tr>
+<td>args</td>
+<td>Default none. Alphanumerics, underscores, hyphens. No repeats. Ignored if stanza takes no args</td>
+</tr>
+<tr>
+<td>definition</td>
+<td>Default none, required. <code>$arg$</code> replaced globally, even inside quotation marks</td>
+</tr>
+<tr>
+<td>validation</td>
+<td>Default none. Boolean: true passes, false or NULL fails. Non-Boolean: NULL passes, returned string fails and is the message</td>
+</tr>
+<tr>
+<td>errormsg</td>
+<td>Default none. Used only by the Boolean form of validation</td>
+</tr>
+<tr>
+<td>iseval</td>
+<td>Default false. true means definition is an eval expression returning the expansion string</td>
+</tr>
+<tr>
+<td>description</td>
+<td>Default none, optional</td>
+</tr>
+<tr>
+<td>Destination app</td>
+<td>Default: current app context</td>
+</tr>
+<tr>
+<td>Nesting</td>
+<td>Indefinite; cycles detected and error</td>
+</tr>
+<tr>
+<td>limits.conf [search] max_macro_depth</td>
+<td>Default 100, minimum 1</td>
+</tr>
+<tr>
+<td>Macro reference inside quoted value</td>
+<td>Not expanded</td>
+</tr>
+<tr>
+<td>Hyphen in macro name</td>
+<td>Unsupported by the Search app</td>
+</tr>
+<tr>
+<td>macros.conf restart</td>
+<td>Not required; search-time file, use <code>/en-US/debug/refresh</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>If</th>
+<th>Then</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chunk never varies</td>
+<td>Zero-argument macro</td>
+</tr>
+<tr>
+<td>Chunk varies by a value</td>
+<td>Arguments, count in the name, <code>$name$</code> in definition</td>
+</tr>
+<tr>
+<td>Chunk varies by a whole option</td>
+<td>Pass the option text as the argument value, e.g. <code>span=1h</code></td>
+</tr>
+<tr>
+<td>Expansion text chosen conditionally</td>
+<td>Use eval-based definition, return a string</td>
+</tr>
+<tr>
+<td>One bad-input condition</td>
+<td>Boolean validation plus Validation error message</td>
+</tr>
+<tr>
+<td>Several bad-input conditions</td>
+<td><code>validate(cond1,&quot;msg1&quot;,cond2,&quot;msg2&quot;)</code>, non-Boolean, errormsg unused</td>
+</tr>
+<tr>
+<td>Definition starts with a generating command</td>
+<td>Pipe goes before the backtick, not in the definition</td>
+</tr>
+<tr>
+<td>Needed outside the owning app</td>
+<td>Share All apps; admin or power role required</td>
+</tr>
+<tr>
+<td>Unsure what ran</td>
+<td>Control-Shift-E</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Backticks invoke a macro. Single or double quotation marks do not.</li>
+<li><code>mymacro(2)</code> is stored because it takes two arguments; it is invoked as <code>`mymacro(foo,bar)`</code>.</li>
+<li>Arguments field has no dollar signs; Definition has <code>$arg$</code> tokens.</li>
+<li>Validation failure is an error before dispatch, not zero results.</li>
+<li>Macro expansion is textual and precedes parsing, so macros never appear in the search-time operations sequence (field filters, field extractions, field aliases, calculated fields, lookups, event types, tags).</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-07-01 backticks not quotes, T-07-02 number is the argument count, T-07-03 Arguments bare vs Definition tokens, T-07-04 references inert in quotes but tokens substituted in quotes, T-07-05 Boolean vs non-Boolean validation asymmetry, T-07-06 validation failure is an error, T-07-07 no restart for macros.conf (Apress wrong), T-07-08 macros absent from the search-time operations sequence, T-07-09 leading pipe outside the definition, T-07-10 hyphens legal in arg names, hostile in macro names, T-07-11 overloading by argument count creates distinct macros, T-07-12 named arguments are order-independent, T-07-13 iseval returns the expansion string, T-07-14 app scope decides whether the macro resolves.</p>
+
+<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="06-tags-and-event-types.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Tags and event types</span></a><a class="pn pn-next" href="08-workflow-actions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Workflow actions</span></a></nav>
+      <p class="doc-foot">Built from <code>cram/07-macros.md</code>. The markdown is the source
+      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+    </article>
+  </main>
+  <aside class="rail-right" aria-label="On this page">
+    <p class="onpage-title">On this page</p>
+    <nav class="toc">
+<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
+<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
+<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
+<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
+<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
+    </nav>
+    <div class="onpage-meta">
+      <span class="onpage-weight">10% of the exam</span>
+      <span class="onpage-time">3 min read</span>
+    </div>
+  </aside>
+</div>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+
+</body>
+</html>
