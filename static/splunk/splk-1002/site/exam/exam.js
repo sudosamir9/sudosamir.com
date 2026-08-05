@@ -578,7 +578,7 @@
         var st = state(); var pr = prog(st, q.id);
         pr.seen++; if (ok) pr.right++; else pr.wrong++;
         save(st);
-        if (window.SPLK) { SPLK.recordAnswer(q.grp, ok); drawSpine(); }
+        if (window.SPLK) SPLK.recordAnswer(q.grp, ok);
         p.done++; if (ok) p.right++;
         renderPractice();
       };
