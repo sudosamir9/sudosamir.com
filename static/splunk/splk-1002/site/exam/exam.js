@@ -70,6 +70,26 @@
     u = String(u == null ? "" : u);
     return /^(https?:\/\/|\.{0,2}\/|[\w.-]+\.html|#)/i.test(u) ? esc(u) : "";
   }
+  var WORD_N = { one: 1, two: 2, three: 3, four: 4, five: 5 };
+
+  /* How many options the reader must pick.
+     "Choose two." means exactly two. "Choose all that apply" means as many as they
+     think are right, which is the honest form: telling them the count would give the
+     answer away on a question where all four options are correct. */
+  function required(q) {
+    var m = /choose\s+(one|two|three|four|five|\d+)\b/i.exec(q.stem);
+    if (m) {
+      var w = m[1].toLowerCase();
+      return WORD_N[w] || parseInt(w, 10) || null;
+    }
+    return null;                       // open multi-select
+  }
+  function canSubmit(q, chosen) {
+    if (q.type !== "multi") return chosen.length === 1;
+    var need = required(q);
+    return need ? chosen.length === need : chosen.length >= 1;
+  }
+
   function same(a, b) {
     if (a.length !== b.length) return false;
     var x = a.slice().sort().join(""), y = b.slice().sort().join("");
@@ -149,6 +169,20 @@
         var p = st.progress[q.id]; return p && p.wrong > 0;
       }).map(function (q) { return q.id; });
     }
+    if (spec.kind === "weak") {
+      /* The three sections with the worst accuracy, ordered by how much of the exam
+         they are worth, so time goes where it changes the score most. */
+      var sw = window.SPLK ? SPLK.state() : { sec: {} };
+      var ranked = BANK.sections.map(function (sec) {
+        var b = sw.sec[sec.grp], n = b ? b.r + b.w : 0;
+        return { grp: sec.grp, weight: sec.weight, n: n, acc: n ? b.r / n : 0, seen: n > 0 };
+      }).filter(function (x) { return x.seen; })
+        .sort(function (a, b) { return (a.acc - b.acc) || (b.weight - a.weight); })
+        .slice(0, 3).map(function (x) { return x.grp; });
+      if (!ranked.length) return [];
+      return BANK.questions.filter(function (q) { return ranked.indexOf(q.grp) >= 0; })
+                           .map(function (q) { return q.id; });
+    }
     if (spec.kind === "unseen") {
       var su = state();
       return BANK.questions.filter(function (q) { return !su.progress[q.id]; }).map(function (q) { return q.id; });
@@ -176,7 +210,10 @@
     card.appendChild(stem);
 
     if (q.type === "multi") {
-      card.appendChild(el("p", "hint", "Select exactly " + q.answer.length + " answers."));
+      var need = required(q);
+      card.appendChild(el("p", "hint", need
+        ? "Select exactly " + need + "."
+        : "Select every option you think is correct."));
     }
 
     var list = el("div", "answers");
@@ -220,20 +257,35 @@
   /* The full teaching panel: what the answer is, why, which traps it bites, and why each
      other option fails. The doc links and the key-verdict note are this guide's own
      additions; they are the reason the bank was fact-checked in the first place. */
+  /* Where a topic anchor points, in words rather than a file path. */
+  function topicLabel(p) {
+    var path = p.split("#")[0].replace(/\.md$/, ""), anchor = (p.split("#")[1] || "");
+    var sec = null;
+    if (window.SPLK) {
+      SPLK.SECTIONS.forEach(function (x) { if (x.page === path) sec = x; });
+    }
+    var name = sec ? sec.id + " " + sec.short : path.split("/").pop().replace(/^\d+-/, "").replace(/-/g, " ");
+    if (!anchor) return name;
+    var part = anchor.replace(/-/g, " ");
+    part = part.charAt(0).toUpperCase() + part.slice(1);
+    return name + ", " + part;
+  }
+
+  /* The panel after submitting, in the order a reader actually uses it: what the answer
+     is, why, why each other option is not, then the traps and the source. */
   function reviewPanel(q, chosen) {
     var r = el("div", "review");
     var h = [];
 
     if (q.block === "unanswerable") {
       h.push('<div class="keywarn"><b>No offered option is correct.</b> ' + rich(q.note) +
-             ' This question is kept out of mock exams.</div>');
+             " This question is kept out of mock exams.</div>");
     } else if (q.verdict === "wrong") {
-      h.push('<div class="keywarn"><b>The course answer key is wrong here.</b> It keys ' +
-             esc((q.courseKey || []).join(", ") || "nothing") + '. The verified answer is ' +
-             esc(q.answer.join(", ")) + ', and you are scored against that.</div>');
+      h.push('<div class="keywarn"><b>The source answer key is wrong here.</b> The verified answer is ' +
+             esc(q.answer.join(", ")) + ", and you are scored against that.</div>");
     } else if (q.block === "disputed") {
-      h.push('<div class="keywarn"><b>Disputed.</b> The course and the 10.4 documentation ' +
-             'disagree and the docs do not settle it. Kept out of mock exams.</div>');
+      h.push('<div class="keywarn"><b>Disputed.</b> The documentation does not settle this one, ' +
+             "so it is kept out of mock exams.</div>");
     }
 
     h.push('<div class="rlabel b">Correct answer</div>');
@@ -242,6 +294,21 @@
     if (q.explanation) {
       h.push('<div class="rlabel b">Explanation</div>');
       h.push('<p class="expl">' + rich(q.explanation) + "</p>");
+    }
+
+    var wrongs = q.options.filter(function (o) { return !o.correct && o.why; });
+    if (wrongs.length) {
+      h.push('<div class="rlabel r">Why the other options are wrong</div>');
+      wrongs.forEach(function (o) {
+        h.push('<div class="why"><span class="k">' + esc(o.id) + ':</span><span>' + rich(o.why) + "</span></div>");
+      });
+    }
+    var rights = q.options.filter(function (o) { return o.correct && o.why; });
+    if (rights.length) {
+      h.push('<div class="rlabel g">Why the answer is right</div>');
+      rights.forEach(function (o) {
+        h.push('<div class="why pos"><span class="k">' + esc(o.id) + ':</span><span>' + rich(o.why) + "</span></div>");
+      });
     }
 
     var traps = (q.traps || []).filter(function (t) { return BANK.traps[t]; });
@@ -254,61 +321,21 @@
       });
     }
 
-    var wrongs = q.options.filter(function (o) { return !o.correct && o.why; });
-    if (wrongs.length) {
-      h.push('<div class="rlabel r">Why the other options are wrong</div>');
-      wrongs.forEach(function (o) {
-        h.push('<div class="why"><span class="k">' + esc(o.id) + ":</span><span>" + rich(o.why) + "</span></div>");
-      });
-    }
-    var rights = q.options.filter(function (o) { return o.correct && o.why; });
-    if (rights.length) {
-      h.push('<div class="rlabel g">Why the answer is right</div>');
-      rights.forEach(function (o) {
-        h.push('<div class="why pos"><span class="k">' + esc(o.id) + ":</span><span>" + rich(o.why) + "</span></div>");
-      });
-    }
-
-    /* The course explains its own options, and the fact-check found 65 statements in
-       those explanations that the documentation contradicts. Where the reader is being
-       told something false, say so on the same screen rather than in a separate file. */
-    if (q.issues && q.issues.length) {
-      h.push('<div class="rlabel r">Where the course explanation is wrong</div>');
-      q.issues.forEach(function (t) {
-        h.push('<div class="why"><span class="k">!</span><span>' + rich(t) + "</span></div>");
-      });
-    }
-
-    if (q.note) {
-      // Questions written for this guide carry no course key, so "checked against the
-      // documentation" would be the wrong claim; they were written from it.
-      if (q.verdict === "authored") {
-        h.push('<div class="rlabel b">Written for this guide ' +
-               '<span class="badge info">from the 10.4 docs</span></div>');
-      } else {
-        var cls = q.verdict === "wrong" || q.verdict === "disputed" ? "bad"
-                : q.verdict === "imprecise" ? "warn" : "ok";
-        h.push('<div class="rlabel b">Checked against the documentation ' +
-               '<span class="badge ' + cls + '">' + esc(q.verdict || "checked") + "</span></div>");
-      }
-      h.push('<div class="note">' + rich(q.note) + "</div>");
-    }
-
-    if (q.docs && q.docs.length) {
+    // one link, the primary one: more than that is a reading list, not an answer
+    var docs = (q.docs || []).filter(function (d) { return d.primary; });
+    if (!docs.length && q.docs && q.docs.length) docs = [q.docs[0]];
+    if (docs.length) {
       h.push('<div class="rlabel b">Documentation</div><ul class="doclist">');
-      q.docs.forEach(function (d) {
-        h.push('<li><a href="' + href(d.url) + '" target="_blank" rel="noopener">' + esc(d.title) + "</a>" +
-               (d.primary ? '<span class="primary">primary</span>' : "") +
-               (d.note ? '<span class="n">' + rich(d.note) + "</span>" : "") + "</li>");
-      });
-      h.push("</ul>");
+      h.push('<li><a href="' + href(docs[0].url) + '" target="_blank" rel="noopener">' +
+             esc(docs[0].title) + "</a>" +
+             (docs[0].note ? '<span class="n">' + rich(docs[0].note) + "</span>" : "") + "</li></ul>");
     }
 
     if (q.read && q.read.length) {
-      h.push('<div class="rlabel b">Read this next</div><ul class="doclist">');
+      h.push('<div class="rlabel b">Where this is covered</div><ul class="doclist">');
       q.read.forEach(function (p) {
         h.push('<li><a href="' + href(GUIDE + p.replace(/\.md(#|$)/, ".html$1")) + '">' +
-               esc(p.replace(/\.md(#|$)/, "$1")) + "</a></li>");
+               esc(topicLabel(p)) + "</a></li>");
       });
       h.push("</ul>");
     }
@@ -321,28 +348,18 @@
 
   var app = document.getElementById("app");
 
-  function drawSpine() {
-    if (window.SPLK) SPLK.spine(document.getElementById("spine"), { prefix: GUIDE });
-  }
-  function band(show) {
-    var b = document.getElementById("spineband");
-    if (b) b.style.display = show ? "" : "none";
-  }
   if (window.SPLK) {
     SPLK.theme.wire(document.getElementById("theme"));
-    addEventListener("splk:theme", drawSpine);
   }
 
   function mount(node) {
     app.innerHTML = ""; app.appendChild(node); window.scrollTo(0, 0);
-    drawSpine();
   }
   function go(hash) { location.hash = hash; }
 
   // ---- home
 
   function viewHome() {
-    band(true);
     var s = state();
     var root = el("div");
     var w = el("div", "wrap");
@@ -374,6 +391,10 @@
     if (wrong > 0) {
       var b1b = el("a", "btn ghost", "Drill what I missed"); b1b.href = "#/practice/missed";
       a1.appendChild(b1b);
+    }
+    if (poolFor({ kind: "weak" }).length) {
+      var b1c = el("a", "btn ghost", "Drill my weakest sections"); b1c.href = "#/practice/weak";
+      a1.appendChild(b1c);
     }
     m1.appendChild(a1);
     grid.appendChild(m1);
@@ -457,7 +478,6 @@
   var practice = null;   // {ids, i, chosen, revealed, spec}
 
   function practiceSetup(preset) {
-    band(true);
     var root = el("div");
     var w = el("div", "wrap");
     w.appendChild(el("h1", null, "Practice"));
@@ -472,11 +492,9 @@
       { label: "Everything", spec: { kind: "all" }, n: BANK.questions.length },
       { label: "Not yet seen", spec: { kind: "unseen" }, n: unseen },
       { label: "Previously missed", spec: { kind: "missed" }, n: missed },
-      { label: "Flagged", spec: { kind: "flagged" }, n: flagged }
+      { label: "Flagged", spec: { kind: "flagged" }, n: flagged },
+      { label: "My weakest sections", spec: { kind: "weak" }, n: poolFor({ kind: "weak" }).length }
     ];
-    BANK.tests.forEach(function (t) {
-      specs.push({ label: t.title, spec: { kind: "test", id: t.id }, n: t.questionIds.length });
-    });
     BANK.sections.forEach(function (sec) {
       var n = BANK.questions.filter(function (q) { return q.grp === sec.grp; }).length;
       if (n) specs.push({ label: sec.id + " " + sec.short, spec: { kind: "section", id: sec.grp }, n: n });
@@ -495,11 +513,6 @@
     });
     w.appendChild(opts);
 
-    var note = el("p", "sub");
-    note.innerHTML = "The " + (BANK.questions.length - BANK.meta.mockEligible) +
-      " questions that never appear in a mock exam are all here: the one with no correct option, " +
-      "the three the docs dispute, and the four that are off blueprint.";
-    w.appendChild(note);
 
     root.appendChild(w);
     mount(root);
@@ -514,8 +527,14 @@
     renderPractice();
   }
 
+  function advance() {
+    var p = practice;
+    if (!p) return;
+    if (p.i + 1 < p.ids.length) { p.i++; p.chosen = []; p.revealed = false; renderPractice(); }
+    else { practice = null; go("#/"); }
+  }
+
   function renderPractice() {
-    band(true);
     var p = practice;
     var q = Q[p.ids[p.i]];
     var s = state();
@@ -538,12 +557,21 @@
     chg.onclick = function () { practice = null; practiceSetup(); };
     head.appendChild(chg);
     head.appendChild(flag);
+    // the same control as the one below the review, mirrored here so a reader who has
+    // finished reading does not have to scroll back down to move on
+    if (p.revealed) {
+      var topNext = el("button", "btn", p.i + 1 < p.ids.length ? "Next question" : "Finish");
+      topNext.id = "next-top";
+      topNext.onclick = function () { advance(); };
+      head.appendChild(topNext);
+    }
     w.appendChild(head);
 
     var footer = el("div", "qnav");
     if (!p.revealed) {
       var submit = el("button", "btn", "Submit Answer");
-      submit.disabled = q.type === "multi" ? p.chosen.length !== q.answer.length : p.chosen.length === 0;
+      submit.id = "submit-answer";
+      submit.disabled = !canSubmit(q, p.chosen);
       submit.onclick = function () {
         p.revealed = true;
         var ok = same(p.chosen, q.answer);
@@ -557,11 +585,8 @@
       footer.appendChild(submit);
     } else {
       footer.appendChild(el("span", "spacer"));
-      var next = el("button", "btn", p.i + 1 < p.ids.length ? "Next question ›" : "Finish");
-      next.onclick = function () {
-        if (p.i + 1 < p.ids.length) { p.i++; p.chosen = []; p.revealed = false; renderPractice(); }
-        else { practice = null; go("#/"); }
-      };
+      var next = el("button", "btn", p.i + 1 < p.ids.length ? "Next question" : "Finish");
+      next.onclick = advance;
       footer.appendChild(next);
     }
 
@@ -571,9 +596,9 @@
       chosen: p.chosen, revealed: p.revealed, footer: p.revealed ? null : footer,
       onPick: function (id) {
         if (q.type === "multi") {
-          var k = p.chosen.indexOf(id);
+          var k = p.chosen.indexOf(id), need = required(q);
           if (k >= 0) p.chosen.splice(k, 1);
-          else if (p.chosen.length < q.answer.length) p.chosen.push(id);
+          else if (!need || p.chosen.length < need) p.chosen.push(id);
           else { p.chosen.shift(); p.chosen.push(id); }
         } else {
           p.chosen = [id];
@@ -610,7 +635,6 @@
   function stopTick() { if (tick) { clearInterval(tick); tick = null; } }
 
   function renderMock() {
-    band(false);
     var s = state();
     if (!s.active) { go("#/"); return; }
     var a = s.active;
@@ -680,9 +704,9 @@
         var st = state();
         var cur = st.active.answers[q.id] || [];
         if (q.type === "multi") {
-          var k = cur.indexOf(id);
+          var k = cur.indexOf(id), need = required(q);
           if (k >= 0) cur.splice(k, 1);
-          else if (cur.length < q.answer.length) cur.push(id);
+          else if (!need || cur.length < need) cur.push(id);
           else { cur.shift(); cur.push(id); }
         } else {
           cur = [id];
@@ -790,7 +814,6 @@
   // ---- results
 
   function viewResult(id) {
-    band(true);
     var s = state();
     var a = null;
     s.attempts.forEach(function (x) { if (x.id === id) a = x; });
@@ -896,7 +919,6 @@
   }
 
   function viewAttempts() {
-    band(true);
     var s = state();
     var root = el("div");
     var w = el("div", "wrap");
@@ -932,6 +954,7 @@
     if (h === "/") return viewHome();
     if (h === "/practice") return practiceSetup();
     if (h === "/practice/missed") return practiceSetup({ kind: "missed" });
+    if (h === "/practice/weak") return practiceSetup({ kind: "weak" });
     if (h === "/mock") return renderMock();
     if (h === "/attempts") return viewAttempts();
     var m = h.match(/^\/result\/(.+)$/);
@@ -944,8 +967,37 @@
     render();
   });
 
+  /* Answer without the mouse: A to E select, Enter submits, Enter again moves on.
+     Drilling two hundred questions is the whole workload, so this is the shortcut that
+     actually saves time. */
   document.addEventListener("keydown", function (e) {
     if (e.target.tagName === "INPUT" || e.metaKey || e.ctrlKey || e.altKey) return;
+
+    if (practice && location.hash.indexOf("/practice") >= 0) {
+      var q = Q[practice.ids[practice.i]];
+      var letter = e.key.toUpperCase();
+      if (!practice.revealed && /^[A-E]$/.test(letter)) {
+        var opt = q.options.filter(function (o) { return o.id === letter; })[0];
+        if (opt) {
+          e.preventDefault();
+          var btns = document.querySelectorAll(".ans");
+          for (var i = 0; i < q.options.length; i++) {
+            if (q.options[i].id === letter && btns[i]) { btns[i].click(); break; }
+          }
+        }
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (practice.revealed) { advance(); }
+        else {
+          var sb = document.getElementById("submit-answer");
+          if (sb && !sb.disabled) sb.click();
+        }
+        return;
+      }
+    }
+
     var s = state();
     if (location.hash.indexOf("/mock") >= 0 && s.active) {
       if (e.key === "ArrowRight" && s.active.i + 1 < s.active.ids.length) { s.active.i++; save(s); renderMock(); }

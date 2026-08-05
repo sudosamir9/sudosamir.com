@@ -74,13 +74,6 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
 <a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="railgroup">
-<summary>Practice and sources</summary>
-<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
-<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
-<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
-<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
-</details>
     </nav>
     <div class="railfoot">
       <a href="../../topics/00-foundations-refresher.md">Markdown source</a>
@@ -143,10 +136,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <li>Search contains <strong>no</strong> transforming command (an event search): field discovery is <strong>on</strong>, Smart behaves as if it were in <strong>Verbose</strong> mode.</li>
 <li>Search <strong>does</strong> contain a transforming command (a report search): field discovery is <strong>off</strong>, Smart behaves as if it were in <strong>Fast</strong> mode, skipping event list generation and jumping to the results.</li>
 </ul>
-<div class="mermaid-wrap" style="min-height:208px"><div class="mermaid">flowchart TD
-    A[&quot;Search submitted in Smart mode&quot;] --&gt; B{&quot;Does the pipeline contain&lt;br/&gt;a transforming command?&quot;}
-    B -- No --&gt; C[&quot;Field discovery ON&lt;br/&gt;Behaves like Verbose&lt;br/&gt;Events tab populated&quot;]
-    B -- Yes --&gt; D[&quot;Field discovery OFF&lt;br/&gt;Behaves like Fast&lt;br/&gt;Statistics tab populated&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 408 262" width="408" height="262" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M204.3 41.0 C204.3 61.0 204.3 61.0 204.3 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M204.3 141.0 C204.3 161.0 87.5 161.0 87.5 181.0"/><rect class="dg-lblbg" x="134.55" y="149.0" width="22.700000000000003" height="16" rx="3"/><text class="dg-lbl" x="145.9" y="158.0" text-anchor="middle" dominant-baseline="middle">No</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M204.3 141.0 C204.3 161.0 306.8 161.0 306.8 181.0"/><rect class="dg-lblbg" x="241.025" y="149.0" width="29.05" height="16" rx="3"/><text class="dg-lbl" x="255.55" y="158.0" text-anchor="middle" dominant-baseline="middle">Yes</text><rect class="dg-node" x="83.05000000000001" y="2.0" width="242.5" height="39" rx="5"/><text class="dg-text" x="204.3" y="22.5" text-anchor="middle" dominant-baseline="middle">Search submitted in Smart mode</text><path class="dg-node dg-diamond" d="M204.3 85.0 L307.675 113.0 L204.3 141.0 L100.92500000000001 113.0 z"/><text class="dg-text" x="204.3" y="105.5" text-anchor="middle" dominant-baseline="middle">Does the pipeline contain</text><text class="dg-text" x="204.3" y="122.5" text-anchor="middle" dominant-baseline="middle">a transforming command?</text><rect class="dg-node" x="2.0" y="185.0" width="171.0" height="73" rx="5"/><text class="dg-text" x="87.5" y="205.5" text-anchor="middle" dominant-baseline="middle">Field discovery ON</text><text class="dg-text" x="87.5" y="222.5" text-anchor="middle" dominant-baseline="middle">Behaves like Verbose</text><text class="dg-text" x="87.5" y="239.5" text-anchor="middle" dominant-baseline="middle">Events tab populated</text><rect class="dg-node" x="207.0" y="185.0" width="199.60000000000002" height="73" rx="5"/><text class="dg-text" x="306.8" y="205.5" text-anchor="middle" dominant-baseline="middle">Field discovery OFF</text><text class="dg-text" x="306.8" y="222.5" text-anchor="middle" dominant-baseline="middle">Behaves like Fast</text><text class="dg-text" x="306.8" y="239.5" text-anchor="middle" dominant-baseline="middle">Statistics tab populated</text></svg></figure>
 <p>Two consequences the exam likes:</p>
 <ol>
 <li>In Fast mode a field you did not name in the search will not appear in the fields sidebar, even though the extraction exists and is correctly configured. The extraction is not broken; the mode is suppressing discovery.</li>
@@ -338,11 +328,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </ul>
 <p>Distributable streaming examples named in the search manual: <code>eval</code>, <code>fields</code>, <code>makemv</code>, <code>rename</code>, <code>regex</code>, <code>replace</code>, <code>strcat</code>, <code>typer</code>, <code>where</code>. Centralized streaming examples: <code>head</code>, <code>streamstats</code>, and certain modes of <code>dedup</code> and <code>cluster</code>.</p>
 <p>Why the distinction decides pipeline order:</p>
-<div class="mermaid-wrap" style="min-height:230px"><div class="mermaid">flowchart LR
-    A[&quot;Retrieval&lt;br/&gt;index=... terms&quot;] --&gt; B[&quot;Distributable streaming&lt;br/&gt;eval, fields, rename, where&quot;]
-    B --&gt; C[&quot;Transforming&lt;br/&gt;stats, chart, timechart, top&quot;]
-    C --&gt; D[&quot;Post-transform commands&lt;br/&gt;operate on ROWS, not events&quot;]
-    D --&gt; E[&quot;Output&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 911 146" width="911" height="146" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="135.25" height="56" rx="5"/><text class="dg-text" x="69.625" y="22.5" text-anchor="middle" dominant-baseline="middle">Retrieval</text><text class="dg-text" x="69.625" y="39.5" text-anchor="middle" dominant-baseline="middle">index=... terms</text><rect class="dg-node" x="171.25" y="2" width="221.05" height="56" rx="5"/><text class="dg-text" x="281.775" y="22.5" text-anchor="middle" dominant-baseline="middle">Distributable streaming</text><text class="dg-text" x="281.775" y="39.5" text-anchor="middle" dominant-baseline="middle">eval, fields, rename, where</text><rect class="dg-node" x="426.3" y="2" width="228.20000000000002" height="56" rx="5"/><text class="dg-text" x="540.4" y="22.5" text-anchor="middle" dominant-baseline="middle">Transforming</text><text class="dg-text" x="540.4" y="39.5" text-anchor="middle" dominant-baseline="middle">stats, chart, timechart, top</text><rect class="dg-node" x="688.5" y="2" width="221.05" height="56" rx="5"/><text class="dg-text" x="799.025" y="22.5" text-anchor="middle" dominant-baseline="middle">Post-transform commands</text><text class="dg-text" x="799.025" y="39.5" text-anchor="middle" dominant-baseline="middle">operate on ROWS, not events</text><rect class="dg-node" x="2" y="88" width="70.9" height="56" rx="5"/><text class="dg-text" x="37.45" y="117.0" text-anchor="middle" dominant-baseline="middle">Output</text><path class="dg-edge" marker-end="url(#ah)" d="M137.25 30.0 L167.25 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M392.3 30.0 L422.3 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M654.5 30.0 L684.5 30.0"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M799.025 58 L799.025 73.0 L37.45 73.0 L37.45 84"/></svg></figure>
 <p>Once a transforming command runs, the pipeline no longer holds events. It holds a result table. Commands after that point see only the fields the transforming command emitted. <code>_raw</code> is gone. <code>_time</code> survives only if the transforming command produced it (<code>timechart</code> does, <code>stats count by host</code> does not). This is the mechanism behind a very large share of exam distractors across sections 3.0 and 4.0.</p>
 <p>Generating commands that generate events, rather than reporting on an index, must be first in the search and are written with a leading pipe: <code>| inputlookup</code>, <code>| makeresults</code>, <code>| tstats</code>. <code>search</code> is a generating command too, which is why a bare search string works without a leading pipe.</p>
 <h2 id="5.-subsearches">5. Subsearches<a class="anchor" href="#5.-subsearches" aria-label="Link to this section">#</a></h2>
@@ -939,8 +925,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </ol>
 
 <nav class="pn" aria-label="Section"><a href="01-transforming-commands.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">1.0</span><span class="pn-label">Transforming commands</span></a></nav>
-      <p class="doc-foot">Built from <code>topics/00-foundations-refresher.md</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -988,6 +973,5 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
-<script src="../mermaid-init.js"></script>
 </body>
 </html>

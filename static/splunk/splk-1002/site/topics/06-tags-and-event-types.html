@@ -74,13 +74,6 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
 <a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="railgroup">
-<summary>Practice and sources</summary>
-<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
-<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
-<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
-<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
-</details>
     </nav>
     <div class="railfoot">
       <a href="../../topics/06-tags-and-event-types.md">Markdown source</a>
@@ -114,25 +107,10 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <p>The stated purpose is readability: tags track abstract field values, IP addresses and ID numbers, by giving them descriptive names, and group several distinct values under one searchable name. &quot;Tags make your data more understandable&quot; is therefore always a true statement about tags, and it is what separates them from event types, which categorise events using a saved search string. The pair you tag can come from anywhere, since tags apply to fields &quot;extracted at index time, search time, or added through some other method&quot;. The tag itself is always search-time, because &quot;tags come last in the sequence of search-time operations&quot;. A tag is never created at index time.</p>
 <p>An <strong>event type</strong> is a saved search string that classifies events. Any event returned by that search string gets the field <code>eventtype</code> set to the event type's name at search time. It is a categorization system, not a shortcut for typing. Splunk's own guidance is that &quot;using event types as a short cut for search is not recommended&quot; and that search macros are the better tool for shortening a search, because macros can contain other search commands, can be parameterized, and do not incur costs when events are retrieved.</p>
 <p>Both objects are applied at search time, and their position in the sequence is examinable. The full documented sequence of search-time operations is:</p>
-<div class="mermaid-wrap" style="min-height:362px"><div class="mermaid">flowchart TD
-  A[&quot;1. Field filters&quot;] --&gt; B[&quot;2. Inline field extraction&quot;]
-  B --&gt; C[&quot;3. Field extraction using field transforms&quot;]
-  C --&gt; D[&quot;4. Automatic key-value field extraction&quot;]
-  D --&gt; E[&quot;5. Field aliasing&quot;]
-  E --&gt; F[&quot;6. Calculated fields&quot;]
-  F --&gt; G[&quot;7. Lookups&quot;]
-  G --&gt; H[&quot;8. Event types&quot;]
-  H --&gt; I[&quot;9. Tags&quot;]
-  style H fill:#5b8def,color:#ffffff
-  style I fill:#2e8b57,color:#ffffff</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 332 709" width="332" height="709" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 41.0 C166.15 61.0 166.15 61.0 166.15 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 124.0 C166.15 144.0 166.15 144.0 166.15 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 207.0 C166.15 227.0 166.15 227.0 166.15 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 290.0 C166.15 310.0 166.15 310.0 166.15 330.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 373.0 C166.15 393.0 166.15 393.0 166.15 413.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 456.0 C166.15 476.0 166.15 476.0 166.15 496.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 539.0 C166.15 559.0 166.15 559.0 166.15 579.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 622.0 C166.15 642.0 166.15 642.0 166.15 662.0"/><rect class="dg-node" x="94.95" y="2.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="166.15" y="22.5" text-anchor="middle" dominant-baseline="middle">1. Field filters</text><rect class="dg-node" x="59.2" y="85.0" width="213.9" height="39" rx="5"/><text class="dg-text" x="166.15" y="105.5" text-anchor="middle" dominant-baseline="middle">2. Inline field extraction</text><rect class="dg-node" x="2.0" y="168.0" width="328.3" height="39" rx="5"/><text class="dg-text" x="166.15" y="188.5" text-anchor="middle" dominant-baseline="middle">3. Field extraction using field transforms</text><rect class="dg-node" x="12.724999999999994" y="251.0" width="306.85" height="39" rx="5"/><text class="dg-text" x="166.15" y="271.5" text-anchor="middle" dominant-baseline="middle">4. Automatic key-value field extraction</text><rect class="dg-node" x="91.375" y="334.0" width="149.55" height="39" rx="5"/><text class="dg-text" x="166.15" y="354.5" text-anchor="middle" dominant-baseline="middle">5. Field aliasing</text><rect class="dg-node" x="80.65" y="417.0" width="171.0" height="39" rx="5"/><text class="dg-text" x="166.15" y="437.5" text-anchor="middle" dominant-baseline="middle">6. Calculated fields</text><rect class="dg-node" x="116.4" y="500.0" width="99.5" height="39" rx="5"/><text class="dg-text" x="166.15" y="520.5" text-anchor="middle" dominant-baseline="middle">7. Lookups</text><rect class="dg-node" x="102.1" y="583.0" width="128.10000000000002" height="39" rx="5"/><text class="dg-text" x="166.15" y="603.5" text-anchor="middle" dominant-baseline="middle">8. Event types</text><rect class="dg-node" x="127.125" y="666.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="166.15" y="686.5" text-anchor="middle" dominant-baseline="middle">9. Tags</text></svg></figure>
 <p>The consequences fall straight out of that ordering. Calculated fields (6) cannot reference lookups, event types or tags. Lookups (7) cannot reference event types or tags. An event type search string <strong>can</strong> reference a lookup output field, because 7 runs before 8, but it cannot reference a tag. Tags (9) can be applied to any field-value pair produced by any earlier operation, which is exactly why you can tag an event type: <code>eventtype</code> is just another field by the time step 9 runs.</p>
 <p>That last point is the mechanism the Common Information Model is built on.</p>
-<div class="mermaid-wrap" style="min-height:252px"><div class="mermaid">flowchart LR
-  RAW[&quot;Raw events from a TA&lt;br/&gt;(sourcetype=nessus:scan)&quot;] --&gt; ET[&quot;Event type&lt;br/&gt;[nessus]&lt;br/&gt;search = sourcetype=nessus:scan&quot;]
-  ET --&gt; ETF[&quot;eventtype=nessus&lt;br/&gt;set on every matching event&quot;]
-  ETF --&gt; TAG[&quot;tags.conf&lt;br/&gt;[eventtype=nessus]&lt;br/&gt;vulnerability = enabled&lt;br/&gt;report = enabled&quot;]
-  TAG --&gt; CIM[&quot;CIM data model constraint&lt;br/&gt;tag=vulnerability tag=report&quot;]
-  CIM --&gt; DM[&quot;Vulnerabilities data model&lt;br/&gt;pivot, dashboards, accelerated searches&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 768 146" width="768" height="146" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="192.45000000000002" height="56" rx="5"/><text class="dg-text" x="98.22500000000001" y="22.5" text-anchor="middle" dominant-baseline="middle">Raw events from a TA</text><text class="dg-text" x="98.22500000000001" y="39.5" text-anchor="middle" dominant-baseline="middle">(sourcetype=nessus:scan</text><rect class="dg-node" x="228.45000000000002" y="2" width="99.5" height="56" rx="5"/><text class="dg-text" x="278.20000000000005" y="22.5" text-anchor="middle" dominant-baseline="middle">Event type</text><text class="dg-text" x="278.20000000000005" y="39.5" text-anchor="middle" dominant-baseline="middle">[nessus</text><rect class="dg-node" x="361.95000000000005" y="2" width="221.05" height="56" rx="5"/><text class="dg-text" x="472.475" y="22.5" text-anchor="middle" dominant-baseline="middle">eventtype=nessus</text><text class="dg-text" x="472.475" y="39.5" text-anchor="middle" dominant-baseline="middle">set on every matching event</text><rect class="dg-node" x="617.0" y="2" width="149.55" height="56" rx="5"/><text class="dg-text" x="691.775" y="22.5" text-anchor="middle" dominant-baseline="middle">tags.conf</text><text class="dg-text" x="691.775" y="39.5" text-anchor="middle" dominant-baseline="middle">[eventtype=nessus</text><rect class="dg-node" x="2" y="88" width="228.20000000000002" height="56" rx="5"/><text class="dg-text" x="116.10000000000001" y="108.5" text-anchor="middle" dominant-baseline="middle">CIM data model constraint</text><text class="dg-text" x="116.10000000000001" y="125.5" text-anchor="middle" dominant-baseline="middle">tag=vulnerability tag=report</text><rect class="dg-node" x="264.20000000000005" y="88" width="306.85" height="56" rx="5"/><text class="dg-text" x="417.62500000000006" y="108.5" text-anchor="middle" dominant-baseline="middle">Vulnerabilities data model</text><text class="dg-text" x="417.62500000000006" y="125.5" text-anchor="middle" dominant-baseline="middle">pivot, dashboards, accelerated searches</text><path class="dg-edge" marker-end="url(#ah)" d="M194.45000000000002 30.0 L224.45000000000002 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M327.95000000000005 30.0 L357.95000000000005 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M583.0 30.0 L613.0 30.0"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M691.775 58 L691.775 73.0 L116.10000000000001 73.0 L116.10000000000001 84"/><path class="dg-edge" marker-end="url(#ah)" d="M230.20000000000002 116.0 L260.20000000000005 116.0"/></svg></figure>
 <p>CIM never tags raw events directly. A technology add-on defines event types over its sourcetypes, tags those event types in <code>tags.conf</code>, and the CIM data model constrains on those tags. Change the event type definition and every downstream model follows.</p>
 <h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
 <h3 id="tag-search-syntax">Tag search syntax<a class="anchor" href="#tag-search-syntax" aria-label="Link to this section">#</a></h3>
@@ -615,8 +593,7 @@ D. The event type is now schedulable and runs itself every 24 hours</p>
 </ol>
 
 <nav class="pn" aria-label="Section"><a href="05-aliases-and-calculated-fields.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">5.0</span><span class="pn-label">Aliases and calculated fields</span></a><a href="07-macros.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">7.0</span><span class="pn-label">Macros</span></a></nav>
-      <p class="doc-foot">Built from <code>topics/06-tags-and-event-types.md</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -656,6 +633,5 @@ D. The event type is now schedulable and runs itself every 24 hours</p>
 <script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
-<script src="../mermaid-init.js"></script>
 </body>
 </html>

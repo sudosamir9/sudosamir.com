@@ -74,13 +74,6 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
 <a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="railgroup">
-<summary>Practice and sources</summary>
-<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
-<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
-<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
-<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
-</details>
     </nav>
     <div class="railfoot">
       <a href="../../topics/02-filtering-and-formatting.md">Markdown source</a>
@@ -113,16 +106,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
 <p>Everything in section 2.0 happens at search time, after events are retrieved and after search-time field extraction. Nothing here changes what is stored on disk.</p>
 <p>The base search, the terms before the first pipe, is the only part that filters against the index itself: it is event-generating and decides which buckets and raw events are read at all. Every <code>search</code>, <code>where</code>, <code>eval</code>, <code>fillnull</code>, <code>fieldformat</code>, and <code>filldown</code> after the first pipe works on results already read off disk. Hence the performance argument for this section: a filter moved earlier prunes disk reads, a filter left later prunes only rows in memory.</p>
-<div class="mermaid-wrap" style="min-height:340px"><div class="mermaid">flowchart TD
-  A[&quot;Index buckets: rawdata + tsidx&quot;] --&gt; B[&quot;Base search: terms, field-value pairs, time range&lt;br/&gt;event-generating, filters against the index&quot;]
-  B --&gt; C[&quot;Search-time extraction, aliases, calculated fields, lookups, eventtypes, tags&quot;]
-  C --&gt; D[&quot;eval: create or overwrite one field per row&quot;]
-  D --&gt; E[&quot;where: keep rows where a Boolean eval expression is TRUE&quot;]
-  E --&gt; F[&quot;search after a pipe: keep rows matching terms or field-value pairs&quot;]
-  F --&gt; G[&quot;stats / chart / timechart: transforming, drops _raw&quot;]
-  G --&gt; H[&quot;fillnull: replace null cells with a constant&quot;]
-  H --&gt; I[&quot;fieldformat: change rendered appearance only, put it last&quot;]
-  I --&gt; J[&quot;Statistics tab, Events tab, export&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 582 809" width="582" height="809" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 41.0 C291.27500000000003 61.0 291.27500000000003 61.0 291.27500000000003 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 141.0 C291.27500000000003 161.0 291.27500000000003 161.0 291.27500000000003 181.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 224.0 C291.27500000000003 244.0 291.27500000000003 244.0 291.27500000000003 264.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 307.0 C291.27500000000003 327.0 291.27500000000003 327.0 291.27500000000003 347.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 390.0 C291.27500000000003 410.0 291.275 410.0 291.275 430.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.275 473.0 C291.275 493.0 291.27500000000003 493.0 291.27500000000003 513.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 556.0 C291.27500000000003 576.0 291.27500000000003 576.0 291.27500000000003 596.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 639.0 C291.27500000000003 659.0 291.27500000000003 659.0 291.27500000000003 679.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M291.27500000000003 722.0 C291.27500000000003 742.0 291.27500000000003 742.0 291.27500000000003 762.0"/><rect class="dg-node" x="170.02500000000003" y="2.0" width="242.5" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="22.5" text-anchor="middle" dominant-baseline="middle">Index buckets: rawdata + tsidx</text><rect class="dg-node" x="102.10000000000002" y="85.0" width="378.35" height="56" rx="5"/><text class="dg-text" x="291.27500000000003" y="105.5" text-anchor="middle" dominant-baseline="middle">Base search: terms, field-value pairs, time range</text><text class="dg-text" x="291.27500000000003" y="122.5" text-anchor="middle" dominant-baseline="middle">event-generating, filters against the index</text><rect class="dg-node" x="2.0" y="185.0" width="578.5500000000001" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="205.5" text-anchor="middle" dominant-baseline="middle">Search-time extraction, aliases, calculated fields, lookups, eventtypes, tags</text><rect class="dg-node" x="123.55000000000004" y="268.0" width="335.45" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="288.5" text-anchor="middle" dominant-baseline="middle">eval: create or overwrite one field per row</text><rect class="dg-node" x="77.07500000000002" y="351.0" width="428.40000000000003" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="371.5" text-anchor="middle" dominant-baseline="middle">where: keep rows where a Boolean eval expression is TRUE</text><rect class="dg-node" x="41.32499999999999" y="434.0" width="499.90000000000003" height="39" rx="5"/><text class="dg-text" x="291.275" y="454.5" text-anchor="middle" dominant-baseline="middle">search after a pipe: keep rows matching terms or field-value pairs</text><rect class="dg-node" x="94.95000000000002" y="517.0" width="392.65000000000003" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="537.5" text-anchor="middle" dominant-baseline="middle">stats / chart / timechart: transforming, drops _raw</text><rect class="dg-node" x="119.97500000000002" y="600.0" width="342.6" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="620.5" text-anchor="middle" dominant-baseline="middle">fillnull: replace null cells with a constant</text><rect class="dg-node" x="73.50000000000003" y="683.0" width="435.55" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="703.5" text-anchor="middle" dominant-baseline="middle">fieldformat: change rendered appearance only, put it last</text><rect class="dg-node" x="155.72500000000002" y="766.0" width="271.1" height="39" rx="5"/><text class="dg-text" x="291.27500000000003" y="786.5" text-anchor="middle" dominant-baseline="middle">Statistics tab, Events tab, export</text></svg></figure>
 <p>Three different questions: <code>eval</code> answers &quot;what value should this row carry&quot;, <code>search</code> and <code>where</code> answer &quot;should this row survive&quot;, <code>fillnull</code> answers &quot;what should an empty cell say&quot;. <code>fieldformat</code> answers &quot;how should this look on screen without changing what it is&quot;.</p>
 <h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
 <h3 id="eval">eval<a class="anchor" href="#eval" aria-label="Link to this section">#</a></h3>
@@ -944,8 +928,7 @@ D. It returns every event in that source type, because a base search ignores a f
 </ol>
 
 <nav class="pn" aria-label="Section"><a href="01-transforming-commands.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">1.0</span><span class="pn-label">Transforming commands</span></a><a href="03-correlating-events.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">3.0</span><span class="pn-label">Correlating events</span></a></nav>
-      <p class="doc-foot">Built from <code>topics/02-filtering-and-formatting.md</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -994,6 +977,5 @@ D. It returns every event in that source type, because a base search ignores a f
 <script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
-<script src="../mermaid-init.js"></script>
 </body>
 </html>

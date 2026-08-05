@@ -74,13 +74,6 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
 <a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="railgroup">
-<summary>Practice and sources</summary>
-<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
-<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
-<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
-<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
-</details>
     </nav>
     <div class="railfoot">
       <a href="../../reference/time-modifiers.md">Markdown source</a>
@@ -388,11 +381,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </tr>
 </tbody>
 </table></div>
-<div class="mermaid-wrap" style="min-height:230px"><div class="mermaid">flowchart LR
-    A[&quot;-1d@d&lt;br/&gt;Tue 21 Jul 00:00:00&lt;br/&gt;start of yesterday&quot;] --&gt; B[&quot;-1d and -24h&lt;br/&gt;Tue 21 Jul 14:37:12&lt;br/&gt;exactly one day back&quot;]
-    B --&gt; C[&quot;@d&lt;br/&gt;Wed 22 Jul 00:00:00&lt;br/&gt;start of today&quot;]
-    C --&gt; D[&quot;-1h@h&lt;br/&gt;Wed 22 Jul 13:00:00&quot;]
-    D --&gt; E[&quot;now&lt;br/&gt;Wed 22 Jul 14:37:12&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 768 180" width="768" height="180" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="83.925" y="22.5" text-anchor="middle" dominant-baseline="middle">-1d@d</text><text class="dg-text" x="83.925" y="39.5" text-anchor="middle" dominant-baseline="middle">Tue 21 Jul 00:00:00</text><text class="dg-text" x="83.925" y="56.5" text-anchor="middle" dominant-baseline="middle">start of yesterday</text><rect class="dg-node" x="199.85" y="2" width="171.0" height="73" rx="5"/><text class="dg-text" x="285.35" y="22.5" text-anchor="middle" dominant-baseline="middle">-1d and -24h</text><text class="dg-text" x="285.35" y="39.5" text-anchor="middle" dominant-baseline="middle">Tue 21 Jul 14:37:12</text><text class="dg-text" x="285.35" y="56.5" text-anchor="middle" dominant-baseline="middle">exactly one day back</text><rect class="dg-node" x="404.85" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="486.77500000000003" y="22.5" text-anchor="middle" dominant-baseline="middle">@d</text><text class="dg-text" x="486.77500000000003" y="39.5" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 00:00:00</text><text class="dg-text" x="486.77500000000003" y="56.5" text-anchor="middle" dominant-baseline="middle">start of today</text><rect class="dg-node" x="602.7" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="684.625" y="31.0" text-anchor="middle" dominant-baseline="middle">-1h@h</text><text class="dg-text" x="684.625" y="48.0" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 13:00:00</text><rect class="dg-node" x="2" y="105" width="163.85" height="73" rx="5"/><text class="dg-text" x="83.925" y="134.0" text-anchor="middle" dominant-baseline="middle">now</text><text class="dg-text" x="83.925" y="151.0" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 14:37:12</text><path class="dg-edge" marker-end="url(#ah)" d="M165.85 38.5 L195.85 38.5"/><path class="dg-edge" marker-end="url(#ah)" d="M370.85 38.5 L400.85 38.5"/><path class="dg-edge" marker-end="url(#ah)" d="M568.7 38.5 L598.7 38.5"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M684.625 75 L684.625 90.0 L83.925 90.0 L83.925 101"/></svg></figure>
 <p>Read that left to right as earlier to later. <code>-1d@d</code> sits to the <strong>left</strong> of <code>-1d</code>, because the snap moved backwards from Tuesday afternoon to Tuesday midnight. That single ordering fact is the whole of trap T-TM-01.</p>
 <p>Picker equivalents worth memorising, because the exam phrases questions in picker language and answers them in modifier language:</p>
 <div class="tw"><table>
@@ -882,8 +871,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <p class="trap" id="T-TM-17"><span class="tid">T-TM-17</span> <code>now()</code> and <code>time()</code> are the same function. Wrong. <code>now()</code> is fixed for the whole search, set at search start or at the scheduled run time, so every row gets the same value. <code>time()</code> is evaluated per result with microsecond resolution, so it varies row to row. Use <code>now()</code> for anything you intend to compare across rows.</p>
 
 <nav class="pn" aria-label="Section"><a href="stats-and-chart-functions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Stats and chart functions</span></a><a href="regex-for-splunk.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Regex for Splunk</span></a></nav>
-      <p class="doc-foot">Built from <code>reference/time-modifiers.md</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -920,6 +908,5 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
-<script src="../mermaid-init.js"></script>
 </body>
 </html>

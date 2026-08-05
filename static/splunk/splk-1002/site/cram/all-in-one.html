@@ -74,13 +74,6 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
 <a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="railgroup">
-<summary>Practice and sources</summary>
-<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
-<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
-<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
-<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
-</details>
     </nav>
     <div class="railfoot">
       <a href="../../cram/all-in-one.md">Markdown source</a>
@@ -178,15 +171,7 @@ document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <p>Lookups, dashboards, reports and alerts are off blueprint.</p>
 <h2 id="the-search-time-precedence-chain">The search-time precedence chain<a class="anchor" href="#the-search-time-precedence-chain" aria-label="Link to this section">#</a></h2>
 <p>Field filters, inline field extraction, field extraction using a transform, automatic key-value extraction, field aliases, calculated fields, lookups, event types, tags. Each step can reference fields produced by earlier steps and can never reference fields produced by later steps.</p>
-<div class="mermaid-wrap" style="min-height:318px"><div class="mermaid">flowchart LR
-  A[&quot;1 field filters&quot;] --&gt; B[&quot;2 inline EXTRACT&quot;]
-  B --&gt; C[&quot;3 REPORT transform&quot;]
-  C --&gt; D[&quot;4 auto KV&quot;]
-  D --&gt; E[&quot;5 FIELDALIAS&quot;]
-  E --&gt; F[&quot;6 EVAL calc field&quot;]
-  F --&gt; G[&quot;7 LOOKUP&quot;]
-  G --&gt; H[&quot;8 event types&quot;]
-  H --&gt; I[&quot;9 tags&quot;]</div></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 780 112" width="780" height="112" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="135.25" height="39" rx="5"/><text class="dg-text" x="69.625" y="22.5" text-anchor="middle" dominant-baseline="middle">1 field filters</text><rect class="dg-node" x="171.25" y="2" width="142.4" height="39" rx="5"/><text class="dg-text" x="242.45" y="22.5" text-anchor="middle" dominant-baseline="middle">2 inline EXTRACT</text><rect class="dg-node" x="347.65" y="2" width="156.70000000000002" height="39" rx="5"/><text class="dg-text" x="426.0" y="22.5" text-anchor="middle" dominant-baseline="middle">3 REPORT transform</text><rect class="dg-node" x="538.35" y="2" width="92.35000000000001" height="39" rx="5"/><text class="dg-text" x="584.525" y="22.5" text-anchor="middle" dominant-baseline="middle">4 auto KV</text><rect class="dg-node" x="664.7" y="2" width="113.80000000000001" height="39" rx="5"/><text class="dg-text" x="721.6" y="22.5" text-anchor="middle" dominant-baseline="middle">5 FIELDALIAS</text><rect class="dg-node" x="2" y="71" width="149.55" height="39" rx="5"/><text class="dg-text" x="76.775" y="91.5" text-anchor="middle" dominant-baseline="middle">6 EVAL calc field</text><rect class="dg-node" x="185.55" y="71" width="85.2" height="39" rx="5"/><text class="dg-text" x="228.15" y="91.5" text-anchor="middle" dominant-baseline="middle">7 LOOKUP</text><rect class="dg-node" x="304.75" y="71" width="120.95" height="39" rx="5"/><text class="dg-text" x="365.225" y="91.5" text-anchor="middle" dominant-baseline="middle">8 event types</text><rect class="dg-node" x="459.7" y="71" width="70.9" height="39" rx="5"/><text class="dg-text" x="495.15" y="91.5" text-anchor="middle" dominant-baseline="middle">9 tags</text><path class="dg-edge" marker-end="url(#ah)" d="M137.25 21.5 L167.25 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M313.65 21.5 L343.65 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M504.35 21.5 L534.35 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M630.7 21.5 L660.7 21.5"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M721.6 41 L721.6 56.0 L76.775 56.0 L76.775 67"/><path class="dg-edge" marker-end="url(#ah)" d="M151.55 90.5 L181.55 90.5"/><path class="dg-edge" marker-end="url(#ah)" d="M270.75 90.5 L300.75 90.5"/><path class="dg-edge" marker-end="url(#ah)" d="M425.7 90.5 L455.7 90.5"/></svg></figure>
 <p>Macros are absent from this chain: expansion is textual and happens before parsing.</p>
 <h2 id="1.0-transforming-commands-5">1.0 Transforming commands (5%)<a class="anchor" href="#1.0-transforming-commands-5" aria-label="Link to this section">#</a></h2>
 <div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">chart</span> <span class="t-op">&lt;</span><span class="t-field">agg</span><span class="t-op">&gt;</span> <span class="t-kw">OVER</span> <span class="t-op">&lt;</span><span class="t-field">row-split</span><span class="t-op">&gt;</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">column-split</span><span class="t-op">&gt;</span>
@@ -476,8 +461,7 @@ web = enabled</code></pre>
 </ol>
 
 <nav class="pn" aria-label="Section"><a href="../lab-setup.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Lab setup</span></a></nav>
-      <p class="doc-foot">Built from <code>cram/all-in-one.md</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -518,6 +502,5 @@ web = enabled</code></pre>
 <script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
-<script src="../mermaid-init.js"></script>
 </body>
 </html>

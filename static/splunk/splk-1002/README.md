@@ -34,7 +34,7 @@ Start with [`00-exam-overview.md`](00-exam-overview.md).
 | [`topics/09-data-models-and-pivot.md`](topics/09-data-models-and-pivot.md) | 9.0 Creating Data Models | 10% |
 | [`topics/10-cim.md`](topics/10-cim.md) | 10.0 Using the Common Information Model (CIM) Add-On | 10% |
 
-**5. Drill.** Open the [exam simulator](site/exam/index.html). 200 questions, untimed practice with the answer, the traps and the per-option reasoning revealed on submit, or a timed 65-question mock exam under real conditions. See [`practice/README.md`](practice/README.md) for how the bank is built and verified.
+**5. Drill.** Open the [exam simulator](site/exam/index.html). 200 questions, every one checked against the documentation. Untimed practice reveals the answer, the traps it bites and the reasoning behind every option the moment you submit; the timed mode is 65 questions in 60 minutes under exam conditions.
 
 **6. Cram.** The `cram/` folder has one screen per section, reachable from the Study / Cram control at the top of each topic page, and [`cram/all-in-one.md`](cram/all-in-one.md) is the single sheet for the last hour.
 

@@ -19,6 +19,7 @@ HERE = pathlib.Path(__file__).parent
 sys.path.insert(0, str(HERE))
 from spl_lexer import highlight as spl_highlight  # noqa: E402
 from manifest import GROUPS, all_entries         # noqa: E402
+import svgdiag                                   # noqa: E402
 
 ROOT = HERE.parent
 WPM = 190                 # technical reading, not skimming
@@ -51,13 +52,13 @@ def render_fence(self, tokens, idx, options, env):
     code = tok.content.rstrip("\n")
 
     if info == "mermaid":
-        # One element. Mermaid swaps its text for an SVG; if the CDN is unreachable the
-        # same element stays as readable monospace source. min-height reserves the space
-        # so the document does not grow under the reader after the CDN resolves.
-        env["has_mermaid"] = True
-        lines = code.count("\n") + 1
-        return (f'<div class="mermaid-wrap" style="min-height:{min(120 + lines * 22, 460)}px">'
-                f'<div class="mermaid">{html.escape(code)}</div></div>\n')
+        # Drawn to SVG here rather than by a CDN at read time: the file:// origin refuses
+        # the request, so a network-dependent diagram is simply absent offline.
+        svg = svgdiag.render(code)
+        if svg:
+            env["diagrams"] = env.get("diagrams", 0) + 1
+            return '<figure class="dg-wrap">' + svg + '</figure>\n'
+        return '<pre class="plain">' + html.escape(code) + '</pre>\n'
 
     if info == "spl":
         env["spl"] = env.get("spl", 0) + 1
@@ -342,8 +343,7 @@ document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</scri
       </div>
 {body}
 {prevnext}
-      <p class="doc-foot">Built from <code>{entry['src']}</code>. The markdown is the source
-      of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
+
     </article>
   </main>
 
@@ -369,7 +369,6 @@ document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</scri
 <script src="{prefix}progress.js"></script>
 <script src="{prefix}search-index.js"></script>
 <script src="{prefix}app.js"></script>
-{"<script src=\"" + prefix + "mermaid-init.js\"></script>" if env.get("has_mermaid") else ''}
 </body>
 </html>
 """
@@ -377,7 +376,7 @@ document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</scri
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(out, encoding="utf-8")
     return dict(toc=len(toc), spl=env.get("spl", 0), traps=traps,
-                mermaid=env.get("has_mermaid", False), ids=used if False else None,
+                mermaid=env.get("diagrams", 0), ids=used if False else None,
                 spl_src=env.get("spl_src", []))
 
 

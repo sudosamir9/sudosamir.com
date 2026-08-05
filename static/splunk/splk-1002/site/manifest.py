@@ -10,7 +10,6 @@ GROUPS = [
     ("start",     "Start here",           True),
     ("sections",  "Sections",             True),
     ("reference", "Reference",            False),
-    ("practice",  "Practice and sources", False),
 ]
 
 # (group, source path relative to SPLK-1002, label, section, weight, pair)
@@ -47,9 +46,6 @@ PAGES = [
     ("reference", "reference/cim-data-models.md",             "CIM data models",         None, None, None),
     ("reference", "reference/glossary.md",                    "Glossary",                None, None, None),
 
-    ("practice", "practice/README.md",              "How to drill",        None, None, None),
-    ("practice", "practice/tracker.md",             "Attempt tracker",     None, None, None),
-    ("practice", "practice/weak-areas.md",          "Weak areas",          None, None, None),
 ]
 
 # Cram sheets are reachable through their topic's Study / Cram control rather than as
@@ -72,7 +68,6 @@ CRAM = [
 # Pages that are hand-written rather than rendered from markdown. They appear in the rail
 # and in the prev/next chain, but nothing builds them.
 STATIC = [
-    ("practice", "exam/index.html", "Exam simulator", None, None),
 ]
 
 

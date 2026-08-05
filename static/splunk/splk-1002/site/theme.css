@@ -352,3 +352,50 @@ pre.plain { margin: 0 0 var(--p-space-4); padding: var(--p-space-4); background:
   .spl, .trap, .tw, .mermaid-wrap { break-inside: avoid; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
 }
+
+/* ---------------------------------------------------------------- diagrams
+   Drawn to SVG at build time by svgdiag.py, so they need no network, no JavaScript,
+   and they take their colours from the same tokens as the rest of the page. */
+
+.dg-wrap {
+  margin: 0 0 var(--p-space-5); padding: var(--p-space-4);
+  background: var(--surface-raised); border: 1px solid var(--rule);
+  border-radius: var(--p-radius-md); overflow-x: auto;
+}
+.dg { display: block; max-width: 100%; height: auto; font-family: var(--p-font-mono); }
+.dg-node { fill: var(--surface-inset); stroke: var(--rule-strong); stroke-width: 1; }
+.dg-diamond { fill: var(--warn-quiet); stroke: var(--warn); }
+.dg-text { fill: var(--text); font: 500 13px/1 var(--p-font-mono); }
+.dg-edge { stroke: var(--text-faint); stroke-width: 1.4; fill: none; }
+.dg-arrow { fill: var(--text-faint); }
+.dg-lblbg { fill: var(--surface-raised); stroke: none; }
+.dg-lbl { fill: var(--text-soft); font: 600 11px/1 var(--p-font-mono); }
+.dg-title { fill: var(--text); font: 700 15px/1 var(--p-font-mono); }
+.dg-legend { fill: var(--text-soft); font: 500 12.5px/1 var(--p-font-sans); }
+.dg-pct { fill: var(--text-on-accent); font: 700 12px/1 var(--p-font-mono); }
+.dg-panel { fill: var(--surface-inset); stroke: var(--rule-strong); }
+.dg-panelhead { fill: var(--accent-quiet); stroke: none; }
+.dg-paneltitle { fill: var(--accent); font: 700 12px/1 var(--p-font-mono); }
+
+/* The one pie in the guide is the blueprint weights, so the ramp runs from the accent
+   through to a quiet neutral: the biggest section reads as the most saturated. */
+.dg-slice { stroke: var(--surface-raised); stroke-width: 2; }
+.dg-slice.s0 { fill: var(--accent); }
+.dg-slice.s1 { fill: color-mix(in srgb, var(--accent) 82%, var(--surface)); }
+.dg-slice.s2 { fill: color-mix(in srgb, var(--accent) 70%, var(--surface)); }
+.dg-slice.s3 { fill: color-mix(in srgb, var(--accent) 60%, var(--surface)); }
+.dg-slice.s4 { fill: color-mix(in srgb, var(--accent) 50%, var(--surface)); }
+.dg-slice.s5 { fill: color-mix(in srgb, var(--accent) 42%, var(--surface)); }
+.dg-slice.s6 { fill: color-mix(in srgb, var(--accent) 34%, var(--surface)); }
+.dg-slice.s7 { fill: color-mix(in srgb, var(--accent) 27%, var(--surface)); }
+.dg-slice.s8 { fill: color-mix(in srgb, var(--accent) 20%, var(--surface)); }
+.dg-slice.s9 { fill: color-mix(in srgb, var(--accent) 14%, var(--surface)); }
+.dg-slice.s5 ~ .dg-pct, .dg-slice.s6 ~ .dg-pct { fill: var(--text); }
+
+/* JetBrains Mono ships programming ligatures, which turn != into a single glyph.
+   In a guide about SPL syntax that is a bug, not a feature. */
+code, pre, .dg, kbd, .t-cmd, .t-op,
+[class^="t-"], [class*=" t-"] {
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
