@@ -56,17 +56,20 @@ Also: breadcrumbs, a version badge, previous and next links, a reading-progress 
 
 ## Exam simulator
 
-`site/exam/` is a second app on the same data: 106 fact-checked questions, two modes, no server.
+`site/exam/` is a second app on the same data: 200 questions, two modes, no server. 106 are transcribed from the Udemy practice course and fact-checked against the documentation; 94 are written for this guide, one file per blueprint section under `practice/authored/`, apportioned to the blueprint weights.
 
-**Practice** shows one question at a time. Submitting reveals the verified answer, the course's explanation, every exam trap the question bites with its wrong belief and correct fact, the per-option reasoning where the course supplied it, the documented corrections where the course's own explanation is wrong, the fact-check verdict, the documentation links, and a link into the topic file that teaches it. Pools: everything, not yet seen, previously missed, flagged, any of the five original Udemy tests, or any single blueprint section.
+**Practice** shows one question at a time. Submitting reveals the verified answer, the course's explanation, every exam trap the question bites with its wrong belief and correct fact, the per-option reasoning for every distractor on the authored questions and wherever the course supplied it, the documented corrections where the course's own explanation is wrong, the fact-check verdict, the documentation links, and a link into the topic file that teaches it. Pools: everything, not yet seen, previously missed, flagged, any of the five original Udemy tests, any of the ten authored section sets, or any single blueprint section.
 
-**Mock exam** is 65 questions in 60 minutes with a countdown, a question navigator, flagging, and no feedback until submission. The draw is fresh each sitting and apportioned to the blueprint weights by largest remainder, then capped by what each section actually holds. Section 6.0 has only five mock-eligible questions, so its shortfall is redistributed rather than silently shrinking the exam. Results break down by section and replay every missed question with the full review panel.
+**Mock exam** is 65 questions in 60 minutes with a countdown, a question navigator, flagging, and no feedback until submission. The draw is fresh each sitting and apportioned to the blueprint weights by largest remainder, then capped by what each section actually holds. The cap mattered when the bank was 106: section 6.0 held only five mock-eligible questions against a target of 6.5. With 200 questions every section clears its target, and the capping logic stays because it is what makes a short section degrade gracefully rather than silently shrink the exam. Results break down by section and replay every missed question with the full review panel.
 
 Two rules the data forces. Scoring is against the verified answer, never the course's key, because the fact-check found three keys wrong. And eight questions never enter a mock exam: the one with no correct option, the three the documentation disputes, and the four that are off blueprint. All eight stay in practice, where the reasoning is the point.
 
-    python3 site/build_bank.py
+Authored questions carry `keyVerdict: "authored"` and are labelled "Written for this guide" in the review panel rather than "checked against the documentation", because there is no course key to check them against. Every one cites at least one live documentation URL.
 
-regenerates `exam/bank.js` from `practice/udemy-tests/*.json` and the trap master table. It is a plain script assigning a global, not JSON, because fetch is refused at the file origin. Progress, flags, in-flight exams and past attempts live in `localStorage`, which does work there; a finished attempt can be exported as JSON for `practice/attempts/`.
+    python3 site/build_bank.py
+    python3 site/build_bank.py --exclude-udemy --out exam/bank.js   # authored questions only
+
+regenerates `exam/bank.js` from `practice/udemy-tests/*.json`, `practice/authored/*.json` and the trap master table. The `--exclude-udemy` flag builds a bank of the 94 authored questions alone, which is enough for a full 65-question mock exam if the transcribed course questions ever need to come out. It is a plain script assigning a global, not JSON, because fetch is refused at the file origin. Progress, flags, in-flight exams and past attempts live in `localStorage`, which does work there; a finished attempt can be exported as JSON for `practice/attempts/`.
 
 ## Design
 
