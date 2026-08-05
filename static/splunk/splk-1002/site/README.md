@@ -8,7 +8,7 @@ An HTML renderer for the whole guide. The markdown is the single source of truth
 python3 site/build.py --all
 ```
 
-That writes 43 pages plus four shared sidecar files. Open `site/index.html`, or from WSL run `explorer.exe site\index.html`. Everything works over `file://` with no server.
+That writes 40 pages plus four shared sidecar files. Open `site/index.html`, or from WSL run `explorer.exe site\index.html`. Everything works over `file://` with no server.
 
 ```bash
 python3 site/build.py --all --check          # build, then print per-page counts
@@ -19,7 +19,7 @@ Requires `markdown-it-py`, which is already installed.
 
 ## What gets built
 
-`manifest.py` declares all 43 pages. Nothing asks the filesystem what exists, so a single-page rebuild still links correctly to the other 42, and a cram sheet can never overwrite the topic page it shares a filename with. That last one was a real defect: `cram/01-transforming-commands.md` and `topics/01-transforming-commands.md` have the same stem, and the earlier flat output directory let the 2-block cram sheet replace the 17-block topic page with exit code 0.
+`manifest.py` declares all 41 pages, 40 built from markdown plus the hand-written simulator. Nothing asks the filesystem what exists, so a single-page rebuild still links correctly to the other 42, and a cram sheet can never overwrite the topic page it shares a filename with. That last one was a real defect: `cram/01-transforming-commands.md` and `topics/01-transforming-commands.md` have the same stem, and the earlier flat output directory let the 2-block cram sheet replace the 17-block topic page with exit code 0.
 
 Output mirrors the source tree, so the 166 markdown cross-links already in the guide stay correct under a plain `.md` to `.html` swap.
 
@@ -28,7 +28,9 @@ Output mirrors the source tree, so the 166 markdown cross-links already in the g
 | Start here | README, exam overview, lab setup, final review sheet |
 | Sections | 11 topic pages, each paired with its cram sheet |
 | Reference | 11 files, including the 292-row trap inventory and the 154-link docs index |
-| Practice and sources | 3 files: drill instructions, the attempt tracker and the weak-areas sheet |
+
+The practice dataset lives outside `site/`, in `lab-data/`, and is served alongside the pages. A relative link to it from a markdown file gets an escape-to-root prefix at build time; a link to something already inside `site/` is resolved site-relative instead.
+| Practice and sources | 3 files plus the exam simulator |
 
 ## What it does
 
