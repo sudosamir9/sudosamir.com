@@ -1,0 +1,332 @@
+{
+  "testId": "authored-06",
+  "title": "Section 6.0 Creating Tags and Event Types",
+  "source": {
+    "author": "Written for this study guide",
+    "grounding": "help.splunk.com Splunk Enterprise 10.4, Knowledge Management Manual",
+    "writtenOn": "2026-08-05"
+  },
+  "questionCount": 10,
+  "questions": [
+    {
+      "id": "sg-06-01",
+      "number": 1,
+      "type": "single",
+      "stem": "What does a tag attach to?",
+      "options": [
+        {"id": "A", "text": "A field-value pair, such as `host=web01`", "isCorrect": true, "explanation": "Tags are applied to a specific value of a specific field. An event picks the tag up only because it carries that pair."},
+        {"id": "B", "text": "An event", "isCorrect": false, "explanation": "Events acquire tags indirectly. Nothing is attached to the event itself."},
+        {"id": "C", "text": "A field, regardless of its value", "isCorrect": false, "explanation": "Tagging a whole field would apply the label to every value it holds. Tags are value-specific."},
+        {"id": "D", "text": "A source type", "isCorrect": false, "explanation": "You can tag `sourcetype=secure`, but that is still a field-value pair rather than the source type as an object."}
+      ],
+      "overallExplanation": "A tag always names a pair. `host=web01`, `sourcetype=secure`, `status=404` and `eventtype=failed_login` are all taggable. This is why tagging is the standard remedy when a host value changes: the old and new values can carry the same tag.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.1",
+        "blueprintTitle": "Create and use tags",
+        "onBlueprint": true,
+        "trapIds": ["T-06-01", "T-06-14"],
+        "readNext": ["topics/06-tags-and-event-types.md#what-it-is"],
+        "keyVerdict": "authored",
+        "verdictNote": "Tagging never changes the underlying value. It adds a searchable alternate label alongside it.",
+        "resolveInLab": null,
+        "difficulty": "easy",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search", "title": "Tag field-value pairs in search (Knowledge Management 10.4)", "note": "Tags are assigned to field-value pairs.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-02",
+      "number": 2,
+      "type": "single",
+      "stem": "Which search finds events where the tag `webserver` is applied specifically to the `host` field?",
+      "options": [
+        {"id": "A", "text": "`tag::host=webserver`", "isCorrect": true, "explanation": "The field-scoped form uses exactly two colons between tag and the field name, with no spaces."},
+        {"id": "B", "text": "`tag:host=webserver`", "isCorrect": false, "explanation": "One colon is not the documented syntax. It is the single most common way to get this wrong."},
+        {"id": "C", "text": "`tags::host=webserver`", "isCorrect": false, "explanation": "The pseudo-field is singular. There is no tags field."},
+        {"id": "D", "text": "`tag.host=webserver`", "isCorrect": false, "explanation": "A dot is not a valid separator here. Splunk would read this as a field literally named tag.host."}
+      ],
+      "overallExplanation": "Two forms exist. `tag=<tagname>` searches every tagged field-value pair regardless of field, and `tag::<field>=<tagname>` scopes the search to one field. Both accept the wildcard.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.1",
+        "blueprintTitle": "Create and use tags",
+        "onBlueprint": true,
+        "trapIds": ["T-06-02", "T-06-15"],
+        "readNext": ["topics/06-tags-and-event-types.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The unscoped form is `tag=` and not `tags=`. A question in the transcribed practice bank keys `tags=` as correct, which the documentation contradicts.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search", "title": "Tag field-value pairs in search (Knowledge Management 10.4)", "note": "Search syntax tag=<tagname> and tag::<field>=<tagname>.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-03",
+      "number": 3,
+      "type": "single",
+      "stem": "Which of the following disqualifies a search string from being saved as an event type?",
+      "options": [
+        {"id": "A", "text": "It contains a pipe operator after the initial search.", "isCorrect": true, "explanation": "The documentation forbids an event type definition that includes a pipe after a simple search, and position in the string does not rescue it."},
+        {"id": "B", "text": "It contains more than one field-value pair.", "isCorrect": false, "explanation": "Multiple field-value pairs joined with Boolean operators are perfectly normal in an event type."},
+        {"id": "C", "text": "It uses a wildcard in a field value.", "isCorrect": false, "explanation": "Wildcards are allowed. `sourcetype=access_combined_wcookie` style patterns are common."},
+        {"id": "D", "text": "It specifies an index.", "isCorrect": false, "explanation": "Naming an index is allowed and often sensible for scoping."}
+      ],
+      "overallExplanation": "The same restriction list forbids a subsearch and forbids referencing a report with the savedsearch command. An event type is a classification rule, so it has to be a plain search expression rather than a pipeline.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.3",
+        "blueprintTitle": "Create an event type",
+        "onBlueprint": true,
+        "trapIds": ["T-06-03", "T-06-04"],
+        "readNext": ["topics/06-tags-and-event-types.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Three restrictions to carry in: no pipe, no subsearch, no savedsearch reference.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/define-event-types-in-splunk-web", "title": "Define event types in Splunk Web (Knowledge Management 10.4)", "note": "An event type search cannot include a pipe operator or a subsearch.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-04",
+      "number": 4,
+      "type": "single",
+      "stem": "Event type priorities range from 1 to 10. Which value is the highest priority?",
+      "options": [
+        {"id": "A", "text": "1", "isCorrect": true, "explanation": "The documentation states plainly that 1 is the best priority and 10 is the worst. Lower number wins."},
+        {"id": "B", "text": "10", "isCorrect": false, "explanation": "This is the intuitive reading if you think of priority as a score, and it is the reverse of the documented scale."},
+        {"id": "C", "text": "0", "isCorrect": false, "explanation": "Zero is outside the documented range, which starts at 1."},
+        {"id": "D", "text": "5, as the midpoint and default", "isCorrect": false, "explanation": "A midpoint is not a priority ranking, and priority is optional rather than defaulting to the middle."}
+      ],
+      "overallExplanation": "Priority does two things: event types with a priority sort above those without and order among themselves by value, and only one event type colour displays per event, so the highest priority decides the colour.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.2",
+        "blueprintTitle": "Describe event types and their uses",
+        "onBlueprint": true,
+        "trapIds": ["T-06-05", "T-06-06"],
+        "readNext": ["topics/06-tags-and-event-types.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The documentation's own example gives critical_disk_error priority 3 and a broad catch-all a worse number, which is a useful memory hook for the direction of the scale.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-type-priorities", "title": "About event type priorities (Knowledge Management 10.4)", "note": "Priority is 1 through 10, where 1 is best and 10 is worst.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-05",
+      "number": 5,
+      "type": "single",
+      "stem": "An event matches three different event types. What does the `eventtype` field contain?",
+      "options": [
+        {"id": "A", "text": "All three names, as a multivalue field.", "isCorrect": true, "explanation": "A single event can match many event types, and eventtype behaves as a multivalue field when it does."},
+        {"id": "B", "text": "Only the highest-priority name.", "isCorrect": false, "explanation": "Priority orders the values and decides the displayed colour, but it does not discard the others."},
+        {"id": "C", "text": "Only the first name alphabetically.", "isCorrect": false, "explanation": "Alphabetical order plays no part in selecting a single winner, because there is no single winner."},
+        {"id": "D", "text": "The three names concatenated into one string.", "isCorrect": false, "explanation": "They are separate values in a multivalue field, not a joined string."}
+      ],
+      "overallExplanation": "eventtype is multivalue when several event types match. The values are ordered by priority score first, then alphabetically, and only one colour displays per event.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.2",
+        "blueprintTitle": "Describe event types and their uses",
+        "onBlueprint": true,
+        "trapIds": ["T-06-07"],
+        "readNext": ["topics/06-tags-and-event-types.md#result-contract"],
+        "keyVerdict": "authored",
+        "verdictNote": "Because eventtype is a field like any other, it can itself be tagged, which is how `eventtype=failed_login` ends up carrying a CIM tag such as authentication.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-types", "title": "About event types (Knowledge Management 10.4)", "note": "An event can match multiple event types; eventtype is multivalue in that case.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-06",
+      "number": 6,
+      "type": "single",
+      "stem": "How does an event type differ from a report?",
+      "options": [
+        {"id": "A", "text": "An event type classifies matching events automatically at search time; a report is a saved search you run to get a result set.", "isCorrect": true, "explanation": "One is a passive classification applied to data, the other is an action that produces results on demand or on a schedule."},
+        {"id": "B", "text": "They are the same object under two names in the UI.", "isCorrect": false, "explanation": "They are separate knowledge objects with separate management pages and separate conf files."},
+        {"id": "C", "text": "An event type can be scheduled; a report cannot.", "isCorrect": false, "explanation": "Scheduling belongs to reports and alerts. An event type has no schedule."},
+        {"id": "D", "text": "A report classifies events; an event type returns a result set.", "isCorrect": false, "explanation": "The two roles are swapped here."}
+      ],
+      "overallExplanation": "An event type is a category that attaches itself to every matching event whenever a search runs. A report is a stored search that you execute. This is also why an event type definition cannot reference a report with savedsearch.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.2",
+        "blueprintTitle": "Describe event types and their uses",
+        "onBlueprint": true,
+        "trapIds": ["T-06-08"],
+        "readNext": ["topics/06-tags-and-event-types.md#what-it-is"],
+        "keyVerdict": "authored",
+        "verdictNote": "Reports are not on the SPLK-1002 blueprint in their own right. They appear here only as the thing an event type is contrasted with.",
+        "resolveInLab": null,
+        "difficulty": "easy",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-types", "title": "About event types (Knowledge Management 10.4)", "note": "Event types categorise events at search time, unlike saved searches.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-07",
+      "number": 7,
+      "type": "single",
+      "stem": "In the sequence of search-time operations, which comes last?",
+      "options": [
+        {"id": "A", "text": "Tags", "isCorrect": true, "explanation": "Tags are the ninth and final step, which is why a tag can be applied to an event type but an event type cannot be built on a tag."},
+        {"id": "B", "text": "Event types", "isCorrect": false, "explanation": "Event types are step eight, immediately before tags."},
+        {"id": "C", "text": "Lookups", "isCorrect": false, "explanation": "Lookups are step seven, before both event types and tags."},
+        {"id": "D", "text": "Calculated fields", "isCorrect": false, "explanation": "Calculated fields are step six, before lookups."}
+      ],
+      "overallExplanation": "The nine steps in order: field filters, EXTRACT-, REPORT-, KV_MODE, FIELDALIAS-, EVAL-, LOOKUP-, event types, tags. Most cross-section questions on this exam resolve to a position in this list.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.1",
+        "blueprintTitle": "Create and use tags",
+        "onBlueprint": true,
+        "trapIds": ["T-06-09"],
+        "readNext": ["reference/knowledge-object-precedence.md"],
+        "keyVerdict": "authored",
+        "verdictNote": "Nine operations, not the six taught in most courses. The extra three are the distinct extraction mechanisms EXTRACT-, REPORT- and KV_MODE.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations", "title": "The sequence of search-time operations (Knowledge Management 10.4)", "note": "Tags are the final search-time operation.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-08",
+      "number": 8,
+      "type": "single",
+      "stem": "Which statement about priority and colour is correct?",
+      "options": [
+        {"id": "A", "text": "They are properties of an event type, and an event type can itself be tagged.", "isCorrect": true, "explanation": "Priority and colour belong to the event type object. Because eventtype is a field, `eventtype=<name>` can then be tagged like any other pair."},
+        {"id": "B", "text": "They are properties of a tag.", "isCorrect": false, "explanation": "Tags have neither. They are a name attached to a field-value pair and carry no display attributes."},
+        {"id": "C", "text": "They are properties of both tags and event types.", "isCorrect": false, "explanation": "Only event types have them."},
+        {"id": "D", "text": "Colour belongs to the event type and priority belongs to the tag.", "isCorrect": false, "explanation": "Both belong to the event type. Splitting them between the two objects is a distractor pattern."}
+      ],
+      "overallExplanation": "Priority and colour are event type attributes. A statement pairing tags with priority or colour is wrong, but a statement saying you can tag an event type that has a priority and a colour is correct, which is a distinction worth reading carefully in exam wording.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.2",
+        "blueprintTitle": "Describe event types and their uses",
+        "onBlueprint": true,
+        "trapIds": ["T-06-13"],
+        "readNext": ["topics/06-tags-and-event-types.md#traps"],
+        "keyVerdict": "authored",
+        "verdictNote": "The printed Apress guide keys a question on this incorrectly, which is recorded in source-notes/apress-errata.md.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-type-priorities", "title": "About event type priorities (Knowledge Management 10.4)", "note": "Priority and colour are configured on the event type.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-09",
+      "number": 9,
+      "type": "single",
+      "stem": "A host was renamed for an input, so historical events carry `host=old-name` and new events carry `host=new-name`. Both must be searchable together without editing the data. What is the standard remedy?",
+      "options": [
+        {"id": "A", "text": "Apply the same tag to both `host=old-name` and `host=new-name`, then search by tag.", "isCorrect": true, "explanation": "Tagging adds a shared searchable label to both pairs while leaving the underlying values untouched."},
+        {"id": "B", "text": "Create a field alias mapping old-name to new-name.", "isCorrect": false, "explanation": "Aliases map field names to other field names, not one value of a field to another value."},
+        {"id": "C", "text": "Reindex the historical data with the new host value.", "isCorrect": false, "explanation": "Reindexing is expensive and unnecessary when a search-time label solves it."},
+        {"id": "D", "text": "Define a calculated field that rewrites host on the older events.", "isCorrect": false, "explanation": "This would overwrite the real value, losing the information about which physical input produced the event."}
+      ],
+      "overallExplanation": "This is the canonical use of tags: one label spanning several values of the same field. It works retroactively because tags are applied at search time, and it never mutates the stored value.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.1",
+        "blueprintTitle": "Create and use tags",
+        "onBlueprint": true,
+        "trapIds": ["T-06-14"],
+        "readNext": ["topics/06-tags-and-event-types.md#decision-rules"],
+        "keyVerdict": "authored",
+        "verdictNote": "The same shape of answer applies to normalising several source-specific values onto one CIM tag, which is where sections 6.0 and 10.0 meet.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search", "title": "Tag field-value pairs in search (Knowledge Management 10.4)", "note": "Tags let you group several field values under one searchable name.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-06-10",
+      "number": 10,
+      "type": "multi",
+      "stem": "Which two statements about managing tags in Splunk Web are true? (Choose two.)",
+      "options": [
+        {"id": "A", "text": "Settings, Tags offers views by field-value pair, by tag name, and all unique tag objects.", "isCorrect": true, "explanation": "Three distinct views exist, each useful for a different task."},
+        {"id": "B", "text": "Disabling a tag from the List by tag name page disables it across all apps that contain it.", "isCorrect": true, "explanation": "That page operates on the tag name globally rather than on one field-value pairing."},
+        {"id": "C", "text": "Tags are defined in eventtypes.conf using the `tags` attribute.", "isCorrect": false, "explanation": "That attribute exists but the spec marks it deprecated and points to tags.conf. Tags on an event type live in tags.conf under `[eventtype=<name>]`."},
+        {"id": "D", "text": "A tag can only be applied to one field-value pair at a time.", "isCorrect": false, "explanation": "The same tag name can be applied to many pairs, which is what makes tags useful for normalisation."}
+      ],
+      "overallExplanation": "Three views, and a global effect when disabling by tag name. The conf file to know is tags.conf, with stanza headers of the form `[eventtype=<name>]` when tagging an event type.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "6.1",
+        "blueprintTitle": "Create and use tags",
+        "onBlueprint": true,
+        "trapIds": ["T-06-10", "T-06-11"],
+        "readNext": ["topics/06-tags-and-event-types.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Knowing which conf file owns which object is reliably worth a mark: tags.conf for tags, eventtypes.conf for event types, props.conf for aliases and calculated fields, macros.conf for macros, workflow_actions.conf for workflow actions.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search", "title": "Tag field-value pairs in search (Knowledge Management 10.4)", "note": "The three tag management views and their scope.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    }
+  ]
+}

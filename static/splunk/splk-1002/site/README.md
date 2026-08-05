@@ -54,6 +54,20 @@ Reading estimates sum to the total shown beneath them. Words before the first he
 
 Also: breadcrumbs, a version badge, previous and next links, a reading-progress bar, hover anchors on headings, a link to the markdown source of every page, light and dark themes with the choice remembered, a skip link, visible focus rings, reduced motion respected, and a print stylesheet that drops both rails and resets the palette. Below 1320px the right rail goes first, since the guide tree is more useful than the page outline when space is tight; below 1020px both rails collapse above the content.
 
+## Exam simulator
+
+`site/exam/` is a second app on the same data: 106 fact-checked questions, two modes, no server.
+
+**Practice** shows one question at a time. Submitting reveals the verified answer, the course's explanation, every exam trap the question bites with its wrong belief and correct fact, the per-option reasoning where the course supplied it, the documented corrections where the course's own explanation is wrong, the fact-check verdict, the documentation links, and a link into the topic file that teaches it. Pools: everything, not yet seen, previously missed, flagged, any of the five original Udemy tests, or any single blueprint section.
+
+**Mock exam** is 65 questions in 60 minutes with a countdown, a question navigator, flagging, and no feedback until submission. The draw is fresh each sitting and apportioned to the blueprint weights by largest remainder, then capped by what each section actually holds. Section 6.0 has only five mock-eligible questions, so its shortfall is redistributed rather than silently shrinking the exam. Results break down by section and replay every missed question with the full review panel.
+
+Two rules the data forces. Scoring is against the verified answer, never the course's key, because the fact-check found three keys wrong. And eight questions never enter a mock exam: the one with no correct option, the three the documentation disputes, and the four that are off blueprint. All eight stay in practice, where the reasoning is the point.
+
+    python3 site/build_bank.py
+
+regenerates `exam/bank.js` from `practice/udemy-tests/*.json` and the trap master table. It is a plain script assigning a global, not JSON, because fetch is refused at the file origin. Progress, flags, in-flight exams and past attempts live in `localStorage`, which does work there; a finished attempt can be exported as JSON for `practice/attempts/`.
+
 ## Design
 
 The subject is a reference manual for a pipe-delimited query language, so the pipe is the structural device and headings are set in monospace because the subject is code. One element is allowed to be loud, the search bar; everything else stays quiet. Amber appears only on traps, where it means warning rather than decoration.
@@ -69,6 +83,11 @@ The subject is a reference manual for a pipe-delimited query language, so the pi
 | `app.js` | Search, copy buttons, scrollspy, progress bar, theme toggle |
 | `search-index.js` | Generated. Do not edit |
 | `mermaid-init.js` | CDN load, theme-aware re-render, offline fallback |
+| `build_bank.py` | Practice JSON plus the trap table to `exam/bank.js` |
+| `exam/index.html` | The simulator shell |
+| `exam/exam.css` | Its dark palette, separate from the guide's |
+| `exam/exam.js` | Routing, both modes, scoring, storage |
+| `exam/bank.js` | Generated. Do not edit |
 
 ## Verification
 

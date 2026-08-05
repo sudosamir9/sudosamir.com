@@ -1,0 +1,332 @@
+{
+  "testId": "authored-07",
+  "title": "Section 7.0 Creating and Using Macros",
+  "source": {
+    "author": "Written for this study guide",
+    "grounding": "help.splunk.com Splunk Enterprise 10.4, Knowledge Management Manual and macros.conf spec",
+    "writtenOn": "2026-08-05"
+  },
+  "questionCount": 10,
+  "questions": [
+    {
+      "id": "sg-07-01",
+      "number": 1,
+      "type": "single",
+      "stem": "Which character delimits a search macro reference?",
+      "options": [
+        {"id": "A", "text": "The backtick, as in `` `mymacro` ``", "isCorrect": true, "explanation": "The backtick shares a key with the tilde. It is the only delimiter that triggers macro expansion."},
+        {"id": "B", "text": "The single quotation mark, as in 'mymacro'", "isCorrect": false, "explanation": "Single quotes do not invoke a macro. The text is treated as an ordinary search term."},
+        {"id": "C", "text": "The double quotation mark, as in \"mymacro\"", "isCorrect": false, "explanation": "Double quotes also fail to expand, and in fact macros inside quoted values are explicitly not expanded."},
+        {"id": "D", "text": "The dollar sign, as in $mymacro$", "isCorrect": false, "explanation": "Dollar signs delimit argument tokens inside a macro definition, not the macro reference itself."}
+      ],
+      "overallExplanation": "Backticks invoke, dollar signs substitute. Two different jobs and two different characters, and mixing them up is the most common macro error.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.2",
+        "blueprintTitle": "Create and use a basic macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-01"],
+        "readNext": ["topics/07-macros.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The platform does not expand macros inside quoted values, so a backtick reference buried in a quoted string will not fire either.",
+        "resolveInLab": null,
+        "difficulty": "easy",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/use-search-macros-in-searches", "title": "Use search macros in searches (Knowledge Management 10.4)", "note": "Macro references are enclosed in backtick characters.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-02",
+      "number": 2,
+      "type": "single",
+      "stem": "A macro takes three arguments. What must it be named in Settings, and how is it invoked?",
+      "options": [
+        {"id": "A", "text": "Named `mymacro(3)`, invoked as `` `mymacro(a,b,c)` ``", "isCorrect": true, "explanation": "The stored name carries the argument count. The invocation carries the actual values."},
+        {"id": "B", "text": "Named `mymacro`, invoked as `` `mymacro(3)` ``", "isCorrect": false, "explanation": "This reverses the two. The number in the invocation would be read as a single argument value."},
+        {"id": "C", "text": "Named `mymacro(a,b,c)`, invoked as `` `mymacro(3)` ``", "isCorrect": false, "explanation": "Argument names go in the separate Arguments field, not into the macro name."},
+        {"id": "D", "text": "Named `mymacro`, invoked as `` `mymacro(a,b,c)` ``", "isCorrect": false, "explanation": "Calling with arguments when only a bare-name macro exists is an error rather than a call with arguments."}
+      ],
+      "overallExplanation": "The documentation is explicit: if your search macro includes two arguments, name it mymacro(2). `[foobar]` and `[foobar(1)]` are different macros, not one macro with an optional argument.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.4",
+        "blueprintTitle": "Add and use arguments with a macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-02", "T-07-11"],
+        "readNext": ["topics/07-macros.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Because the count is part of the name, you can define several macros sharing a base name with different arity, and they coexist independently.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/define-search-macros-in-settings", "title": "Define search macros in Settings (Knowledge Management 10.4)", "note": "Name a macro with its argument count, for example mymacro(2).", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-03",
+      "number": 3,
+      "type": "single",
+      "stem": "How are argument names written in the Arguments field, and how are they referenced in the Definition?",
+      "options": [
+        {"id": "A", "text": "Bare and comma-delimited in Arguments, as `val, rate`; wrapped in dollar signs in the Definition, as `$val$`", "isCorrect": true, "explanation": "Arguments takes a comma-delimited string of names. The Definition references them with the dollar-sign token pattern."},
+        {"id": "B", "text": "Dollar-wrapped in both places", "isCorrect": false, "explanation": "Adding dollar signs in the Arguments field is a common error; that field wants bare names."},
+        {"id": "C", "text": "Bare in both places", "isCorrect": false, "explanation": "Without dollar signs the Definition would treat the name as literal search text and never substitute."},
+        {"id": "D", "text": "Backtick-wrapped in the Definition", "isCorrect": false, "explanation": "Backticks invoke other macros. They do not mark argument substitution."}
+      ],
+      "overallExplanation": "Two quoting rules pull in opposite directions here. Macros are not expanded inside quoted values, but the $<arg>$ pattern is replaced globally, including inside quoted strings.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.3",
+        "blueprintTitle": "Define arguments and variables for a macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-03", "T-07-04"],
+        "readNext": ["topics/07-macros.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Argument names may contain only alphanumeric characters, underscores and hyphens, with no repeats. The manual separately warns against hyphens in macro names.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/define-search-macros-in-settings", "title": "Define search macros in Settings (Knowledge Management 10.4)", "note": "Arguments is a comma-delimited string of argument names; the definition uses $arg$.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-04",
+      "number": 4,
+      "type": "single",
+      "stem": "A macro has a validation expression, and a user supplies an argument that fails it. What does the user see?",
+      "options": [
+        {"id": "A", "text": "The validation error message, with the search never dispatched.", "isCorrect": true, "explanation": "Validation runs before dispatch, so the search does not execute at all and the configured error message is displayed."},
+        {"id": "B", "text": "Zero events, as though the search matched nothing.", "isCorrect": false, "explanation": "An empty result set would be indistinguishable from a genuine no-match. Validation is designed to be louder than that."},
+        {"id": "C", "text": "The search runs with the argument replaced by a null value.", "isCorrect": false, "explanation": "No substitution of a default happens. The search is stopped."},
+        {"id": "D", "text": "A warning in the job log, with the search running anyway.", "isCorrect": false, "explanation": "Failing validation blocks execution rather than annotating it."}
+      ],
+      "overallExplanation": "A Boolean validation expression succeeds on true and fails on false or NULL, with errormsg supplying the message. A non-Boolean validation expression inverts that: it succeeds on NULL and fails by returning the message itself.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.3",
+        "blueprintTitle": "Define arguments and variables for a macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-06", "T-07-05"],
+        "readNext": ["topics/07-macros.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The two validation modes behaving oppositely is unusual enough to be examinable. Boolean: true is good. Non-Boolean: NULL is good.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/macros.conf", "title": "macros.conf spec (Admin Manual 10.4)", "note": "validation and errormsg settings, and the Boolean versus non-Boolean behaviour.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-05",
+      "number": 5,
+      "type": "single",
+      "stem": "Where does macro expansion sit in the sequence of search-time operations?",
+      "options": [
+        {"id": "A", "text": "Nowhere in it; expansion is textual and happens before the search is parsed.", "isCorrect": true, "explanation": "The nine-step sequence contains no macro step. A macro is replaced with its text before parsing begins."},
+        {"id": "B", "text": "Between field aliases and calculated fields.", "isCorrect": false, "explanation": "That slot belongs to nothing; aliases at step 5 are followed directly by calculated fields at step 6."},
+        {"id": "C", "text": "Immediately after lookups.", "isCorrect": false, "explanation": "Step 7 is followed by event types. Macros are not part of this ordering at all."},
+        {"id": "D", "text": "Last, after tags.", "isCorrect": false, "explanation": "Tags are the final search-time operation, and macros are not a search-time knowledge object in this sense."}
+      ],
+      "overallExplanation": "A macro is a text substitution performed on the search string. By the time the nine search-time operations run, the macro has already been replaced and is indistinguishable from typed SPL.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.1",
+        "blueprintTitle": "Describe macros",
+        "onBlueprint": true,
+        "trapIds": ["T-07-08"],
+        "readNext": ["reference/knowledge-object-precedence.md"],
+        "keyVerdict": "authored",
+        "verdictNote": "This is why a macro can contain anything at all, including whole pipelines, while an event type definition cannot even contain a pipe.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros", "title": "Search macros (Knowledge Management 10.4)", "note": "Macros are reusable search string fragments expanded into the search.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-06",
+      "number": 6,
+      "type": "single",
+      "stem": "A macro should encapsulate `| tstats count WHERE index=web BY _time`. How should the definition be written?",
+      "options": [
+        {"id": "A", "text": "Without the leading pipe, putting the pipe in front of the reference instead.", "isCorrect": true, "explanation": "The definition holds `tstats count WHERE index=web BY _time` and the search reads `` | `mymacro` ``. The pipe lives at the call site."},
+        {"id": "B", "text": "With the leading pipe, so the macro is self-contained.", "isCorrect": false, "explanation": "Keeping the pipe in the definition produces a doubled or misplaced pipe once the text is substituted."},
+        {"id": "C", "text": "With the leading pipe, and invoked without a preceding pipe.", "isCorrect": false, "explanation": "This is the documented mistake. The convention is the reverse."},
+        {"id": "D", "text": "A generating command cannot be placed in a macro at all.", "isCorrect": false, "explanation": "It can. Only the placement of the leading pipe needs care."}
+      ],
+      "overallExplanation": "Because expansion is textual, the surrounding pipe structure is your responsibility. Remove the leading pipe from the definition and write it in front of the backtick reference.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.2",
+        "blueprintTitle": "Create and use a basic macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-09"],
+        "readNext": ["topics/07-macros.md#worked-examples"],
+        "keyVerdict": "authored",
+        "verdictNote": "The same reasoning explains why a macro can sit mid-pipeline with further commands after it. Nothing about a macro has to end a search.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/search-macro-examples", "title": "Search macro examples (Knowledge Management 10.4)", "note": "Definitions omit the leading pipe; the reference carries it.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-07",
+      "number": 7,
+      "type": "single",
+      "stem": "A two-argument macro `foobar(2)` is defined with arguments `foo` and `bar`. Which invocations are equivalent according to the documentation's own example?",
+      "options": [
+        {"id": "A", "text": "`` `foobar(1,2)` ``, `` `foobar(foo=1,bar=2)` `` and `` `foobar(bar=2,foo=1)` ``", "isCorrect": true, "explanation": "The macros.conf example states these three forms are equivalent, so arguments can be positional or named, and named arguments can be reordered."},
+        {"id": "B", "text": "Only `` `foobar(1,2)` ``, because macro arguments are strictly positional", "isCorrect": false, "explanation": "Named arguments are supported. This is the assumption the documentation's example specifically refutes."},
+        {"id": "C", "text": "Only the two named forms, because a two-argument macro requires named arguments", "isCorrect": false, "explanation": "The positional form works and is the most common in practice."},
+        {"id": "D", "text": "None; a macro can take at most one argument", "isCorrect": false, "explanation": "Macros routinely take several arguments; the count simply goes in the name."}
+      ],
+      "overallExplanation": "Positional and named invocation both work, and named arguments may appear in any order. This is easy to miss because most examples in circulation only ever show the positional form.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.4",
+        "blueprintTitle": "Add and use arguments with a macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-12"],
+        "readNext": ["topics/07-macros.md#worked-examples"],
+        "keyVerdict": "authored",
+        "verdictNote": "Sourced from macros.conf.example, which is shipped with the product and is the authority for this behaviour.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/macros.conf", "title": "macros.conf spec (Admin Manual 10.4)", "note": "Example showing positional and named invocation as equivalent.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-08",
+      "number": 8,
+      "type": "single",
+      "stem": "What does `iseval = true` mean on a macro definition?",
+      "options": [
+        {"id": "A", "text": "The definition is an eval expression returning a string, and that string becomes the macro's expansion.", "isCorrect": true, "explanation": "The macro computes its own replacement text. The result is search text, not a field value."},
+        {"id": "B", "text": "The macro runs an eval command and adds a computed field to the results.", "isCorrect": false, "explanation": "No field is created. The eval expression produces the text that replaces the macro reference."},
+        {"id": "C", "text": "The macro may only be used inside an eval expression.", "isCorrect": false, "explanation": "There is no such placement restriction."},
+        {"id": "D", "text": "Argument validation is performed with eval syntax.", "isCorrect": false, "explanation": "That is what the separate validation setting does."}
+      ],
+      "overallExplanation": "iseval defaults to false. When set, the definition is evaluated as an eval expression and its returned string is substituted, which lets a macro build different search text depending on its arguments.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.3",
+        "blueprintTitle": "Define arguments and variables for a macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-13"],
+        "readNext": ["topics/07-macros.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Consistent with macros being textual: even an eval-backed macro produces text for the parser rather than data for the pipeline.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/macros.conf", "title": "macros.conf spec (Admin Manual 10.4)", "note": "iseval: the definition is an eval expression returning a string representing the expansion.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-09",
+      "number": 9,
+      "type": "single",
+      "stem": "A macro is created in Search and Reporting and shared at app level. A colleague working in a different app cannot use it. Why?",
+      "options": [
+        {"id": "A", "text": "App-level sharing makes an object available only to users of that app; global use requires All apps.", "isCorrect": true, "explanation": "The object is bound to the app context it was created in until it is promoted to All apps."},
+        {"id": "B", "text": "Macros cannot be shared between users under any circumstances.", "isCorrect": false, "explanation": "They can be shared to an app or globally like other knowledge objects."},
+        {"id": "C", "text": "The colleague lacks the power role, which is required to invoke any macro.", "isCorrect": false, "explanation": "Roles govern who can share and promote, not who can invoke a macro that is already visible to them."},
+        {"id": "D", "text": "Macros require a restart before other users can see them.", "isCorrect": false, "explanation": "macros.conf is among the search-time files whose settings take effect without a restart."}
+      ],
+      "overallExplanation": "Permission scope is the usual explanation for it works for me but not for them. Promote to All apps for cross-app use. No restart is needed either way.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.2",
+        "blueprintTitle": "Create and use a basic macro",
+        "onBlueprint": true,
+        "trapIds": ["T-07-14", "T-07-07"],
+        "readNext": ["topics/07-macros.md#traps"],
+        "keyVerdict": "authored",
+        "verdictNote": "The Admin Manual page on when a restart is required lists macros.conf among search-time files that take effect after an endpoint refresh.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions", "title": "Manage knowledge object permissions (Knowledge Management 10.4)", "note": "App-level sharing limits visibility to that app until promoted globally.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-07-10",
+      "number": 10,
+      "type": "multi",
+      "stem": "Which two statements about search macros are true? (Choose two.)",
+      "options": [
+        {"id": "A", "text": "A macro definition can contain a full pipeline including multiple commands.", "isCorrect": true, "explanation": "Because expansion is textual, anything valid as search text is valid in a definition."},
+        {"id": "B", "text": "A macro reference can be followed by further commands in the same search.", "isCorrect": true, "explanation": "Nothing requires a macro to end a search. It substitutes text and the pipeline continues."},
+        {"id": "C", "text": "A macro with arguments must also define a validation expression and an error message.", "isCorrect": false, "explanation": "Validation is optional. Arguments work without it."},
+        {"id": "D", "text": "Macros are configured under Settings, Fields alongside aliases and calculated fields.", "isCorrect": false, "explanation": "Macros have their own page under Settings, Advanced search, Search macros."}
+      ],
+      "overallExplanation": "A macro is text, so it composes freely: whole pipelines inside, more commands after. Validation is optional, and macros live under Advanced search rather than with the field-related objects.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "7.1",
+        "blueprintTitle": "Describe macros",
+        "onBlueprint": true,
+        "trapIds": ["T-07-16", "T-07-17", "T-07-18"],
+        "readNext": ["topics/07-macros.md#what-it-is"],
+        "keyVerdict": "authored",
+        "verdictNote": "Knowing the Settings path matters: Settings, Advanced search, Search macros. Distractors routinely place them under Fields.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/define-search-macros-in-settings", "title": "Define search macros in Settings (Knowledge Management 10.4)", "note": "Navigation path and the optional nature of validation.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    }
+  ]
+}

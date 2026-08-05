@@ -1,0 +1,300 @@
+{
+  "testId": "authored-10",
+  "title": "Section 10.0 Using the Common Information Model (CIM) Add-On",
+  "source": {
+    "author": "Written for this study guide",
+    "grounding": "help.splunk.com Common Information Model 8.6",
+    "writtenOn": "2026-08-05"
+  },
+  "questionCount": 9,
+  "questions": [
+    {
+      "id": "sg-10-01",
+      "number": 1,
+      "type": "single",
+      "stem": "When does the Common Information Model normalize data?",
+      "options": [
+        {"id": "A", "text": "At search time; it leaves the raw machine data intact.", "isCorrect": true, "explanation": "The CIM is a search-time schema. Installing the add-on reindexes nothing and modifies no stored event."},
+        {"id": "B", "text": "At index time, rewriting events into a common format.", "isCorrect": false, "explanation": "Nothing is rewritten. This misreads normalisation as transformation of stored data."},
+        {"id": "C", "text": "At ingest, before the data reaches the indexers.", "isCorrect": false, "explanation": "The add-on is not part of the ingest path at all."},
+        {"id": "D", "text": "On a schedule, as a summarisation job.", "isCorrect": false, "explanation": "Acceleration builds summaries on a schedule, but that is separate from normalisation and is off by default."}
+      ],
+      "overallExplanation": "Schema on the fly. The CIM defines expected field names and tags, and knowledge objects map your data onto them when a search runs. That is also why the add-on is installed on search heads only.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.1",
+        "blueprintTitle": "Describe the Splunk CIM",
+        "onBlueprint": true,
+        "trapIds": ["T-10-01", "T-10-05"],
+        "readNext": ["topics/10-cim.md#what-it-is"],
+        "keyVerdict": "authored",
+        "verdictNote": "Search heads only, because the add-on contains only search-time knowledge objects. Answers naming indexers or forwarders are wrong for that reason.",
+        "resolveInLab": null,
+        "difficulty": "easy",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/overview-of-the-splunk-common-information-model", "title": "Overview of the Splunk CIM (CIM 8.6)", "note": "The CIM is a search-time schema that leaves raw machine data intact.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-02",
+      "number": 2,
+      "type": "single",
+      "stem": "A fresh CIM add-on installation is complete. What is the acceleration state of its data models?",
+      "options": [
+        {"id": "A", "text": "Off for every model; you enable it per model on the CIM Setup page.", "isCorrect": true, "explanation": "All data models included in the CIM add-on have acceleration turned off by default."},
+        {"id": "B", "text": "On for every model, which is why the add-on speeds searches immediately.", "isCorrect": false, "explanation": "Nothing is accelerated on install, so no speed-up happens by itself."},
+        {"id": "C", "text": "On for the security models only.", "isCorrect": false, "explanation": "There is no partial default. All are off."},
+        {"id": "D", "text": "Determined automatically by data volume.", "isCorrect": false, "explanation": "Acceleration is an explicit administrative choice, never automatic."}
+      ],
+      "overallExplanation": "The practical consequence is that a `tstats summariesonly=true` search against a stock CIM model returns nothing, because no summary exists yet. That looks like broken data and is actually the default state.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.1",
+        "blueprintTitle": "Describe the Splunk CIM",
+        "onBlueprint": true,
+        "trapIds": ["T-10-02", "T-09-03"],
+        "readNext": ["topics/10-cim.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "Enabling acceleration is done per model on the CIM Setup page, where the Indexes allowlist for that model also lives.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/accelerate-cim-data-models", "title": "Accelerate CIM data models (CIM 8.6)", "note": "All CIM data models have acceleration turned off by default.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-03",
+      "number": 3,
+      "type": "single",
+      "stem": "Events have been given correct CIM field names but no tags. What is the result?",
+      "options": [
+        {"id": "A", "text": "The events do not appear in the data model at all, because tags are what admit events to a dataset.", "isCorrect": true, "explanation": "Membership is decided by the constraint, which for CIM event datasets is a tag expression. Field names alone put the events nowhere."},
+        {"id": "B", "text": "They appear in the model but with null values.", "isCorrect": false, "explanation": "That is what happens when tags are correct and a field is missing, which is the opposite situation."},
+        {"id": "C", "text": "They appear, because field names are the constraint.", "isCorrect": false, "explanation": "Field names are the payload, not the admission criterion."},
+        {"id": "D", "text": "Splunk warns that the events are non-compliant.", "isCorrect": false, "explanation": "Nothing warns. Silence is precisely the difficulty with CIM compliance."}
+      ],
+      "overallExplanation": "Two separate obligations. Tags decide membership, fields carry the values. Correct fields without tags means no membership; correct tags with a missing field means membership with a null column and no warning.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.3",
+        "blueprintTitle": "Use the CIM Add-On to normalize data",
+        "onBlueprint": true,
+        "trapIds": ["T-10-03", "T-CIM-08"],
+        "readNext": ["topics/10-cim.md#decision-rules"],
+        "keyVerdict": "authored",
+        "verdictNote": "Child datasets inherit the parent constraint, so the Web model's Proxy dataset needs both web and proxy, not proxy alone.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time", "title": "Use the CIM to normalize data at search time (CIM 8.6)", "note": "Tags admit events into an event dataset; fields carry the normalised values.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-04",
+      "number": 4,
+      "type": "single",
+      "stem": "What is the default state of the Indexes allowlist for a CIM data model?",
+      "options": [
+        {"id": "A", "text": "It searches all indexes, so the allowlist is a performance control rather than a prerequisite.", "isCorrect": true, "explanation": "By default each data model searches every index. Restricting it improves performance but is not required for the model to return data."},
+        {"id": "B", "text": "It is empty, so the model returns nothing until indexes are added.", "isCorrect": false, "explanation": "An empty allowlist would make the add-on inert on install, which is not the behaviour."},
+        {"id": "C", "text": "It contains only the main index.", "isCorrect": false, "explanation": "There is no such single-index default."},
+        {"id": "D", "text": "It updates automatically as new indexes are created.", "isCorrect": false, "explanation": "Once you set an allowlist, new indexes must be added by hand."}
+      ],
+      "overallExplanation": "All indexes by default. Setting the allowlist is the single highest-value CIM performance change, and the older documentation calls the same setting an index whitelist.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.1",
+        "blueprintTitle": "Describe the Splunk CIM",
+        "onBlueprint": true,
+        "trapIds": ["T-10-04", "T-CIM-12"],
+        "readNext": ["topics/10-cim.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "This guide previously asserted a `cim_<Model>_indexes` macro convention for index scoping. The fact-check found no CIM 8.6 page documenting it; the allowlist on the CIM Setup page is the mechanism.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/set-up-the-splunk-common-information-model-add-on", "title": "Set up the Splunk CIM add-on (CIM 8.6)", "note": "Each data model searches all indexes by default; the allowlist restricts it.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-05",
+      "number": 5,
+      "type": "multi",
+      "stem": "Which two knowledge object types does the CIM add-on rely on to normalize data? (Choose two.)",
+      "options": [
+        {"id": "A", "text": "Field aliases", "isCorrect": true, "explanation": "Aliasing a source-specific field name onto the CIM name is the most common normalisation step."},
+        {"id": "B", "text": "Lookups", "isCorrect": true, "explanation": "Lookups map source-specific values onto the CIM's expected values, for example turning a numeric code into allowed or blocked."},
+        {"id": "C", "text": "Workflow actions", "isCorrect": false, "explanation": "Workflow actions are click-driven UI shortcuts and play no part in normalisation."},
+        {"id": "D", "text": "Search macros", "isCorrect": false, "explanation": "The add-on ships some macros, but they are not part of the documented normalisation set."}
+      ],
+      "overallExplanation": "The documented set is field aliases, field extractions and lookups, alongside the event types and tags that admit events to a dataset, plus calculated fields for derived values such as `bytes = bytes_in + bytes_out`.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.2",
+        "blueprintTitle": "List the knowledge objects included with the Splunk CIM Add-On",
+        "onBlueprint": true,
+        "trapIds": ["T-10-19", "T-CIM-16"],
+        "readNext": ["topics/10-cim.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The add-on does not ship tsidx summary files, custom visualizations, or a dashboard library. Column stores exist only once acceleration is enabled, and the one shipped dashboard is Data Model Audit.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time", "title": "Use the CIM to normalize data at search time (CIM 8.6)", "note": "Field aliases, field extractions, lookups, event types and tags are the normalisation objects.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-06",
+      "number": 6,
+      "type": "single",
+      "stem": "A firewall event is normalized into Network Traffic with `action=denied`. What happens?",
+      "options": [
+        {"id": "A", "text": "Nothing rejects it, but it will never match content expecting the prescribed values.", "isCorrect": true, "explanation": "Expected values are not exhaustive or exclusive and nothing validates them. Network Traffic prescribes allowed, blocked and teardown."},
+        {"id": "B", "text": "The event is rejected from the data model.", "isCorrect": false, "explanation": "Membership is decided by tags. Field values do not gate admission."},
+        {"id": "C", "text": "Splunk maps it automatically to the nearest expected value.", "isCorrect": false, "explanation": "No automatic mapping exists. That is what a lookup in your add-on is for."},
+        {"id": "D", "text": "The search errors when the field is used.", "isCorrect": false, "explanation": "No error is raised. The failure is entirely silent."}
+      ],
+      "overallExplanation": "The consequence of an out-of-spec value is silence: the data is in the model, and every dashboard and correlation search looking for the prescribed value simply misses it. Intrusion Detection is stricter still, allowing only allowed and blocked.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.3",
+        "blueprintTitle": "Use the CIM Add-On to normalize data",
+        "onBlueprint": true,
+        "trapIds": ["T-10-10", "T-CIM-02", "T-CIM-03"],
+        "readNext": ["reference/cim-data-models.md"],
+        "keyVerdict": "authored",
+        "verdictNote": "In Change, action records what was attempted and status carries success or failure. Only in Authentication does action itself carry the outcome.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/data-models/cim-fields-per-associated-data-model", "title": "CIM fields per associated data model (CIM 8.6)", "note": "Expected values per model; they are not exhaustive or exclusive.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-07",
+      "number": 7,
+      "type": "single",
+      "stem": "Which command is shipped by the CIM add-on rather than being core SPL?",
+      "options": [
+        {"id": "A", "text": "`datamodelsimple`", "isCorrect": true, "explanation": "It is a custom command inside Splunk_SA_CIM and does not exist without the add-on installed."},
+        {"id": "B", "text": "`datamodel`", "isCorrect": false, "explanation": "Core SPL, available on any Splunk Enterprise installation."},
+        {"id": "C", "text": "`tstats`", "isCorrect": false, "explanation": "Core SPL, and the usual way to query an accelerated data model."},
+        {"id": "D", "text": "`pivot`", "isCorrect": false, "explanation": "Core SPL, and the command behind the Pivot interface."}
+      ],
+      "overallExplanation": "datamodel, tstats, pivot and from are all core. datamodelsimple is the odd one out, shipped inside Splunk_SA_CIM. A question asking which command depends on the add-on has exactly one answer.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.2",
+        "blueprintTitle": "List the knowledge objects included with the Splunk CIM Add-On",
+        "onBlueprint": true,
+        "trapIds": ["T-10-09"],
+        "readNext": ["topics/10-cim.md#syntax-and-options"],
+        "keyVerdict": "authored",
+        "verdictNote": "The app identity is worth knowing too: the Splunk Common Information Model Add-on is app 1621, Splunk_SA_CIM. The Splunk Add-on Builder is a different app entirely.",
+        "resolveInLab": null,
+        "difficulty": "medium",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/install-the-splunk-common-information-model-add-on", "title": "Install the Splunk CIM add-on (CIM 8.6)", "note": "Contents of Splunk_SA_CIM, including the datamodelsimple command.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-08",
+      "number": 8,
+      "type": "single",
+      "stem": "A custom field must be added to a CIM data model. What does the documentation recommend?",
+      "options": [
+        {"id": "A", "text": "Add the field to the model itself; cloning the model and keeping the original is not considered a best practice.", "isCorrect": true, "explanation": "The docs state cloning to preserve the original is not best practice, so the supported route is modifying the model."},
+        {"id": "B", "text": "Clone the model and extend the clone, keeping the original for reference.", "isCorrect": false, "explanation": "This is the approach the documentation explicitly discourages."},
+        {"id": "C", "text": "Create a new data model that inherits from the CIM model.", "isCorrect": false, "explanation": "Data models do not inherit from each other; inheritance exists between datasets within one model."},
+        {"id": "D", "text": "Add the field via props.conf on the source type instead of touching the model.", "isCorrect": false, "explanation": "That makes the field available on events but does not add it to the model's field list."}
+      ],
+      "overallExplanation": "Extend the model in place, and prefer not extending at all where the existing schema will do. Cloning leaves two models drifting apart, and acceleration then has to be paid for twice.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.3",
+        "blueprintTitle": "Use the CIM Add-On to normalize data",
+        "onBlueprint": true,
+        "trapIds": ["T-10-13"],
+        "readNext": ["topics/10-cim.md#decision-rules"],
+        "keyVerdict": "authored",
+        "verdictNote": "Remember that an accelerated model cannot be edited at all, so any extension starts by turning acceleration off.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/approaches-to-using-the-cim", "title": "Approaches to using the CIM (CIM 8.6)", "note": "Cloning a data model and keeping the original is not a best practice.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    },
+    {
+      "id": "sg-10-09",
+      "number": 9,
+      "type": "single",
+      "stem": "Which CIM data model covers a DHCP lease assignment?",
+      "options": [
+        {"id": "A", "text": "Network Sessions", "isCorrect": true, "explanation": "Network Sessions covers DHCP, tagged network, session and dhcp, and also covers VPN tunnel establishment."},
+        {"id": "B", "text": "Network Traffic", "isCorrect": false, "explanation": "Network Traffic covers flows between hosts. The payload inside a VPN tunnel belongs here; establishing the session does not."},
+        {"id": "C", "text": "Network Resolution", "isCorrect": false, "explanation": "Network Resolution covers DNS, not address assignment."},
+        {"id": "D", "text": "Inventory", "isCorrect": false, "explanation": "Inventory describes what exists in the environment rather than session events."}
+      ],
+      "overallExplanation": "Session establishment versus traffic is the distinction. DHCP and VPN connection events are Network Sessions; the flows that follow are Network Traffic. Network Resolution is DNS.",
+      "duplicateOf": null,
+      "courseKey": null,
+      "guide": {
+        "blueprintSection": "10.2",
+        "blueprintTitle": "List the knowledge objects included with the Splunk CIM Add-On",
+        "onBlueprint": true,
+        "trapIds": ["T-CIM-15", "T-10-06"],
+        "readNext": ["reference/cim-data-models.md"],
+        "keyVerdict": "authored",
+        "verdictNote": "Two model names to keep current: the model is Inventory, not Compute Inventory, and Application State is deprecated in favour of Endpoint.",
+        "resolveInLab": null,
+        "difficulty": "hard",
+        "correctedAnswer": null,
+        "docs": [
+          {"url": "https://help.splunk.com/en/data-management/common-information-model/8.6/data-models", "title": "Data models (CIM 8.6)", "note": "Network Sessions covers DHCP and VPN session events.", "primary": true}
+        ],
+        "explanationIssues": [],
+        "factChecked": true
+      }
+    }
+  ]
+}

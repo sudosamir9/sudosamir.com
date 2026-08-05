@@ -72,6 +72,13 @@ CRAM = [
 ]
 
 
+# Pages that are hand-written rather than rendered from markdown. They appear in the rail
+# and in the prev/next chain, but nothing builds them.
+STATIC = [
+    ("practice", "exam/index.html", "Exam simulator", None, None),
+]
+
+
 def out_path(src: str) -> str:
     """Mirror the source tree, so the 166 existing markdown cross-links stay correct
     under a plain extension swap. The root README becomes the landing page."""
@@ -83,12 +90,18 @@ def all_entries():
     out = []
     for group, src, label, section, weight, pair in PAGES:
         out.append(dict(src=src, out=out_path(src), group=group, label=label,
-                        section=section, weight=weight, pair=pair, is_cram=False))
+                        section=section, weight=weight, pair=pair, is_cram=False,
+                        static=False))
+    for group, out_rel, label, section, weight in STATIC:
+        out.append(dict(src=out_rel, out=out_rel, group=group, label=label,
+                        section=section, weight=weight, pair=None, is_cram=False,
+                        static=True))
     seen = {e["src"] for e in out}
     for src, label, section, weight in CRAM:
         if src in seen:      # cram/all-in-one is already a Start here page
             continue
         topic = src.replace("cram/", "topics/")
         out.append(dict(src=src, out=out_path(src), group="sections", label=label,
-                        section=section, weight=weight, pair=topic, is_cram=True))
+                        section=section, weight=weight, pair=topic, is_cram=True,
+                        static=False))
     return out

@@ -68,6 +68,7 @@ document.documentElement.dataset.theme=s;})();</script>
 <a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
 <a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
 <a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
+<a class="tree-item" href="../exam/index.html"><span class="tree-label">Exam simulator</span></a>
 </details>
     </nav>
     <div class="rail-foot">
@@ -233,15 +234,15 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-00-19</td>
 <td>0 (off blueprint)</td>
-<td>A job only exists when a user types SPL into the search bar, so dashboards and reports have nothing to inspect. Wrong. Running a search, creating a pivot, opening a report and loading a dashboard panel each create a job, which is why a six-panel dashboard creates six of them and why every one of them shows up on the ho.</td>
-<td>.</td>
+<td>A job only exists when a user types SPL into the search bar, so dashboards and reports have nothing to inspect.</td>
+<td>Running a search, creating a pivot, opening a report and loading a dashboard panel each create a job, which is why a six-panel dashboard creates six of them and why every one of them shows up on the host as a <code>splunkd search</code> child process.</td>
 <td>00-foundations-refresher.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-00-20</td>
 <td>0 (off blueprint)</td>
-<td>The Search Job Inspector only works on a search that is still running, so you have to catch a slow search in the act. Wrong. Any job whose artifact has not expired can be inspected, running or not, succeeded or failed. What defeats you is expiry: an ad hoc job lives 10 minutes by default, and sharing it extends the lif.</td>
-<td>.</td>
+<td>The Search Job Inspector only works on a search that is still running, so you have to catch a slow search in the act.</td>
+<td>Any job whose artifact has not expired can be inspected, running or not, succeeded or failed. What defeats you is expiry: an ad hoc job lives 10 minutes by default, and sharing it extends the lifetime to 7 days.</td>
 <td>00-foundations-refresher.md, ## Traps</td>
 </tr>
 <tr>
@@ -548,22 +549,22 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-02-20</td>
 <td>2.0</td>
-<td><code>| eval size = tostring(bytes,&quot;commas&quot;) | sort - size</code> still orders by size, because the number survives underneath. Correct: <code>tostring</code> returns a string and the assignment overwrites the field with it, so <code>sort</code> uses lexicographical collation and orders on the first character. Sort while the values are numeric and c.</td>
-<td>.</td>
+<td><code>| eval size = tostring(bytes,&quot;commas&quot;) | sort - size</code> still orders by size, because the number survives underneath.</td>
+<td><code>tostring</code> returns a string and the assignment overwrites the field with it, so <code>sort</code> uses lexicographical collation and orders on the first character. Sort while the values are numeric and convert afterwards, or use <code>fieldformat</code> and never convert. Same trap in currency dress: <code>| eval price = &quot;$&quot; . price</code> makes every value start with punctuation.</td>
 <td>02-filtering-and-formatting.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-02-21</td>
 <td>2.0</td>
-<td>the field an <code>eval</code> creates is written to the index, a KV Store collection, or a lookup, so the next search can filter on it. Correct: it lands in a field in the search results only and is gone when the search ends, so naming it in a new base search matches nothing. Only a calculated field, or an explicit `outputlookup.</td>
-<td>.</td>
+<td>the field an <code>eval</code> creates is written to the index, a KV Store collection, or a lookup, so the next search can filter on it.</td>
+<td>it lands in a field in the search results only and is gone when the search ends, so naming it in a new base search matches nothing. Only a calculated field, or an explicit <code>outputlookup</code> or <code>collect</code>, makes the value outlive the search.</td>
 <td>02-filtering-and-formatting.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-02-22</td>
 <td>2.0</td>
-<td><code>eval</code> turns into a transforming command once it creates a column or once it follows <code>stats</code>, or it is &quot;report generating&quot;. Correct: <code>eval</code> is distributable streaming wherever it sits. Position changes only the machine, a distributable streaming command running on the indexers unless it follows a non-streaming command,.</td>
-<td>.</td>
+<td><code>eval</code> turns into a transforming command once it creates a column or once it follows <code>stats</code>, or it is &quot;report generating&quot;.</td>
+<td><code>eval</code> is distributable streaming wherever it sits. Position changes only the machine, a distributable streaming command running on the indexers unless it follows a non-streaming command, in which case the search head takes it. &quot;Report generating&quot; is not one of the six command types.</td>
 <td>02-filtering-and-formatting.md, ## Traps</td>
 </tr>
 <tr>
@@ -863,8 +864,8 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-04-19</td>
 <td>4.0</td>
-<td>.</td>
-<td>the docs describe the delimiters method as designed for structured event data, &quot;data from files with headers, where all of the fields in the events are separated by a common delimiter, such as a comma or space&quot;. The header row lives in the file, not inside each event, which is why the Rename Fields step gives you `fiel.</td>
+<td>The delimiter method is for data that has no header row</td>
+<td>the docs describe the delimiters method as designed for structured event data, &quot;data from files with headers, where all of the fields in the events are separated by a common delimiter, such as a comma or space&quot;. The header row lives in the file, not inside each event, which is why the Rename Fields step gives you <code>field1</code>, <code>field2</code>, <code>field3</code> and makes you name them.</td>
 <td>04-field-extractions.md, ## Traps</td>
 </tr>
 <tr>
@@ -877,7 +878,7 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-04-21</td>
 <td>4.0</td>
-<td>.</td>
+<td>Selected Fields is Splunk's judgement about which fields matter</td>
 <td>on a fresh search Selected Fields contains exactly <code>host</code>, <code>source</code>, and <code>sourcetype</code>. <code>index</code> is a default field on every event, so it clears the 20 percent bar and appears under Interesting Fields, not Selected Fields. All Fields is the dialog you use to promote anything else into the selected list.</td>
 <td>04-field-extractions.md, ## Traps</td>
 </tr>
@@ -1010,7 +1011,7 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-05-17</td>
 <td>5.0</td>
-<td>.</td>
+<td>A calculated field has to be based on an extracted field, or has to combine two or more fields</td>
 <td>the eval statement is as flexible as it is for the <code>eval</code> search command, so it may read one field, several fields, a field alias, or no field at all. The real rule is directional: calculated fields can reference all types of field extractions and field aliases, and cannot reference lookups, event types, or tags.</td>
 <td>05-aliases-and-calculated-fields.md, ## Traps</td>
 </tr>
@@ -1122,22 +1123,22 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-06-15</td>
 <td>6.0</td>
-<td>The search term is <code>tags=&lt;tagname&gt;</code>, or a bare <code>tag::&lt;fieldname&gt;</code> finds everything tagged on that field. <strong>Wrong on both counts.</strong> The term is singular, <code>tag</code>, and the scoped form always ends with <code>=&lt;tagname&gt;</code>, because the tag name is what you match. Wrong options here are mutations of the two real forms: pluralised, s.</td>
-<td>.</td>
+<td>The search term is <code>tags=&lt;tagname&gt;</code>, or a bare <code>tag::&lt;fieldname&gt;</code> finds everything tagged on that field.</td>
+<td>The term is singular, <code>tag</code>, and the scoped form always ends with <code>=&lt;tagname&gt;</code>, because the tag name is what you match. Wrong options here are mutations of the two real forms: pluralised, single-coloned, colons after the field name instead of before it, or a field name where the tag name belongs. If no option is exactly <code>tag=&lt;tagname&gt;</code> or <code>tag::&lt;field&gt;=&lt;tagname&gt;</code>, none of them is right.</td>
 <td>06-tags-and-event-types.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-06-16</td>
 <td>6.0</td>
-<td>Event types are defined in <code>props.conf</code>, or created with a <code>searchtypes</code> command. <strong>Wrong.</strong> Definitions are stanzas in <code>eventtypes.conf</code>, the stanza header being the event type name; <code>props.conf</code> holds extractions, aliases, calculated fields and lookup bindings, and has no <code>event_type</code> stanza. The discovery command is.</td>
-<td>.</td>
+<td>Event types are defined in <code>props.conf</code>, or created with a <code>searchtypes</code> command.</td>
+<td>Definitions are stanzas in <code>eventtypes.conf</code>, the stanza header being the event type name; <code>props.conf</code> holds extractions, aliases, calculated fields and lookup bindings, and has no <code>event_type</code> stanza. The discovery command is <code>findtypes</code>, and it only suggests. The three Splunk Web routes are Save As, Event Type; Settings, Event Types, New; and Event Actions, Build Event Type.</td>
 <td>06-tags-and-event-types.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-06-17</td>
 <td>6.0</td>
-<td>An event type stores a time range, output formatting, a rank or a weight. <strong>Wrong.</strong> The stanza has five live attributes: <code>disabled</code>, <code>search</code>, <code>description</code>, <code>priority</code> and <code>color</code>. A stored time range and stored formatting belong to a report. Rank and weight are not event type concepts at all, so when they appear as .</td>
-<td>.</td>
+<td>An event type stores a time range, output formatting, a rank or a weight.</td>
+<td>The stanza has five live attributes: <code>disabled</code>, <code>search</code>, <code>description</code>, <code>priority</code> and <code>color</code>. A stored time range and stored formatting belong to a report. Rank and weight are not event type concepts at all, so when they appear as options against &quot;what decides which colour an event shows&quot;, the answer is <strong>priority</strong>.</td>
 <td>06-tags-and-event-types.md, ## Traps</td>
 </tr>
 <tr>
@@ -1241,29 +1242,29 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-07-15</td>
 <td>7.0</td>
-<td>arguments are defined when the macro runs, or the values are baked into the search string when the macro is saved. Correct: the Arguments field fixes the names at creation time, and the invocation supplies the values, which resolve the search string at execution by substituting into the <code>$name$</code> tokens. Validation is c.</td>
-<td>.</td>
+<td>arguments are defined when the macro runs, or the values are baked into the search string when the macro is saved.</td>
+<td>the Arguments field fixes the names at creation time, and the invocation supplies the values, which resolve the search string at execution by substituting into the <code>$name$</code> tokens. Validation is checked against those supplied values, so it happens at execution too.</td>
 <td>07-macros.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-07-16</td>
 <td>7.0</td>
-<td>a macro with arguments must also carry a validation expression and an error message. Correct: the documented procedure marks every step except Name and Definition as &quot;(Optional)&quot;, Destination app included.</td>
-<td>.</td>
+<td>a macro with arguments must also carry a validation expression and an error message.</td>
+<td>the documented procedure marks every step except Name and Definition as &quot;(Optional)&quot;, Destination app included.</td>
 <td>07-macros.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-07-17</td>
 <td>7.0</td>
-<td>macros are configured in Settings, then Fields, with the other search-time objects, or under Searches, reports, and alerts because a macro is search text. Correct, verbatim: &quot;Select Settings &gt; Advanced Search &gt; Search macros.&quot;.</td>
-<td>.</td>
+<td>macros are configured in Settings, then Fields, with the other search-time objects, or under Searches, reports, and alerts because a macro is search text</td>
+<td>&quot;Select Settings &gt; Advanced Search &gt; Search macros.&quot;</td>
 <td>07-macros.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-07-18</td>
 <td>7.0</td>
-<td>a macro has to end the search, or piping after a reference requires the macro to be shared globally. Correct: a reference behaves like the text it becomes, and the manual's own example pipes into one (<code>sourcetype=access_* | `mymacro`</code>) with nothing stopping further commands after it. Sharing decides whether the ma.</td>
-<td>.</td>
+<td>a macro has to end the search, or piping after a reference requires the macro to be shared globally.</td>
+<td>a reference behaves like the text it becomes, and the manual's own example pipes into one (<code>sourcetype=access_* | `mymacro`</code>) with nothing stopping further commands after it. Sharing decides whether the macro resolves, not what may follow it.</td>
 <td>07-macros.md, ## Traps</td>
 </tr>
 <tr>
@@ -1535,29 +1536,29 @@ document.documentElement.dataset.theme=s;})();</script>
 <tr>
 <td>T-09-20</td>
 <td>9.0</td>
-<td>Acceleration with several root datasets. The wrong belief is that when a data model has more than one root dataset, only the first one is accelerated. The correct fact is that every qualifying hierarchy in the model is summarized, and the docs state plainly that &quot;Data models can contain a mixture of accelerated and una.</td>
-<td>.</td>
+<td>when a data model has more than one root dataset, only the first one is accelerated.</td>
+<td>The correct fact is that every qualifying hierarchy in the model is summarized, and the docs state plainly that &quot;Data models can contain a mixture of accelerated and unaccelerated datasets&quot;. The one thing that really is single-root is the Size on Disk metric, which under-reports on a multi-root model because it accounts for only one root object.</td>
 <td>09-data-models-and-pivot.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-09-21</td>
 <td>9.0</td>
-<td>What acceleration does to fields. The wrong belief is that persistent acceleration turns all the fields in the model into indexed fields. The correct fact is that acceleration writes <code>.tsidx</code> summary files alongside the buckets on the indexers, holding the indexed field and value combinations for the accelerated datase.</td>
-<td>.</td>
+<td>persistent acceleration turns all the fields in the model into indexed fields.</td>
+<td>The correct fact is that acceleration writes <code>.tsidx</code> summary files alongside the buckets on the indexers, holding the indexed field and value combinations for the accelerated datasets. Nothing is added to the source index and no index-time extraction is created.</td>
 <td>09-data-models-and-pivot.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-09-22</td>
 <td>9.0</td>
-<td>Child datasets as a dataset type. The wrong belief is that a child of an event, search or transaction dataset is not one of the data model dataset types, because a data model has only three. The correct fact is that three is the count of root types. The docs count four dataset types overall, event, search, transaction .</td>
-<td>.</td>
+<td>a child of an event, search or transaction dataset is not one of the data model dataset types, because a data model has only three.</td>
+<td>The correct fact is that three is the count of root types. The docs count four dataset types overall, event, search, transaction and child, so a stem asking what a data model is composed of should include children.</td>
 <td>09-data-models-and-pivot.md, ## Traps</td>
 </tr>
 <tr>
 <td>T-09-23</td>
 <td>9.0</td>
-<td><code>datamodel</code> argument order and mode names. The wrong belief is that the first name after <code>| datamodel</code> is the dataset. The correct fact is model first, dataset second, mode third, because the dataset name must be specified after the data model name. Two distractors travel with this one: the acceleration mode is `accel.</td>
-<td>.</td>
+<td>the first name after <code>| datamodel</code> is the dataset.</td>
+<td>The correct fact is model first, dataset second, mode third, because the dataset name must be specified after the data model name. Two distractors travel with this one: the acceleration mode is <code>acceleration_search</code>, not <code>accelerate_search</code>, and there are six modes, not three, since each result mode has a <code>_string</code> twin.</td>
 <td>09-data-models-and-pivot.md, ## Traps</td>
 </tr>
 <tr>
@@ -2528,7 +2529,7 @@ document.documentElement.dataset.theme=s;})();</script>
     <p class="onpage-title">On this page</p>
     <nav class="toc">
 <a class="h2" href="#how-the-columns-work"><span class="toc-text">How the columns work</span><span class="mins">2 min</span></a>
-<a class="h2" href="#master-table"><span class="toc-text">Master table</span><span class="mins">92 min</span></a>
+<a class="h2" href="#master-table"><span class="toc-text">Master table</span><span class="mins">93 min</span></a>
 <a class="h2" href="#the-top-twenty"><span class="toc-text">The top twenty</span><span class="mins">10 min</span></a>
 <a class="h2" href="#confusable-pairs-index"><span class="toc-text">Confusable pairs index</span><span class="mins">10 min</span></a>
 <a class="h2" href="#the-last-hour-fifteen-facts"><span class="toc-text">The last hour: fifteen facts</span><span class="mins">2 min</span></a>
@@ -2537,7 +2538,7 @@ document.documentElement.dataset.theme=s;})();</script>
     </nav>
     <div class="onpage-meta">
       
-      <span class="onpage-time">122 min read</span>
+      <span class="onpage-time">123 min read</span>
     </div>
   </aside>
 </div>

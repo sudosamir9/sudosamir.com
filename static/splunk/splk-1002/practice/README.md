@@ -1,5 +1,7 @@
 # Practice
 
+The questions are also playable as an exam simulator at `site/exam/index.html`, reachable from the Exam simulator entry in the site navigation: untimed practice with full explanations, or a timed 65-question mock exam. Run `python3 site/build_bank.py` after editing any question file.
+
 Practice-test questions as structured JSON, so a web interface can drill them, score them, and filter by weak area. Source: the Udemy course "Splunk Core Certified Power User Practice Tests (SPLK-1002)", 165 questions across five tests.
 
 ## Layout

@@ -329,6 +329,8 @@ def build_search_index(entries, by_src):
     """
     idx = []
     for e in entries:
+        if e.get("static"):        # hand-written page, no markdown to index
+            continue
         raw = (ROOT / e["src"]).read_text(encoding="utf-8")
         used = set()
         cmds = set()
@@ -409,11 +411,13 @@ def main():
         e["order"] = i
     by_src = {e["src"]: e for e in entries}
 
-    missing = [e["src"] for e in entries if not (ROOT / e["src"]).exists()]
+    missing = [e["src"] for e in entries
+               if not e.get("static") and not (ROOT / e["src"]).exists()]
     if missing:
         sys.exit("manifest lists files that do not exist:\n  " + "\n  ".join(missing))
 
-    targets = entries if args.all else [
+    buildable = [e for e in entries if not e.get("static")]
+    targets = buildable if args.all else [
         by_src[str(pathlib.Path(f).as_posix()).replace(str(ROOT) + "/", "")]
         for f in args.files]
     if not targets:
