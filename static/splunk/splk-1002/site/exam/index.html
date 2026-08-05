@@ -1,16 +1,42 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SPLK-1002 exam simulator</title>
-<meta name="description" content="Practice and timed mock exams for the Splunk Core Certified Power User exam, built on 106 fact-checked questions.">
+<title>Exam simulator | SPLK-1002</title>
+<meta name="description" content="Practice and timed mock exams for the Splunk Core Certified Power User exam, on 200 fact-checked questions.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
 <link rel="stylesheet" href="exam.css">
 </head>
-<body>
-<a class="skip" href="#app" style="position:absolute;left:-9999px">Skip to content</a>
+<body data-page="exam" data-section="">
+<a class="skip" href="#app">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+</header>
+
+<div class="spineband" id="spineband"><div class="spine" id="spine"></div></div>
+
 <main id="app"><p class="wrap">Loading the question bank...</p></main>
-<noscript><p class="wrap">The simulator needs JavaScript. The questions themselves are readable as JSON under <code>practice/udemy-tests/</code>.</p></noscript>
+<noscript><p class="wrap">The simulator needs JavaScript. The questions are readable as JSON under <code>practice/</code>.</p></noscript>
+
+<script src="../progress.js"></script>
 <script src="bank.js"></script>
 <script src="exam.js"></script>
 </body>

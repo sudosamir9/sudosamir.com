@@ -4,75 +4,90 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>7.0 Creating and Using Macros (10%) - cram | SPLK-1002</title>
-<script>(function(){var s=localStorage.getItem("splk-theme");
-if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-document.documentElement.dataset.theme=s;})();</script>
+<meta name="description" content="Macros, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="../theme.css">
 </head>
-<body>
+<body data-page="cram/07-macros" data-section="7">
 <a class="skip" href="#doc">Skip to content</a>
-<div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
 <div class="shell">
-  <aside class="rail" aria-label="Study guide contents">
-    <div class="rail-head">
-      <span class="rail-eyebrow">SPLK-1002</span>
-      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
-    </div>
-    <div class="search">
-      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
-             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
-      <kbd class="search-key">/</kbd>
-      <div class="search-results" id="results" role="listbox" hidden></div>
-    </div>
-    <nav class="tree">
-<details class="tree-group" open>
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
 <summary>Start here</summary>
-<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
-<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
-<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
-<a class="tree-item" href="all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="all-in-one.html"><span class="t">Final review sheet</span></a>
 </details>
-<details class="tree-group" open>
+<details class="railgroup" open>
 <summary>Sections</summary>
-<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span></a>
-<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span></a>
-<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span></a>
-<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span></a>
-<a class="tree-item current" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span></a>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html" aria-current="page"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
 </details>
-<details class="tree-group">
+<details class="railgroup">
 <summary>Reference</summary>
-<a class="tree-item" href="../reference/knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
-<a class="tree-item" href="../reference/exam-traps.html"><span class="tree-label">Trap inventory</span></a>
-<a class="tree-item" href="../reference/docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
-<a class="tree-item" href="../reference/doc-links.html"><span class="tree-label">Doc links by manual</span></a>
-<a class="tree-item" href="../reference/spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
-<a class="tree-item" href="../reference/eval-functions.html"><span class="tree-label">Eval functions</span></a>
-<a class="tree-item" href="../reference/stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
-<a class="tree-item" href="../reference/time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
-<a class="tree-item" href="../reference/regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
-<a class="tree-item" href="../reference/cim-data-models.html"><span class="tree-label">CIM data models</span></a>
-<a class="tree-item" href="../reference/glossary.html"><span class="tree-label">Glossary</span></a>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="tree-group">
+<details class="railgroup">
 <summary>Practice and sources</summary>
-<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
-<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
-<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
-<a class="tree-item" href="../exam/index.html"><span class="tree-label">Exam simulator</span></a>
+<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
+<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
+<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
+<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
 </details>
     </nav>
-    <div class="rail-foot">
+    <div class="railfoot">
       <a href="../../cram/07-macros.md">Markdown source</a>
-      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+      <a href="../../lab-data/splk-1002-practice-data.zip">Practice data</a>
     </div>
   </aside>
+
   <main>
     <article class="doc" id="doc" tabindex="-1">
       <div class="crumbs">
@@ -80,7 +95,6 @@ document.documentElement.dataset.theme=s;})();</script>
         <span>Sections</span><span class="sep">/</span>
         <span>Macros</span>
         <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/07-macros.html">Study</a><a class="on" href="07-macros.html">Cram</a></div>
-        <span class="ver">Splunk Enterprise 10.4</span>
       </div>
 <h1 id="7.0-creating-and-using-macros-10---cram">7.0 Creating and Using Macros- cram</h1>
 <h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
@@ -229,26 +243,36 @@ description = Web access events in a half-open status range.</code></pre>
 <h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
 <p>T-07-01 backticks not quotes, T-07-02 number is the argument count, T-07-03 Arguments bare vs Definition tokens, T-07-04 references inert in quotes but tokens substituted in quotes, T-07-05 Boolean vs non-Boolean validation asymmetry, T-07-06 validation failure is an error, T-07-07 no restart for macros.conf, T-07-08 macros absent from the search-time operations sequence, T-07-09 leading pipe outside the definition, T-07-10 hyphens legal in arg names, hostile in macro names, T-07-11 overloading by argument count creates distinct macros, T-07-12 named arguments are order-independent, T-07-13 iseval returns the expansion string, T-07-14 app scope decides whether the macro resolves.</p>
 
-<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="06-tags-and-event-types.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Tags and event types</span></a><a class="pn pn-next" href="08-workflow-actions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Workflow actions</span></a></nav>
+<nav class="pn" aria-label="Section"><a href="06-tags-and-event-types.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">6.0</span><span class="pn-label">Tags and event types</span></a><a href="08-workflow-actions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">8.0</span><span class="pn-label">Workflow actions</span></a></nav>
       <p class="doc-foot">Built from <code>cram/07-macros.md</code>. The markdown is the source
       of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
     </article>
   </main>
-  <aside class="rail-right" aria-label="On this page">
-    <p class="onpage-title">On this page</p>
-    <nav class="toc">
-<a class="h2" href="#syntax"><span class="toc-text">Syntax</span></a>
-<a class="h2" href="#defaults-and-limits"><span class="toc-text">Defaults and limits</span></a>
-<a class="h2" href="#decision-rule"><span class="toc-text">Decision rule</span></a>
-<a class="h2" href="#five-facts-they-test"><span class="toc-text">Five facts they test</span></a>
-<a class="h2" href="#trap-ids"><span class="toc-text">Trap IDs</span></a>
-    </nav>
-    <div class="onpage-meta">
-      <span class="onpage-weight">10% of the exam</span>
-      <span class="onpage-time">3 min read</span>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#syntax"><span>Syntax</span></a></li>
+<li><a class="lvl2" href="#defaults-and-limits"><span>Defaults and limits</span></a></li>
+<li><a class="lvl2" href="#decision-rule"><span>Decision rule</span></a></li>
+<li><a class="lvl2" href="#five-facts-they-test"><span>Five facts they test</span></a></li>
+<li><a class="lvl2" href="#trap-ids"><span>Trap IDs</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>3 min read</span>
     </div>
   </aside>
 </div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
 

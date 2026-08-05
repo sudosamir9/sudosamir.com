@@ -1,0 +1,245 @@
+/* SPLK-1002 design tokens.
+   Three layers, in one direction only: primitive -> semantic -> component.
+   Components reference semantic or component tokens. Never a primitive, never a raw
+   value. Swapping the mode rewrites the semantic layer and nothing else.
+   Direction and rationale: DIRECTION.md */
+
+/* ============================================================ 1. PRIMITIVE
+   Raw values. Named for what they are, never for what they do. Nothing outside
+   this block should ever reference a --p- token. */
+
+:root {
+  /* paper ramp: warm near-whites through to ink */
+  --p-paper-50:  #FBFAF7;
+  --p-paper-100: #F6F4EF;
+  --p-paper-200: #F1EFEA;
+  --p-paper-300: #E0DCD4;
+  --p-paper-400: #C7C2B8;
+
+  /* slate ramp: the dark mode surface, blue-leaning so green and amber stay legible */
+  --p-slate-900: #0D1116;
+  --p-slate-850: #12161D;
+  --p-slate-800: #181D26;
+  --p-slate-700: #242A34;
+  --p-slate-600: #333B48;
+  --p-slate-500: #4A5563;
+
+  /* ink ramp: text */
+  --p-ink-900: #1A1D21;
+  --p-ink-700: #4C5560;
+  --p-ink-500: #6B7480;
+  --p-ink-200: #A5AFBC;
+  --p-ink-100: #C9D1DB;
+  --p-ink-050: #E8ECF1;
+
+  /* green: the single accent. Splunk's family, at a weight that passes contrast. */
+  --p-green-700: #17603C;
+  --p-green-600: #1F7A4C;
+  --p-green-500: #2E9463;
+  --p-green-400: #3FB37C;
+  --p-green-300: #6ECFA0;
+
+  /* amber: traps only */
+  --p-amber-700: #7A4D06;
+  --p-amber-600: #9A6108;
+  --p-amber-400: #D69A3C;
+  --p-amber-300: #E8B968;
+
+  /* red: wrong answers only */
+  --p-red-700:  #8A2420;
+  --p-red-600:  #A32C28;
+  --p-red-400:  #E8635E;
+
+  /* magenta: inline code and SPL */
+  --p-mag-600: #8A3A66;
+  --p-mag-300: #F2A0C4;
+
+  /* type */
+  --p-font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --p-font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* fifth-based scale, fixed steps */
+  --p-size-1:  12px;
+  --p-size-2:  13px;
+  --p-size-3:  14px;
+  --p-size-4:  16px;
+  --p-size-5:  17px;
+  --p-size-6:  18px;
+  --p-size-7:  21px;
+  --p-size-8:  26px;
+  --p-size-9:  32px;
+  --p-size-10: 42px;
+
+  --p-weight-normal: 400;
+  --p-weight-medium: 500;
+  --p-weight-semi:   600;
+  --p-weight-bold:   700;
+
+  --p-leading-tight: 1.2;
+  --p-leading-snug:  1.4;
+  --p-leading-body:  1.65;
+
+  /* space: 4px modular */
+  --p-space-1:  4px;
+  --p-space-2:  8px;
+  --p-space-3:  12px;
+  --p-space-4:  16px;
+  --p-space-5:  24px;
+  --p-space-6:  32px;
+  --p-space-7:  48px;
+  --p-space-8:  64px;
+  --p-space-9:  96px;
+
+  --p-radius-sm: 3px;
+  --p-radius-md: 6px;
+  --p-radius-lg: 10px;
+  --p-radius-pill: 999px;
+
+  --p-dur-fast: 120ms;
+  --p-dur-base: 150ms;
+  --p-dur-slow: 240ms;
+  --p-ease: cubic-bezier(.2, .6, .3, 1);
+}
+
+/* ============================================================ 2. SEMANTIC
+   Purpose aliases. This is the only layer that changes between modes. */
+
+:root,
+:root[data-theme="paper"] {
+  color-scheme: light;
+
+  --surface:        var(--p-paper-50);
+  --surface-raised: #FFFFFF;
+  --surface-sunk:   var(--p-paper-200);
+  --surface-inset:  var(--p-paper-100);
+
+  --text:       var(--p-ink-900);
+  --text-soft:  var(--p-ink-700);
+  --text-faint: var(--p-ink-500);
+  --text-on-accent: #FFFFFF;
+
+  --rule:        var(--p-paper-300);
+  --rule-strong: var(--p-paper-400);
+
+  --accent:       var(--p-green-600);
+  --accent-hover: var(--p-green-700);
+  --accent-quiet: color-mix(in srgb, var(--p-green-600) 10%, transparent);
+
+  --warn:       var(--p-amber-600);
+  --warn-quiet: color-mix(in srgb, var(--p-amber-600) 9%, transparent);
+
+  --wrong:       var(--p-red-600);
+  --wrong-quiet: color-mix(in srgb, var(--p-red-600) 8%, transparent);
+
+  --right:       var(--p-green-600);
+  --right-quiet: color-mix(in srgb, var(--p-green-600) 10%, transparent);
+
+  --code:       var(--p-mag-600);
+  --code-quiet: color-mix(in srgb, var(--p-mag-600) 7%, transparent);
+
+  --shadow-sm: 0 1px 2px rgb(26 29 33 / .06);
+  --shadow-md: 0 2px 4px rgb(26 29 33 / .05), 0 8px 24px rgb(26 29 33 / .06);
+}
+
+:root[data-theme="ink"] {
+  color-scheme: dark;
+
+  --surface:        var(--p-slate-850);
+  --surface-raised: var(--p-slate-800);
+  --surface-sunk:   var(--p-slate-900);
+  --surface-inset:  var(--p-slate-700);
+
+  --text:       var(--p-ink-050);
+  --text-soft:  var(--p-ink-200);
+  --text-faint: #7E8896;
+  --text-on-accent: #06210F;
+
+  --rule:        var(--p-slate-700);
+  --rule-strong: var(--p-slate-600);
+
+  --accent:       var(--p-green-400);
+  --accent-hover: var(--p-green-300);
+  --accent-quiet: color-mix(in srgb, var(--p-green-400) 14%, transparent);
+
+  --warn:       var(--p-amber-400);
+  --warn-quiet: color-mix(in srgb, var(--p-amber-400) 12%, transparent);
+
+  --wrong:       var(--p-red-400);
+  --wrong-quiet: color-mix(in srgb, var(--p-red-400) 12%, transparent);
+
+  --right:       var(--p-green-400);
+  --right-quiet: color-mix(in srgb, var(--p-green-400) 12%, transparent);
+
+  --code:       var(--p-mag-300);
+  --code-quiet: color-mix(in srgb, var(--p-mag-300) 10%, transparent);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / .4);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / .45), 0 12px 32px rgb(0 0 0 / .3);
+}
+
+/* System preference decides only when the reader has expressed none. The inline head
+   script writes data-theme before first paint, so this never causes a flash. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --surface: var(--p-slate-850); --surface-raised: var(--p-slate-800);
+    --surface-sunk: var(--p-slate-900); --surface-inset: var(--p-slate-700);
+    --text: var(--p-ink-050); --text-soft: var(--p-ink-200); --text-faint: #7E8896;
+    --text-on-accent: #06210F;
+    --rule: var(--p-slate-700); --rule-strong: var(--p-slate-600);
+    --accent: var(--p-green-400); --accent-hover: var(--p-green-300);
+    --accent-quiet: color-mix(in srgb, var(--p-green-400) 14%, transparent);
+    --warn: var(--p-amber-400); --warn-quiet: color-mix(in srgb, var(--p-amber-400) 12%, transparent);
+    --wrong: var(--p-red-400); --wrong-quiet: color-mix(in srgb, var(--p-red-400) 12%, transparent);
+    --right: var(--p-green-400); --right-quiet: color-mix(in srgb, var(--p-green-400) 12%, transparent);
+    --code: var(--p-mag-300); --code-quiet: color-mix(in srgb, var(--p-mag-300) 10%, transparent);
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / .4);
+    --shadow-md: 0 2px 8px rgb(0 0 0 / .45), 0 12px 32px rgb(0 0 0 / .3);
+  }
+}
+
+/* ============================================================ 3. COMPONENT
+   Per-component knobs. Every one resolves to a semantic token. */
+
+:root {
+  --shell-rail:     288px;
+  --shell-aside:    248px;
+  --shell-max:      2100px;
+  --shell-gutter:   var(--p-space-7);
+
+  --topbar-h:       52px;
+  --topbar-bg:      var(--surface-sunk);
+  --topbar-border:  var(--rule);
+
+  --spine-h:        34px;
+  --spine-gap:      2px;
+  --spine-radius:   var(--p-radius-sm);
+  --spine-idle:     var(--rule);
+  --spine-read:     color-mix(in srgb, var(--accent) 34%, transparent);
+  --spine-current:  var(--accent);
+
+  --card-bg:      var(--surface-raised);
+  --card-border:  var(--rule);
+  --card-radius:  var(--p-radius-lg);
+  --card-pad:     var(--p-space-5);
+
+  --btn-radius:   var(--p-radius-md);
+  --btn-pad-y:    10px;
+  --btn-pad-x:    var(--p-space-4);
+  --btn-font:     var(--p-weight-semi) var(--p-size-3)/1 var(--p-font-sans);
+
+  --field-bg:     var(--surface-raised);
+  --field-border: var(--rule-strong);
+  --field-radius: var(--p-radius-md);
+
+  --table-head-bg:  var(--surface-inset);
+  --table-zebra:    color-mix(in srgb, var(--text) 2.5%, transparent);
+  --table-cell-pad: 10px var(--p-space-3);
+
+  --spl-bg:      var(--surface-raised);
+  --spl-chrome:  var(--surface-inset);
+  --spl-border:  var(--rule);
+
+  --focus-ring: 2px solid var(--accent);
+  --focus-offset: 2px;
+}

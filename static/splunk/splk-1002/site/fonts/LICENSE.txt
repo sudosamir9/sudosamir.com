@@ -1,0 +1,2 @@
+IBM Plex Sans and JetBrains Mono are both licensed under the SIL Open Font License 1.1.
+Bundled here as latin-subset woff2 so the guide renders identically offline.

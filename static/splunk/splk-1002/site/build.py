@@ -29,6 +29,20 @@ GLASS = ('<svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="current
          '<path d="M10.5 10.5 14 14"/></svg>')
 
 
+ICON_BOOK = ('<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" '
+             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/>'
+             '<path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>')
+ICON_TARGET = ('<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" '
+               'aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>')
+ICON_SEARCH = ('<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" '
+               'stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/>'
+               '<path d="M10.5 10.5 14 14"/></svg>')
+ICON_THEME = ('<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" '
+              'stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/>'
+              '<path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1'
+              'M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg>')
+
 # --------------------------------------------------------------------------- fences
 
 def render_fence(self, tokens, idx, options, env):
@@ -227,11 +241,11 @@ def build_page(entry, by_src, groups_html, problems):
 
     mins, total_min = section_minutes(raw)
     onpage = "\n".join(
-        f'<a class="h{t["level"]}" href="#{t["id"]}">'
-        f'<span class="toc-text">{html.escape(t["text"])}</span>'
-        + (f'<span class="mins">{mins[t["text"]]} min</span>'
+        f'<li><a class="lvl{t["level"]}" href="#{t["id"]}">'
+        f'<span>{html.escape(t["text"])}</span>'
+        + (f'<span class="min">{mins[t["text"]]}m</span>'
            if t["level"] == "2" and t["text"] in mins else "")
-        + "</a>"
+        + "</a></li>"
         for t in toc)
 
     # Study / Cram control
@@ -256,14 +270,18 @@ def build_page(entry, by_src, groups_html, problems):
         if not (0 <= j < len(peers)):
             return ""
         e = peers[j]
-        return (f'<a class="pn pn-{rel_}" href="{rel(entry["out"], e["out"])}" rel="{rel_}">'
+        secn = f'<span class="pn-sec">{e["section"]}</span>' if e["section"] else ""
+        return (f'<a href="{rel(entry["out"], e["out"])}" rel="{rel_}">'
                 f'<span class="pn-rel">{"Previous" if rel_ == "prev" else "Next"}</span>'
-                f'<span class="pn-label">{html.escape(e["label"])}</span></a>')
+                f'{secn}<span class="pn-label">{html.escape(e["label"])}</span></a>')
 
-    prevnext = f'<nav class="prevnext" aria-label="Section">{sib(i-1,"prev")}{sib(i+1,"next")}</nav>'
+    prevnext = f'<nav class="pn" aria-label="Section">{sib(i-1,"prev")}{sib(i+1,"next")}</nav>'
 
     prefix = "../" * entry["out"].count("/")
     crumb_group = dict((g, t) for g, t, _ in GROUPS)[entry["group"]]
+
+    grp = (entry["section"] or "").split(".")[0] if entry.get("section") else ""
+    stem = entry["src"][:-3]
 
     out = f"""<!doctype html>
 <html lang="en">
@@ -271,34 +289,49 @@ def build_page(entry, by_src, groups_html, problems):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)} | SPLK-1002</title>
-<script>(function(){{var s=localStorage.getItem("splk-theme");
-if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-document.documentElement.dataset.theme=s;}})();</script>
+<meta name="description" content="{html.escape(entry['label'])}, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){{try{{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</script>
+<link rel="stylesheet" href="{prefix}tokens.css">
+<link rel="stylesheet" href="{prefix}fonts.css">
 <link rel="stylesheet" href="{prefix}theme.css">
 </head>
-<body>
+<body data-page="{stem}" data-section="{grp}">
 <a class="skip" href="#doc">Skip to content</a>
-<div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+<header class="topbar">
+  <a class="brand" href="{prefix}index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="{prefix}index.html" aria-current="true">{ICON_BOOK}Guide</a>
+    <a href="{prefix}exam/index.html">{ICON_TARGET}Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      {ICON_SEARCH}<span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme">{ICON_THEME}</button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
 <div class="shell">
-  <aside class="rail" aria-label="Study guide contents">
-    <div class="rail-head">
-      <span class="rail-eyebrow">SPLK-1002</span>
-      <p class="rail-title"><a href="{prefix}index.html">Splunk Core Certified Power User</a></p>
-    </div>
-    <div class="search">
-      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
-             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
-      <kbd class="search-key">/</kbd>
-      <div class="search-results" id="results" role="listbox" hidden></div>
-    </div>
-    <nav class="tree">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
 {groups_html(entry)}
     </nav>
-    <div class="rail-foot">
+    <div class="railfoot">
       <a href="{prefix}../{entry["src"]}">Markdown source</a>
-      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+      <a href="{prefix}../lab-data/splk-1002-practice-data.zip">Practice data</a>
     </div>
   </aside>
+
   <main>
     <article class="doc" id="doc" tabindex="-1">
       <div class="crumbs">
@@ -306,7 +339,6 @@ document.documentElement.dataset.theme=s;}})();</script>
         <span>{html.escape(crumb_group)}</span><span class="sep">/</span>
         <span>{html.escape(entry['label'])}</span>
         {seg}
-        <span class="ver">Splunk Enterprise 10.4</span>
       </div>
 {body}
 {prevnext}
@@ -314,17 +346,27 @@ document.documentElement.dataset.theme=s;}})();</script>
       of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
     </article>
   </main>
-  <aside class="rail-right" aria-label="On this page">
-    <p class="onpage-title">On this page</p>
-    <nav class="toc">
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
 {onpage}
-    </nav>
-    <div class="onpage-meta">
-      {f'<span class="onpage-weight">{entry["weight"]}% of the exam</span>' if entry.get("weight") else ''}
-      <span class="onpage-time">{total_min} min read</span>
+    </ul>
+    <div class="aside-meta">
+      {f'<span class="weight">{entry["weight"]}% of the exam</span>' if entry.get("weight") else ''}
+      <span>{total_min} min read</span>
     </div>
   </aside>
 </div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="{prefix}progress.js"></script>
 <script src="{prefix}search-index.js"></script>
 <script src="{prefix}app.js"></script>
 {"<script src=\"" + prefix + "mermaid-init.js\"></script>" if env.get("has_mermaid") else ''}
@@ -400,20 +442,19 @@ def rail_html_factory(entries, by_src):
         out = []
         for g, gtitle, gopen in GROUPS:
             is_here = current["group"] == g
-            out.append(f'<details class="tree-group"{" open" if gopen or is_here else ""}>')
+            out.append(f'<details class="railgroup"{" open" if gopen or is_here else ""}>')
             out.append(f'<summary>{html.escape(gtitle)}</summary>')
             for e in rows[g]:
                 here = e["src"] == current["src"] or e["src"] == current.get("pair")
-                cls = "tree-item" + (" current" if here else "")
-                sec = f'<span class="tree-sec">{e["section"]}</span>' if e["section"] else ""
-                wt = f'<span class="tree-wt">{e["weight"]}%</span>' if e["weight"] else ""
-                chip = ""
+                sec = f'<span class="n">{e["section"]}</span>' if e["section"] else ""
+                wt = f'<span class="w">{e["weight"]}%</span>' if e["weight"] else ""
                 out.append(
-                    f'<a class="{cls}" href="{rel(current["out"], e["out"])}"'
-                    f'{" aria-current=\"page\"" if e["src"] == current["src"] else ""}>'
-                    f'{sec}<span class="tree-label">{html.escape(e["label"])}</span>{wt}</a>')
+                    f'<a class="navitem" href="{rel(current["out"], e["out"])}"'
+                    f'{" aria-current=\"page\"" if here else ""}>'
+                    f'{sec}<span class="t">{html.escape(e["label"])}</span>{wt}</a>')
             out.append("</details>")
         return "\n".join(out)
+
     return render
 
 

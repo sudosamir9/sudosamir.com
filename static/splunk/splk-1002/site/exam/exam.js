@@ -320,27 +320,31 @@
   // ------------------------------------------------------------------ views
 
   var app = document.getElementById("app");
-  function mount(node) { app.innerHTML = ""; app.appendChild(node); window.scrollTo(0, 0); }
-  function go(hash) { location.hash = hash; }
 
-  function topbar(links) {
-    var t = el("div", "topbar");
-    var b = el("span", "brand");
-    b.innerHTML = "SPLK-1002 <b>Exam simulator</b>";
-    t.appendChild(b);
-    t.appendChild(el("span", "spacer"));
-    (links || [["Home", "#/"], ["Study guide", GUIDE + "index.html"]]).forEach(function (l) {
-      var a = el("a", null, l[0]); a.href = l[1]; t.appendChild(a);
-    });
-    return t;
+  function drawSpine() {
+    if (window.SPLK) SPLK.spine(document.getElementById("spine"), { prefix: GUIDE });
   }
+  function band(show) {
+    var b = document.getElementById("spineband");
+    if (b) b.style.display = show ? "" : "none";
+  }
+  if (window.SPLK) {
+    SPLK.theme.wire(document.getElementById("theme"));
+    addEventListener("splk:theme", drawSpine);
+  }
+
+  function mount(node) {
+    app.innerHTML = ""; app.appendChild(node); window.scrollTo(0, 0);
+    drawSpine();
+  }
+  function go(hash) { location.hash = hash; }
 
   // ---- home
 
   function viewHome() {
+    band(true);
     var s = state();
     var root = el("div");
-    root.appendChild(topbar([["Study guide", GUIDE + "index.html"]]));
     var w = el("div", "wrap");
 
     w.appendChild(el("h1", null, "Exam simulator"));
@@ -453,8 +457,8 @@
   var practice = null;   // {ids, i, chosen, revealed, spec}
 
   function practiceSetup(preset) {
+    band(true);
     var root = el("div");
-    root.appendChild(topbar());
     var w = el("div", "wrap");
     w.appendChild(el("h1", null, "Practice"));
     w.appendChild(el("p", "sub", "Pick a pool. Answers and explanations show as soon as you submit."));
@@ -511,17 +515,12 @@
   }
 
   function renderPractice() {
+    band(true);
     var p = practice;
     var q = Q[p.ids[p.i]];
     var s = state();
 
     var root = el("div");
-    var tb = topbar([["Home", "#/"], ["Study guide", GUIDE + "index.html"]]);
-    var chg = el("a", null, "Change pool");
-    chg.href = "#/practice";
-    chg.onclick = function (e) { e.preventDefault(); practice = null; practiceSetup(); };
-    tb.insertBefore(chg, tb.querySelector("a"));
-    root.appendChild(tb);
     var w = el("div", "wrap");
 
     var head = el("div", "exam-head");
@@ -535,6 +534,9 @@
     flag.onclick = function () {
       var st = state(); var pr = prog(st, q.id); pr.flag = !pr.flag; save(st); renderPractice();
     };
+    var chg = el("button", "btn ghost", "Change pool");
+    chg.onclick = function () { practice = null; practiceSetup(); };
+    head.appendChild(chg);
     head.appendChild(flag);
     w.appendChild(head);
 
@@ -548,6 +550,7 @@
         var st = state(); var pr = prog(st, q.id);
         pr.seen++; if (ok) pr.right++; else pr.wrong++;
         save(st);
+        if (window.SPLK) { SPLK.recordAnswer(q.grp, ok); drawSpine(); }
         p.done++; if (ok) p.right++;
         renderPractice();
       };
@@ -607,6 +610,7 @@
   function stopTick() { if (tick) { clearInterval(tick); tick = null; } }
 
   function renderMock() {
+    band(false);
     var s = state();
     if (!s.active) { go("#/"); return; }
     var a = s.active;
@@ -775,6 +779,7 @@
       pr.seen++;
       if (r.right) pr.right++; else pr.wrong++;
       if (a.flags[r.id]) pr.flag = true;
+      if (window.SPLK) SPLK.recordAnswer(Q[r.id].grp, r.right);
     });
     s.attempts.push(attempt);
     s.active = null;
@@ -785,13 +790,13 @@
   // ---- results
 
   function viewResult(id) {
+    band(true);
     var s = state();
     var a = null;
     s.attempts.forEach(function (x) { if (x.id === id) a = x; });
     if (!a) { go("#/attempts"); return; }
 
     var root = el("div");
-    root.appendChild(topbar([["Home", "#/"], ["All attempts", "#/attempts"], ["Study guide", GUIDE + "index.html"]]));
     var w = el("div", "wrap wide");
 
     var score = pct(a.right, a.count);
@@ -891,9 +896,9 @@
   }
 
   function viewAttempts() {
+    band(true);
     var s = state();
     var root = el("div");
-    root.appendChild(topbar());
     var w = el("div", "wrap");
     w.appendChild(el("h1", null, "Past attempts"));
     if (!s.attempts.length) {

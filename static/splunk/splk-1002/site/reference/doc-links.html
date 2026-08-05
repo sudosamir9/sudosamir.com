@@ -4,75 +4,90 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Documentation reading syllabus | SPLK-1002</title>
-<script>(function(){var s=localStorage.getItem("splk-theme");
-if(!s)s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-document.documentElement.dataset.theme=s;})();</script>
+<meta name="description" content="Doc links by manual, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
 <link rel="stylesheet" href="../theme.css">
 </head>
-<body>
+<body data-page="reference/doc-links" data-section="">
 <a class="skip" href="#doc">Skip to content</a>
-<div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
 <div class="shell">
-  <aside class="rail" aria-label="Study guide contents">
-    <div class="rail-head">
-      <span class="rail-eyebrow">SPLK-1002</span>
-      <p class="rail-title"><a href="../index.html">Splunk Core Certified Power User</a></p>
-    </div>
-    <div class="search">
-      <input type="search" id="q" placeholder="Search all pages" autocomplete="off"
-             aria-label="Search all pages" aria-expanded="false" aria-controls="results">
-      <kbd class="search-key">/</kbd>
-      <div class="search-results" id="results" role="listbox" hidden></div>
-    </div>
-    <nav class="tree">
-<details class="tree-group" open>
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
 <summary>Start here</summary>
-<a class="tree-item" href="../index.html"><span class="tree-label">Read me first</span></a>
-<a class="tree-item" href="../00-exam-overview.html"><span class="tree-label">Exam overview</span></a>
-<a class="tree-item" href="../lab-setup.html"><span class="tree-label">Lab setup</span></a>
-<a class="tree-item" href="../cram/all-in-one.html"><span class="tree-label">Final review sheet</span></a>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
 </details>
-<details class="tree-group" open>
+<details class="railgroup" open>
 <summary>Sections</summary>
-<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span></a>
-<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span></a>
-<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span></a>
-<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span></a>
-<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span></a>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
 </details>
-<details class="tree-group" open>
+<details class="railgroup" open>
 <summary>Reference</summary>
-<a class="tree-item" href="knowledge-object-precedence.html"><span class="tree-label">Search-time precedence</span></a>
-<a class="tree-item" href="exam-traps.html"><span class="tree-label">Trap inventory</span></a>
-<a class="tree-item" href="docs-by-blueprint.html"><span class="tree-label">Docs by blueprint</span></a>
-<a class="tree-item current" href="doc-links.html" aria-current="page"><span class="tree-label">Doc links by manual</span></a>
-<a class="tree-item" href="spl-command-reference.html"><span class="tree-label">SPL command reference</span></a>
-<a class="tree-item" href="eval-functions.html"><span class="tree-label">Eval functions</span></a>
-<a class="tree-item" href="stats-and-chart-functions.html"><span class="tree-label">Stats and chart functions</span></a>
-<a class="tree-item" href="time-modifiers.html"><span class="tree-label">Time modifiers</span></a>
-<a class="tree-item" href="regex-for-splunk.html"><span class="tree-label">Regex for Splunk</span></a>
-<a class="tree-item" href="cim-data-models.html"><span class="tree-label">CIM data models</span></a>
-<a class="tree-item" href="glossary.html"><span class="tree-label">Glossary</span></a>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html" aria-current="page"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
 </details>
-<details class="tree-group">
+<details class="railgroup">
 <summary>Practice and sources</summary>
-<a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
-<a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
-<a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
-<a class="tree-item" href="../exam/index.html"><span class="tree-label">Exam simulator</span></a>
+<a class="navitem" href="../practice/README.html"><span class="t">How to drill</span></a>
+<a class="navitem" href="../practice/tracker.html"><span class="t">Attempt tracker</span></a>
+<a class="navitem" href="../practice/weak-areas.html"><span class="t">Weak areas</span></a>
+<a class="navitem" href="../exam/index.html"><span class="t">Exam simulator</span></a>
 </details>
     </nav>
-    <div class="rail-foot">
+    <div class="railfoot">
       <a href="../../reference/doc-links.md">Markdown source</a>
-      <button class="theme-toggle" type="button" id="theme" aria-pressed="false">Toggle theme</button>
+      <a href="../../lab-data/splk-1002-practice-data.zip">Practice data</a>
     </div>
   </aside>
+
   <main>
     <article class="doc" id="doc" tabindex="-1">
       <div class="crumbs">
@@ -80,7 +95,6 @@ document.documentElement.dataset.theme=s;})();</script>
         <span>Reference</span><span class="sep">/</span>
         <span>Doc links by manual</span>
         
-        <span class="ver">Splunk Enterprise 10.4</span>
       </div>
 <h1 id="documentation-reading-syllabus">Documentation reading syllabus</h1>
 <p>The link-by-link reading list. Every URL below was fetched and confirmed to return HTTP 200 on 2026-07-26, all 145 of them, against Splunk Enterprise 10.4 and Common Information Model 8.6.</p>
@@ -1193,40 +1207,50 @@ document.documentElement.dataset.theme=s;})();</script>
 </tbody>
 </table></div>
 
-<nav class="prevnext" aria-label="Section"><a class="pn pn-prev" href="docs-by-blueprint.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Docs by blueprint</span></a><a class="pn pn-next" href="spl-command-reference.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">SPL command reference</span></a></nav>
+<nav class="pn" aria-label="Section"><a href="docs-by-blueprint.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Docs by blueprint</span></a><a href="spl-command-reference.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">SPL command reference</span></a></nav>
       <p class="doc-foot">Built from <code>reference/doc-links.md</code>. The markdown is the source
       of truth; rebuild with <code>python3 site/build.py --all</code>.</p>
     </article>
   </main>
-  <aside class="rail-right" aria-label="On this page">
-    <p class="onpage-title">On this page</p>
-    <nav class="toc">
-<a class="h2" href="#how-this-file-relates-to-the-topic-files"><span class="toc-text">How this file relates to the topic files</span><span class="mins">2 min</span></a>
-<a class="h2" href="#read-these-first"><span class="toc-text">Read these first</span><span class="mins">1 min</span></a>
-<a class="h2" href="#manual-map"><span class="toc-text">Manual map</span><span class="mins">1 min</span></a>
-<a class="h2" href="#traps-in-the-documentation-itself"><span class="toc-text">Traps in the documentation itself</span><span class="mins">1 min</span></a>
-<a class="h2" href="#non-documentation-sources"><span class="toc-text">Non-documentation sources</span><span class="mins">1 min</span></a>
-<a class="h2" href="#master-table"><span class="toc-text">Master table</span><span class="mins">9 min</span></a>
-<a class="h3" href="#knowledge-management-manual-10.4-55-pages"><span class="toc-text">Knowledge Management Manual 10.4 (55 pages)</span></a>
-<a class="h3" href="#search-reference-10.4-40-pages"><span class="toc-text">Search Reference 10.4 (40 pages)</span></a>
-<a class="h3" href="#search-manual-10.4-15-pages"><span class="toc-text">Search Manual 10.4 (15 pages)</span></a>
-<a class="h3" href="#common-information-model-8.6-12-pages"><span class="toc-text">Common Information Model 8.6 (12 pages)</span></a>
-<a class="h3" href="#admin-manual-10.4-conf-specs-7-pages"><span class="toc-text">Admin Manual 10.4 (conf specs) (7 pages)</span></a>
-<a class="h3" href="#simple-xml-dashboards-10.4-7-pages"><span class="toc-text">Simple XML Dashboards 10.4 (7 pages)</span></a>
-<a class="h3" href="#pivot-manual-10.4-2-pages"><span class="toc-text">Pivot Manual 10.4 (2 pages)</span></a>
-<a class="h3" href="#dashboard-studio-10.4-1-pages"><span class="toc-text">Dashboard Studio 10.4 (1 pages)</span></a>
-<a class="h3" href="#alerting-manual-10.4-1-pages"><span class="toc-text">Alerting Manual 10.4 (1 pages)</span></a>
-<a class="h3" href="#search-tutorial-10.4-1-pages"><span class="toc-text">Search Tutorial 10.4 (1 pages)</span></a>
-<a class="h3" href="#getting-data-in-10.4-1-pages"><span class="toc-text">Getting Data In 10.4 (1 pages)</span></a>
-<a class="h3" href="#managing-indexers-and-clusters-10.4-1-pages"><span class="toc-text">Managing Indexers and Clusters 10.4 (1 pages)</span></a>
-<a class="h3" href="#release-notes-2-pages"><span class="toc-text">Release Notes (2 pages)</span></a>
-    </nav>
-    <div class="onpage-meta">
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#how-this-file-relates-to-the-topic-files"><span>How this file relates to the topic files</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#read-these-first"><span>Read these first</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#manual-map"><span>Manual map</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#traps-in-the-documentation-itself"><span>Traps in the documentation itself</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#non-documentation-sources"><span>Non-documentation sources</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#master-table"><span>Master table</span><span class="min">9m</span></a></li>
+<li><a class="lvl3" href="#knowledge-management-manual-10.4-55-pages"><span>Knowledge Management Manual 10.4 (55 pages)</span></a></li>
+<li><a class="lvl3" href="#search-reference-10.4-40-pages"><span>Search Reference 10.4 (40 pages)</span></a></li>
+<li><a class="lvl3" href="#search-manual-10.4-15-pages"><span>Search Manual 10.4 (15 pages)</span></a></li>
+<li><a class="lvl3" href="#common-information-model-8.6-12-pages"><span>Common Information Model 8.6 (12 pages)</span></a></li>
+<li><a class="lvl3" href="#admin-manual-10.4-conf-specs-7-pages"><span>Admin Manual 10.4 (conf specs) (7 pages)</span></a></li>
+<li><a class="lvl3" href="#simple-xml-dashboards-10.4-7-pages"><span>Simple XML Dashboards 10.4 (7 pages)</span></a></li>
+<li><a class="lvl3" href="#pivot-manual-10.4-2-pages"><span>Pivot Manual 10.4 (2 pages)</span></a></li>
+<li><a class="lvl3" href="#dashboard-studio-10.4-1-pages"><span>Dashboard Studio 10.4 (1 pages)</span></a></li>
+<li><a class="lvl3" href="#alerting-manual-10.4-1-pages"><span>Alerting Manual 10.4 (1 pages)</span></a></li>
+<li><a class="lvl3" href="#search-tutorial-10.4-1-pages"><span>Search Tutorial 10.4 (1 pages)</span></a></li>
+<li><a class="lvl3" href="#getting-data-in-10.4-1-pages"><span>Getting Data In 10.4 (1 pages)</span></a></li>
+<li><a class="lvl3" href="#managing-indexers-and-clusters-10.4-1-pages"><span>Managing Indexers and Clusters 10.4 (1 pages)</span></a></li>
+<li><a class="lvl3" href="#release-notes-2-pages"><span>Release Notes (2 pages)</span></a></li>
+    </ul>
+    <div class="aside-meta">
       
-      <span class="onpage-time">15 min read</span>
+      <span>15 min read</span>
     </div>
   </aside>
 </div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
 <script src="../search-index.js"></script>
 <script src="../app.js"></script>
 
