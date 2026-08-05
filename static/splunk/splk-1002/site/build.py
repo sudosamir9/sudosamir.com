@@ -184,9 +184,29 @@ def render_body(raw, entry, by_src, problems):
                 else:
                     new = path[:-3] + ".html"
                 href = new + (("#" + frag) if frag else "")
+        elif not href.startswith(("#", "/", "mailto:")):
+            target = posixpath.normpath(
+                posixpath.join(posixpath.dirname(entry["src"]), href.partition("#")[0]))
+            if target.startswith("site/"):
+                # already inside the output tree, so it is a plain site-relative link
+                href = rel(entry["out"], target[len("site/"):])
+            elif (ROOT / target).exists():
+                # a repository asset such as the practice data, which lives above site/
+                up = "../" * (entry["out"].count("/") + 1)
+                href = up + href
         return f'<a href="{href}">'
 
     body = re.sub(r'<a href="([^"]+)">', fix_link, body)
+
+    # A .md suffix is an implementation detail of how this guide is stored. Strip it
+    # from everything the reader sees, while leaving every href untouched: the built
+    # pages are .html and the markdown-source links must keep pointing at real files.
+    # Only text nodes are touched, and only where .md ends a filename-like token, so
+    # prose such as "every .md file" is left alone.
+    body = re.sub(r">([^<]+)<",
+                  lambda m: ">" + re.sub(r"([\w./-]+)\.md\b", r"\1", m.group(1)) + "<",
+                  body)
+
     return body, toc, traps, env
 
 
@@ -387,11 +407,11 @@ def rail_html_factory(entries, by_src):
                 cls = "tree-item" + (" current" if here else "")
                 sec = f'<span class="tree-sec">{e["section"]}</span>' if e["section"] else ""
                 wt = f'<span class="tree-wt">{e["weight"]}%</span>' if e["weight"] else ""
-                chip = '<span class="tree-chip">cram</span>' if e["pair"] else ""
+                chip = ""
                 out.append(
                     f'<a class="{cls}" href="{rel(current["out"], e["out"])}"'
                     f'{" aria-current=\"page\"" if e["src"] == current["src"] else ""}>'
-                    f'{sec}<span class="tree-label">{html.escape(e["label"])}</span>{wt}{chip}</a>')
+                    f'{sec}<span class="tree-label">{html.escape(e["label"])}</span>{wt}</a>')
             out.append("</details>")
         return "\n".join(out)
     return render

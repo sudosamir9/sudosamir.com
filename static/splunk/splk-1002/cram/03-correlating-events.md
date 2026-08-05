@@ -12,8 +12,8 @@ memcontrol     = maxopentxn | maxopenevents | keepevicted
 rendering      = delim | mvlist | mvraw | nullstr
 filter-string  = <search-expression> | (<quoted-search-expression>) | eval(<eval-expression>)
 
-sourcetype=access_* | transaction JSESSIONID clientip startswith="view" endswith="purchase" maxspan=30m | where duration>0
-sourcetype=access_* | stats range(_time) AS duration, count AS eventcount, values(action) AS actions BY JSESSIONID
+index=web sourcetype=access_combined | transaction JSESSIONID clientip startswith="view" endswith="purchase" maxspan=30m | where duration>0
+index=web sourcetype=access_combined | stats range(_time) AS duration, count AS eventcount, values(action) AS actions BY JSESSIONID
 ```
 
 ## Defaults and limits

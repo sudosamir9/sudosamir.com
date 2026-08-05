@@ -12,13 +12,7 @@ The CIM is the only blueprint section with no dedicated Splunk course behind it,
 
 > The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.
 
-| Sub-objective | Udemy (Hailie Shaw) | Apress (Deep Mehta, 2021) | Honest note |
-| --- | --- | --- | --- |
-| 10.1 Describe the Splunk CIM | Module 23A | Chapter 5, "Common Information Model in Splunk" / "Defining CIM in Splunk" | Apress is two pages and reduces the section to "install the add-on and allowlist your index". |
-| 10.2 List the knowledge objects included with the Splunk CIM Add-On | Module 23A, partially 21A | Not covered | Neither source enumerates the knowledge objects, the model catalogue, or the tag requirements. This file is your only source for the list. |
-| 10.3 Use the CIM Add-On to normalize data | Module 23B, plus CIM Add-on Builder coverage | Chapter 5, index allowlist only | The Add-on Builder is a separate Splunkbase app and is not on the blueprint. Know that it exists and spend no more time on it. |
-
-Two known defects to carry into the exam. Apress answer key F states that CIM data models ship accelerated; they do not, and T-10-02 covers why. Apress is also inconsistent on case sensitivity. Hold to what the docs support: CIM field names are case sensitive, the values you search often are not, and the 10.4 docs never state whether tag names are case sensitive, so do not answer as though they did.
+Two known defects to carry into the exam. Circulating answer keys state that CIM data models ship accelerated; they do not, and T-10-02 covers why. The same material is inconsistent on case sensitivity. Hold to what the docs support: CIM field names are case sensitive, the values you search often are not, and the 10.4 docs never state whether tag names are case sensitive, so do not answer as though they did.
 
 ## What it is
 
@@ -236,7 +230,7 @@ Note the dotted column name survives into the statistics table. `| rename Web.st
 
 ## Worked examples
 
-The Splunk tutorial dataset is used throughout: `access_combined_wcookie` for web traffic, `secure` for Linux authentication, and `vendor_sales` for the non-CIM counterexample.
+The practice dataset is used throughout: `access_combined` for web traffic, `linux_secure` for Linux authentication, and `access_combined` for the non-CIM counterexample.
 
 **1. Enumerate what the add-on gave you.**
 
@@ -262,10 +256,10 @@ The first returns the datasets in the Web model, the second the field names the 
 **3. Prove the tutorial web data is not yet in the Web model.**
 
 ```spl
-| datamodel Web Web search | search sourcetype=access_combined_wcookie | stats count
+| datamodel Web Web search | search index=web sourcetype=access_combined | stats count
 ```
 
-Returns `count=0` on a stock instance. The tutorial data has `status`, `clientip`, `action`, and `bytes` extracted, so the field half is largely satisfied, but nothing tags it `web`. This is the single most instructive search in the section: correct fields with no tag means the events are outside the model.
+Returns `count=0` on a stock instance. The practice data has `status`, `clientip`, `action`, and `bytes` extracted, so the field half is largely satisfied, but nothing tags it `web`. This is the single most instructive search in the section: correct fields with no tag means the events are outside the model.
 
 **4. Tag it, then re-run.**
 
@@ -273,27 +267,27 @@ Create an event type over the sourcetype and tag it `web`. The Lab below has the
 
 ```ini
 # eventtypes.conf
-[buttercup_web]
-search = sourcetype=access_combined_wcookie
+[web_activity]
+search = index=web sourcetype=access_combined
 
 # tags.conf
-[eventtype=buttercup_web]
+[eventtype=web_activity]
 web = enabled
 ```
 
 Now the same validation search returns rows:
 
 ```spl
-| datamodel Web Web search | search sourcetype=access_combined_wcookie | stats count by Web.status
+| datamodel Web Web search | search index=web sourcetype=access_combined | stats count by Web.status
 ```
 
 **5. Map a field the vendor named differently.**
 
-The Web dataset expects `src` for the client address. The tutorial data extracts `clientip`. A field alias fixes it without touching the raw event or the existing field:
+The Web dataset expects `src` for the client address. The practice data extracts `clientip`. A field alias fixes it without touching the raw event or the existing field:
 
 ```ini
 # props.conf
-[access_combined_wcookie]
+[access_combined]
 FIELDALIAS-cim_src = clientip AS src
 ```
 
@@ -301,7 +295,7 @@ The original `clientip` still exists after aliasing. Aliases add a name, they do
 
 **6. Derive a value the vendor did not log, with a calculated field.**
 
-The Authentication dataset requires `action` with expected values `success`, `failure`, `pending`, `error`. Linux `secure` events say "Accepted password" or "Failed password" in the raw text. A calculated field normalizes it:
+The Authentication dataset requires `action` with expected values `success`, `failure`, `pending`, `error`. Linux `linux_secure` events say "Accepted password" or "Failed password" in the raw text. A calculated field normalizes it:
 
 ```ini
 # props.conf
@@ -312,14 +306,14 @@ EVAL-action = case(match(_raw,"(?i)Accepted"),"success", match(_raw,"(?i)Failed"
 Then validate the failed-login child dataset:
 
 ```spl
-| datamodel Authentication Failed_Authentication search | search sourcetype=secure | stats count by Authentication.user, Authentication.src
+| datamodel Authentication Failed_Authentication search | search index=security sourcetype=linux_secure | stats count by Authentication.user, Authentication.src
 ```
 
 **7. Field-level validation with fieldsummary.**
 
 ```spl
 | datamodel Authentication Successful_Authentication search
-| search sourcetype=secure
+| search index=security sourcetype=linux_secure
 | table *
 | fields - date_* host index punct _raw time* splunk_server sourcetype source eventtype linecount
 | fieldsummary
@@ -342,10 +336,10 @@ On a stock instance with acceleration disabled this returns zero rows even thoug
 **9. The counterexample.**
 
 ```spl
-| datamodel Web Web search | search sourcetype=vendor_sales | stats count
+| datamodel Web Web search | search index=web sourcetype=access_combined action=purchase | stats count
 ```
 
-Returns zero and always will. `vendor_sales` is transactional retail data with no CIM domain. Not every sourcetype belongs in a CIM model, and the docs explicitly warn against force-fitting a source into a model "based solely on field name".
+Returns zero and always will. `access_combined` is transactional retail data with no CIM domain. Not every sourcetype belongs in a CIM model, and the docs explicitly warn against force-fitting a source into a model "based solely on field name".
 
 **10. Find the recommended fields you have not mapped yet.**
 
@@ -393,7 +387,7 @@ This is the docs' own prioritization search, reading the `recommended=true` flag
 
 **T-10-01** The exam offers "the CIM normalizes data at index time" or "the CIM changes how events are stored". Wrong belief: normalizing means rewriting. Correct fact: the CIM is a search-time schema, schema-on-the-fly, and it "leaves the raw machine data intact". Installing the add-on reindexes nothing and modifies no indexed event.
 
-**T-10-02** A question states that CIM data models are accelerated out of the box, or that installing the add-on immediately speeds up searches. This is the Apress answer key F error. Correct fact: acceleration is disabled by default for every CIM data model, and you enable it per model on the CIM Setup page. A `tstats summariesonly=t` search against a stock CIM model returns zero rows.
+**T-10-02** A question states that CIM data models are accelerated out of the box, or that installing the add-on immediately speeds up searches. This is a circulating answer key F error. Correct fact: acceleration is disabled by default for every CIM data model, and you enable it per model on the CIM Setup page. A `tstats summariesonly=t` search against a stock CIM model returns zero rows.
 
 **T-10-03** A question implies that populating the CIM field names is sufficient for compliance. Wrong belief: field mapping equals compliance. Correct fact: tags are the constraint that admits events into an event dataset. Correct field names without the required tag put the events nowhere. Compliance requires both the tags and the populated required fields.
 
@@ -431,20 +425,20 @@ This is the docs' own prioritization search, reading the `recommended=true` flag
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded. If `Splunk_SA_CIM` is not installed, install app 1621 from Splunkbase first and restart.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded. If `Splunk_SA_CIM` is not installed, install app 1621 from Splunkbase first and restart.
 
 1. Confirm the add-on is present. Run `| datamodelsimple type=models` in Search and Reporting. If the command is unknown, the add-on is missing.
 2. Read the contract. Run `| datamodelsimple type=attributes datamodel=Web nodename=Web.Web` and note that `src`, `action`, `status`, and `url` are expected.
-3. Establish the baseline. Run `| datamodel Web Web search | search sourcetype=access_combined_wcookie | stats count`. Expect `0`.
-4. Create the event type. Settings, then Event types, then New Event Type. Name `buttercup_web`, search string `sourcetype=access_combined_wcookie`, app Search and Reporting.
-5. Tag it. Settings, then Tags, then List by tag name, then New. Tag name `web`, field-value pair `eventtype=buttercup_web`.
-6. Alias the client address. Settings, then Fields, then Field aliases, then New Field Alias. Name `cim_src`, applied to sourcetype `access_combined_wcookie`, with `clientip` becoming `src`.
+3. Establish the baseline. Run `| datamodel Web Web search | search index=web sourcetype=access_combined | stats count`. Expect `0`.
+4. Create the event type. Settings, then Event types, then New Event Type. Name `web_activity`, search string `index=web sourcetype=access_combined`, app Search and Reporting.
+5. Tag it. Settings, then Tags, then List by tag name, then New. Tag name `web`, field-value pair `eventtype=web_activity`.
+6. Alias the client address. Settings, then Fields, then Field aliases, then New Field Alias. Name `cim_src`, applied to sourcetype `access_combined`, with `clientip` becoming `src`.
 7. Set the index allowlist. Apps, then Manage Apps, then Set up on the Splunk Common Information Model row. Select the Web data model, type `main` into Indexes allowlist, save. Leave acceleration off.
 8. Verification search. Run:
 
 ```spl
 | datamodel Web Web search
-| search sourcetype=access_combined_wcookie
+| search index=web sourcetype=access_combined
 | stats count, dc(Web.src) AS distinct_sources BY Web.status
 | sort - count
 ```

@@ -1,6 +1,6 @@
 # Eval functions: the corrected catalogue
 
-Every evaluation function in Splunk Enterprise 10.4, by family, with the signature and the one or two facts per function that a question can hang on. This file exists because the printed Apress study guide's Chapter 2 function tables have rows with the wrong description or the wrong example pasted in, including two rows on eval functions specifically. See the last section for those, and `source-notes/apress-errata.md` for the rest of the book.
+Every evaluation function in Splunk Enterprise 10.4, by family, with the signature and the one or two facts per function that a question can hang on. This file exists because circulating function tables carry rows with the wrong description or the wrong example pasted in, including two rows on eval functions specifically. See the last section for those, and `source-notes/apress-errata.md` for the rest of the book.
 
 The taught treatment of `eval`, `where` and `fieldformat` as commands lives in `topics/02-filtering-and-formatting.md`. This is the lookup layer: catalogue first, then the eight pairs people actually confuse, then the exact list of places an eval function is legal.
 
@@ -18,14 +18,14 @@ Numbers are double-precision floats. Results are rounded to the precision of the
 |---|---|---|---|
 | case | `case(<condition>,<value>,...)` | Value paired with the first TRUE condition | NULL when no condition is TRUE. The documented default idiom is a final `true(),"<default>"` pair. Tests strictly first to last, so range ordering matters. |
 | cidrmatch | `cidrmatch(<cidr>,<ip>)` | Boolean | Subnet first, address second. Both arguments are strings, so literals need double quotes. IPv4 and IPv6. |
-| coalesce | `coalesce(<values>)` | The first argument that is not NULL | One or more arguments. No condition, no branches. This is the row Apress gets wrong. |
+| coalesce | `coalesce(<values>)` | The first argument that is not NULL | One or more arguments. No condition, no branches. This is the row circulating reference tables get wrong. |
 | false | `false()` | FALSE | No arguments. |
 | if | `if(<predicate>,<true_value>,<false_value>)` | Second argument if the predicate is TRUE, third otherwise | Exactly three arguments, no more. Nesting `if` inside `if` is how people fake a `case`. |
 | in | `in(<field>,<list>)` | Boolean | Quoted values, no wildcards. Under `eval` it must sit inside `case`, `if`, or `validate`. Distinct from the `IN` operator. |
 | like | `like(<str>,<pattern>)` | Boolean | Case sensitive. `%` matches many characters, `_` matches exactly one. No asterisk. |
 | lookup | `lookup("<table>",json_object(...),json_array(...))` | Output fields as a JSON object | Splunk Enterprise only, CSV lookups only. A quoted string not ending in `.csv` is read as a globally shared lookup definition. |
 | match | `match(<str>,<regex>)` | Boolean | Matches any substring. Anchor with `^` and `$` for a whole-string match. |
-| null | `null()` | NULL | Takes no arguments. Assigning it clears a field value. The second row Apress gets wrong. |
+| null | `null()` | NULL | Takes no arguments. Assigning it clears a field value. The second row circulating reference tables get wrong. |
 | nullif | `nullif(<field1>,<field2>)` | NULL when the two values are equal, otherwise the value of `<field1>` | Two arguments, both field names in normal use. |
 | searchmatch | `searchmatch(<search_str>)` | Boolean | TRUE if the event matches the search string. Under `eval` it must sit inside `if`. Literal search strings only, not saved-search names. |
 | true | `true()` | TRUE | No arguments. The standard `case` and `validate` terminator. |
@@ -302,12 +302,12 @@ Subsecond variables only produce meaningful digits when the data carries that re
 `tostring` is a function that produces a new string value, and whatever you assign it to really is a string from that point on. `fieldformat` is a command that changes only how a field renders; every command after it, and every export, sees the original value.
 
 ```spl
-sourcetype=vendor_sales
-| stats sum(price) AS revenue BY product_name
+index=web sourcetype=access_combined action=purchase
+| stats sum(bytes) AS total_bytes BY categoryId
 | eval revenue_str = tostring(revenue, "commas")
 | fieldformat revenue = "$" . tostring(revenue, "commas")
 | sort - revenue
-| table product_name revenue revenue_str
+| table categoryId revenue revenue_str
 ```
 
 Both columns look formatted. `sort - revenue` is still numerically correct because `fieldformat` did not touch the value, whereas `sort - revenue_str` would compare `$9.99` against `1,204.50` as text. One expression per `fieldformat` command, and put it last.
@@ -331,7 +331,7 @@ Both columns look formatted. `sort - revenue` is still numerically correct becau
 `like(<str>,<pattern>)` and the infix `LIKE` operator are the same matcher in two syntaxes, both case sensitive, both using `%` for many characters and `_` for exactly one. The `search` command uses `*` instead and is case insensitive on field values. `where` has no `*` at all; there it is a literal character.
 
 ```spl
-sourcetype=access_combined_wcookie useragent=*MSIE*
+index=web sourcetype=access_combined useragent=*MSIE*
 | where like(useragent, "Mozilla%") AND NOT useragent LIKE "%Trident%"
 | stats count BY useragent
 ```
@@ -414,25 +414,10 @@ The `search` command has no evaluation stage, and that is the reason rather than
 The fix is always the same shape. Move the predicate to `where`, or compute the value with `eval` first and then filter on the field you created:
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval uri_len = len(uri_path)
 | search uri_len>30
 ```
 
 That works because `uri_len` exists as a field by the time `search` sees it, and `search` is comparing a field to a literal. What it still cannot do is call `len()` itself.
 
-## Apress errata for eval
-
-Chapter 2 of the Apress guide is a set of reference tables rather than a taught progression, and several rows carry the wrong description or an example pasted in from a neighbouring row. Two are eval rows and three are function-table rows in the same chapter. Cross-reference `source-notes/apress-errata.md`, which lists these alongside the nine broken answer keys.
-
-| Table | Row | What the book prints | The correction |
-|---|---|---|---|
-| 2-16, eval functions | `coalesce(X,...)` | Described as "it evaluates X if true, return Y; otherwise, it returns Z" | That sentence describes `if(X,Y,Z)`. `coalesce` takes one or more arguments, tests no condition, and returns the first that is not NULL. Trap T-02-05. |
-| 2-16, eval functions | `null()` | Example given as `\| eval n=nullif(fielda,fieldB)` | That is `nullif`'s example. `null()` takes no arguments and returns NULL; assigning it clears a field. `nullif(<field1>,<field2>)` returns NULL when the two are equal and otherwise the first. Trap T-02-06. |
-| 2-9, stats functions | `var(field)` | Command shown as `\| stats mode(field_name)` | Should be `\| stats var(field_name)`. `mode` and `var` are different aggregates. |
-| 2-12, headed "timechart Functions" | The whole table | Every example written as `\| stats per_day(...)` under a heading that says timechart | These are rate functions available to `stats`, `chart` and `timechart`. The heading and the examples disagree; neither is wrong on its own, and the table teaches you to trust neither. |
-| 2-12 | `per_minute(field)` | Command shown as `\| stats per_day(field_name)` | Should be `\| stats per_minute(field_name)`. |
-
-Chapter 2 also calls the field-selection command "Field" when the SPL command is `fields`, and prints two Boolean examples that will not run, both missing the `search` command after a pipe. For the aggregate and rate functions in tables 2-9 and 2-12, use `reference/stats-and-chart-functions.md` rather than the book.
-
-Read the eval catalogue itself from the source: the [evaluation functions overview](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/evaluation-functions) links every family page, and [Comparison and Conditional functions](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions) is the single page that corrects both Apress eval rows.

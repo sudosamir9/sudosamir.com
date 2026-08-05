@@ -160,7 +160,7 @@ The `p` suffix means population. Without it the function computes the sample sta
 
 ```spl
 index=sales
-| stats stdev(price) AS sample_sd, stdevp(price) AS population_sd, var(price) AS sample_var, varp(price) AS population_var BY category
+| stats stdev(bytes) AS sample_sd, stdevp(bytes) AS population_sd, var(bytes) AS sample_var, varp(bytes) AS population_var BY category
 ```
 
 `sample_sd` is always the larger of the two, because the denominator is smaller.
@@ -171,34 +171,34 @@ This is the single highest-yield idea in the file. Take ten events with three fi
 
 | _time | host | status |
 | --- | --- | --- |
-| 10:05 | www1 | 200 |
-| 10:12 | www1 | 200 |
-| 10:20 | www1 | 404 |
-| 10:31 | www2 | 200 |
-| 10:44 | www2 | 503 |
-| 11:02 | www1 | 200 |
-| 11:15 | www1 | 503 |
-| 11:20 | www2 | 200 |
-| 11:33 | www2 | 404 |
-| 11:41 | www2 | 404 |
+| 10:05 | web1 | 200 |
+| 10:12 | web1 | 200 |
+| 10:20 | web1 | 404 |
+| 10:31 | web2 | 200 |
+| 10:44 | web2 | 503 |
+| 11:02 | web1 | 200 |
+| 11:15 | web1 | 503 |
+| 11:20 | web2 | 200 |
+| 11:33 | web2 | 404 |
+| 11:41 | web2 | 404 |
 
 `stats count BY host, status` gives one row per observed combination, and both group-by field names survive as columns:
 
 | host | status | count |
 | --- | --- | --- |
-| www1 | 200 | 3 |
-| www1 | 404 | 1 |
-| www1 | 503 | 1 |
-| www2 | 200 | 2 |
-| www2 | 404 | 2 |
-| www2 | 503 | 1 |
+| web1 | 200 | 3 |
+| web1 | 404 | 1 |
+| web1 | 503 | 1 |
+| web2 | 200 | 2 |
+| web2 | 404 | 2 |
+| web2 | 503 | 1 |
 
 `chart count OVER host BY status` gives the matrix of the same six numbers. The field name `status` disappears; its values became column headers:
 
 | host | 200 | 404 | 503 |
 | --- | --- | --- | --- |
-| www1 | 3 | 1 | 1 |
-| www2 | 2 | 2 | 1 |
+| web1 | 3 | 1 | 1 |
+| web2 | 2 | 2 | 1 |
 
 `timechart span=1h count BY status` gives the same matrix with the row axis replaced by time. The first column is always `_time`:
 
@@ -209,7 +209,7 @@ This is the single highest-yield idea in the file. Take ten events with three fi
 
 Change the split field and the columns change but the geometry does not. `timechart span=1h count BY host`:
 
-| _time | www1 | www2 |
+| _time | web1 | web2 |
 | --- | --- | --- |
 | 10:00 | 3 | 2 |
 | 11:00 | 2 | 3 |
@@ -277,15 +277,15 @@ index=web
 | stats count AS total,
         count(eval(status>=500)) AS server_errors,
         count(eval(status>=400 AND status<500)) AS client_errors,
-        sum(eval(if(action="purchase", price, 0))) AS revenue,
+        sum(eval(if(action="purchase", bytes, 0))) AS revenue,
         sum(eval(bytes/1024)) AS kb_total
         BY host
 ```
 
 | host | total | server_errors | client_errors | revenue | kb_total |
 | --- | --- | --- | --- | --- | --- |
-| www1 | 20,183 | 214 | 1,902 | 41,255.00 | 92,410.7 |
-| www2 | 21,385 | 198 | 2,041 | 39,870.00 | 96,332.1 |
+| web1 | 20,183 | 214 | 1,902 | 41,255.00 | 92,410.7 |
+| web2 | 21,385 | 198 | 2,041 | 39,870.00 | 96,332.1 |
 
 Three things worth knowing. `count(eval(...))` counts events where the expression evaluates true, not events where it returns a value, so `count(eval(status))` is not a way to count events with a `status` field; use `count(status)` for that. `sum(eval(...))` evaluates the expression per event and then sums, which is how you build a conditional total without a preceding `eval` line. And `timechart` requires the split-by clause when the argument is a bare eval expression rather than a function wrapping one.
 
@@ -324,22 +324,11 @@ index=web
 ```spl
 index=sales
 | sort _time
-| streamstats sum(price) AS running_total BY category
+| streamstats sum(bytes) AS running_total BY category
 ```
 
 Both are dataset-shaped commands that keep events, so neither populates the Statistics tab on its own. That is the distractor: a question asking which command produces a table for a visualization never has `eventstats` as the answer.
 
-## Apress errata, Tables 2-9 and 2-12
-
-The printed study guide (Deep Mehta, *Splunk Certified Study Guide*, Apress 2021) presents chapter 2 as reference tables. Several rows have the wrong example pasted in. These two tables cover exactly the material in this file.
-
-| Table | Row | What the book prints | What is correct |
-| --- | --- | --- | --- |
-| 2-9, stats functions | `var(field)` | Command shown as `\|stats mode(field_name)` | `\| stats var(field_name)`. The `mode` example was pasted into the `var` row, so a reader learns that `var` returns the most frequent value. |
-| 2-12, headed "timechart Functions" | Whole table | Every command written as `\|stats per_day(...)` and similar, under a heading that says timechart | `per_day()`, `per_hour()`, `per_minute()` and `per_second()` are documented for the `timechart` command. The heading is right and every example contradicts it. |
-| 2-12 | `per_minute(field)` | Command shown as `\|stats per_day(field_name)` | `\| timechart per_minute(field_name)`. Both the command and the function name are wrong in the printed example. |
-
-Two consequences for revision. Do not learn the rate and per-interval functions from chapter 2 at all; use the tables above, where the `per_*` family is `timechart` only and `rate()` is `stats`, `tstats` and `mstats` only. And treat the whole of Table 2-9 as unverified: one row in it is demonstrably a copy-paste error, which says nothing good about the rest. Chapter 2 also calls the field-selection command "Field" when the actual SPL command is `fields`. Full inventory in `source-notes/apress-errata.md`.
 
 ## Docs
 

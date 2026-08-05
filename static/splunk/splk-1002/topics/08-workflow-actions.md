@@ -13,12 +13,6 @@ Workflow actions are the only blueprint section that is pure knowledge-object co
 
 > The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.
 
-| Source | Coverage of 8.0 | Honest assessment |
-| --- | --- | --- |
-| Udemy, "Splunk: Zero to Power User" (Hailie Shaw), Module 20 | Walks the Splunk Web form for all three kinds | Demonstration-led and correct on the click path, but it never shows `workflow_actions.conf`, states no defaults, and skips the `$@` special tokens. |
-| Apress, "Splunk Certified Study Guide" (Deep Mehta, 2021), Chapter 5 | GET workflow actions and Search workflow actions | POST is named as one of the three kinds and then never demonstrated, which leaves sub-objective 8.3 uncovered. The book is unreliable on answer keys generally (at least nine wrong keys), so use it for shape and `workflow_actions.conf` for facts. |
-| help.splunk.com, Knowledge Management Manual 10.4, Workflow actions chapter, plus the `workflow_actions.conf` spec | Everything | Authoritative. The Knowledge Management Manual gives the click path and the form field labels; only the `.conf` spec states the defaults, and defaults are what the exam asks for. |
-
 ## What it is
 
 A workflow action is a knowledge object that adds an interactive entry to the **Actions** menu attached to an event or to a field value in search results. Clicking it either opens an external web resource (a `link` action, issued as an HTTP GET or an HTTP POST) or launches a new Splunk search (a `search` action). In both cases, values from the event you clicked are substituted into the target by a `$fieldname$` token syntax before the request or search runs.
@@ -170,7 +164,7 @@ A workflow action produces no rows, no columns and no fields. It is neither stre
 3. **At click time for `type = link`, `link.method = post`**, the browser issues an HTTP POST to `link.uri`. The `link.postargs.<int>.key` and `.value` pairs form the HTTP-form-encoded request body. They are not in the query string, so they do not appear in the URL bar.
 4. **At click time for `type = search`**, Splunk dispatches a new search job whose SPL is `search.search_string` with tokens substituted, in app `search.app`, view `search.view`, over `search.earliest` to `search.latest`, or the originating search's range when `search.preserve_timerange = true` and neither bound is set. The job is independent, with its own sid and its own results, and it runs under the clicking user's roles.
 
-The rendered menu for a single `access_combined_wcookie` event with `clientip = 87.194.216.51` and three workflow actions defined:
+The rendered menu for a single `access_combined` event with `clientip = 87.194.216.51` and three workflow actions defined:
 
 | Menu | Entry drawn | Why it is there |
 | --- | --- | --- |
@@ -186,7 +180,7 @@ The last two rows are the point of `$@field_value$`: one definition, one stanza,
 
 ### 1. GET, the minimum viable workflow action
 
-Look up the owner of a client IP from the Buttercup Games web logs.
+Look up the owner of a client IP from the web access logs.
 
 ```ini
 [whois_clientip]
@@ -199,7 +193,7 @@ link.target = blank
 link.uri = http://ws.arin.net/whois/?queryinput=$clientip$
 ```
 
-Run `index=main sourcetype=access_combined_wcookie | head 20`, expand an event, open the Actions menu on a `clientip` value. The entry reads `Whois: 87.194.216.51` and opens ARIN in a new tab. `link.method = get` and `link.target = blank` are both defaults, so this stanza behaves identically with those two lines deleted. Writing them out is good hygiene and bad exam preparation: know that they are defaults.
+Run `index=web sourcetype=access_combined | head 20`, expand an event, open the Actions menu on a `clientip` value. The entry reads `Whois: 87.194.216.51` and opens ARIN in a new tab. `link.method = get` and `link.target = blank` are both defaults, so this stanza behaves identically with those two lines deleted. Writing them out is good hygiene and bad exam preparation: know that they are defaults.
 
 ### 2. GET on every field at once
 
@@ -219,7 +213,7 @@ This appears on `productName`, on `useragent`, on `status`, on everything, becau
 
 ### 3. POST, sending an event body to an issue tracker
 
-Buttercup Games returns HTTP 500s from the checkout path. Open a ticket from the event without retyping the stack trace.
+The application returns HTTP 500s from the checkout path. Open a ticket from the event without retyping the stack trace.
 
 ```ini
 [create_issue_500]
@@ -229,7 +223,7 @@ eventtypes = errors_in_500_range
 display_location = event_menu
 link.method = post
 link.target = blank
-link.uri = http://issuetracker.buttercup.example:8000/issue/create
+link.uri = http://issuetracker.example.com:8000/issue/create
 link.postargs.1.key = title
 link.postargs.1.value = server error $status$
 link.postargs.2.key = description
@@ -250,7 +244,7 @@ type = search
 label = All activity for JSESSIONID $JSESSIONID$ in past 24h
 fields = JSESSIONID
 display_location = both
-search.search_string = index=main sourcetype=access_combined_wcookie JSESSIONID="$JSESSIONID$" | stats count by uri_path, status | sort - count
+search.search_string = index=web sourcetype=access_combined JSESSIONID="$JSESSIONID$" | stats count by uri_path, status | sort - count
 search.app = search
 search.view = search
 search.target = blank
@@ -260,7 +254,7 @@ search.earliest = -24h
 The dispatched SPL, after substitution, is:
 
 ```spl
-index=main sourcetype=access_combined_wcookie JSESSIONID="SD6SL8FF9ADFF3" | stats count by uri_path, status | sort - count
+index=web sourcetype=access_combined JSESSIONID="SD6SL8FF9ADFF3" | stats count by uri_path, status | sort - count
 ```
 
 Note the explicit double quotes around `$JSESSIONID$`. Search-string tokens are not escaped by Splunk, so quoting is the author's job. `search.latest` is unset, so with `search.earliest = -24h` the range is the last 24 hours up to the moment of the click, not of the original search.
@@ -275,7 +269,7 @@ type = search
 label = All activity for JSESSIONID $JSESSIONID$ in this time range
 fields = JSESSIONID
 display_location = field_menu
-search.search_string = index=main sourcetype=access_combined_wcookie JSESSIONID="$JSESSIONID$" | timechart span=5m count by status
+search.search_string = index=web sourcetype=access_combined JSESSIONID="$JSESSIONID$" | timechart span=5m count by status
 search.preserve_timerange = true
 ```
 
@@ -290,9 +284,9 @@ Take a user from the vendor sales data and go look for their authentication acti
 type = search
 label = Recent auth events for $User$
 fields = User
-eventtypes = vendor_sales_events
+eventtypes = web_purchase_events
 display_location = field_menu
-search.search_string = index=main sourcetype=secure user="$User$" | stats count by action, src_ip | sort - count
+search.search_string = index=security sourcetype=linux_secure user="$User$" | stats count by action, src_ip | sort - count
 search.app = search
 search.earliest = -7d
 search.latest = now
@@ -385,7 +379,7 @@ flowchart TD
 
 ## Lab
 
-Roughly fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded. You will build one GET action, one Search action, and prove both.
+Roughly fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded. You will build one GET action, one Search action, and prove both.
 
 **Part 1, GET action on `clientip` (5 minutes).**
 
@@ -414,7 +408,7 @@ Roughly fifteen minutes on a single-node Splunk Enterprise 10.x instance with th
 7. **Search string**:
 
 ```spl
-index=main sourcetype=access_combined_wcookie JSESSIONID="$JSESSIONID$" | stats count by uri_path, status | sort - count
+index=web sourcetype=access_combined JSESSIONID="$JSESSIONID$" | stats count by uri_path, status | sort - count
 ```
 
 8. **Run in app**: `search`. Leave **Open in view** empty.
@@ -424,10 +418,10 @@ index=main sourcetype=access_combined_wcookie JSESSIONID="$JSESSIONID$" | stats 
 
 **Part 3, verification (5 minutes).**
 
-Run this over Last 24 hours (widen to All time if the tutorial data is older):
+Run this over All time (use All time, the practice data is historical):
 
 ```spl
-index=main sourcetype=access_combined_wcookie | head 50 | table _time, clientip, JSESSIONID, uri_path, status
+index=web sourcetype=access_combined | head 50 | table _time, clientip, JSESSIONID, uri_path, status
 ```
 
 Expand any event. On the `clientip` value, open the **Actions** menu: `Whois: <the actual IP>` must be present, with the IP rendered rather than the literal `$clientip$`. On the `JSESSIONID` value, open **Actions** and click `Session activity for <the actual session id>`. A new tab opens running the substituted SPL, and its time range picker must show the range you ran the original search over, not All time. Now open **Event Actions** on the event itself: `Session activity ...` appears there too because you chose `Both`, while the Whois entry does not, because you chose `Fields menus`.
@@ -507,7 +501,7 @@ You should see `type = link`, `link.method = get`, `link.target = blank`, `field
 type = link
 label = Create JIRA issue
 link.method = post
-link.uri = https://jira.buttercup.example/rest/api/2/issue
+link.uri = https://jira.example.com/rest/api/2/issue
 ```
 
 What happens?

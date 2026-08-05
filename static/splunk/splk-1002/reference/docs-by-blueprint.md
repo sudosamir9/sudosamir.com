@@ -152,7 +152,7 @@ Covered by [`topics/03-correlating-events.md`](../topics/03-correlating-events.m
 ### 3.1 Identify transactions
 
 51. [transaction command (Search Reference 10.4)](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/transaction)  
-   maxspan and maxpause definitions and defaults; Extended example 2 runs `sourcetype=access_* | transaction clientip host maxspan=30s maxpause=5s` and describes the result as a distinct combination of clientip and host values. The Specifying multiple fields section carries the not-necessarily-a-conjunction caveat.
+   maxspan and maxpause definitions and defaults; Extended example 2 runs `index=web sourcetype=access_combined | transaction clientip host maxspan=30s maxpause=5s` and describes the result as a distinct combination of clientip and host values. The Specifying multiple fields section carries the not-necessarily-a-conjunction caveat.
 
 ### 3.2 Group events using fields
 
@@ -307,7 +307,7 @@ Covered by [`topics/07-macros.md`](../topics/07-macros.md).
 ### 7.1 Describe macros
 
 95. [Use search macros in searches (Knowledge Manager Manual 10.4)](https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros)  
-   Insert search macros into search strings: backticks around the macro name, example sourcetype=access_* | `mymacro`. Also: macros inside quoted values are not expanded, and a macro that expands to a generating command needs a pipe BEFORE the backtick.
+   Insert search macros into search strings: backticks around the macro name, example index=web sourcetype=access_combined | `mymacro`. Also: macros inside quoted values are not expanded, and a macro that expands to a generating command needs a pipe BEFORE the backtick.
 
 ### 7.2 Create and use a basic macro
 

@@ -14,7 +14,7 @@
 ```ini
 [bc_status_band(2)]
 args = lo, hi
-definition = index=main sourcetype=access_combined_wcookie status>=$lo$ status<$hi$
+definition = index=web sourcetype=access_combined status>=$lo$ status<$hi$
 validation = isnum($lo$) AND isnum($hi$)
 errormsg = Both lo and hi must be numeric HTTP status codes.
 iseval = false
@@ -70,4 +70,4 @@ description = Web access events in a half-open status range.
 
 ## Trap IDs
 
-T-07-01 backticks not quotes, T-07-02 number is the argument count, T-07-03 Arguments bare vs Definition tokens, T-07-04 references inert in quotes but tokens substituted in quotes, T-07-05 Boolean vs non-Boolean validation asymmetry, T-07-06 validation failure is an error, T-07-07 no restart for macros.conf (Apress wrong), T-07-08 macros absent from the search-time operations sequence, T-07-09 leading pipe outside the definition, T-07-10 hyphens legal in arg names, hostile in macro names, T-07-11 overloading by argument count creates distinct macros, T-07-12 named arguments are order-independent, T-07-13 iseval returns the expansion string, T-07-14 app scope decides whether the macro resolves.
+T-07-01 backticks not quotes, T-07-02 number is the argument count, T-07-03 Arguments bare vs Definition tokens, T-07-04 references inert in quotes but tokens substituted in quotes, T-07-05 Boolean vs non-Boolean validation asymmetry, T-07-06 validation failure is an error, T-07-07 no restart for macros.conf, T-07-08 macros absent from the search-time operations sequence, T-07-09 leading pipe outside the definition, T-07-10 hyphens legal in arg names, hostile in macro names, T-07-11 overloading by argument count creates distinct macros, T-07-12 named arguments are order-independent, T-07-13 iseval returns the expansion string, T-07-14 app scope decides whether the macro resolves.

@@ -77,7 +77,7 @@ Three renames worth knowing because search results still use the old names:
 | `knowledge-management-manual/10.4/pivot/introduction-to-pivot` | `pivot-manual/10.4/pivot-overview/introduction-to-pivot` |
 | `manage-event-types/define-and-maintain-event-types-in-eventtypes-conf` | `event-types/...` (the chapter slug is `event-types`) |
 
-**Every URL printed in the Apress book is stale.** They point at Splunk 6.1.1 through 7.3.1. Use this file instead of the book's reference lists. See [source-notes/apress-errata.md](../source-notes/apress-errata.md).
+**Printed study guides carry stale URLs.** They point at Splunk 6.1.1 through 7.3.1. Use this file instead.
 
 ## Non-documentation sources
 

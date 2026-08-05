@@ -11,13 +11,6 @@ This section is about turning raw text into named fields at search time, and the
 - 4.1 Perform regex field extractions using the Field Extractor (FX)
 - 4.2 Perform delimiter field extractions using the FX
 
-| Source | Coverage | Honest assessment |
-| --- | --- | --- |
-| Udemy "Splunk: Zero to Power User" (Hailie Shaw), Module 7 | Fields, the fields sidebar, default fields | Adequate on the sidebar. Never states the 20 percent threshold as a number, and blurs index time against search time. |
-| Udemy Module 12A | Field Extractor, regular expression method | Happy path only. Skips required text, counterexamples, manual regex editing, and Save-step permissions. |
-| Udemy Module 12B | Field Extractor, delimiter method | Shows the flow without saying that the delimiter path skips Validate, or where the extraction lands in configuration. |
-| Apress "Splunk Certified Study Guide" (Deep Mehta, 2021), Chapter 3 | Field extraction, regular expressions, inline regex, delimiters | Body text is broadly correct that delimiters suit structured data, then the answer key marks "delimiters are mostly used in structured data" as False, contradicting the chapter body and the docs. Treat the key as wrong. The chapter also contradicts itself on field-value case sensitivity, and never mentions `erex`. |
-
 ## What it is
 
 Splunk extracts a small, fixed set of default fields when data is indexed, and extracts everything else when you run a search. Index-time extraction is expensive and permanent: an indexed field increases the size of the searchable index, and changing it requires reindexing the data. Search-time extraction is cheap and reversible: the extraction is a knowledge object evaluated against `_raw` while the search runs, so creating one immediately applies to data that was indexed months ago and deleting one changes nothing about what is stored. The Field Extractor only ever creates search-time extractions, which is exactly why the Power User exam confines itself to search time.
@@ -207,12 +200,12 @@ Sharing something built on an extraction does not share the extraction. A report
 
 ## Worked examples
 
-Assume the Splunk tutorial data is loaded into `main` with source types `access_combined_wcookie`, `vendor_sales`, and `secure`.
+Assume the practice dataset from [lab setup](../lab-setup.md) is loaded: `index=web` (`access_combined`), `index=security` (`linux_secure`), and `index=cisco` (`cisco:wsa:squid`). The Cisco events arrive with almost no extracted fields, which makes them the right target for the extractions below.
 
 **1. Basic named capture group. The single pattern every FX regex extraction reduces to.**
 
 ```spl
-index=main sourcetype=secure "Failed password"
+index=security sourcetype=linux_secure "Failed password"
 | rex "port (?<src_port>\d+)"
 | stats count by src_port
 | sort - count
@@ -223,7 +216,7 @@ index=main sourcetype=secure "Failed password"
 **2. Multivalue extraction with max_match.**
 
 ```spl
-index=main sourcetype=access_combined_wcookie action=purchase
+index=web sourcetype=access_combined action=purchase
 | rex field=uri_query max_match=0 "(?<qs_param>[^&]+)"
 | stats count by qs_param
 ```
@@ -233,7 +226,7 @@ index=main sourcetype=access_combined_wcookie action=purchase
 **3. offset_field, which the exam likes because almost nobody uses it.**
 
 ```spl
-index=main sourcetype=secure "Failed password"
+index=security sourcetype=linux_secure "Failed password"
 | rex "from (?<src_ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})" offset_field=src_ip_offset
 | table _time src_ip src_ip_offset
 ```
@@ -243,17 +236,17 @@ Produces two new fields. `src_ip` holds the address; `src_ip_offset` holds the z
 **4. sed mode for masking, which creates no new field at all.**
 
 ```spl
-index=main sourcetype=vendor_sales
-| rex field=AcctID mode=sed "s/\d(?=\d{4})/x/g"
-| table VendorID AcctID
+index=web sourcetype=access_combined action=purchase
+| rex field=JSESSIONID mode=sed "s/\d(?=\d{4})/x/g"
+| table clientip JSESSIONID
 ```
 
-Rewrites `AcctID` in place, masking every digit except the last four. There is no capture group and no new field name because `mode=sed` transforms an existing field rather than extracting a new one. The index is untouched; re-run the search without the `rex` and the original values are back.
+Rewrites `JSESSIONID` in place, masking every digit except the last four. There is no capture group and no new field name because `mode=sed` transforms an existing field rather than extracting a new one. The index is untouched; re-run the search without the `rex` and the original values are back.
 
 **5. erex, the example-based extractor.**
 
 ```spl
-index=main sourcetype=secure "failed password"
+index=security sourcetype=linux_secure "failed password"
 | erex src_port examples="port 3351, port 3768"
 | top src_port
 ```
@@ -263,7 +256,7 @@ index=main sourcetype=secure "failed password"
 **6. extract with explicit delimiters, the SPL twin of the FX delimiter method.**
 
 ```spl
-index=main sourcetype=access_combined_wcookie action=purchase
+index=web sourcetype=access_combined action=purchase
 | rename _raw AS keep_raw, uri_query AS _raw
 | extract pairdelim="?&" kvdelim="="
 | rename _raw AS uri_query, keep_raw AS _raw
@@ -280,7 +273,7 @@ The double rename exists because `extract` works only on `_raw`. `pairdelim="?&"
 DELIMS = "?&", "="
 
 # props.conf
-[access_combined_wcookie]
+[access_combined]
 REPORT-access_query_params = access_query_params
 ```
 
@@ -312,7 +305,7 @@ Two sets of quoted delimiters because the data contains full key-value pairs. If
 
 **T-04-04** The default permission at the Save step is App. Wrong belief: a saved extraction is immediately visible to everyone in the app. Correct fact: the default is Owner, and the docs state it "only extracts fields in searches run by the person who created the extraction." The three choices are Owner, App, All apps.
 
-**T-04-05** Field values are case sensitive. Wrong belief, and the belief the Apress book states inconsistently in two different places. The rule is per context, and this is the table to memorise.
+**T-04-05** Field values are case sensitive. Wrong belief, and one stated inconsistently across secondary material. The rule is per context, and this is the table to memorise.
 
 | Context | Case sensitive? | Source sentence |
 | --- | --- | --- |
@@ -327,7 +320,7 @@ Two sets of quoted delimiters because the data contains full key-value pairs. If
 | Lookup matching | Yes, by default | `case_sensitive_match` in transforms.conf defaults to true |
 | A regular expression in `rex`, `regex`, or an `EXTRACT-` | Yes, by default | Splunk regexes are PCRE, which matches case sensitively unless the pattern says otherwise |
 
-So `sourcetype=access_combined_wcookie` and `SOURCETYPE=...` are not the same search, but `status=Failed` matches `failed`. The exception the exam builds questions on is the eval family: `| where action="Purchase"` returns nothing against `purchase` even though `action=Purchase` in the base search would have matched it.
+So `index=web sourcetype=access_combined` and `SOURCETYPE=...` are not the same search, but `status=Failed` matches `failed`. The exception the exam builds questions on is the eval family: `| where action="Purchase"` returns nothing against `purchase` even though `action=Purchase` in the base search would have matched it.
 
 **T-04-06** `eventtype` and `tag` are default fields extracted at index time. Wrong belief: they appear in the sidebar so they must be default. Correct fact: the documented default field list is `host`, `index`, `linecount`, `punct`, `source`, `sourcetype`, `splunk_server`, `timestamp`, plus the internal fields `_raw`, `_time`, `_indextime`, `_cd`, `_bkt`, plus the `date_*` fields. Event types and tags are applied at search time, at stages 8 and 9 of the search-time sequence, long after extraction.
 
@@ -337,7 +330,7 @@ So `sourcetype=access_combined_wcookie` and `SOURCETYPE=...` are not the same se
 
 **T-04-09** `max_match=0` means no matches, or `max_match` defaults to unlimited. Correct fact: the default is `1`, and `0` means unlimited. Any value greater than 1 produces a multivalue field. If your pattern has a capture group that can match multiple times within itself, only the last capture group is used for the multiple matches.
 
-**T-04-10** `erex` saves an extraction. Wrong belief: `erex` is the command-line version of the FX and persists what it builds. Correct fact: `erex` extracts for that search only and prints its generated regular expression to the job messages, readable from the Job menu. It is a regex-writing aid. It is also completely absent from the Apress book, so do not expect that source to prepare you for it.
+**T-04-10** `erex` saves an extraction. Wrong belief: `erex` is the command-line version of the FX and persists what it builds. Correct fact: `erex` extracts for that search only and prints its generated regular expression to the job messages, readable from the Job menu. It is a regex-writing aid. It is also completely absent from circulating study material, so do not expect that source to prepare you for it.
 
 **T-04-11** You can always back out of a manual regex edit in the FX. Correct fact: you can select the Back button to abandon manual editing and return to the field extractor workflow "only if you have not yet tried to preview a regular expression change." Once you preview an edited regex, the interactive highlighting workflow for that extraction is gone and you are committed to editing the regex by hand.
 
@@ -347,7 +340,7 @@ So `sourcetype=access_combined_wcookie` and `SOURCETYPE=...` are not the same se
 
 **T-04-14** The FX always writes the same configuration. Correct fact: the regular expression method writes an inline `EXTRACT-<class>` into props.conf with the regex embedded. The delimiter method writes a `transforms.conf` stanza holding `DELIMS` and `FIELDS` plus a `REPORT-<class>` reference in props.conf. This is why changing permissions on a delimiter extraction requires moving the transforms.conf stanza manually.
 
-**T-04-15** Delimiters are mostly used for unstructured data. This is the Apress answer-key error verbatim. Correct fact: choose Delimiters when values are cleanly separated by a common character such as a space, comma, or pipe, and are consistent across events, "commonly the case with structured, table-based data such as .csv files or events indexed from a database." Choose Regular Expression for unstructured data such as a system log.
+**T-04-15** Delimiters are mostly used for unstructured data. This is a verbatim answer-key error found in circulating material. Correct fact: choose Delimiters when values are cleanly separated by a common character such as a space, comma, or pipe, and are consistent across events, "commonly the case with structured, table-based data such as .csv files or events indexed from a database." Choose Regular Expression for unstructured data such as a system log.
 
 **T-04-16** The Event Actions entry point starts the wizard at Select Sample. Correct fact: opening the FX from **Event Actions > Extract Fields** on a specific event starts you at Select Method, because the source type and the sample event are already determined by the event you clicked. Every other entry point starts at Select Sample.
 
@@ -367,14 +360,14 @@ So `sourcetype=access_combined_wcookie` and `SOURCETYPE=...` are not the same se
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data in `main`.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.
 
 **Part A, regex extraction from the search-result entry point (about 8 minutes).**
 
 1. Run this search over All time.
 
 ```spl
-index=main sourcetype=secure "Failed password for invalid user"
+index=security sourcetype=linux_secure "Failed password for invalid user"
 ```
 
 2. Expand any result event, select **Event Actions**, then **Extract Fields**. Confirm the wizard opens on **Select Method**, not Select Sample. That is the observable difference between the two entry points.
@@ -405,13 +398,13 @@ printf '2024-03-26 10:04:20|EU-WEST|Dream Crusher|3|29.99\n2024-03-26 10:06:11|U
 **Verification searches.**
 
 ```spl
-index=main sourcetype=secure "Failed password for invalid user"
+index=security sourcetype=linux_secure "Failed password for invalid user"
 | stats count by bad_user, src_port
 | sort - count
 ```
 
 ```spl
-index=main sourcetype=pipe_sales
+index=cisco sourcetype=cisco:wsa:squid
 | stats sum(qty) AS units by region, product
 ```
 
@@ -494,7 +487,7 @@ Which value does `status_code` hold at search time?
 **10.** You run this search and look at the fields sidebar.
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 ```
 
 `host`, `source`, and `sourcetype` are listed under Selected Fields. Where does `index` appear, and why?

@@ -12,7 +12,7 @@ Alias UI: Settings, Fields, Field aliases, New Field Alias. Form: Destination ap
 
 Calc field UI: Settings, Fields, Calculated Fields row, Add new. Form: Destination app, Apply to named, Name, Eval expression. Expression is the right-hand side only: no `eval` keyword, no `fieldname =`.
 
-Valid: `FIELDALIAS-v = VendorID AS vendor_id VendorID AS vendor_name`
+Valid: `FIELDALIAS-v = clientip AS vendor_id clientip AS vendor_name`
 
 Invalid: `FIELDALIAS-f = userID AS user loginID AS user` (use `EVAL-user = coalesce(userID, loginID)`)
 

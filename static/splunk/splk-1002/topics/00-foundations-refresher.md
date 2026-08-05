@@ -11,20 +11,8 @@ What is here and why:
 - Areas 1 to 5 and 9 (search modes, fields sidebar, time, command types, subsearches, search jobs and the Job Inspector) are **assumed prerequisites**. A blueprint question can be built on top of them. Example: a 3.0 transaction question that hinges on whether `transaction` is streaming, or a 5.0 field-alias question that hinges on the search-time sequence.
 - Areas 6, 7, 8 and 10 (lookups, reports and alerts, dashboards, knowledge object management) are **off blueprint** and are not tested directly on SPLK-1002. Lookups belong to SPLK-1001 and SPLK-1004; alerting and dashboards to SPLK-1001 and the admin track. They are here in tight summary form because they are useful at work and because knowing they are off blueprint is the fastest way to stop over-studying them.
 
-| Area | Udemy "Splunk: Zero to Power User" (Hailie Shaw) | Apress "Splunk Certified Study Guide" (Mehta, 2021) | Honest note |
-| --- | --- | --- | --- |
-| Search modes | Covered in the Search app modules | Chapter 2 (User exam material) | Both are correct in outline. Neither states the Smart mode transforming/non-transforming switch precisely, which is the single most testable fact in this file. |
-| Fields sidebar | Covered early, correctly | Chapter 2 | Apress states the 20% rule. Udemy demonstrates it without naming the threshold. |
-| Time modifiers | Covered | Chapter 2 and Chapter 3 | Both are thin on snap-to. Neither gives the full unit alias table. Verify all unit spellings against the docs. |
-| Command types | Barely covered | Barely covered | Both weak. This is the biggest gap in the secondary sources and it feeds directly into 3.0 and 4.0 questions. |
-| Subsearches | Covered | Chapter 4 | Apress states the limits inconsistently across chapters. Trust 10,000 results and 60 seconds from the docs. |
-| Lookups | Five-plus lessons, heavy | Chapter 5 | Massively over-covered relative to SPLK-1002 value. Off blueprint. |
-| Reports and alerts | Several lessons | Chapter 4 | Off blueprint. Apress mixes SPLK-1001 and SPLK-1003 alert content together. |
-| Dashboards | Several lessons | Chapter 4 | Off blueprint and written against Simple XML only, which is now the legacy framework in 10.x. |
-| Search jobs and the Job Inspector | Brief | Brief | Both thin. The scanCount vs eventCount distinction is worth knowing and neither states it. Courseware counts three components; the docs name two sections plus a header strip. |
-| Knowledge object permissions | Covered | Chapter 5 | Apress predates the current Reassign Knowledge Objects page layout. Use the 10.x click-path below. |
 
-Errata warning that applies to this whole file: the Apress book has at least nine wrong answer keys and contradicts itself on field-value case sensitivity. Where it disagrees with anything below, the docs win.
+Where any secondary source disagrees with anything below, the documentation wins.
 
 ## 1. Search modes
 
@@ -129,7 +117,7 @@ Worth memorising as a shape: `earliest=-5d@w1 latest=@w6` is Monday to Saturday 
 `now()` is an eval function returning the current time as an epoch integer. `relative_time(<epoch_time>, <relative_time_specifier>)` applies the same relative syntax to an arbitrary epoch value and returns an epoch integer. They live in `eval` and `where`, not in the time modifier slot.
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval age_seconds = now() - _time
 | eval start_of_day = relative_time(now(), "@d")
 ```
@@ -175,7 +163,7 @@ Generating commands that generate events, rather than reporting on an index, mus
 Syntax: enclose the inner search in square brackets inside the outer search.
 
 ```spl
-index=main sourcetype=access_combined_wcookie [ search index=main sourcetype=vendor_sales | top limit=1 product_name | fields product_name ]
+index=web sourcetype=access_combined [ search index=web sourcetype=access_combined action=purchase | top limit=1 categoryId | fields categoryId ]
 ```
 
 Execution order: when a search contains a subsearch, the subsearch typically **runs first**. Its output is turned into a search-term string, and that string is substituted into the outer search before the outer search runs. The outer search never sees the subsearch as a pipeline stage.
@@ -447,20 +435,20 @@ Fix: `Settings > All configurations > Reassign Knowledge Objects`. The page filt
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.
 
 **Part 1, search modes and the sidebar (5 minutes).**
 
 Set the time range picker to `All time`, set the mode selector to `Verbose`, and run:
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 ```
 
 Note how many entries are under Interesting Fields. Switch the mode selector to `Fast` and re-run the same search. Count again. Now run this in Fast mode:
 
 ```spl
-index=main sourcetype=access_combined_wcookie | fields action, productId
+index=web sourcetype=access_combined | fields action, productId
 ```
 
 `action` and `productId` now appear because you named them explicitly. Nothing about the extraction changed; the mode did.
@@ -470,11 +458,11 @@ index=main sourcetype=access_combined_wcookie | fields action, productId
 Set the mode to `Smart`. Run each of these and watch which tab is selected by default and what the sidebar holds:
 
 ```spl
-index=main sourcetype=vendor_sales
+index=web sourcetype=access_combined action=purchase
 ```
 
 ```spl
-index=main sourcetype=vendor_sales | stats sum(price) as revenue by product_name
+index=web sourcetype=access_combined action=purchase | stats sum(bytes) as revenue by categoryId
 ```
 
 The first lands on Events with a full sidebar (Verbose behaviour). The second lands on Statistics with field discovery off (Fast behaviour).
@@ -484,7 +472,7 @@ The first lands on Events with a full sidebar (Verbose behaviour). The second la
 Set the picker to `Last 15 minutes`, then run:
 
 ```spl
-index=main sourcetype=access_combined_wcookie earliest=-30d@d latest=now
+index=web sourcetype=access_combined earliest=-30d@d latest=now
 ```
 
 You get 30 days of data despite the picker. The search bar wins. Now compare the two snap forms:
@@ -498,13 +486,13 @@ You get 30 days of data despite the picker. The search bar wins. Now compare the
 Run a deliberately sparse search over all time and inspect it:
 
 ```spl
-index=main sourcetype=access_combined_wcookie status=503
+index=web sourcetype=access_combined status=503
 ```
 
 Open `Job > Inspect Job`. Record `scanCount`, `eventCount` and `resultCount` from Search job properties. Then run a dense equivalent and compare:
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 ```
 
 **Part 5, permissions (2 minutes).**
@@ -514,7 +502,7 @@ Go to `Settings > Searches, reports, and alerts`. Pick any object you own, choos
 **Verification search.** This proves the mode and time-modifier behaviour without depending on a screenshot:
 
 ```spl
-index=main sourcetype=access_combined_wcookie earliest=-30d@d latest=@d | stats count as events, dc(clientip) as unique_clients, min(_time) as first, max(_time) as last | eval first = strftime(first, "%F %T"), last = strftime(last, "%F %T")
+index=web sourcetype=access_combined earliest=-30d@d latest=@d | stats count as events, dc(clientip) as unique_clients, min(_time) as first, max(_time) as last | eval first = strftime(first, "%F %T"), last = strftime(last, "%F %T")
 ```
 
 If `last` is midnight of today rather than the current clock time, `@d` snapped down correctly and `latest` behaved exclusively.
@@ -530,12 +518,12 @@ If `last` is midnight of today rather than the current clock time, `@d` snapped 
 
 **Q2.** In Smart mode, which search will have field discovery turned OFF?
 
-- A. `index=main sourcetype=access_combined_wcookie action=purchase`
-- B. `index=main sourcetype=access_combined_wcookie | fields clientip`
-- C. `index=main sourcetype=access_combined_wcookie | stats count by status`
-- D. `index=main sourcetype=access_combined_wcookie | eval is_error = if(status >= 500, 1, 0)`
+- A. `index=web sourcetype=access_combined action=purchase`
+- B. `index=web sourcetype=access_combined | fields clientip`
+- C. `index=web sourcetype=access_combined | stats count by status`
+- D. `index=web sourcetype=access_combined | eval is_error = if(status >= 500, 1, 0)`
 
-**Q3.** The Time Range Picker is set to Last 7 days. The search bar contains `index=main earliest=-1h latest=now`. What range is searched?
+**Q3.** The Time Range Picker is set to Last 7 days. The search bar contains `index=web earliest=-1h latest=now`. What range is searched?
 
 - A. Last 7 days, because the picker is evaluated after the search string.
 - B. The last hour, because a time range in the search bar overrides the picker.
@@ -577,7 +565,7 @@ If `last` is midnight of today rather than the current clock time, `@d` snapped 
 - C. The object is orphaned and privately shared, so the Reassign page cannot fix it. You must temporarily recreate the owner account or edit the configuration file.
 - D. Private objects cannot be scheduled, so the premise is impossible.
 
-**Q9.** A dashboard panel running `index=main sourcetype=access_combined_wcookie | lookup product_lookup productId OUTPUT product_name | stats count by product_name` takes 40 seconds. You need to know whether the lookup or the base retrieval is responsible. Where do you look?
+**Q9.** A dashboard panel running `index=web sourcetype=access_combined | lookup product_lookup productId OUTPUT categoryId | stats count by categoryId` takes 40 seconds. You need to know whether the lookup or the base retrieval is responsible. Where do you look?
 
 - A. Search job properties, comparing `scanCount` with `resultCount`.
 - B. Execution costs, reading the duration and invocation count of each processing component, including `command.search.lookups`.

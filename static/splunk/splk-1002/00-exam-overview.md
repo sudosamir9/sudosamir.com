@@ -176,7 +176,5 @@ The ordered reading list is in `reference/doc-links.md`.
 | `reference/knowledge-object-precedence.md` | The search-time operation order. Sections 4, 5, 6, 9 and 10 all reduce to it, which is 50% of the exam by weight |
 | `reference/exam-traps.md` | Every trap in the guide, by stable ID, in one place |
 | `reference/doc-links.md` | The docs reading syllabus, in reading order |
-| `practice/` | Intake format for your 165 Udemy practice questions, plus the tracker and weak-areas files |
-| `source-notes/apress-errata.md` | Every wrong answer key in the printed study guide, verified against its own text |
-| `source-notes/udemy-module-map.md` | All 41 Udemy modules mapped to blueprint sections, with what is off blueprint |
+| `practice/` | The 200-question bank behind the exam simulator, plus the tracker and weak-areas files |
 | `lab-setup.md` | One-time data and index setup on your local Splunk Enterprise 10.x |

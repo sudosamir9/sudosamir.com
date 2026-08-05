@@ -14,12 +14,6 @@ Sub-objectives, verbatim from the official blueprint:
 
 > The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.
 
-| Sub-objective | Udemy (Hailie Shaw, "Splunk: Zero to Power User") | Apress (Deep Mehta, 2021) | Where the secondary sources fail |
-| --- | --- | --- | --- |
-| 2.1 eval | Modules 11A, 11B | Chapter 2, eval function tables | Apress Table 2-16 describes `coalesce` as if it were `if()` and `null()` as if it were `nullif()`. Both wrong. Udemy is demo-heavy and never enumerates signatures. |
-| 2.2 search and where | Modules 8A, 8B | Chapter 2 (`where`, plus `dedup`, `head`, `tail`) | Apress mixes in commands that are not on the 2.0 blueprint and contradicts itself on field-value case sensitivity. |
-| 2.3 fillnull | No dedicated module | Absent from the book entirely | `fillnull` and `fieldformat` are both missing from Apress. This file is the only source. |
-
 `fieldformat` and `filldown` are not named in the blueprint but sit directly adjacent to `eval` and `fillnull`, so question writers use them as distractors. Both are covered here.
 
 ## What it is
@@ -220,15 +214,15 @@ Storage contract for `eval`: the result goes into a field in the search results 
 
 ## Worked examples
 
-All examples use the Splunk tutorial dataset (Buttercup Games), sourcetypes `access_combined_wcookie`, `vendor_sales`, and `secure`.
+All examples run against the practice dataset from [lab setup](../lab-setup.md): `index=web` (`access_combined`), `index=security` (`linux_secure`), and `index=cisco` (`cisco:wsa:squid`). Set the time picker to **All time**.
 
 ### 1. Derive a field, then filter on it
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
-| eval revenue = price * quantity
+index=web sourcetype=access_combined status=200 action=purchase
+| eval revenue = bytes * quantity
 | where revenue > 100
-| table clientip productId price quantity revenue
+| table clientip productId bytes quantity revenue
 ```
 
 The base search filters at the index. `eval` adds one column to every row with no change to the row count; `where` then drops rows with no change to the column set. `revenue > 100` cannot go in the base search, because `revenue` does not exist until `eval` creates it.
@@ -236,7 +230,7 @@ The base search filters at the index. `eval` adds one column to every row with n
 ### 2. Categorise with case, and give it a default
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval status_class = case(status < 300, "success",
                            status < 400, "redirect",
                            status < 500, "client error",
@@ -249,29 +243,29 @@ sourcetype=access_combined_wcookie
 ### 3. coalesce versus if versus nullif on one screen
 
 ```spl
-sourcetype=access_combined_wcookie OR sourcetype=vendor_sales
+index=web sourcetype=access_combined OR index=web sourcetype=access_combined action=purchase
 | eval ip         = coalesce(clientip, VendorIP, "unknown"),
        is_local   = if(cidrmatch("87.194.0.0/16", ip), "local", "remote"),
        changed_ip = nullif(ip, clientip)
 | table sourcetype clientip VendorIP ip is_local changed_ip
 ```
 
-`coalesce` walks its arguments and returns the first non-NULL one; it tests no condition. `if` takes exactly three arguments and branches on a Boolean. `nullif` returns NULL when its two arguments are equal and otherwise returns the first, so `changed_ip` is populated only where `ip` came from somewhere other than `clientip`. These are the three functions Apress Table 2-16 conflates.
+`coalesce` walks its arguments and returns the first non-NULL one; it tests no condition. `if` takes exactly three arguments and branches on a Boolean. `nullif` returns NULL when its two arguments are equal and otherwise returns the first, so `changed_ip` is populated only where `ip` came from somewhere other than `clientip`. These three functions are routinely conflated with one another in circulating reference tables.
 
 ### 4. Compare two fields, which only where can do
 
 ```spl
-sourcetype=secure
+index=security sourcetype=linux_secure
 | where user != src_user
 | stats count BY user src_user
 ```
 
-`sourcetype=secure user!=src_user` does not work: the `search` command reads `src_user` as the literal string value `src_user`. Only `where` treats an unquoted bare word on the right-hand side as a field reference.
+`index=security sourcetype=linux_secure user!=src_user` does not work: the `search` command reads `src_user` as the literal string value `src_user`. Only `where` treats an unquoted bare word on the right-hand side as a field reference.
 
 ### 5. Wildcards on both sides of the search and where line
 
 ```spl
-sourcetype=access_combined_wcookie referer_domain=*buttercup*
+index=web sourcetype=access_combined referer_domain=www.google.com
 | where like(useragent, "Mozilla%") AND NOT like(useragent, "%MSIE%")
 | stats count BY referer_domain
 ```
@@ -281,8 +275,8 @@ The base search uses `*` because `search` supports the asterisk in field values.
 ### 6. Fill the holes, then format the display
 
 ```spl
-sourcetype=vendor_sales
-| timechart span=1d sum(price) AS revenue BY product_name
+index=web sourcetype=access_combined action=purchase
+| timechart span=1d sum(bytes) AS total_bytes BY categoryId
 | fillnull value=0
 | fieldformat revenue = "$" . tostring(revenue, "commas")
 ```
@@ -294,7 +288,7 @@ Swap that last line for `| eval revenue = "$" . tostring(revenue, "commas")` and
 ### 7. Multivalue and text functions in one eval chain
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval path_parts = split(uri_path, "/"),
        depth      = mvcount(path_parts),
        leaf       = mvindex(path_parts, -1),
@@ -341,15 +335,15 @@ Operators must be capitalised: `AND`, `OR`, `NOT`, `XOR`. `AND` is implied betwe
 
 **T-02-01** Comparing two fields in `search`. Wrong belief: `index=web clientip=ipaddress` finds events where the two fields hold the same value. Correct: the `search` command expects a field compared to a literal and reads `ipaddress` as the string `ipaddress`. Use `| where clientip=ipaddress`, and for the negative form either `| where fieldA!=fieldB` or `| where NOT fieldA=fieldB`.
 
-**T-02-02** Boolean precedence is uniform. Wrong belief: `AND` always binds tighter than `OR`. Correct: `search` evaluates OR before AND, so `host="www1" AND status=200 OR action="addtocart"` runs as `host="www1" AND (status=200 OR action="addtocart")`. `eval` and `where` evaluate AND before OR, so the same expression under `where` runs as `(host="www1" AND status=200) OR action="addtocart"`. Different results. `search` also has no `XOR`; `eval` and `where` do.
+**T-02-02** Boolean precedence is uniform. Wrong belief: `AND` always binds tighter than `OR`. Correct: `search` evaluates OR before AND, so `host="web1" AND status=200 OR action="addtocart"` runs as `host="web1" AND (status=200 OR action="addtocart")`. `eval` and `where` evaluate AND before OR, so the same expression under `where` runs as `(host="web1" AND status=200) OR action="addtocart"`. Different results. `search` also has no `XOR`; `eval` and `where` do.
 
 **T-02-03** `NOT` equals `!=`. Wrong belief: `NOT status=404` and `status!=404` return the same events. Correct: `status!=404` returns only events that have a `status` field with a different value, dropping events with no `status` at all. `NOT status=404` returns everything except the matches, including events with no `status`. Corollary: `NOT field=*` returns events where the field is null or undefined, and `field!=*` never returns anything.
 
-**T-02-04** Case sensitivity is uniform. Wrong belief: SPL is either all case sensitive or all not. Correct: for `search`, field names are case sensitive but field values are not, and searches are case-insensitive by default unless wrapped in `CASE()`. `eval` and `where` are case sensitive throughout, being eval expressions, and `like()` matches case-sensitively. Apress contradicts itself here; trust the doc split.
+**T-02-04** Case sensitivity is uniform. Wrong belief: SPL is either all case sensitive or all not. Correct: for `search`, field names are case sensitive but field values are not, and searches are case-insensitive by default unless wrapped in `CASE()`. `eval` and `where` are case sensitive throughout, being eval expressions, and `like()` matches case-sensitively. Secondary material is routinely inconsistent here; trust the split the documentation states.
 
-**T-02-05** `coalesce` is a conditional. Wrong belief, and the exact Apress Table 2-16 error: `coalesce(X,Y)` behaves like `if(X,Y,...)`. Correct: `coalesce(<values>)` takes one or more arguments and returns the first that is not NULL. No test expression, no branches. `if(<predicate>,<true_value>,<false_value>)` is the conditional and takes exactly three arguments.
+**T-02-05** `coalesce` is a conditional. Wrong belief, and a common error in circulating reference tables: `coalesce(X,Y)` behaves like `if(X,Y,...)`. Correct: `coalesce(<values>)` takes one or more arguments and returns the first that is not NULL. No test expression, no branches. `if(<predicate>,<true_value>,<false_value>)` is the conditional and takes exactly three arguments.
 
-**T-02-06** `null()` takes arguments. Wrong belief, the second Apress Table 2-16 error: `null()` behaves like `nullif()`. Correct: `null()` takes no arguments and returns NULL, clearing a field value when assigned. `nullif(<field1>,<field2>)` takes two fields and returns NULL when they are equal, otherwise the value of `<field1>`.
+**T-02-06** `null()` takes arguments. Wrong belief, the mirror of the coalesce error: `null()` behaves like `nullif()`. Correct: `null()` takes no arguments and returns NULL, clearing a field value when assigned. `nullif(<field1>,<field2>)` takes two fields and returns NULL when they are equal, otherwise the value of `<field1>`.
 
 **T-02-07** `case` supplies a default. Wrong belief: a value matching no condition falls through to the last value listed. Correct: `case` returns NULL when no condition is TRUE. The documented default idiom is a final `true(), "<default>"` pair. The mirror function is `validate`, which returns the value for the first FALSE condition and defaults to NULL when all are TRUE.
 
@@ -377,7 +371,7 @@ Operators must be capitalised: `AND`, `OR`, `NOT`, `XOR`. `AND` is implied betwe
 
 **T-02-19** `tostring` formats. Wrong belief: `tostring(x,"commas")` preserves all decimals, or any format keyword is accepted, or the list stops at three. Correct: there are exactly four, `"binary"`, `"hex"`, `"commas"`, and `"duration"`. `"commas"` rounds to two decimal places, `"duration"` converts seconds to `HH:MM:SS`, and `"binary"` renders the number in base 2, so `tostring(9,"binary")` gives `1001`. `"decimal"` is not a format. A currency symbol is not a format option either, so concatenate it: `"$" . tostring(x,"commas")`.
 
-**T-02-20** Convert first, sort second. Wrong belief: `| eval size = tostring(bytes,"commas") | sort - size` still orders by size, because the number survives underneath. Correct: `tostring` returns a string and the assignment overwrites the field with it, so `sort` uses lexicographical collation and orders on the first character. Sort while the values are numeric and convert afterwards, or use `fieldformat` and never convert. Same trap in currency dress: `| eval price = "$" . price` makes every value start with punctuation.
+**T-02-20** Convert first, sort second. Wrong belief: `| eval size = tostring(bytes,"commas") | sort - size` still orders by size, because the number survives underneath. Correct: `tostring` returns a string and the assignment overwrites the field with it, so `sort` uses lexicographical collation and orders on the first character. Sort while the values are numeric and convert afterwards, or use `fieldformat` and never convert. Same trap in currency dress: `| eval label = "$" . bytes` makes every value start with punctuation.
 
 **T-02-21** `eval` results persist. Wrong belief: the field an `eval` creates is written to the index, a KV Store collection, or a lookup, so the next search can filter on it. Correct: it lands in a field in the search results only and is gone when the search ends, so naming it in a new base search matches nothing. Only a calculated field, or an explicit `outputlookup` or `collect`, makes the value outlive the search.
 
@@ -385,14 +379,14 @@ Operators must be capitalised: `AND`, `OR`, `NOT`, `XOR`. `AND` is implied betwe
 
 ## Lab
 
-Assumes the tutorial data is loaded on a single-node Splunk Enterprise 10.x instance. Budget fifteen minutes.
+Assumes the practice dataset is loaded on a single-node Splunk Enterprise 10.x instance. Budget fifteen minutes.
 
 Step 1. Click **Search** in the App bar to start a new search, and set the time range picker to **All time**.
 
 Step 2, create versus overwrite:
 
 ```spl
-sourcetype=access_combined_wcookie status=200
+index=web sourcetype=access_combined status=200
 | eval bytes_kb = round(bytes/1024, 2), bytes = bytes . " bytes"
 | table clientip bytes bytes_kb
 ```
@@ -402,11 +396,11 @@ On the Statistics tab, `bytes_kb` is a new column and `bytes` now holds a string
 Step 3, `search` versus `where` on two fields. Run both and compare counts:
 
 ```spl
-sourcetype=secure user=src_user
+index=security sourcetype=linux_secure user=src_user
 ```
 
 ```spl
-sourcetype=secure | where user=src_user
+index=security sourcetype=linux_secure | where user=src_user
 ```
 
 The first returns nothing, because it looks for the literal value `src_user`.
@@ -414,22 +408,22 @@ The first returns nothing, because it looks for the literal value `src_user`.
 Step 4, `NOT` versus `!=`. Run both and compare:
 
 ```spl
-sourcetype=access_combined_wcookie NOT action="purchase" | stats count
+index=web sourcetype=access_combined NOT action="purchase" | stats count
 ```
 
 ```spl
-sourcetype=access_combined_wcookie action!="purchase" | stats count
+index=web sourcetype=access_combined action!="purchase" | stats count
 ```
 
 The `NOT` form is larger, because it also returns events with no `action` field at all.
 
-Step 5, `fillnull` on a sparse table. Run `sourcetype=vendor_sales | timechart span=1d count BY categoryId`, note the blank cells, then append `| fillnull` and re-run. Every blank now reads `0` and the row and column counts are unchanged.
+Step 5, `fillnull` on a sparse table. Run `index=web sourcetype=access_combined action=purchase | timechart span=1d count BY categoryId`, note the blank cells, then append `| fillnull` and re-run. Every blank now reads `0` and the row and column counts are unchanged.
 
 Step 6, `fieldformat` versus `eval`:
 
 ```spl
-sourcetype=vendor_sales
-| stats sum(price) AS revenue BY product_name
+index=web sourcetype=access_combined action=purchase
+| stats sum(bytes) AS total_bytes BY categoryId
 | fieldformat revenue = "$" . tostring(revenue, "commas")
 | sort - revenue
 ```
@@ -439,7 +433,7 @@ The column displays as currency and the sort is still numerically correct. Repla
 Step 7, surface a computed field in the Events tab:
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval network = if(cidrmatch("182.236.164.11/16", clientip), "local", "other")
 ```
 
@@ -448,8 +442,8 @@ In the fields sidebar, click on the **network** field. In the popup, next to **S
 Verification search, proving the whole section at once:
 
 ```spl
-sourcetype=vendor_sales
-| stats count sum(price) AS revenue BY categoryId
+index=web sourcetype=access_combined action=purchase
+| stats count sum(bytes) AS total_bytes BY categoryId
 | eval tier = case(revenue > 10000, "high", revenue > 1000, "mid", true(), "low")
 | where tier != "low"
 | fillnull value=unverified note
@@ -496,7 +490,7 @@ B. `| where like(useragent, "Mozilla%")`
 C. `| where match(useragent, "Mozilla*")`
 D. `| where useragent IN (Mozilla*)`
 
-**Q6.** How do `sourcetype=secure NOT user="root"` and `sourcetype=secure user!="root"` differ?
+**Q6.** How do `index=security sourcetype=linux_secure NOT user="root"` and `index=security sourcetype=linux_secure user!="root"` differ?
 
 A. They are identical; `NOT` is shorthand for `!=`.
 B. The `NOT` form also returns events that have no `user` field.
@@ -520,7 +514,7 @@ D. Both B and C
 **Q9.** A search ends with these three commands:
 
 ```spl
-| stats sum(price) AS revenue BY product_name
+| stats sum(bytes) AS total_bytes BY categoryId
 | eval revenue = tostring(revenue, "commas")
 | sort - revenue
 ```
@@ -535,11 +529,11 @@ D. Rows ordered numerically, because `"commas"` only inserts separators and leav
 **Q10.** A colleague runs and saves this search:
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval bytes_kb = round(bytes/1024, 2)
 ```
 
-The next day you open a new search and run `sourcetype=access_combined_wcookie bytes_kb>10`. What happens?
+The next day you open a new search and run `index=web sourcetype=access_combined bytes_kb>10`. What happens?
 
 A. It returns the events whose `bytes_kb` exceeds 10, because `eval` wrote the field into the index.
 B. It returns no events, because `bytes_kb` exists only inside the pipeline that builds it.
@@ -560,7 +554,7 @@ D. It returns every event in that source type, because a base search ignores a f
 
 **Q6: B.** With `NOT`, every event is returned except those containing the specified value, including events with no value in the field. With `!=`, only events that have a value in the field and whose value differs are returned. A is wrong because the counts differ whenever the field is sparse. C reverses the behaviour. D is wrong because neither form changes case handling; `search` field values are case-insensitive in both.
 
-**Q7: C.** `coalesce(<values>)` returns the first argument that is not NULL. A is wrong: `if` is a three-argument conditional branching on a Boolean and never inspects for NULL. B is wrong: `nullif` returns NULL when the two values are equal and otherwise the first value, close to the opposite behaviour. D is wrong: `validate` returns the value paired with the first FALSE condition and is documented as the opposite of `case`. A and B are precisely the two functions Apress Table 2-16 wrongly maps onto `coalesce` and `null`.
+**Q7: C.** `coalesce(<values>)` returns the first argument that is not NULL. A is wrong: `if` is a three-argument conditional branching on a Boolean and never inspects for NULL. B is wrong: `nullif` returns NULL when the two values are equal and otherwise the first value, close to the opposite behaviour. D is wrong: `validate` returns the value paired with the first FALSE condition and is documented as the opposite of `case`. A and B are precisely the two functions most often wrongly mapped onto `coalesce` and `null`.
 
 **Q8: D.** Multivalue indexes start at 0, so five values occupy indexes 0 through 4 and index 4 is the last; separately, `-1` is documented as the last value. Both work, which is why D beats B or C alone. A is wrong because index 5 is out of range and out-of-range indexes return NULL. The function that starts at 1 is `substr`, not `mvindex`.
 
@@ -575,7 +569,7 @@ D. It returns every event in that source type, because a base search ignores a f
 Read in this order.
 
 1. [eval](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval) - the whole page: Usage (create versus overwrite, no Boolean assignment), the operator table, Boolean expressions, Field names, and the ten basic examples. 25 minutes.
-2. [Comparison and Conditional functions](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions) - `case`, `coalesce`, `if`, `in`, `like`, `match`, `null`, `nullif`, `true`, `validate`. This is the page that corrects Apress Table 2-16. 20 minutes.
+2. [Comparison and Conditional functions](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions) - `case`, `coalesce`, `if`, `in`, `like`, `match`, `null`, `nullif`, `true`, `validate`. This is the page that settles the `coalesce`, `if`, `null` and `nullif` signatures. 20 minutes.
 3. [where](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/where) - the quoting table and the three-row comparison against `search`. 8 minutes.
 4. [search](https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/search) - Usage: the implied search command, using search later in the pipeline, Boolean expressions, Comparing two fields, the IN operator, and example 6 on `NOT` versus `!=`. 20 minutes.
 5. [Difference between != and NOT](https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/expressions-and-predicates/difference-between-and-not) - the Ponies.csv example, framed exactly as the exam frames it. 6 minutes.

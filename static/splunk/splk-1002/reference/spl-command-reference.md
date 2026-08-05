@@ -130,7 +130,7 @@ fields [+|-] <wc-field-list>
 The sign defaults to `+`, meaning keep only the listed fields. Wildcards are supported. Internal fields such as `_raw` and `_time` are not removed by `+` unless you name them, so `| fields - _*` is the only way to clear them all. The docs warn against removing `_time`, since `chart` and `timechart` cannot display date or time information without it.
 
 ```spl
-index=main sourcetype=access_combined_wcookie | fields clientip status bytes | stats sum(bytes) BY status
+index=web sourcetype=access_combined | fields clientip status bytes | stats sum(bytes) BY status
 ```
 
 Gotcha: `fields` does not reorder columns and does not turn the Events tab into a Statistics tab, because it is distributable streaming, not transforming. Placing `| fields` early is a genuine performance win because it reduces what gets moved from the indexers.
@@ -144,7 +144,7 @@ rename <wc-field> AS <wc-field>
 Wildcards must appear on both sides and must correspond. Field names containing spaces must be quoted. The old name disappears, which is the whole difference from a field alias.
 
 ```spl
-index=main sourcetype=vendor_sales | rename productId AS "Product ID" | table "Product ID" price
+index=web sourcetype=access_combined action=purchase | rename productId AS "Product ID" | table "Product ID" bytes
 ```
 
 Gotcha: renaming a field onto a name that already exists overwrites it, and renaming several fields onto one name loses data. A rename lives for one search only; the persistent equivalent is a field alias, which keeps both names alive.
@@ -158,7 +158,7 @@ sort [<count>] <sort-by-clause>... [desc]
 With no count, the limit is 10,000 results. Prefix a field with `-` for descending or `+` for ascending; ascending is the default. The ordering functions are `num()`, `str()`, `ip()` and `auto()`, and `auto()` is what runs when you name a bare field.
 
 ```spl
-index=main sourcetype=vendor_sales | stats sum(price) AS revenue BY product_name | sort 5 -revenue
+index=web sourcetype=access_combined action=purchase | stats sum(bytes) AS total_bytes BY categoryId | sort 5 -revenue
 ```
 
 Gotcha: `sort` is a dataset processing command, so it emits nothing until it has the whole set, and it silently truncates at 10,000 unless you pass a count. A field that was formatted with `eval` rather than `fieldformat` sorts lexicographically, which is why `$1,204.50` lands before `$9.99`.
@@ -172,7 +172,7 @@ dedup [<int>] <field-list> [keepevents=<bool>] [keepempty=<bool>] [consecutive=<
 The leading integer is how many events to keep per combination of values and defaults to 1. `consecutive=false`, `keepempty=false` and `keepevents=false` are the defaults. Events missing any listed field are dropped unless `keepempty=true`. With `sortby`, `dedup` becomes a dataset processing command instead of a streaming one.
 
 ```spl
-index=main sourcetype=access_combined_wcookie | dedup 2 clientip sortby -bytes
+index=web sourcetype=access_combined | dedup 2 clientip sortby -bytes
 ```
 
 Gotcha: "first" means first in the order the events arrive, which by default is most recent first. Change the sort and you change which event survives. `consecutive=true` only removes duplicates that are adjacent, which is a different answer entirely.
@@ -187,7 +187,7 @@ tail [<N>]
 Both default to 10 results. `head` stops at the first result for which the eval expression is false; `null=false` and `keeplast=false` are the defaults, and `keeplast=true` keeps the result that ended the run. If both a count and an expression are given, the more restrictive wins. `tail` returns the last N results in reverse order.
 
 ```spl
-index=main sourcetype=access_combined_wcookie | sort -_time | head (bytes > 1000) keeplast=true
+index=web sourcetype=access_combined | sort -_time | head (bytes > 1000) keeplast=true
 ```
 
 Gotcha: `head` is centralized streaming and `tail` is dataset processing, so `tail` is the more expensive of the pair. `| head 5` after a transforming command takes the first five rows of the table, not the first five events.
@@ -202,8 +202,8 @@ streamstats [reset_on_change=<bool>] [reset_before=(<eval>)] [reset_after=(<eval
 Both keep every input row and add columns rather than replacing the result set. `allnum=false` on both. `streamstats` defaults are `window=0` (no window, so all events so far), `current=true` (include the current event), `global=true` (one window shared across BY groups), and the three reset options all `false`. With `window=0` the `max_stream_window` limit of 10,000 events still applies.
 
 ```spl
-index=main sourcetype=vendor_sales | eventstats avg(price) AS avg_price | where price > avg_price
-index=main sourcetype=vendor_sales | sort _time | streamstats sum(price) AS running_total
+index=web sourcetype=access_combined action=purchase | eventstats avg(bytes) AS avg_bytes | where bytes > avg_bytes
+index=web sourcetype=access_combined action=purchase | sort _time | streamstats sum(bytes) AS running_total
 ```
 
 Gotcha: `eventstats` is dataset processing and `streamstats` is centralized streaming, and neither is transforming, so neither one on its own populates the Statistics tab from an event search. `streamstats current=false` gives you the previous row's value, which is the standard way to compute a delta.
@@ -217,7 +217,7 @@ bin [<bin-options>...] <field> [AS <newfield>]
 `bins` defaults to 100 and is a maximum, not a target. `span`, `minspan`, `start`, `end` and `aligntime` are unset by default; `aligntime` aligns to the UTC epoch when not given. Specifying `span` makes `bin` a streaming command instead of a dataset processing one.
 
 ```spl
-index=main sourcetype=access_combined_wcookie | bin span=1h _time | stats count BY _time, status
+index=web sourcetype=access_combined | bin span=1h _time | stats count BY _time, status
 ```
 
 Gotcha: that example is what `timechart` does for you. `bin` is the answer when you need time buckets and more than one BY field, since `timechart` allows exactly one split-by field.
@@ -231,7 +231,7 @@ addtotals [row=<bool>] [col=<bool>] [labelfield=<field>] [label=<string>] [field
 `row=true` and `col=false` are the defaults, so bare `addtotals` adds a per-row sum in a new field named by `fieldname`, default `Total`. `col=true` appends a summary row whose label is `label`, default `Total`, written into `labelfield`. Only numeric fields are summed.
 
 ```spl
-index=main sourcetype=vendor_sales | chart sum(price) OVER product_name BY categoryId | addtotals col=true labelfield=product_name
+index=web sourcetype=access_combined action=purchase | chart sum(bytes) OVER categoryId BY categoryId | addtotals col=true labelfield=categoryId
 ```
 
 Gotcha: the type changes with the arguments. `addtotals` is distributable streaming for row totals and transforming for column totals. Without `labelfield` the summary row appears with no label, which reads like a bug.
@@ -245,7 +245,7 @@ appendpipe [run_in_preview=<bool>] [<subpipeline>]
 Runs the subpipeline against the results already in the pipeline and appends its output as extra rows. Unlike `append`, there is no subsearch and no second data retrieval, so the subsearch limits do not apply. `run_in_preview` defaults to `true` [verify].
 
 ```spl
-index=main sourcetype=vendor_sales | stats sum(price) AS revenue BY product_name | appendpipe [stats sum(revenue) AS revenue | eval product_name="TOTAL"]
+index=web sourcetype=access_combined action=purchase | stats sum(bytes) AS total_bytes BY categoryId | appendpipe [stats sum(revenue) AS revenue | eval categoryId="TOTAL"]
 ```
 
 Gotcha: it is the cheap way to add a totals row, and it is a dataset processing command, so it sits with `sort` and `eventstats` as a barrier in the pipeline.
@@ -259,7 +259,7 @@ regex (<field>=<regex> | <field>!=<regex> | <regex>)
 Defaults to matching against `_raw`. It filters and nothing else: no field is created, no value is changed. `!=` keeps the events that do not match.
 
 ```spl
-index=main sourcetype=secure | regex _raw="(?i)failed password for (invalid user )?\w+"
+index=security sourcetype=linux_secure | regex _raw="(?i)failed password for (invalid user )?\w+"
 ```
 
 Gotcha: this is the one that pairs with `rex` in a two-answer question. `rex` extracts and returns every input event whether it matched or not; `regex` extracts nothing and returns only matching events.
@@ -273,7 +273,7 @@ spath [input=<field>] [output=<field>] [path=<datapath> | <datapath>]
 `input` defaults to `_raw`. With no `path`, `spath` extracts every field it can find in the structured data. Paths use dot notation for objects and `{}` for arrays, so `objects{}.name` reaches into an array of objects, and `{n}` selects one element.
 
 ```spl
-index=main sourcetype=_json | spath input=_raw output=user_role path=user.role
+index=cisco sourcetype=cisco:wsa:squid | spath input=_raw output=user_role path=user.role
 ```
 
 Gotcha: `spath` reads JSON and XML only. For a flat `key=value` line the command is `extract`, and for arbitrary text it is `rex`. Automatic key-value extraction already handles well-formed JSON in many cases, so `spath` is most useful when the JSON is nested inside a field rather than in `_raw`.
@@ -289,7 +289,7 @@ nomv <field>
 `makemv` splits one field's value into several. `delim` defaults to a single space, `tokenizer` is unset, `allowempty=false` and `setsv=false`. `mvexpand` turns each value of one multivalue field into its own result, duplicating the other fields; `limit` defaults to 0, meaning no cap. `nomv` reverses the process and returns a single value.
 
 ```spl
-index=main sourcetype=vendor_sales | eval tags="a,b,c" | makemv delim="," tags | mvexpand tags
+index=web sourcetype=access_combined action=purchase | eval tags="a,b,c" | makemv delim="," tags | mvexpand tags
 ```
 
 Gotcha: `mvexpand` accepts exactly one field per command and multiplies your row count, which is how a search that ran fine yesterday hits `max_mem_usage_mb` today. `makemv` uses `delim` or `tokenizer`, never both.
@@ -317,7 +317,7 @@ foreach <wc-field>... [fieldstr=<string>] [matchstr=<string>] [matchseg1=<string
 Runs a template subpipeline once per field matched by the wildcard, substituting the field name for the `<<FIELD>>` token. `<<MATCHSTR>>` gives the part of the name that matched the wildcard. `mode` defaults to `multifield`.
 
 ```spl
-index=main | timechart sum(bytes) BY host | foreach * [eval <<FIELD>>=round('<<FIELD>>'/1024, 2)]
+index=web | timechart sum(bytes) BY host | foreach * [eval <<FIELD>>=round('<<FIELD>>'/1024, 2)]
 ```
 
 Gotcha: `foreach` is the documented exception to the rule that a subsearch must start with a generating command, because its bracketed argument is a template pipeline rather than a subsearch.
@@ -334,7 +334,7 @@ Gotcha: `foreach` is the documented exception to the rule that a subsearch must 
 `map` runs a search once per input result with `$field$` token substitution and defaults to `maxsearches=10`, silently dropping the rest. `multisearch` needs at least two subsearches, each starting with a generating command, and permits only streaming commands inside them. `loadjob` reads the artifacts of a job that already finished rather than rerunning it, and `events` defaults to `false`, meaning results rather than events. `savedsearch` runs the saved search's SPL inline.
 
 ```spl
-| multisearch [search index=main sourcetype=access_combined_wcookie | eval src="web"] [search index=main sourcetype=vendor_sales | eval src="sales"]
+| multisearch [search index=web sourcetype=access_combined | eval src="web"] [search index=web sourcetype=access_combined action=purchase | eval src="sales"]
 ```
 
 Gotcha: `savedsearch` is the thing an event type definition may not contain, along with a pipe and a subsearch. Do not confuse the `savedsearch` command with the `savedsearch=` search modifier, which is a filter term inside `search`.
@@ -349,7 +349,7 @@ Gotcha: `savedsearch` is the thing an event type definition may not contain, alo
 `collect` writes the current results into a summary index you name; `index` is required, and `testmode` defaults to `false`, so it writes for real. `addtime` defaults to `true` [verify]. `history` returns your own search history and `events` defaults to `false`, giving a table rather than events.
 
 ```spl
-index=main sourcetype=vendor_sales | stats sum(price) AS revenue BY product_name | collect index=summary marker="report=daily_revenue"
+index=web sourcetype=access_combined action=purchase | stats sum(bytes) AS total_bytes BY categoryId | collect index=summary marker="report=daily_revenue"
 ```
 
 Gotcha: summary indexing is one of three distinct acceleration mechanisms and is not report acceleration or data model acceleration. `history` is on both the transforming and the generating lists, which makes it a clean example of the types not being mutually exclusive.
@@ -359,8 +359,8 @@ Gotcha: summary indexing is one of three distinct acceleration mechanisms and is
 **`search` versus `where`.** `search` compares a field to a literal and reads an unquoted right-hand word as a string, so it can never compare two fields. `where` evaluates an eval expression, so it can compare fields, do arithmetic, and call functions. `search` evaluates OR before AND and has no XOR; `where` and `eval` evaluate AND before OR and do have XOR. Wildcards work in `search` and only through `like()` or `LIKE` in `where`.
 
 ```spl
-index=main clientip=192.168.1.1 status=200
-index=main | where bytes > avg_bytes AND like(uri_path, "/product%")
+index=web clientip=192.168.1.1 status=200
+index=web | where bytes > avg_bytes AND like(uri_path, "/product%")
 ```
 
 **`rex` versus `regex` versus `extract`.** `rex` extracts named capture groups into fields and passes every input event through, matched or not. `regex` extracts nothing and passes through only the events that match. `extract` runs key-value extraction on `_raw` with delimiters rather than a pattern, and has no `field=` argument at all.
@@ -397,8 +397,8 @@ index=main | where bytes > avg_bytes AND like(uri_path, "/product%")
 **`eval` versus `fieldformat`.** Both take an eval expression. `eval` changes the stored value, so everything downstream, including `sort`, `where` and any export, sees the new value. `fieldformat` changes only how the field renders, so downstream commands still see the original, and the change does not reach `outputcsv` or `outputlookup`. Format currency, durations and byte counts with `fieldformat` and keep the arithmetic intact.
 
 ```spl
-... | stats sum(price) AS revenue | eval revenue="$".tostring(revenue, "commas")
-... | stats sum(price) AS revenue | fieldformat revenue="$".tostring(revenue, "commas")
+... | stats sum(bytes) AS total_bytes | eval revenue="$".tostring(revenue, "commas")
+... | stats sum(bytes) AS total_bytes | fieldformat revenue="$".tostring(revenue, "commas")
 ```
 
 **`dedup` versus `stats values`.** `dedup` keeps whole events, one per combination of the named fields, and the surviving event is whichever arrived first. `stats values()` throws the events away and returns the distinct values themselves, sorted lexicographically, alongside whatever else you aggregate. If the question asks for unique events, `dedup`; if it asks for the set of values, `stats`.
@@ -418,23 +418,23 @@ index=main | where bytes > avg_bytes AND like(uri_path, "/product%")
 **`append` versus `appendcols` versus `join` versus `union`.** `append` adds subsearch rows to the bottom, keeping columns aligned by name. `appendcols` merges the Nth subsearch row into the Nth main row by position, which is fragile and rarely the exam answer. `join` matches rows on shared field values with `type=inner` and `max=1` by default. `union` merges whole datasets and interleaves on `_time`. All four are limited: 50,000 rows and 60 seconds by default, and `join` caps the right side at one matching row per main row.
 
 ```spl
-index=main sourcetype=access_combined_wcookie | stats count BY host | append [search index=main sourcetype=vendor_sales | stats count BY host]
-index=main sourcetype=access_combined_wcookie | stats count BY host | join type=left host [search index=main sourcetype=vendor_sales | stats sum(price) AS revenue BY host]
-| union [search index=main sourcetype=access_combined_wcookie] [search index=main sourcetype=vendor_sales]
+index=web sourcetype=access_combined | stats count BY host | append [search index=web sourcetype=access_combined action=purchase | stats count BY host]
+index=web sourcetype=access_combined | stats count BY host | join type=left host [search index=web sourcetype=access_combined action=purchase | stats sum(bytes) AS total_bytes BY host]
+| union [search index=web sourcetype=access_combined] [search index=web sourcetype=access_combined action=purchase]
 ```
 
 **`table` versus `fields`.** `table` is transforming: it produces a results table in the column order you typed, ends the event stream, and populates the Statistics tab. `fields` is distributable streaming: it keeps or drops columns without reordering them and without ending the event stream, and it can run on the indexers. Both accept wildcards. Use `fields` early to cut data volume, and `table` at the end to fix presentation, especially the marker, X, Y ordering a scatter chart needs.
 
 ```spl
-index=main | fields clientip status bytes | stats sum(bytes) BY status
-index=main | stats sum(bytes) AS total BY status | table status total
+index=web | fields clientip status bytes | stats sum(bytes) BY status
+index=web | stats sum(bytes) AS total BY status | table status total
 ```
 
 **`inputlookup` versus `lookup`.** `inputlookup` is a generating command: it reads the lookup table as the search's input and must be first, with a leading pipe. `lookup` is an orchestrating command that enriches results already in the pipeline by matching one or more fields. `inputlookup` when the table is the data; `lookup` when the table is the annotation.
 
 ```spl
-| inputlookup product_names.csv | search categoryId=STRATEGY
-index=main sourcetype=vendor_sales | lookup product_names.csv productId OUTPUT product_name
+| inputlookup categoryIds.csv | search categoryId=STRATEGY
+index=web sourcetype=access_combined action=purchase | lookup categoryIds.csv productId OUTPUT categoryId
 ```
 
 **`datamodel` versus `tstats` versus `from datamodel`.** `datamodel <model> <dataset> search` runs the dataset's generated search against raw events and honours `strict_fields=true`, so you see the constraint fields only. `tstats` reads indexed fields and accelerated summaries, is by far the fastest, and returns nothing useful with `summariesonly=true` against an unaccelerated model, which every stock CIM model is. `from datamodel:<model>.<dataset>` is the dataset-reading form and takes a colon where `tstats` takes an equals sign.
@@ -457,7 +457,7 @@ index=main sourcetype=vendor_sales | lookup product_names.csv productId OUTPUT p
 
 ```mermaid
 flowchart LR
-  A["index=main status=503<br/>retrieval, on indexers"] --> B["| eval kb=bytes/1024<br/>distributable streaming, on indexers"]
+  A["index=web status=503<br/>retrieval, on indexers"] --> B["| eval kb=bytes/1024<br/>distributable streaming, on indexers"]
   B --> C["| stats sum(kb) BY host<br/>transforming, first reduce on indexers"]
   C --> D["final reduce on the search head"]
   D --> E["| sort -sum(kb)<br/>dataset processing, search head only"]

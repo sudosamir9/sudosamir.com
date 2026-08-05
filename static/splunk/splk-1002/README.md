@@ -1,16 +1,18 @@
 # SPLK-1002: Splunk Core Certified Power User
 
-A docs-grounded study system for the Splunk Core Certified Power User exam. Built from `help.splunk.com` 10.4 as the source of truth, with the Udemy course and the printed study guide mapped onto it rather than driving it.
+A self-contained study system for the Splunk Core Certified Power User exam, built entirely from `help.splunk.com` 10.4. Everything you need is in this folder: the concepts, the option defaults, worked SPL against a practice dataset you install locally, the traps, and a 200-question exam simulator. No other book or course is required.
+
+If you want a video course alongside it, "Splunk: Zero to Power User" by Hailie Shaw on Udemy is a reasonable companion for building intuition. It is not a prerequisite for anything here.
 
 Start with [`00-exam-overview.md`](00-exam-overview.md).
 
 ## The exam in four lines
 
-65 questions, 60 minutes (three of which are the exam agreement), $130, no prerequisite exam. Splunk publishes no passing score, so ignore the "70%" that circulates. Ten blueprint sections; the heaviest is 3.0 Correlating Events at 15%. **Lookups, dashboards, reports and alerts are not on this exam**, despite seven Udemy modules covering them.
+65 questions, 60 minutes (three of which are the exam agreement), $130, no prerequisite exam. Splunk publishes no passing score, so ignore the "70%" that circulates. Ten blueprint sections; the heaviest is 3.0 Correlating Events at 15%. **Lookups, dashboards, reports and alerts are not on this exam**, however much space they get in general Splunk training.
 
 ## Reading order
 
-**1. Orient.** [`00-exam-overview.md`](00-exam-overview.md) for the verified blueprint, weights and what the exam is not. Then [`source-notes/udemy-module-map.md`](source-notes/udemy-module-map.md) to see which parts of the course you already did were worth the time.
+**1. Orient.** [`00-exam-overview.md`](00-exam-overview.md) for the verified blueprint, weights and what the exam is not.
 
 **2. Set up the lab.** [`lab-setup.md`](lab-setup.md). About twenty minutes on your local 10.x instance. Every topic file ends with an exercise that assumes this is done.
 
@@ -32,7 +34,7 @@ Start with [`00-exam-overview.md`](00-exam-overview.md).
 | [`topics/09-data-models-and-pivot.md`](topics/09-data-models-and-pivot.md) | 9.0 Creating Data Models | 10% |
 | [`topics/10-cim.md`](topics/10-cim.md) | 10.0 Using the Common Information Model (CIM) Add-On | 10% |
 
-**5. Drill.** Send your Udemy practice tests through [`practice/README.md`](practice/README.md). You get scored, blueprint-mapped analysis with every distractor explained and a verdict on whether the course's own answer key is correct.
+**5. Drill.** Open the [exam simulator](site/exam/index.html). 200 questions, untimed practice with the answer, the traps and the per-option reasoning revealed on submit, or a timed 65-question mock exam under real conditions. See [`practice/README.md`](practice/README.md) for how the bank is built and verified.
 
 **6. Cram.** The `cram/` folder has one screen per section, reachable from the Study / Cram control at the top of each topic page, and [`cram/all-in-one.md`](cram/all-in-one.md) is the single sheet for the last hour.
 
@@ -52,16 +54,9 @@ Start with [`00-exam-overview.md`](00-exam-overview.md).
 | [`reference/cim-data-models.md`](reference/cim-data-models.md) | The CIM model catalogue with required, recommended and optional fields |
 | [`reference/glossary.md`](reference/glossary.md) | Terms the exam uses precisely, including the three that mean two things |
 
-## Source notes
-
-| File | What it is |
-|---|---|
-| [`source-notes/apress-errata.md`](source-notes/apress-errata.md) | Every wrong answer key in the printed study guide, verified against its own text |
-| [`source-notes/apress-part1-notes.md`](source-notes/apress-part1-notes.md) | What is actually in chapters 1-7, with the correct page mapping |
-| [`source-notes/udemy-module-map.md`](source-notes/udemy-module-map.md) | All 41 Udemy modules mapped to blueprint sections |
 
 ## Two things to know before you start
 
-**The printed study guide in this folder has a broken answer key.** At least nine of its keyed answers contradict its own prose, including the data model to Pivot relationship, which is blueprint objective 9.1 verbatim. It also contradicts itself between chapters on field-value case sensitivity and on whether delimiters are for structured data. Keep [`source-notes/apress-errata.md`](source-notes/apress-errata.md) open whenever you use the book.
+**Answer keys in circulation are unreliable.** Several widely-shared study guides key the data model to Pivot relationship backwards, which is blueprint objective 9.1 verbatim, and contradict themselves on field-value case sensitivity and on whether the delimiters method is for structured data. Every claim in this guide traces to a documentation page, and [`reference/exam-traps.md`](reference/exam-traps.md) records each of those errors with a stable ID so you meet them here rather than in the exam.
 
 **Splunk's own course path has a hole.** The blueprint names eight suggested courses and none of them covers section 10.0, CIM, which is 10% of the exam. [`topics/10-cim.md`](topics/10-cim.md) and [`reference/cim-data-models.md`](reference/cim-data-models.md) are written to stand alone because of it.

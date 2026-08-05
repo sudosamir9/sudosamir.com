@@ -44,7 +44,7 @@ Exam consequence: if one option shows `(?P<status>\d+)` and another shows `(?<st
 
 The two generators in the product, the Field Extractor wizard and `erex`, build patterns the same way: anchor at the start of the event, walk forward through the sample text by counting delimiters, then capture. Neither understands what the log means.
 
-The documentation's own `erex` example is the cleanest published specimen. Run against `sourcetype=secure` failed-login events with `examples="port 3351, port 3768"`, it produces:
+The documentation's own `erex` example is the cleanest published specimen. Run against `index=security sourcetype=linux_secure` failed-login events with `examples="port 3351, port 3768"`, it produces:
 
 ```
 (?i)^(?:[^\.]*\.){3}\d+\s+(?P<port>\w+\s+\d+)
@@ -63,7 +63,7 @@ Token by token against `Failed password for invalid user jabber from 118.142.68.
 
 That last row matters. The generator captured the label because the examples included the label. Ask for `3351` and you get a pattern that captures digits; ask for `port 3351` and you get a field whose every value starts with the word `port`.
 
-Now the Apache case. Given an `access_combined_wcookie` event whose request looks like `GET /product.screen?productId=WC-SH-A02&JSESSIONID=SD0SL6FF7ADFF4953 HTTP 1.1`, highlighting `SD0SL6FF7ADFF4953` in the Field Extractor and naming it `JSESSIONID` yields a pattern of this shape:
+Now the Apache case. Given an `access_combined` event whose request looks like `GET /product.screen?productId=WC-SH-A02&JSESSIONID=SD0SL6FF7ADFF4953 HTTP 1.1`, highlighting `SD0SL6FF7ADFF4953` in the Field Extractor and naming it `JSESSIONID` yields a pattern of this shape:
 
 ```
 ^(?:[^=\n]*=){2}(?P<JSESSIONID>\w+)
@@ -105,7 +105,7 @@ rex [field=<field>] ( <regex-expression> [max_match=<int>] [offset_field=<string
 Sed mode takes two expression types. Substitution is `"s/<regex>/<replacement>/<flags>"`, where the flags are `g` for every occurrence and a bare integer for the Nth occurrence only, and `\1` and `\2` in the replacement refer to capture groups in the search half. Transliteration is `"y/<string1>/<string2>/"`, which maps characters positionally, first character of `string1` to first character of `string2`, with no regular expression involved at all. Keep the two strings the same length.
 
 ```spl
-| rex field=AcctID mode=sed "s/\d(?=\d{4})/x/g"
+| rex field=JSESSIONID mode=sed "s/\d(?=\d{4})/x/g"
 | rex field=Code mode=sed "y/ABC/XYZ/"
 ```
 
@@ -137,8 +137,8 @@ The most reliable distractor pair in the section: the names differ by one letter
 | Command type | Distributable streaming | Distributable streaming |
 
 ```spl
-index=main sourcetype=secure | regex _raw="(?<!\d)10\.\d{1,3}\.\d{1,3}\.\d{1,3}(?!\d)"
-index=main sourcetype=access_combined_wcookie | regex JSESSIONID!="^SD"
+index=security sourcetype=linux_secure | regex _raw="(?<!\d)10\.\d{1,3}\.\d{1,3}\.\d{1,3}(?!\d)"
+index=web sourcetype=access_combined | regex JSESSIONID!="^SD"
 ```
 
 One documented subtlety that makes a good question: `regex <field>!=<pattern>` does not behave like `search <field>!=<value>`. The `regex` form includes events where the field is undefined or null, because those events also fail to match. The `search` form excludes them.
@@ -169,16 +169,16 @@ flowchart TD
 | Eval function | `mvfind(<mv>,<regex>)` | Returns the index of the first value in a multivalue field that matches. |
 | Lookups | `transforms.conf`, `match_type = WILDCARD(<field>)` | Not regex. It is glob matching on `*` inside the lookup table values. `CIDR()` and the default `EXACT` are the other two match types. |
 | Data models | Regular Expression field on any dataset | Extract From accepts any dataset field or `_raw`, and the expression must contain at least one named capture group. Sed mode and sed expressions are not supported here. |
-| Search itself | `index=main uri_path=*cart*` | Also not regex. The asterisk in the `search` command is a glob over terms, and `like()` under `where` uses `%` and `_`. Neither accepts PCRE. |
+| Search itself | `index=web uri_path=*cart*` | Also not regex. The asterisk in the `search` command is a glob over terms, and `like()` under `where` uses `%` and `_`. Neither accepts PCRE. |
 
 ## Worked examples against the guide's lab data
 
-Splunk tutorial data in `index=main`, source types `access_combined_wcookie`, `secure`, and `vendor_sales`.
+The practice dataset from lab setup: `index=web` (`access_combined`), `index=security` (`linux_secure`), `index=cisco` (`cisco:wsa:squid`).
 
 **1. JSESSIONID from an Apache access log.**
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | rex "JSESSIONID=(?<JSESSIONID>[^&\"\s]+)"
 | stats dc(uri_path) AS pages_visited BY JSESSIONID
 | sort - pages_visited
@@ -189,7 +189,7 @@ The pattern is unanchored and keyed on the literal string `JSESSIONID=`, so the 
 **2. User and source IP from an sshd failure.**
 
 ```spl
-index=main sourcetype=secure "Failed password"
+index=security sourcetype=linux_secure "Failed password"
 | rex "for (?:invalid user )?(?<user>\S+) from (?<src_ip>\d{1,3}(?:\.\d{1,3}){3}) port (?<src_port>\d+)"
 | stats count BY user, src_ip
 | sort - count
@@ -197,18 +197,18 @@ index=main sourcetype=secure "Failed password"
 
 Against `Failed password for invalid user jabber from 118.142.68.222 port 3187 ssh2` this returns `user=jabber`, `src_ip=118.142.68.222`, `src_port=3187`. Three constructs are doing real work. `(?:invalid user )?` is a non-capturing group made optional by `?`, so the same pattern also matches `Failed password for root from ...`, which a Field Extractor pattern built from one sample would not. `\S+` is the correct way to grab one whitespace-delimited token; `.*` would swallow the rest of the line and hand `user` the value `jabber from 118.142.68.222 port 3187 ssh2`. `(?:\.\d{1,3}){3}` repeats the dot-octet pair three times inside a non-capturing group, so no stray numbered group is created and the whole address lands in one field.
 
-**3. Three fields from the vendor_sales format.**
+**3. Three fields from the Squid proxy format.**
 
 ```spl
-index=main sourcetype=vendor_sales
-| rex "VendorID=(?<VendorID>\d+)\s+Code=(?<Code>\w+)\s+AcctID=(?<AcctID>\d+)"
+index=web sourcetype=access_combined action=purchase
+| rex "clientip=(?<clientip>\d+)\s+Code=(?<Code>\w+)\s+JSESSIONID=(?<JSESSIONID>\d+)"
 | stats count BY Code
 ```
 
-Against `[01/Sep/2022:18:23:07] VendorID=5037 Code=C AcctID=5317605039838520` this fills all three fields in one pass, which is what the Field Extractor produces when you highlight three values in one sample event. `\s+` between the segments stays deliberately vague about how much whitespace separates them. To list the keys without knowing their names, use the multivalue form:
+Against `[01/Sep/2022:18:23:07] clientip=5037 Code=C JSESSIONID=5317605039838520` this fills all three fields in one pass, which is what the Field Extractor produces when you highlight three values in one sample event. `\s+` between the segments stays deliberately vague about how much whitespace separates them. To list the keys without knowing their names, use the multivalue form:
 
 ```spl
-index=main sourcetype=vendor_sales
+index=web sourcetype=access_combined action=purchase
 | rex max_match=0 "(?<kv_key>\w+)="
 | stats count BY kv_key
 ```
@@ -217,9 +217,9 @@ index=main sourcetype=vendor_sales
 
 ## Traps
 
-**T-RX-01** Greedy quantifiers on a line with repeated delimiters. Wrong belief: `"\[(?<ts>.*)\]"` extracts the timestamp from `[01/Sep/2022:18:23:07] VendorID=5037`. Correct fact: `.*` is greedy and runs to the end of the line before backtracking to the **last** `]`, so on any event containing a second closing bracket the field swallows everything in between. Use the lazy form `.*?` or, better, a negated class `[^\]]*` which cannot cross the delimiter at all.
+**T-RX-01** Greedy quantifiers on a line with repeated delimiters. Wrong belief: `"\[(?<ts>.*)\]"` extracts the timestamp from `[01/Sep/2022:18:23:07] clientip=5037`. Correct fact: `.*` is greedy and runs to the end of the line before backtracking to the **last** `]`, so on any event containing a second closing bracket the field swallows everything in between. Use the lazy form `.*?` or, better, a negated class `[^\]]*` which cannot cross the delimiter at all.
 
-**T-RX-02** An unescaped dot or question mark. Wrong belief: `"host=(?<h>www1.example.com)"` and `"screen?productId=(?<p>\w+)"` say what they look like they say. Correct fact: an unescaped `.` matches any character, so `www1.example.com` also matches `www1xexample!com`, and an unescaped `?` makes the preceding character optional, so `screen?` matches `scree` followed by an optional `n`. Write `www1\.example\.com` and `screen\?`.
+**T-RX-02** An unescaped dot or question mark. Wrong belief: `"host=(?<h>web1.example.com)"` and `"screen?productId=(?<p>\w+)"` say what they look like they say. Correct fact: an unescaped `.` matches any character, so `web1.example.com` also matches `www1xexample!com`, and an unescaped `?` makes the preceding character optional, so `screen?` matches `scree` followed by an optional `n`. Write `www1\.example\.com` and `screen\?`.
 
 **T-RX-03** Reaching for `.*` where a negated class is correct. Wrong belief: `"user (?<user>.*) from"` is fine because the pattern ends at ` from`. Correct fact: on a line containing a second occurrence of ` from` the greedy `.*` matches through the first one. `[^ ]*` or `\S+` is the correct token grab, cannot cross the space, and needs no backtracking. Prefer a negated class to a dot-star in every Splunk extraction.
 

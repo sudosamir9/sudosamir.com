@@ -120,13 +120,13 @@ flowchart LR
 Configuration file syntax for a single source type that uses six of the stages:
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 EXTRACT-sessionid = JSESSIONID=(?<session_id>\w+)
 REPORT-ua = extract_user_agent
 KV_MODE = auto
 FIELDALIAS-client = clientip AS src_ip
 EVAL-bytes_kb = round(bytes/1024, 2)
-LOOKUP-prices = prices_lookup productId OUTPUTNEW product_name, price
+LOOKUP-users = mock_users ip_address AS clientip OUTPUTNEW state, email
 ```
 
 ## The consequences table
@@ -195,7 +195,7 @@ Three facts to hold onto. `local` always beats `default` at the same level, whic
 
 **T-KO-03** An alias built on a calculated field. Wrong belief: `FIELDALIAS-x = my_eval_field AS foo` produces `foo`. Correct fact: the source field does not exist at stage 5, so nothing is aliased. Worse, since 7.2.4, if the alias field already exists on the event and the source field does not, the alias field is removed from the event.
 
-**T-KO-04** A calculated field built on a lookup output. Wrong belief: `EVAL-margin = price - cost` works when `price` comes from an automatic lookup. Correct fact: lookups are stage 7 and calculated fields are stage 6, so `price` is null when the eval runs. The docs state calculated fields cannot reference lookups, event types, or tags.
+**T-KO-04** A calculated field built on a lookup output. Wrong belief: `EVAL-margin = bytes - cost` works when `bytes` comes from an automatic lookup. Correct fact: lookups are stage 7 and calculated fields are stage 6, so `bytes` is null when the eval runs. The docs state calculated fields cannot reference lookups, event types, or tags.
 
 **T-KO-05** An event type defined in terms of a tag. Wrong belief: `search = tag=authentication` is a valid event type definition. Correct fact: "Search strings that define event types cannot reference tags, because event types are always processed and added to events before tags." The event type will match nothing.
 
@@ -231,16 +231,16 @@ Three facts to hold onto. `local` always beats `default` at the same level, whic
 
 ## Self-check
 
-**1.** A `props.conf` stanza for `sourcetype=vendor_sales` contains an automatic lookup that outputs `product_name`, and a calculated field `EVAL-label = product_name . " (" . VendorID . ")"`. A search on that source type returns events where `label` is null. Why?
+**1.** A `props.conf` stanza for `index=web sourcetype=access_combined action=purchase` contains an automatic lookup that outputs `categoryId`, and a calculated field `EVAL-label = categoryId . " (" . clientip . ")"`. A search on that source type returns events where `label` is null. Why?
 
 - A. The lookup ran but `OUTPUTNEW` suppressed the field
-- B. Calculated fields are evaluated before lookups, so `product_name` did not exist yet
+- B. Calculated fields are evaluated before lookups, so `categoryId` did not exist yet
 - C. The concatenation operator is not valid in `EVAL-` settings
 - D. Calculated fields cannot be scoped to a source type
 
 **2.** Which of these definitions will silently match nothing?
 
-- A. An event type whose search string is `sourcetype=access_combined_wcookie status=404`
+- A. An event type whose search string is `index=web sourcetype=access_combined status=404`
 - B. An event type whose search string is `tag=web_error`
 - C. A tag applied to the field/value pair `eventtype=failed_purchase`
 - D. A lookup whose input field is a field alias
@@ -268,7 +268,7 @@ Three facts to hold onto. `local` always beats `default` at the same level, whic
 
 <details><summary>Answers</summary>
 
-**1. B.** Field aliasing is stage 5, calculated fields are stage 6, lookups are stage 7. The eval runs one stage before the lookup populates `product_name`, so the concatenation operates on a null and yields null. The About calculated fields page states directly that calculated fields cannot reference lookups, event types, or tags. A is wrong because `OUTPUTNEW` only declines to overwrite a field that already exists; it still adds a field that is not present. C is wrong because `EVAL-` accepts any SPL eval expression, and `.` is the standard concatenation operator. D is wrong because scoping a calculated field to a source type is the normal case; what the docs say is unsupported is scoping one to an *aliased* host, source, or source type.
+**1. B.** Field aliasing is stage 5, calculated fields are stage 6, lookups are stage 7. The eval runs one stage before the lookup populates `categoryId`, so the concatenation operates on a null and yields null. The About calculated fields page states directly that calculated fields cannot reference lookups, event types, or tags. A is wrong because `OUTPUTNEW` only declines to overwrite a field that already exists; it still adds a field that is not present. C is wrong because `EVAL-` accepts any SPL eval expression, and `.` is the standard concatenation operator. D is wrong because scoping a calculated field to a source type is the normal case; what the docs say is unsupported is scoping one to an *aliased* host, source, or source type.
 
 **2. B.** Event types are stage 8 and tags are stage 9, so a tag does not exist when the event type search is evaluated. The docs say so explicitly. A is a valid event type: `sourcetype` is a default field and `status` comes from extraction at stage 2 to 4, both earlier. C is valid and is the normal pattern, because tags run after event types, so `eventtype` is a real field by then. D is valid because aliasing is stage 5 and lookups are stage 7, and the docs give keying a lookup on an alias as the reason for that ordering.
 

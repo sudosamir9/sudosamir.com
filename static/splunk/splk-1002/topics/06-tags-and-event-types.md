@@ -11,12 +11,6 @@ This section is the classification half of Splunk knowledge management: tags lab
 - 6.2 Describe event types and their uses
 - 6.3 Create an event type
 
-| Sub-objective | Udemy (Hailie Shaw, "Splunk: Zero to Power User") | Apress (Deep Mehta, "Splunk Certified Study Guide", 2021) | Where the secondary sources fail |
-| --- | --- | --- | --- |
-| 6.1 Create and use tags | Module 18, 6A | Chapter 4, "Tags" | Both demonstrate `tag=<name>` and skip `tag::<field>=<name>` almost entirely. Neither states the three Settings, Tags views by their current 10.x names. |
-| 6.2 Describe event types and their uses | Module 18, 6B | Chapter 4, "Tag Event Types" | Apress keys its question C ("tags use event types, you can set priority and color") as false, while its own worked example sets a priority and a colour on an event type and then tags it. The answer key is wrong; the worked example is right. |
-| 6.3 Create an event type | Module 18, 6B | Chapter 4 | Neither covers priority semantics, colour precedence, the position of event types in the search-time sequence, or the Build Event Type route. |
-
 Read both secondary sources for orientation only. Every default, every option name and every click path below comes from help.splunk.com for Splunk Enterprise 10.4.
 
 ## What it is
@@ -130,7 +124,7 @@ Three routes exist in Splunk Web, and the fourth is the file itself. Know all fo
 One command is worth knowing so you do not mistake it for a creation route. `findtypes` analyses the events returned by the search in front of it and prints candidate event type definitions, 10 by default, changeable with `max`, from at most 5000 events. It finds and prints. It saves nothing. There is no `searchtypes` command.
 
 ```spl
-sourcetype=secure "failed password" | findtypes
+index=security sourcetype=linux_secure "failed password" | findtypes
 ```
 
 ### Splunk Web form fields
@@ -166,7 +160,7 @@ Tags do not create a colour band and have no priority. Colour and priority are e
 
 ## Worked examples
 
-Assume the Splunk tutorial dataset (Buttercup Games) with sourcetypes `access_combined_wcookie`, `vendor_sales` and `secure`.
+All examples assume the practice dataset from [lab setup](../lab-setup.md) is loaded: `index=web` (`access_combined`), `index=security` (`linux_secure`), and `index=cisco` (`cisco:wsa:squid`).
 
 **1. Tag a set of HTTP status values, then search by meaning.**
 
@@ -182,7 +176,7 @@ server_error = enabled
 ```
 
 ```spl
-sourcetype=access_combined_wcookie tag=client_error
+index=web sourcetype=access_combined tag=client_error
 ```
 
 Returns every 403 and every 404 without naming either code. Four separate `tags.conf` stanzas, because each stanza describes exactly one field-value pair, and two distinct tags across those four pairs.
@@ -190,7 +184,7 @@ Returns every 403 and every 404 without naming either code. Four separate `tags.
 **2. Restrict a tag search to one field.**
 
 ```spl
-sourcetype=access_combined_wcookie tag::status=client_error
+index=web sourcetype=access_combined tag::status=client_error
 ```
 
 Identical results to example 1 here, but different semantics. If someone later tags `http_status=404` or `error_code=404` with `client_error` in another app, example 1 would widen and this one would not. Use the double-colon form whenever a tag name is reused across fields.
@@ -199,22 +193,22 @@ Identical results to example 1 here, but different semantics. If someone later t
 
 ```ini
 [web_client_error]
-search = sourcetype=access_combined_wcookie status>=400 status<500
+search = index=web sourcetype=access_combined status>=400 status<500
 priority = 3
 color = et_red
 ```
 
 ```spl
-sourcetype=access_combined_wcookie eventtype=web_client_error | stats count by status, clientip | sort - count
+index=web sourcetype=access_combined eventtype=web_client_error | stats count by status, clientip | sort - count
 ```
 
 The `eventtype=web_client_error` term is a plain field-value match against the field the event type set at step 8 of the search-time sequence. The `| stats` pipe is in your ad hoc search, not in the event type definition, which is what keeps the definition legal.
 
-**4. Find purchases that the vendor_sales data confirms, using a lookup output field inside an event type.**
+**4. Find purchases that a lookup confirms, using a lookup output field inside an event type.**
 
 ```ini
 [confirmed_vip_purchase]
-search = sourcetype=access_combined_wcookie action=purchase vip_status=gold
+search = index=web sourcetype=access_combined action=purchase vip_status=gold
 priority = 1
 color = et_purple
 ```
@@ -224,17 +218,17 @@ color = et_purple
 **5. Nest an event type inside another event type and then tag the outer one.**
 
 ```ini
-[buttercup_purchase]
-search = sourcetype=access_combined_wcookie action=purchase
+[web_purchase]
+search = index=web sourcetype=access_combined action=purchase
 priority = 1
 
-[buttercup_failed_purchase]
-search = eventtype=buttercup_purchase status>=400
+[web_failed_purchase]
+search = eventtype=web_purchase status>=400
 priority = 2
 ```
 
 ```ini
-[eventtype=buttercup_failed_purchase]
+[eventtype=web_failed_purchase]
 failed_transaction = enabled
 alert = enabled
 ```
@@ -243,7 +237,7 @@ alert = enabled
 tag::eventtype=failed_transaction | stats count by clientip
 ```
 
-An event type search string may reference another event type, but only when the inner one is processed first. The one ordering rule inside step 8 is that Splunk "processes event types first by priority score and then by lexicographical order", which is why the inner event type carries priority 1: on names alone `buttercup_f...` sorts before `buttercup_p...` and the outer one would be evaluated before the field it depends on exists. No 10.4 page states outright that nesting is supported, and the exam does not test it. [verify] The tag search reaches the events through two indirections, tag to event type to event, which is the CIM add-on pattern: one narrow event type per sourcetype plus a tag layer that data models constrain on.
+An event type search string may reference another event type, but only when the inner one is processed first. The one ordering rule inside step 8 is that Splunk "processes event types first by priority score and then by lexicographical order", which is why the inner event type carries priority 1: on names alone `web_f...` sorts before `web_p...` and the outer one would be evaluated before the field it depends on exists. No 10.4 page states outright that nesting is supported, and the exam does not test it. [verify] The tag search reaches the events through two indirections, tag to event type to event, which is the CIM add-on pattern: one narrow event type per sourcetype plus a tag layer that data models constrain on.
 
 **6. Audit your own knowledge objects.**
 
@@ -252,7 +246,7 @@ index=* NOT tag::eventtype=* | stats count by eventtype
 ```
 
 ```spl
-sourcetype=secure | stats count by eventtype, tag
+index=security sourcetype=linux_secure | stats count by eventtype, tag
 ```
 
 The first finds event types nobody has tagged, which in a CIM deployment means data that will never appear in a data model. The second cross-tabulates classification against labelling for the security sourcetype.
@@ -279,11 +273,11 @@ The first finds event types nobody has tagged, which in a CIM deployment means d
 
 ## Traps
 
-**T-06-01** Tags attach to events. **Wrong.** A tag attaches to a field-value pair, `<field>=<value>`. You cannot tag "this event"; you tag `host=web01`, `sourcetype=secure`, `status=404` or `eventtype=failed_login`. The event picks up the tag only because it contains that pair. This is the single most tested fact in the section, and the most common distractor pair is "a tag is applied to a field" versus "a tag is applied to a field-value pair". Choose the pair.
+**T-06-01** Tags attach to events. **Wrong.** A tag attaches to a field-value pair, `<field>=<value>`. You cannot tag "this event"; you tag `host=web01`, `index=security sourcetype=linux_secure`, `status=404` or `eventtype=failed_login`. The event picks up the tag only because it contains that pair. This is the single most tested fact in the section, and the most common distractor pair is "a tag is applied to a field" versus "a tag is applied to a field-value pair". Choose the pair.
 
 **T-06-02** `tag:<field>=<name>` with one colon, or `tag.<field>`, or `tag[field]`. **Wrong.** The field-scoped form is `tag::<field>=<tagname>` with exactly two colons and no spaces. `tag=<tagname>` with no field scope searches every tagged field-value pair. Both forms accept the `*` wildcard.
 
-**T-06-03** An event type can contain a pipe as long as the pipe comes last. **Wrong.** The documentation forbids a search that "includes a pipe operator after a simple search" and a search that "includes a subsearch". Position does not rescue it. If a question shows `sourcetype=access_combined_wcookie status=404 | stats count` as a candidate event type definition, that option is invalid regardless of what else it does.
+**T-06-03** An event type can contain a pipe as long as the pipe comes last. **Wrong.** The documentation forbids a search that "includes a pipe operator after a simple search" and a search that "includes a subsearch". Position does not rescue it. If a question shows `index=web sourcetype=access_combined status=404 | stats count` as a candidate event type definition, that option is invalid regardless of what else it does.
 
 **T-06-04** An event type can reference a report with `savedsearch`. **Wrong.** The same restriction list forbids referencing a report with the `savedsearch` command inside an event type definition.
 
@@ -310,7 +304,7 @@ Whether the **tag name itself** is case sensitive is not settled. The 10.4 tags 
 
 Two consequences. A wildcard that preserves the original capitalisation, `tag=Priv*`, matches under either reading, so prefer it when it is offered. And you can **resolve this on your own instance in under a minute**: tag a pair with `Privileged`, run `tag=privileged`, `tag=Privileged` and `tag=priv*`, record which return events in `source-notes/`, and the trap closes. Field-value case sensitivity is a different question and is settled: see `topics/04-field-extractions.md`. [verify]
 
-**T-06-13** The Apress book keys its item "tags use event types, you can set priority and color" as false, while the same chapter's worked example creates an event type with a priority and a colour and then tags it. The correct reading: priority and colour are set **on the event type**, and that event type can then be tagged. Priority and colour are never properties of a tag.
+**T-06-13** Material in circulation keys "tags use event types, you can set priority and color" as false, while its own worked example creates an event type with a priority and a colour and then tags it. The correct reading: priority and colour are set **on the event type**, and that event type can then be tagged. Priority and colour are never properties of a tag.
 
 **T-06-14** Tagging `host=web01` renames the host. **Wrong.** Tagging never changes the underlying field value. It adds a searchable alternate label. This is why tagging is the standard remedy when a host value changed for an input and historical events still carry the old value: tag both values with one tag and search the tag.
 
@@ -322,14 +316,14 @@ Two consequences. A wildcard that preserves the original capitalisation, `tag=Pr
 
 ## Lab
 
-Fifteen minutes, single-node Splunk Enterprise 10.4, tutorial data loaded, logged in as `admin`.
+Fifteen minutes, single-node Splunk Enterprise 10.4, practice dataset loaded, logged in as `admin`.
 
 **Step 1, tag a field-value pair from search results (about 3 minutes).**
 
 Run:
 
 ```spl
-sourcetype=access_combined_wcookie status=404 | head 20
+index=web sourcetype=access_combined status=404 | head 20
 ```
 
 Expand any result row, find the `status` field with value `404`, click the arrow in its **Actions** column and select **Edit Tags**. The Field Value box should already read `status=404`. In the Tags box type `client_error, page_missing` (comma or space separated both work). Click **Save**. Repeat for `status=403` with the tag `client_error`.
@@ -340,14 +334,14 @@ Go to **Settings**, **Tags**. Confirm the three views: **List by field-value pai
 
 **Step 3, create an event type from Settings (about 4 minutes).**
 
-Go to **Settings**, **Event Types**, click **New**. Set Destination App to `search`. Name: `bc_web_client_error`. Search String: `sourcetype=access_combined_wcookie status>=400 status<500`. Tag(s): `web_error`. Color: pick **Red**. Priority: **2**. Click **Save**.
+Go to **Settings**, **Event Types**, click **New**. Set Destination App to `search`. Name: `bc_web_client_error`. Search String: `index=web sourcetype=access_combined status>=400 status<500`. Tag(s): `web_error`. Color: pick **Red**. Priority: **2**. Click **Save**.
 
 **Step 4, create a second, broader event type to prove colour precedence (about 3 minutes).**
 
 From the search bar run:
 
 ```spl
-sourcetype=access_combined_wcookie status>=400
+index=web sourcetype=access_combined status>=400
 ```
 
 Click **Save As**, then **Event Type**. Name: `bc_web_any_error`. Color: **Orange**. Priority: **8**. Save. Then try the third route without saving: expand any event, click **Event Actions**, select **Build Event Type**, and note that the builder offers Style and Priority.
@@ -355,13 +349,13 @@ Click **Save As**, then **Event Type**. Name: `bc_web_any_error`. Color: **Orang
 **Step 5, verify (about 3 minutes).**
 
 ```spl
-sourcetype=access_combined_wcookie eventtype=* | stats count by eventtype
+index=web sourcetype=access_combined eventtype=* | stats count by eventtype
 ```
 
 You should see rows for `bc_web_any_error` alone and for the multivalue combination containing both event types. Now check colour precedence and ordering:
 
 ```spl
-sourcetype=access_combined_wcookie status=404 | head 5
+index=web sourcetype=access_combined status=404 | head 5
 ```
 
 In the events list the colour band should be **red**, not orange, because priority 2 beats priority 8, and in the expanded `eventtype` field `bc_web_client_error` should be listed before `bc_web_any_error`.
@@ -398,9 +392,9 @@ D. `host::tag=prod*`
 
 **3.** Which of these is a valid event type definition?
 
-A. `sourcetype=vendor_sales | stats sum(price) by product_name`
-B. `sourcetype=vendor_sales [search sourcetype=access_combined_wcookie action=purchase | fields productId]`
-C. `sourcetype=vendor_sales productId=DB-SG-G01 vip_status=gold` where `vip_status` comes from an automatic lookup
+A. `index=web sourcetype=access_combined action=purchase | stats sum(bytes) by categoryId`
+B. `index=web sourcetype=access_combined action=purchase [search index=web sourcetype=access_combined action=purchase | fields productId]`
+C. `index=web sourcetype=access_combined action=purchase productId=DB-SG-G01 vip_status=gold` where `vip_status` comes from an automatic lookup
 D. `| savedsearch daily_sales_report`
 
 **4.** An event matches `all_errors` (priority 9, colour orange) and `disk_failure` (priority 2, colour purple). What does the events list show?
@@ -441,7 +435,7 @@ D. Only the current user's private objects
 **9.** An analyst runs this search:
 
 ```spl
-sourcetype=secure "failed password" | findtypes
+index=security sourcetype=linux_secure "failed password" | findtypes
 ```
 
 What is the result?
@@ -455,7 +449,7 @@ D. The search fails, because the command that discovers event types is `searchty
 
 ```ini
 [recent_failed_logins]
-search = sourcetype=secure "failed password"
+search = index=security sourcetype=linux_secure "failed password"
 priority = 4
 color = et_red
 earliest = -24h

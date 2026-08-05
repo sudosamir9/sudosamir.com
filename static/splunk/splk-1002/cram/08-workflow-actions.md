@@ -18,7 +18,7 @@ link.method = <get|post>
 link.postargs.1.key = title       # post only, sent in BODY
 link.postargs.1.value = err $status$
 
-search.search_string = index=main user="$User$" | stats count
+search.search_string = index=web user="$User$" | stats count
 search.app = <app>
 search.view = <view>
 search.target = <blank|self>

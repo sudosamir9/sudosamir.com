@@ -10,11 +10,6 @@ This section is about the four commands that turn an event stream into a statist
 - 1.1 Use the chart command
 - 1.2 Use the timechart command
 
-| Source | Where it covers this | Honest assessment |
-| --- | --- | --- |
-| Udemy, "Splunk: Zero to Power User" (Hailie Shaw), Modules 9A, 9B | `chart` and `timechart` demonstrations against the tutorial data | Good for intuition about the Statistics and Visualization tabs. Covers none of `limit`, `useother`, `usenull`, `cont`, `partial`, `fixedrange`, or `bins`, which is where the exam distractors live. |
-| Udemy, Modules 14A, 14B, 15A | Reports, dashboards, and visualization formatting | Dashboard mechanics outside blueprint 1.0. Context, not preparation for this section. |
-| Apress, "Splunk Certified Study Guide" (Deep Mehta, 2021), Chapter 2 | Reference tables for `chart`, `timechart`, `stats`, `top`, `rare`, `untable` | Reference tables only, four `chart` examples and two `timechart` examples, nothing on `span`, `limit`, or `useother`. The book has demonstrably wrong answer keys elsewhere, so use it for vocabulary and check every default against help.splunk.com. |
 
 ## What it is
 
@@ -51,7 +46,7 @@ chart [<chart-options>] [agg=<stats-agg-term>] ( <stats-agg-term> | <sparkline-a
 
 The row-split field becomes the first column of the results table and the X-axis of the chart. The column-split field becomes the data series, one column per distinct value. `BY a b` and `OVER a BY b` mean the same thing: `a` is the row-split, `b` is the column-split.
 
-Two points in that syntax line are easy to misread. First, `chart` requires an aggregation: the docs state that you must specify a statistical function when you use the `chart` command, so the argument has to be a stats-agg-term, a sparkline-agg-term, or a parenthesised eval expression. `chart sum(price) AS sales BY product_name` is valid, `chart sales BY product_name` is not. Second, `chart` does not have two BY clauses. `BY <row-split> <column-split>` is one BY clause listing two fields, and the comma is optional: the docs write `chart eval(avg(size)/max(delay)) AS ratio BY host user`, and `BY host, user` parses identically. `OVER` takes exactly one field, always the row-split, cannot follow `BY`, and appears in no command other than `chart`, so `chart count OVER a, b` and `chart count BY a OVER b` are both malformed.
+Two points in that syntax line are easy to misread. First, `chart` requires an aggregation: the docs state that you must specify a statistical function when you use the `chart` command, so the argument has to be a stats-agg-term, a sparkline-agg-term, or a parenthesised eval expression. `chart sum(bytes) AS total_bytes BY categoryId` is valid, `chart sales BY categoryId` is not. Second, `chart` does not have two BY clauses. `BY <row-split> <column-split>` is one BY clause listing two fields, and the comma is optional: the docs write `chart eval(avg(size)/max(delay)) AS ratio BY host user`, and `BY host, user` parses identically. `OVER` takes exactly one field, always the row-split, cannot follow `BY`, and appears in no command other than `chart`, so `chart count OVER a, b` and `chart count BY a OVER b` are both malformed.
 
 | Option | Values | Default | What it does |
 | --- | --- | --- | --- |
@@ -165,17 +160,17 @@ The `stats` rule is one row per distinct combination. The docs state that if a B
 
 | host | productId | count |
 | --- | --- | --- |
-| www1 | DB-SG-G01 | 210 |
-| www1 | DC-SG-G02 | 187 |
-| www2 | DB-SG-G01 | 194 |
-| www2 | DC-SG-G02 | 165 |
+| web1 | DB-SG-G01 | 210 |
+| web1 | DC-SG-G02 | 187 |
+| web2 | DB-SG-G01 | 194 |
+| web2 | DC-SG-G02 | 165 |
 
 `chart count OVER host BY productId` produces the matrix form of exactly the same numbers:
 
 | host | DB-SG-G01 | DC-SG-G02 | ...8 more... | OTHER | NULL |
 | --- | --- | --- | --- | --- | --- |
-| www1 | 210 | 187 | ... | 122 | 4041 |
-| www2 | 194 | 165 | ... | 118 | 3987 |
+| web1 | 210 | 187 | ... | 122 | 4041 |
+| web2 | 194 | 165 | ... | 118 | 3987 |
 
 The first column is the row-split field, every other column is a distinct value of the column-split field, and the number of value columns is limited to 10 by default. The `OTHER` column exists because `useother=true` and `productId` has more than 10 distinct values. The `NULL` column exists because `usenull=true` and most web events (anything that is not a product page view or purchase) carry no `productId` at all.
 
@@ -217,12 +212,12 @@ Off-blueprint context, worth a minute because it marks the boundary of what the 
 
 ## Worked examples
 
-All examples use the Splunk tutorial dataset (Buttercup Games) with sourcetypes `access_combined_wcookie`, `vendor_sales`, and `secure`.
+All examples run against the practice dataset from [lab setup](../lab-setup.md): `index=web` (`access_combined`, hosts `web1` to `web3`), `index=security` (`linux_secure`), and `index=cisco` (`cisco:wsa:squid`). Set the time picker to **All time**, because the data is historical.
 
 1. Simplest transforming search with an arbitrary X-axis. One row per web server, one numeric column.
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | chart count OVER host
 ```
 
@@ -231,16 +226,16 @@ Two columns, so this drives a column chart, a bar chart, a line chart, or a pie 
 2. Row-split plus column-split. This is the canonical `chart` shape question.
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | chart dc(clientip) OVER date_hour BY categoryId usenull=f
 ```
 
-One row per hour of the day (0 to 23), one column per category. `usenull=f` suppresses the `NULL` column for purchase events carrying no `categoryId`. The tutorial data has seven categories, so the default `limit=top 10` never bites and no `OTHER` column appears.
+One row per hour of the day (0 to 23), one column per category. `usenull=f` suppresses the `NULL` column for purchase events carrying no `categoryId`. The practice data has eight category values, so the default `limit=top 10` never bites and no `OTHER` column appears.
 
-3. Forcing the series count. The `status` field has several distinct values in the tutorial data, so this is where `limit`, `useother`, and `otherstr` become visible.
+3. Forcing the series count. The `status` field has nine distinct values in the practice data, so this is where `limit`, `useother`, and `otherstr` become visible.
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | chart count OVER host BY status limit=3 useother=t otherstr="ALL OTHER CODES"
 ```
 
@@ -252,16 +247,16 @@ The Statistics tab returns this. Read the shape rather than the numbers: the row
 
 | host | 200 | 404 | 503 | ALL OTHER CODES |
 | --- | --- | --- | --- | --- |
-| www1 | 12,046 | 892 | 311 | 604 |
-| www2 | 11,733 | 861 | 298 | 587 |
-| www3 | 11,504 | 848 | 289 | 573 |
+| web1 | 12,046 | 892 | 311 | 604 |
+| web2 | 11,733 | 861 | 298 | 587 |
+| web3 | 11,504 | 848 | 289 | 573 |
 
 Three things to take from that table. The `host` header is the field name itself, not a label you chose, which is why `chart` output is self-describing. The column headers are data values rather than field names, which is the difference from `stats count BY host, status` where you would get one `status` column with a row per pair. And `ALL OTHER CODES` sits at the end because `useother=t` pools everything the `limit=3` cut, so the row still totals the full event count for that host.
 
 4. Time series with a split. The `_time` guarantee plus a controlled span.
 
 ```spl
-sourcetype=access_combined_wcookie action=purchase
+index=web sourcetype=access_combined action=purchase
 | timechart span=1d count BY categoryId usenull=f
 ```
 
@@ -270,7 +265,7 @@ One row per calendar day, first column `_time`, one column per category. Without
 5. Multiple aggregations with a split-by field, which is where series naming shows up.
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | timechart span=1h avg(bytes) max(bytes) BY host limit=0 useother=f
 ```
 
@@ -279,10 +274,10 @@ Three hosts and two functions give six value columns plus `_time`. With more tha
 6. `top` and `rare` as transforming commands, and the option that changes the output schema.
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | top 5 productId BY categoryId showperc=f countfield=purchases useother=t
 
-sourcetype=secure
+index=security sourcetype=linux_secure
 | rare limit=5 user
 ```
 
@@ -291,7 +286,7 @@ The first search returns `categoryId`, `productId`, and `purchases`, with no `pe
 7. Shape conversion in both directions.
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | top categoryId
 | untable categoryId calculation value
 ```
@@ -301,7 +296,7 @@ This turns the three-column `top` output into a long table with columns `categor
 8. Simulating a multi-series chart that `timechart` cannot produce directly.
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | bin _time span=1h
 | stats sum(bytes) AS total avg(bytes) AS mean BY _time, host
 | eval s1="total mean"
@@ -366,7 +361,7 @@ The documented pattern for building a chart of multiple data series, because tra
 
 **T-01-15** `sparkline` does not work with `timechart`. Wrong belief: `timechart sparkline(count) BY host` adds inline mini-charts. Correct fact: the docs state that sparkline is a function that applies to only the `chart` and `stats` commands. Sparkline size is capped by `sparkline_maxsize` in `limits.conf`.
 
-**T-01-16** The `per_*` functions are `timechart` only and do not set a span. Wrong belief: `per_hour(price)` forces hourly buckets. Correct fact: `per_day()`, `per_hour()`, `per_minute()`, and `per_second()` are documented as usable with `timechart`, and the docs state they are aggregators not responsible for setting a time span. On a 30-minute span, `per_hour()` returns `sum()*2`. Hourly buckets still need `span=1h`.
+**T-01-16** The `per_*` functions are `timechart` only and do not set a span. Wrong belief: `per_hour(bytes)` forces hourly buckets. Correct fact: `per_day()`, `per_hour()`, `per_minute()`, and `per_second()` are documented as usable with `timechart`, and the docs state they are aggregators not responsible for setting a time span. On a 30-minute span, `per_hour()` returns `sum()*2`. Hourly buckets still need `span=1h`.
 
 **T-01-17** `limit=0` does not mean zero results. Wrong belief: `limit=0` suppresses the series entirely. Correct fact: on `chart`, `limit=0` returns all results; on `timechart`, `limit=0` means all distinct values are used and no series filtering occurs; on `top` and `rare`, `limit=0` returns all values up to `maxresultrows` (default maximum 50,000).
 
@@ -378,22 +373,22 @@ The documented pattern for building a chart of multiple data series, because tra
 
 **T-01-21** There is no such thing as two BY clauses. Wrong belief: `chart count BY vendor_action, user` works because `chart` supports two BY clauses, so `timechart count BY host, status` should work for the same reason. Correct fact: the documented syntax is one BY clause taking a row-split and a column-split, `BY <row-split> <column-split>`, comma optional. `timechart` has one BY clause too; it just accepts a single field in it, because `_time` already holds the row-split. Count fields, not clauses.
 
-**T-01-22** `chart` and `timechart` demand a statistical function. Wrong belief: `chart sales BY product_name` reports the `sales` field split by product. Correct fact: the docs state you must specify a statistical function when you use the `chart` command, so the argument must be a stats-agg-term, a sparkline-agg-term, or a parenthesised eval expression. The working form is `chart sum(price) AS sales BY product_name`. Bare field names belong to `table` and `fields`, which aggregate nothing.
+**T-01-22** `chart` and `timechart` demand a statistical function. Wrong belief: `chart sales BY categoryId` reports the `sales` field split by product. Correct fact: the docs state you must specify a statistical function when you use the `chart` command, so the argument must be a stats-agg-term, a sparkline-agg-term, or a parenthesised eval expression. The working form is `chart sum(bytes) AS total_bytes BY categoryId`. Bare field names belong to `table` and `fields`, which aggregate nothing.
 
-**T-01-23** `OVER` belongs to `chart` and nothing else. Wrong belief: `stats sum(price) AS sales OVER product_name` is the `stats` way of naming an X-axis. Correct fact: the `stats` syntax offers only `BY <field-list>`. `timechart` has no `OVER` because `_time` is its fixed row-split, `xyseries` takes three positional fields, and `transaction` takes a field list. `OVER` on any other command is wrong on syntax alone.
+**T-01-23** `OVER` belongs to `chart` and nothing else. Wrong belief: `stats sum(bytes) AS total_bytes OVER categoryId` is the `stats` way of naming an X-axis. Correct fact: the `stats` syntax offers only `BY <field-list>`. `timechart` has no `OVER` because `_time` is its fixed row-split, `xyseries` takes three positional fields, and `transaction` takes a field list. `OVER` on any other command is wrong on syntax alone.
 
 **T-01-24** `span` is the only time-bucketing argument on `timechart`. Wrong belief: an `interval` or `duration` argument sets the bin size. Correct fact: the documented bin options are `span`, `bins`, `minspan`, `start`, `end`, and `aligntime`. `span` sets the bin size, `bins` caps the bin count, and no `interval` argument exists. `duration` is a field the `transaction` command outputs, which is what makes it plausible.
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.
 
 1. Open Splunk Web. From the Splunk bar select **Apps**, then **Search & Reporting**. In the app navigation bar click **Search**. Set the time range picker to **All time**.
 
 2. Run the baseline and click the **Statistics** tab. Count the columns: `host` plus one per category, and note whether `OTHER` or `NULL` appeared.
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | chart count OVER host BY categoryId
 ```
 
@@ -402,25 +397,25 @@ sourcetype=access_combined_wcookie status=200 action=purchase
 4. Render a pie chart. Run the two-column search below, click the **Visualization** tab, use the **Visualization Picker** to select **Pie**, and set a minimum size from the **Format** menu. Then change the search to `| chart count OVER host BY categoryId` and click **Visualization** again: the pie ignores every column past the second.
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | stats count BY categoryId
 ```
 
 5. Watch the span default move. Run the search below on **Last 24 hours**, then on **Last 7 days**, without changing the SPL, and compare the `_time` granularity. Pin it with `timechart span=1h` and confirm it stops moving.
 
 ```spl
-sourcetype=access_combined_wcookie action=purchase
+index=web sourcetype=access_combined action=purchase
 | timechart count BY categoryId usenull=f
 ```
 
-6. Single value. Run `sourcetype=access_combined_wcookie action=purchase | timechart span=1h count`, click **Visualization**, pick **Single Value**, and confirm the sparkline and trend arrow appear. Replace `timechart span=1h count` with `stats count` and confirm both disappear.
+6. Single value. Run `index=web sourcetype=access_combined action=purchase | timechart span=1h count`, click **Visualization**, pick **Single Value**, and confirm the sparkline and trend arrow appear. Replace `timechart span=1h count` with `stats count` and confirm both disappear.
 
 7. Trellis. With the step 5 search loaded, on the **Visualization** tab open the **Trellis** menu, switch **Use Trellis** on, and split by `categoryId`.
 
 Verification search that proves the shapes are what you think they are:
 
 ```spl
-sourcetype=access_combined_wcookie status=200 action=purchase
+index=web sourcetype=access_combined status=200 action=purchase
 | chart count OVER host BY categoryId limit=2
 | untable host series value
 | stats sum(value) AS total BY series
@@ -453,10 +448,10 @@ If `useother` is still at its default of `true`, the `series` column will contai
 
 4. You need a pie chart of purchases by product category. Which search gives the correct data structure?
 
-    A. `sourcetype=access_combined_wcookie action=purchase | chart count OVER date_hour BY categoryId`
-    B. `sourcetype=access_combined_wcookie action=purchase | stats count BY categoryId`
-    C. `sourcetype=access_combined_wcookie action=purchase | timechart count BY categoryId`
-    D. `sourcetype=access_combined_wcookie action=purchase | table categoryId productId price`
+    A. `index=web sourcetype=access_combined action=purchase | chart count OVER date_hour BY categoryId`
+    B. `index=web sourcetype=access_combined action=purchase | stats count BY categoryId`
+    C. `index=web sourcetype=access_combined action=purchase | timechart count BY categoryId`
+    D. `index=web sourcetype=access_combined action=purchase | table categoryId productId bytes`
 
 5. Which statement about `top` is correct?
 
@@ -489,7 +484,7 @@ If `useother` is still at its default of `true`, the `series` column will contai
 9. What does this search return?
 
     ```spl
-    sourcetype=access_combined_wcookie
+    index=web sourcetype=access_combined
     | timechart span=1h avg(bytes) BY host limit=3 WHERE avg(bytes) > 2000
     ```
 

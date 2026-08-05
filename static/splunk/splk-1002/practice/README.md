@@ -2,7 +2,7 @@
 
 The questions are also playable as an exam simulator at `site/exam/index.html`, reachable from the Exam simulator entry in the site navigation: untimed practice with full explanations, or a timed 65-question mock exam. The bank holds 200 unique questions, the 106 transcribed here plus 94 written for this guide under `authored/`. Run `python3 site/build_bank.py` after editing any question file.
 
-Practice-test questions as structured JSON, so a web interface can drill them, score them, and filter by weak area. Source: the Udemy course "Splunk Core Certified Power User Practice Tests (SPLK-1002)", 165 questions across five tests.
+Practice-test questions as structured JSON, so a web interface can drill them, score them, and filter by weak area. Two sources: 106 questions transcribed from a third-party practice-test course and fact-checked against the documentation, and 94 written for this guide. 165 transcribed items across five tests.
 
 ## Layout
 
@@ -69,7 +69,7 @@ Every question carries the course's content verbatim plus a `guide` block that t
 
 Fields added by the fact-check pass:
 
-- `courseKey` preserves the option ids Udemy marked correct. `isCorrect` holds the verified truth, so the two differ only where `keyVerdict` is `wrong`.
+- `courseKey` preserves the option ids the source course marked correct. `isCorrect` holds the verified truth, so the two differ only where `keyVerdict` is `wrong`.
 - `guide.docs` is the documentation for the question. `docs[0]` is the primary page to open; every URL was fetched and returns HTTP 200.
 - `guide.correctedAnswer` is set only when `keyVerdict` is `wrong`. An empty array means no offered option is correct.
 - `guide.unanswerable` is `true` on the one question where no option is correct. A UI should skip it in scoring rather than mark you wrong.
@@ -97,7 +97,7 @@ Third-party practice tests get answers wrong. Rather than silently "fixing" the 
 
 Every one of the 106 unique questions has been fact-checked against fetched documentation, keyed answer and explanation text both. Results: **56 agree, 44 imprecise, 3 wrong, 3 disputed**, with 65 false statements found in explanation text across 44 questions.
 
-`isCorrect` holds the **documentation-verified** answer, so your UI scores you against reality. `courseKey` preserves what Udemy said. Where the two differ, `guide.keyVerdict` is `wrong` and `guide.correctedAnswer` gives the true answer.
+`isCorrect` holds the **documentation-verified** answer, so your UI scores you against reality. `courseKey` preserves what the source course said. Where the two differ, `guide.keyVerdict` is `wrong` and `guide.correctedAnswer` gives the true answer.
 
 ### Three keys were wrong
 

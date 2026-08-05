@@ -12,15 +12,15 @@
 
 ```ini
 # eventtypes.conf
-[buttercup_web]
-search = sourcetype=access_combined_wcookie
+[web_activity]
+search = index=web sourcetype=access_combined
 
 # tags.conf
-[eventtype=buttercup_web]
+[eventtype=web_activity]
 web = enabled
 
 # props.conf
-[access_combined_wcookie]
+[access_combined]
 FIELDALIAS-cim_src = clientip AS src
 
 [secure]

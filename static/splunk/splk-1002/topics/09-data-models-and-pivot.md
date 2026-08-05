@@ -11,11 +11,6 @@ Data models are the search-time schema layer that turns raw events into a named,
 - 9.2 Identify data model attributes
 - 9.3 Create a data model
 
-| Source | Coverage | Honest note |
-| --- | --- | --- |
-| Udemy "Splunk: Zero to Power User" (Hailie Shaw), Modules 22A and 22B | Building a data model in the UI, adding datasets, running Pivot | Accurate for the click path but stops at the UI. No acceleration, no `tstats`, no `datamodel` command, nothing on which dataset types can be accelerated. Watch it for muscle memory only. |
-| Apress "Splunk Certified Study Guide" (Deep Mehta, 2021), Chapter 5 (Understanding Data Models and Pivot, Creating Data Models and Pivot) | Dataset types, field types, Pivot editor basics | Three answer-key errors sit on this section. Key B says "Pivot provides a dataset for the data model", the relationship backwards. Key E marks child dataset inheritance as false, when a child inherits every constraint and field from its ancestors. Key F says CIM data models ship with acceleration on, contradicting the book's own body text and the CIM documentation. Acceleration, `tstats` and the `datamodel` command are absent from the chapter. |
-
 ## What it is
 
 A data model is, in the documentation's own words, "a hierarchically structured search-time mapping of semantic knowledge about one or more datasets". Hold on to the word hierarchically: a data model is an ordered parent-child tree, so an option calling it a randomly structured collection of datasets fails on that word alone. It is a knowledge object, it is fully permissionable, and its permissions cover all of its datasets at once. It contains no data. It contains constraints (searches) and field definitions (extractions, evals, lookups, regexes) applied at search time to produce a dataset. The docs put the same breakdown at dataset level: "Data model datasets are defined by characteristics that mostly break down into constraints and fields." The two parts of a root event dataset are therefore its constraints and its fields. Attribute is a synonym for field here, which is why objective 9.2 says attributes while the editor says fields, so an option offering "fields and attributes" as the two parts has named one thing twice.
@@ -45,14 +40,14 @@ A data model is built from datasets. There are three root dataset types and one 
 | Root transaction | A `transaction` over one or more Group Datasets already defined in this data model, plus Group by, Max Pause or Max Span | Yes | No. "Root transaction datasets and their children do not benefit from data model acceleration." |
 | Child | One or more additional constraints, in the same simple-search form. Search macros are not allowed. | No, it inherits them from its root | Yes, if its root hierarchy is accelerable |
 
-Constraint inheritance is cumulative and narrowing. A child dataset inherits all constraints and all fields from every ancestor and then adds its own. The documentation's own example composes a root event constraint `sourcetype=access_*`, a parent constraint `action=purchase`, and a child constraint `status=200` into the effective search `sourcetype=access_* action=purchase status=200`. Each level down the tree returns fewer events and exposes more fields.
+Constraint inheritance is cumulative and narrowing. A child dataset inherits all constraints and all fields from every ancestor and then adds its own. The documentation's own example composes a root event constraint `index=web sourcetype=access_combined`, a parent constraint `action=purchase`, and a child constraint `status=200` into the effective search `index=web sourcetype=access_combined action=purchase status=200`. Each level down the tree returns fewer events and exposes more fields.
 
 ```mermaid
 flowchart TD
-    R["Root event: Web_Access<br/>constraint: sourcetype=access_combined_wcookie<br/>fields: _time, host, source, sourcetype"]
-    P["Child: Purchases<br/>own constraint: action=purchase<br/>effective: sourcetype=access_combined_wcookie action=purchase"]
-    C1["Child: Successful_Purchases<br/>own constraint: status=200<br/>effective: sourcetype=access_combined_wcookie action=purchase status=200"]
-    C2["Child: Failed_Purchases<br/>own constraint: status&gt;=400<br/>effective: sourcetype=access_combined_wcookie action=purchase status&gt;=400"]
+    R["Root event: Web_Access<br/>constraint: index=web sourcetype=access_combined<br/>fields: _time, host, source, sourcetype"]
+    P["Child: Purchases<br/>own constraint: action=purchase<br/>effective: index=web sourcetype=access_combined action=purchase"]
+    C1["Child: Successful_Purchases<br/>own constraint: status=200<br/>effective: index=web sourcetype=access_combined action=purchase status=200"]
+    C2["Child: Failed_Purchases<br/>own constraint: status&gt;=400<br/>effective: index=web sourcetype=access_combined action=purchase status&gt;=400"]
     R --> P
     P --> C1
     P --> C2
@@ -221,19 +216,19 @@ One row per data model, each cell holding the full JSON definition: every datase
 2. Return the events of a child dataset, with prefixed field names, then flatten them.
 
 ```spl
-| datamodel Buttercup_Web Successful_Purchases search
+| datamodel Web_Activity Successful_Purchases search
 ```
 
-Returns events matching `sourcetype=access_combined_wcookie action=purchase status=200`, with columns named `Web_Access.Purchases.Successful_Purchases.productId` and similar. Swap `search` for `flat` to get plain `productId`:
+Returns events matching `index=web sourcetype=access_combined action=purchase status=200`, with columns named `Web_Access.Purchases.Successful_Purchases.productId` and similar. Swap `search` for `flat` to get plain `productId`:
 
 ```spl
-| datamodel Buttercup_Web Successful_Purchases flat
+| datamodel Web_Activity Successful_Purchases flat
 ```
 
 3. Show every field the model defines, not just the constrained ones.
 
 ```spl
-| datamodel Buttercup_Web Successful_Purchases search strict_fields=false
+| datamodel Web_Activity Successful_Purchases search strict_fields=false
 ```
 
 At the default `strict_fields=true` you get only the default fields and the fields named in the dataset constraints. Setting it `false` returns all fields defined on the dataset, which is what you want when a Pivot user reports a field they can see in Pivot missing from an SPL result.
@@ -241,7 +236,7 @@ At the default `strict_fields=true` you get only the default fields and the fiel
 4. Reproduce a Pivot table in SPL with `pivot`.
 
 ```spl
-| pivot Buttercup_Web Successful_Purchases count(Successful_Purchases) AS "Purchases" SPLITROW categoryId AS "Category" SPLITCOL status SORT 10 categoryId
+| pivot Web_Activity Successful_Purchases count(Successful_Purchases) AS "Purchases" SPLITROW categoryId AS "Category" SPLITCOL status SORT 10 categoryId
 ```
 
 Produces the same statistics table the Pivot Editor builds from one column value, one split row and one split column, which is how you turn a Pivot into a scheduled report you can edit as SPL.
@@ -249,15 +244,15 @@ Produces the same statistics table the Pivot Editor builds from one column value
 5. Count purchases per category off the acceleration summary only.
 
 ```spl
-| tstats summariesonly=t count FROM datamodel=Buttercup_Web.Web_Access WHERE nodename=Web_Access.Purchases.Successful_Purchases BY Successful_Purchases.categoryId
+| tstats summariesonly=t count FROM datamodel=Web_Activity.Web_Access WHERE nodename=Web_Access.Purchases.Successful_Purchases BY Successful_Purchases.categoryId
 ```
 
-Runs against the tsidx summary and never touches raw events. If the search time range is wider than the Summary Range, results are silently incomplete: that is the price of `summariesonly=t`. At the default `summariesonly=f` the search falls back to raw data outside the summary range, returning complete results more slowly.
+Runs against the tsidx summary and never touches raw events. If the search time range is wider than the Summary Range, results are silently incomplete: that is the bytes of `summariesonly=t`. At the default `summariesonly=f` the search falls back to raw data outside the summary range, returning complete results more slowly.
 
 6. Chart purchase volume over time from the summary, one point per hour.
 
 ```spl
-| tstats count FROM datamodel=Buttercup_Web.Web_Access WHERE nodename=Web_Access.Purchases BY _time span=1h
+| tstats count FROM datamodel=Web_Activity.Web_Access WHERE nodename=Web_Access.Purchases BY _time span=1h
 ```
 
 `span` is mandatory when the BY clause includes `_time`. Without it the search errors rather than defaulting to a sensible bucket.
@@ -265,8 +260,8 @@ Runs against the tsidx summary and never touches raw events. If the search time 
 7. Read a dataset with the `from` command instead, then keep using ordinary SPL.
 
 ```spl
-| from datamodel:Buttercup_Web.Successful_Purchases
-| stats sum(price) AS revenue BY categoryId
+| from datamodel:Web_Activity.Successful_Purchases
+| stats sum(bytes) AS total_bytes BY categoryId
 | sort - revenue
 ```
 
@@ -294,11 +289,11 @@ Runs against the tsidx summary and never touches raw events. If the search time 
 
 ## Traps
 
-**T-09-01** The direction of the data model and Pivot relationship. The wrong belief, which the Apress answer key B states outright, is that Pivot provides a dataset for the data model. The correct fact is the reverse: the data model provides the dataset, and Pivot is the SPL-free interface that consumes it to build a report. Pivot cannot run without a data model.
+**T-09-01** The direction of the data model and Pivot relationship. The wrong belief, stated outright in circulating answer keys, is that Pivot provides a dataset for the data model. The correct fact is the reverse: the data model provides the dataset, and Pivot is the SPL-free interface that consumes it to build a report. Pivot cannot run without a data model.
 
-**T-09-02** Child dataset inheritance. The wrong belief, which the Apress answer key E marks as false, is that a child dataset does not inherit from its parent. The correct fact is that a child dataset inherits all constraints and all fields from every ancestor, then adds its own. Inheritance is cumulative and each level down returns strictly fewer events.
+**T-09-02** Child dataset inheritance. The wrong belief, marked false in circulating answer keys, is that a child dataset does not inherit from its parent. The correct fact is that a child dataset inherits all constraints and all fields from every ancestor, then adds its own. Inheritance is cumulative and each level down returns strictly fewer events.
 
-**T-09-03** CIM acceleration defaults. The wrong belief, which the Apress answer key F states, is that the CIM data models ship with acceleration enabled. The correct fact is that "All data models included in the CIM add-on have data model acceleration turned off by default." You enable it per model on the CIM Setup page by selecting the model and checking Accelerate, which writes `acceleration = 1` for that model.
+**T-09-03** CIM acceleration defaults. The wrong belief, stated in circulating answer keys, is that the CIM data models ship with acceleration enabled. The correct fact is that "All data models included in the CIM add-on have data model acceleration turned off by default." You enable it per model on the CIM Setup page by selecting the model and checking Accelerate, which writes `acceleration = 1` for that model.
 
 **T-09-04** Which datasets can be accelerated. The wrong belief is that acceleration applies to every dataset in the model. The correct fact is that it requires at least one root event hierarchy, or one root search hierarchy using only streaming commands. Root search datasets built on transforming searches cannot be accelerated, and root transaction datasets and their children do not benefit.
 
@@ -342,11 +337,11 @@ Runs against the tsidx summary and never touches raw events. If the search time 
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.
 
-1. Create the model. Settings, Data Models, New Data Model. Title `Buttercup Web`, ID `Buttercup_Web`, App `Search`, then Create.
+1. Create the model. Settings, Data Models, New Data Model. Title `Web Activity`, ID `Web_Activity`, App `Search`, then Create.
 
-2. Add the root event dataset. In the Data Model Editor click Add Dataset, then Root Event. Dataset Name `Web Access`, Dataset ID `Web_Access`, Constraints `sourcetype=access_combined_wcookie`. Click Preview to confirm events return, then Save. Confirm the Inherited fields section lists `_time`, `host`, `source` and `sourcetype`.
+2. Add the root event dataset. In the Data Model Editor click Add Dataset, then Root Event. Dataset Name `Web Access`, Dataset ID `Web_Access`, Constraints `index=web sourcetype=access_combined`. Click Preview to confirm events return, then Save. Confirm the Inherited fields section lists `_time`, `host`, `source` and `sourcetype`.
 
 3. Add auto-extracted fields. With `Web Access` selected, click Add Field, then Auto-Extracted. Tick `action`, `status`, `categoryId`, `productId`, `clientip`, `bytes`. Set the Type of `status` and `bytes` to Number and the Type of `clientip` to IPv4. Leave the rest as String and Optional. Save.
 
@@ -354,30 +349,30 @@ Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutori
 
 5. Add the child datasets. Select `Web Access`, click Add Dataset, then Child. Dataset Name `Purchases`, Dataset ID `Purchases`, Constraints `action=purchase`. Save. Select `Purchases`, click Add Dataset, then Child. Dataset Name `Successful Purchases`, Dataset ID `Successful_Purchases`, Constraints `status=200`. Save. Confirm the Inherited section of `Successful Purchases` shows every field from `Web Access`.
 
-6. Share the model. On the Data Models management page, find `Buttercup Web` and select Edit, then Edit Permissions. Set Display For to `App`, give Everyone Read, and Save.
+6. Share the model. On the Data Models management page, find `Web Activity` and select Edit, then Edit Permissions. Set Display For to `App`, give Everyone Read, and Save.
 
-7. Build a Pivot. Settings, Data Models, click Pivot on the `Buttercup Web` row, and select the `Successful Purchases` dataset. In the Pivot Editor set the time range to All time, set Split Rows to `categoryId`, set Column Values to `Count of Successful Purchases`, and set Split Columns to `outcome`. Click Save As, then Report, and name it `Buttercup purchases by category`.
+7. Build a Pivot. Settings, Data Models, click Pivot on the `Web Activity` row, and select the `Successful Purchases` dataset. In the Pivot Editor set the time range to All time, set Split Rows to `categoryId`, set Column Values to `Count of Successful Purchases`, and set Split Columns to `outcome`. Click Save As, then Report, and name it `Web Activity purchases by category`.
 
 Verification searches. Each should return rows.
 
 ```spl
-| datamodel Buttercup_Web
+| datamodel Web_Activity
 ```
 
 ```spl
-| datamodel Buttercup_Web Successful_Purchases search strict_fields=false | head 5
+| datamodel Web_Activity Successful_Purchases search strict_fields=false | head 5
 ```
 
 ```spl
-| from datamodel:Buttercup_Web.Successful_Purchases | stats count BY categoryId
+| from datamodel:Web_Activity.Successful_Purchases | stats count BY categoryId
 ```
 
 A stronger proof that inheritance composed correctly, comparing the model result to the hand-written equivalent search. Both counts must match.
 
 ```spl
-| datamodel Buttercup_Web Successful_Purchases flat
+| datamodel Web_Activity Successful_Purchases flat
 | stats count AS from_model
-| appendcols [ search sourcetype=access_combined_wcookie action=purchase status=200 | stats count AS from_raw ]
+| appendcols [ search index=web sourcetype=access_combined action=purchase status=200 | stats count AS from_raw ]
 | eval match=if(from_model=from_raw,"PASS","FAIL")
 ```
 
@@ -390,21 +385,21 @@ B. A data model supplies the dataset that Pivot reports on.
 C. Pivot and data models are independent features that both read from summary indexes.
 D. A data model is generated automatically from a saved Pivot report.
 
-2. You need a dataset defined by `sourcetype=vendor_sales | stats sum(price) BY VendorCountry`. Which dataset type must you use, and what do you give up?
+2. You need a dataset defined by `index=web sourcetype=access_combined action=purchase | stats sum(bytes) BY VendorCountry`. Which dataset type must you use, and what do you give up?
 
 A. Root event; you give up field inheritance.
 B. Root search; you give up persistent acceleration.
 C. Root transaction; you give up child datasets.
 D. Child; you give up the ability to add auto-extracted fields.
 
-3. A child dataset `Failed_Logins` has constraint `action=failure`. Its parent `Auth` has constraint `user=*`. The root event dataset `Secure` has constraint `sourcetype=secure`. What search does `Failed_Logins` effectively run?
+3. A child dataset `Failed_Logins` has constraint `action=failure`. Its parent `Auth` has constraint `user=*`. The root event dataset `Secure` has constraint `index=security sourcetype=linux_secure`. What search does `Failed_Logins` effectively run?
 
 A. `action=failure`
-B. `sourcetype=secure action=failure`
-C. `sourcetype=secure user=* action=failure`
-D. `sourcetype=secure OR user=* OR action=failure`
+B. `index=security sourcetype=linux_secure action=failure`
+C. `index=security sourcetype=linux_secure user=* action=failure`
+D. `index=security sourcetype=linux_secure OR user=* OR action=failure`
 
-4. You mark the field `productId` as Required on a dataset built from `sourcetype=access_combined_wcookie`. What happens?
+4. You mark the field `productId` as Required on a dataset built from `index=web sourcetype=access_combined`. What happens?
 
 A. Pivot users are forced to include `productId` in every report.
 B. Events that lack `productId` are filtered out of the dataset.
@@ -432,7 +427,7 @@ B. A model whose root is a search dataset using only `eval` and `where`.
 C. A model whose root is a transaction dataset grouping an event dataset by `JSESSIONID`.
 D. A model whose root event dataset has a Geo IP field.
 
-8. A colleague runs `| datamodel Buttercup_Web Successful_Purchases search` and complains that `outcome`, an eval expression field they can see in Pivot, is missing from the results. What is the fix?
+8. A colleague runs `| datamodel Web_Activity Successful_Purchases search` and complains that `outcome`, an eval expression field they can see in Pivot, is missing from the results. What is the fix?
 
 A. Rebuild the acceleration summary.
 B. Add `strict_fields=false`.
@@ -455,7 +450,7 @@ D. The field is renamed to `Client IP` everywhere, including in the index and in
 
 <details><summary>Answers</summary>
 
-1. **B.** The data model is a search-time mapping that produces a dataset, and Pivot is the SPL-free interface that consumes that dataset to build tables and charts. A is the Apress answer key error, the relationship reversed. C is wrong because Pivot has no path to data except through a data model, and summary indexes are a different acceleration mechanism. D is wrong in the general case: saving an Instant Pivot from a non-transforming search does create a private data model, but a Pivot built on an existing model creates nothing.
+1. **B.** The data model is a search-time mapping that produces a dataset, and Pivot is the SPL-free interface that consumes that dataset to build tables and charts. A is the a circulating answer key error, the relationship reversed. C is wrong because Pivot has no path to data except through a data model, and summary indexes are a different acceleration mechanism. D is wrong in the general case: saving an Instant Pivot from a non-transforming search does create a private data model, but a Pivot built on an existing model creates nothing.
 
 2. **B.** A constraint containing a pipe and a transforming command requires a root search dataset, and the documentation states you cannot accelerate root search datasets that use transforming searches. A is wrong because root event constraints cannot contain pipes at all, and root event datasets do not give up field inheritance. C is wrong because a transaction dataset groups events rather than running `stats`, and transaction datasets can have children. D is wrong because a child dataset takes a simple constraint; child datasets really cannot add auto-extracted fields, but that is not the trade-off here.
 

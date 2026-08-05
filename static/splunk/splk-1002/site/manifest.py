@@ -50,9 +50,6 @@ PAGES = [
     ("practice", "practice/README.md",              "How to drill",        None, None, None),
     ("practice", "practice/tracker.md",             "Attempt tracker",     None, None, None),
     ("practice", "practice/weak-areas.md",          "Weak areas",          None, None, None),
-    ("practice", "source-notes/apress-errata.md",   "Apress errata",       None, None, None),
-    ("practice", "source-notes/apress-part1-notes.md", "Apress part 1 notes", None, None, None),
-    ("practice", "source-notes/udemy-module-map.md","Udemy module map",    None, None, None),
 ]
 
 # Cram sheets are reachable through their topic's Study / Cram control rather than as

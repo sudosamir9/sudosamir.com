@@ -307,7 +307,8 @@
     if (q.read && q.read.length) {
       h.push('<div class="rlabel b">Read this next</div><ul class="doclist">');
       q.read.forEach(function (p) {
-        h.push('<li><a href="' + href(GUIDE + p.replace(/\.md(#|$)/, ".html$1")) + '">' + esc(p) + "</a></li>");
+        h.push('<li><a href="' + href(GUIDE + p.replace(/\.md(#|$)/, ".html$1")) + '">' +
+               esc(p.replace(/\.md(#|$)/, "$1")) + "</a></li>");
       });
       h.push("</ul>");
     }

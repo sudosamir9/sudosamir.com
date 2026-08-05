@@ -14,15 +14,6 @@ The heaviest single section of SPLK-1002: it tests whether you can build a group
 
 > The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.
 
-| Sub-objective | Udemy "Splunk: Zero to Power User" (Hailie Shaw) | Apress "Splunk Certified Study Guide" (Deep Mehta, 2021) | Honest gap note |
-| --- | --- | --- | --- |
-| 3.1 Identify transactions | Module 10A | Chapter 2 | Both treat a transaction as "events sharing a field" and miss the docs definition: raw text of every member, the time fields of the earliest member, and the union of all other fields. |
-| 3.2 Group events using fields | Module 10A | Chapter 2 | Neither covers `connected`, and neither states that an event missing the unifying field can still join a transaction. |
-| 3.3 Group events using fields and time | Module 10A | Chapter 2 (`maxpause`, `maxspan` only) | Apress gives `maxspan` and `maxpause` but not their default of `-1`, and states a "1000 event max" without saying that this is the configurable `maxevents` default. |
-| 3.4 Search with transactions | Module 10B | Chapter 4 | Neither source covers `startswith`, `endswith`, `keeporphans`, `unifyends`, or `keepevicted`, which are exactly the options a question writer reaches for as distractors. |
-| 3.5 Report on transactions | Module 10B | Chapter 4 | Thin in both. Neither drills the point that `duration` and `eventcount` exist only after `transaction`, so filters on them must come later in the pipeline. |
-| 3.6 Determine when to use transactions vs. stats | Not contrasted | Not contrasted | Neither source contrasts `transaction` with `stats` or builds the decision table. This sub-objective must be learned from the docs page "About transactions" alone. |
-
 ## What it is
 
 Event correlation is finding relationships between events that a single search line does not express: how far apart in time a set of events occurred, how long an end-to-end operation took, how many steps it involved. The Splunk docs list five correlation mechanisms: time and geographic proximity, transactions, subsearches, field lookups, and joins. The exam concentrates on transactions, with `stats` as the constant alternative.
@@ -133,7 +124,7 @@ Note two things: `count` became multivalue because its members disagreed, and th
 1. Group web access events by client IP with both time constraints. This is the canonical 3.3 pattern.
 
 ```spl
-sourcetype=access_* | transaction clientip maxspan=30s maxpause=5s
+index=web sourcetype=access_combined | transaction clientip maxspan=30s maxpause=5s
 ```
 
 Produces one result per burst of activity from a single `clientip`, where the whole burst spans less than 30 seconds and no two consecutive events are more than 5 seconds apart. `host` and `source` may come back multivalue if several machines share one source IP.
@@ -141,7 +132,7 @@ Produces one result per burst of activity from a single `clientip`, where the wh
 2. Group by a start and an end condition, then filter on a field that only exists afterwards.
 
 ```spl
-sourcetype=access_* | transaction JSESSIONID clientip startswith="view" endswith="purchase" | where duration>0
+index=web sourcetype=access_combined | transaction JSESSIONID clientip startswith="view" endswith="purchase" | where duration>0
 ```
 
 The first event of each transaction must contain the string `view` and the last must contain `purchase`. The `where duration>0` clause drops sessions that completed inside the same second. That filter cannot be moved before `transaction`, because `duration` does not exist until `transaction` creates it.
@@ -149,15 +140,15 @@ The first event of each transaction must contain the string `view` and the last 
 The same sequencing applies to plain text filters, for a different reason. To return whole sessions that contain at least one rejection:
 
 ```spl
-index=main | transaction sessionid | search REJECT
+index=web | transaction sessionid | search REJECT
 ```
 
-`search REJECT` matches a transaction whose combined `_raw` contains that term, contributed by any one member, and the session comes back whole. Writing `index=main REJECT | transaction sessionid` instead discards every non-matching event before grouping, leaving one-event transactions with `duration=0`. Pre-filter on terms every member carries, such as the index, the sourcetype, or the session id; filter after `transaction` on terms only some members carry.
+`search REJECT` matches a transaction whose combined `_raw` contains that term, contributed by any one member, and the session comes back whole. Writing `index=web REJECT | transaction sessionid` instead discards every non-matching event before grouping, leaving one-event transactions with `duration=0`. Pre-filter on terms every member carries, such as the index, the sourcetype, or the session id; filter after `transaction` on terms only some members carry.
 
 3. Bound the group by event count as well as time.
 
 ```spl
-sourcetype=access_* action=purchase | transaction clientip maxspan=10m maxevents=3
+index=web sourcetype=access_combined action=purchase | transaction clientip maxspan=10m maxevents=3
 ```
 
 Defines a purchase transaction as at most 3 events from one IP inside a 10 minute window. The filtering happens before the first pipe, which the docs say makes any search faster, and `transaction` is the command you least want to feed unfiltered. It is safe here because every event of interest carries `action=purchase`.
@@ -165,7 +156,7 @@ Defines a purchase transaction as at most 3 events from one IP inside a 10 minut
 4. Report on transactions. This is the whole of 3.5: everything happens after the `transaction` command.
 
 ```spl
-sourcetype=access_* | transaction JSESSIONID maxpause=30m
+index=web sourcetype=access_combined | transaction JSESSIONID maxpause=30m
 | search closed_txn=1
 | where eventcount>3
 | eval duration_min=round(duration/60,2)
@@ -177,7 +168,7 @@ sourcetype=access_* | transaction JSESSIONID maxpause=30m
 5. Keep the events that did not form a transaction, and the ones memory pressure threw away.
 
 ```spl
-sourcetype=access_* | transaction clientip maxspan=5m keeporphans=true keepevicted=true
+index=web sourcetype=access_combined | transaction clientip maxspan=5m keeporphans=true keepevicted=true
 | eval status=case(_txn_orphan==1,"orphan", closed_txn==0,"evicted", 1==1,"closed")
 | stats count BY status
 ```
@@ -187,7 +178,7 @@ This is a diagnostic search, not a reporting search. It tells you how much of yo
 6. Show what `mvlist` changes.
 
 ```spl
-sourcetype=access_* | transaction clientip maxspan=1m mvlist=true
+index=web sourcetype=access_combined | transaction clientip maxspan=1m mvlist=true
 ```
 
 With the default `mvlist=false`, a field such as `action` comes back as the unique set of its values ordered alphabetically. With `mvlist=true` it comes back as every value from every member event, in arrival order, duplicates included. Use `mvlist=action,status` to get list rendering for only those two fields and set rendering for the rest.
@@ -195,11 +186,11 @@ With the default `mvlist=false`, a field such as `action` comes back as the uniq
 7. The same problem solved both ways. This is the 3.6 pattern the exam draws from directly.
 
 ```spl
-sourcetype=access_* | transaction JSESSIONID | stats count BY duration
+index=web sourcetype=access_combined | transaction JSESSIONID | stats count BY duration
 ```
 
 ```spl
-sourcetype=access_* | stats range(_time) AS duration, count AS eventcount, min(_time) AS _time, values(action) AS actions, earliest(referer) AS entry_page, latest(action) AS exit_action BY JSESSIONID | stats count BY duration
+index=web sourcetype=access_combined | stats range(_time) AS duration, count AS eventcount, min(_time) AS _time, values(action) AS actions, earliest(referer) AS entry_page, latest(action) AS exit_action BY JSESSIONID | stats count BY duration
 ```
 
 Both give the distribution of session durations. The `stats` version is a transforming command that distributes across indexers, discards `_raw`, and has no open-transaction pool to blow. The docs give the identical pair for trades, `... | transaction trade_id | chart count by duration span=log2` and `... | stats range(_time) as duration by trade_id | chart count by duration span=log2`, and the `stats` form is correct only because `trade_id` is unique. If `trade_id` values are reused, the docs say the only solution is `... | transaction trade_id endswith=END`, or `... | transaction trade_id maxpause=10m` when the reuse is separated by time rather than marked by a message.
@@ -309,7 +300,7 @@ Other correlation approaches named in the docs chapter, and when the exam would 
 
 **T-03-18** `connected=false` is offered as a way to change time behaviour. Wrong belief: `connected` affects `maxspan` or `maxpause`. Correct fact: `connected` is only relevant when a field or field list is specified, and it governs one narrow case: an event that carries the transaction's required fields but where none of those fields has yet been instantiated in the open transaction.
 
-**T-03-19** The Apress book's "1000 event max" is read as a hard product ceiling. Wrong belief: transactions can never exceed 1000 events. Correct fact: the accurate phrasing is that by default there is a limit of 1000 events per transaction. `1000` is the `maxevents` default, it is settable per search or per `transactiontypes.conf` stanza, and a negative value removes the limit entirely. The other ceilings are `maxopentxn` (`5000` by default) and `maxopenevents` (`100000` by default), and those cause eviction rather than truncation. Direction matters too: a group that runs past 1000 events argues for `stats`, never for `transaction`.
+**T-03-19** The "1000 event max" is read as a hard product ceiling. Wrong belief: transactions can never exceed 1000 events. Correct fact: the accurate phrasing is that by default there is a limit of 1000 events per transaction. `1000` is the `maxevents` default, it is settable per search or per `transactiontypes.conf` stanza, and a negative value removes the limit entirely. The other ceilings are `maxopentxn` (`5000` by default) and `maxopenevents` (`100000` by default), and those cause eviction rather than truncation. Direction matters too: a group that runs past 1000 events argues for `stats`, never for `transaction`.
 
 **T-03-20** `keepevicted` is confused with `keeporphans`. Wrong belief: they do the same thing. Correct fact: `keepevicted=true` outputs transactions that memory pressure or a missing close condition left open, identified by `closed_txn=0`. `keeporphans=true` outputs events that never belonged to any transaction, identified by `_txn_orphan=1`. Both default to `false`. Note that `transactiontypes.conf.spec` describes the eviction marker as an `evicted` field; the `transaction` command reference, which is the authority for the command, uses `closed_txn`.
 
@@ -317,18 +308,18 @@ Other correlation approaches named in the docs chapter, and when the exam would 
 
 **T-03-22** A question lists the fields a bare `... | transaction JSESSIONID` adds and slips `maxspan` into the list. Wrong belief: the options that shape a group come back as fields. Correct fact: `maxspan`, `maxpause`, and `maxevents` are inputs only. The command adds `duration` and `eventcount`, sets `closed_txn`, and creates `_txn_orphan` and `transactiontype` only under the relevant options. No field named `transaction` exists either, so filters shaped like `where transaction="REJECT"` match nothing.
 
-**T-03-23** `index=main REJECT | transaction sessionid` is offered as the way to see the sessions containing a rejection. Wrong belief: pre-filtering on a term is the same as filtering the finished groups. Correct fact: the pre-pipe term discards every event that does not carry it, so each session contributes only its `REJECT` events and you get one-event transactions with `duration=0`. Group first, then `| search REJECT`, which matches the preserved `_raw` of any member and returns the whole session.
+**T-03-23** `index=web REJECT | transaction sessionid` is offered as the way to see the sessions containing a rejection. Wrong belief: pre-filtering on a term is the same as filtering the finished groups. Correct fact: the pre-pipe term discards every event that does not carry it, so each session contributes only its `REJECT` events and you get one-event transactions with `duration=0`. Group first, then `| search REJECT`, which matches the preserved `_raw` of any member and returns the whole session.
 
 **T-03-24** `streamstats` is offered as the efficient way to group events by fields in a large environment. Wrong belief: `streamstats` is a cheaper `stats`. Correct fact: `streamstats` adds running aggregates to each event as it passes and returns every event; it never collapses events into a group. The grouping commands are `stats` and `transaction`, recommended by the docs over `join` and `append`.
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.
 
 Step 1, build a transaction and read its contract. In Splunk Web open Search & Reporting, set the time range to All time, and run:
 
 ```spl
-sourcetype=access_* | transaction JSESSIONID maxspan=30m maxpause=10m
+index=web sourcetype=access_combined | transaction JSESSIONID maxspan=30m maxpause=10m
 | table _time JSESSIONID duration eventcount closed_txn action
 ```
 
@@ -339,7 +330,7 @@ Step 2, prove that field rendering is controlled by `mvlist`. Run the same searc
 Step 3, prove the `closed_txn` rule. Run:
 
 ```spl
-sourcetype=access_* | transaction JSESSIONID endswith="purchase" keepevicted=true | stats count BY closed_txn
+index=web sourcetype=access_combined | transaction JSESSIONID endswith="purchase" keepevicted=true | stats count BY closed_txn
 ```
 
 Then run it again with `maxspan=30m` added. The first search returns everything under `closed_txn=0` because `endswith` alone does not close a transaction. Adding `maxspan` moves rows into `closed_txn=1`.
@@ -355,7 +346,7 @@ You get a single transaction with `eventcount=10` and `duration=90`, which is wr
 Step 5, create a reusable transaction type. Create `$SPLUNK_HOME/etc/system/local/transactiontypes.conf` with:
 
 ```ini
-[buttercup_session]
+[web_session]
 fields = JSESSIONID
 maxspan = 30m
 maxpause = 10m
@@ -366,23 +357,23 @@ mvlist = false
 In Splunk Web go to Settings, then Server controls, then Restart Splunk. After the restart, verify with:
 
 ```spl
-sourcetype=access_* | transaction name=buttercup_session | stats count AS transactions, avg(duration) AS avg_seconds, max(eventcount) AS biggest
+index=web sourcetype=access_combined | transaction name=web_session | stats count AS transactions, avg(duration) AS avg_seconds, max(eventcount) AS biggest
 ```
 
 Then confirm that an inline option overrules the stanza:
 
 ```spl
-sourcetype=access_* | transaction name=buttercup_session maxevents=3 | stats max(eventcount) AS biggest
+index=web sourcetype=access_combined | transaction name=web_session maxevents=3 | stats max(eventcount) AS biggest
 ```
 
 `biggest` must now be `3` or less.
 
-Step 6, save the report. With the step 5 verification search finalized, click Save As, select Report, title it `buttercup_session_summary`, and save.
+Step 6, save the report. With the step 5 verification search finalized, click Save As, select Report, title it `web_session_summary`, and save.
 
 Verification search that proves the whole lab worked:
 
 ```spl
-sourcetype=access_* | transaction name=buttercup_session keeporphans=true keepevicted=true
+index=web sourcetype=access_combined | transaction name=web_session keeporphans=true keepevicted=true
 | eval bucket=case(_txn_orphan==1,"orphan", closed_txn==0,"open_or_evicted", 1==1,"closed")
 | stats count AS results, sum(eventcount) AS events BY bucket
 ```
@@ -391,7 +382,7 @@ If `transactiontypes.conf` was picked up you get results in the `closed` bucket 
 
 ## Self-check
 
-1. A search reads `index=web sourcetype=access_* | transaction clientip`. What are the defaults in effect for `maxspan`, `maxpause`, and `maxevents`?
+1. A search reads `index=web sourcetype=access_combined | transaction clientip`. What are the defaults in effect for `maxspan`, `maxpause`, and `maxevents`?
 
    A. `maxspan=-1`, `maxpause=-1`, `maxevents=1000`
    B. `maxspan=30s`, `maxpause=5s`, `maxevents=1000`

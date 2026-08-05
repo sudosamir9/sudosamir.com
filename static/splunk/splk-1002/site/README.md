@@ -28,7 +28,7 @@ Output mirrors the source tree, so the 166 markdown cross-links already in the g
 | Start here | README, exam overview, lab setup, final review sheet |
 | Sections | 11 topic pages, each paired with its cram sheet |
 | Reference | 11 files, including the 292-row trap inventory and the 154-link docs index |
-| Practice and sources | 6 files, drill instructions through to the Apress errata |
+| Practice and sources | 3 files: drill instructions, the attempt tracker and the weak-areas sheet |
 
 ## What it does
 
@@ -56,9 +56,9 @@ Also: breadcrumbs, a version badge, previous and next links, a reading-progress 
 
 ## Exam simulator
 
-`site/exam/` is a second app on the same data: 200 questions, two modes, no server. 106 are transcribed from the Udemy practice course and fact-checked against the documentation; 94 are written for this guide, one file per blueprint section under `practice/authored/`, apportioned to the blueprint weights.
+`site/exam/` is a second app on the same data: 200 questions, two modes, no server. 106 are transcribed from a third-party practice-test course and fact-checked against the documentation; 94 are written for this guide, one file per blueprint section under `practice/authored/`, apportioned to the blueprint weights.
 
-**Practice** shows one question at a time. Submitting reveals the verified answer, the course's explanation, every exam trap the question bites with its wrong belief and correct fact, the per-option reasoning for every distractor on the authored questions and wherever the course supplied it, the documented corrections where the course's own explanation is wrong, the fact-check verdict, the documentation links, and a link into the topic file that teaches it. Pools: everything, not yet seen, previously missed, flagged, any of the five original Udemy tests, any of the ten authored section sets, or any single blueprint section.
+**Practice** shows one question at a time. Submitting reveals the verified answer, the source explanation, every exam trap the question bites with its wrong belief and correct fact, the per-option reasoning for every distractor on the authored questions and wherever the course supplied it, the documented corrections where the course's own explanation is wrong, the fact-check verdict, the documentation links, and a link into the topic file that teaches it. Pools: everything, not yet seen, previously missed, flagged, any of the five original transcribed tests, any of the ten authored section sets, or any single blueprint section.
 
 **Mock exam** is 65 questions in 60 minutes with a countdown, a question navigator, flagging, and no feedback until submission. The draw is fresh each sitting and apportioned to the blueprint weights by largest remainder, then capped by what each section actually holds. The cap mattered when the bank was 106: section 6.0 held only five mock-eligible questions against a target of 6.5. With 200 questions every section clears its target, and the capping logic stays because it is what makes a short section degrade gracefully rather than silently shrink the exam. Results break down by section and replay every missed question with the full review panel.
 

@@ -22,7 +22,7 @@ Why the `date_*` fields are a trap rather than a convenience:
 The portable replacement is always to derive from `_time`:
 
 ```spl
-index=main sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | eval hour = strftime(_time, "%H"), wday = strftime(_time, "%A")
 | stats count BY hour
 ```
@@ -30,7 +30,7 @@ index=main sourcetype=access_combined_wcookie
 `_indextime` earns its keep for one job: measuring ingest lag, and finding events that arrived long after they happened.
 
 ```spl
-index=main earliest=-7d@d latest=now
+index=web earliest=-7d@d latest=now
 | eval lag_seconds = _indextime - _time
 | stats avg(lag_seconds) AS avg_lag max(lag_seconds) AS worst_lag BY sourcetype
 ```
@@ -53,13 +53,13 @@ Rules that decide questions:
 - The two index-time modifiers are written with a leading underscore. The docs are explicit about the pairing requirement: "When using index-time based modifiers such as `_index_earliest` and `_index_latest`, your search must also have an event-time window which will retrieve the events." A search for events indexed in the last hour whose event time is three days old needs a wide `earliest` as well, or it returns nothing and looks broken.
 
 ```spl
-index=main earliest=-30d@d latest=now _index_earliest=-1h@h _index_latest=@h
+index=web earliest=-30d@d latest=now _index_earliest=-1h@h _index_latest=@h
 ```
 
 Absolute times use the `timeformat` default `%m/%d/%Y:%H:%M:%S`, quoted:
 
 ```spl
-index=main earliest="11/15/2022:20:00:00" latest="11/22/2022:20:00:00"
+index=web earliest="11/15/2022:20:00:00" latest="11/22/2022:20:00:00"
 ```
 
 ## 3. Relative time syntax in full
@@ -271,7 +271,7 @@ A historical search reads events that are already indexed, over a bounded range,
 Real-time ranges use the same relative grammar with an `rt` prefix, `rt[+|-]<time_integer><time_unit>@<time_unit>`:
 
 ```spl
-index=main sourcetype=access_combined_wcookie status=503 earliest=rt-5m latest=rt
+index=web sourcetype=access_combined status=503 earliest=rt-5m latest=rt
 ```
 
 | Aspect | Windowed real-time | All time (real-time) |

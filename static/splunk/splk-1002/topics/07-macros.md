@@ -12,11 +12,6 @@ Search macros are reusable chunks of SPL substituted into a search as text befor
 
 > The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.
 
-| Source | Coverage | Honest assessment |
-| --- | --- | --- |
-| Udemy, Splunk: Zero to Power User (Hailie Shaw), Modules 19A and 19B | Creating a macro in Splunk Web, using it in a search, adding arguments | Correct on mechanics and backtick syntax. Thin on validation, eval-based definitions, nested macros, and macros.conf. |
-| Apress, Splunk Certified Study Guide (Deep Mehta, 2021), Chapter 3, "Create a Macro Using Splunk Web" and "Create a Macro Using the .conf File" | One zero-argument macro, created twice | Materially incomplete. Arguments, the argument count in the stanza name, validation, errormsg, and iseval are all absent, so 7.3 and 7.4 are never covered. It also states that editing macros.conf requires a full restart, which the Admin Manual contradicts. Record that in source-notes. |
-
 ## What it is
 
 The Knowledge Management Manual states it plainly: "Search macros are reusable chunks of Search Processing Language (SPL) that you can insert into other searches. Search macros can be any part of a search, such as an eval statement or search term, and do not need to be a complete command."
@@ -46,7 +41,7 @@ Each macros.conf stanza is one macro, and because the stanza name carries the ar
 Invocation uses backtick characters, one before the macro name and one after. On most English-language keyboards the backtick shares a key with the tilde.
 
 ```spl
-sourcetype=access_* | `mymacro`
+index=web sourcetype=access_combined | `mymacro`
 ```
 
 Because the reference becomes ordinary search text before parsing, it carries no placement rule of its own: it can open a search, sit mid-pipeline, or be followed by a pipe and any number of further commands, as the manual's example above shows. What it does need is visibility. The user must have read permission on the macro and must be searching from an app context where it resolves; ownership is not part of it. The one placement rule that does exist runs the other way and concerns generating commands, below.
@@ -82,11 +77,11 @@ The same seven things are the macros.conf settings, plus an optional description
 ```ini
 [bc_status_band(2)]
 args = lo, hi
-definition = index=main sourcetype=access_combined_wcookie status>=$lo$ status<$hi$
+definition = index=web sourcetype=access_combined status>=$lo$ status<$hi$
 validation = isnum($lo$) AND isnum($hi$)
 errormsg = Both lo and hi must be numeric HTTP status codes.
 iseval = false
-description = Buttercup Games web access events in a half-open HTTP status range.
+description = Web access events in a half-open HTTP status range.
 ```
 
 | macros.conf setting | Values | Default | What it does |
@@ -105,42 +100,42 @@ Nesting is supported and, per the spec, "nesting can be indefinite and cycles wi
 
 ## Result contract
 
-A macro has no result contract of its own: it is not a command, so it creates no fields, drops none, and changes no row or column shape. The contract of a search containing a macro is entirely that of the expanded SPL, and whether the search is streaming or transforming is decided by the commands the macro expanded into. A macro expanding to `stats count by product_name` makes the search transforming at that point; one expanding to `eval margin=price-sale_price` leaves it streaming.
+A macro has no result contract of its own: it is not a command, so it creates no fields, drops none, and changes no row or column shape. The contract of a search containing a macro is entirely that of the expanded SPL, and whether the search is streaming or transforming is decided by the commands the macro expanded into. A macro expanding to `stats count by categoryId` makes the search transforming at that point; one expanding to `eval ratio=bytes/1024` leaves it streaming.
 
 The one output a macro produces directly is the expansion preview. With the cursor in the search bar, press Control-Shift-E on Linux and Windows, or Command-Shift-E on macOS. The preview shows the expanded search string including all nested search macros and saved searches, and offers Open in Search. Using the macros defined below:
 
 | Search as typed | Search after expansion |
 | --- | --- |
-| `` `bc_web` `` | `index=main sourcetype=access_combined_wcookie` |
-| `` `bc_purchases` `` | `index=main sourcetype=access_combined_wcookie action=purchase` |
-| `` `bc_status_band(400,500)` `` | `index=main sourcetype=access_combined_wcookie status>=400 status<500` |
+| `` `bc_web` `` | `index=web sourcetype=access_combined` |
+| `` `bc_purchases` `` | `index=web sourcetype=access_combined action=purchase` |
+| `` `bc_status_band(400,500)` `` | `index=web sourcetype=access_combined status>=400 status<500` |
 | `` `bc_span(3600)` `` (eval-based) | `span=1h` |
 
 Failure modes are part of the contract too. An unknown macro name, or one not visible from the current app, errors and the search does not run. Calling with the wrong number of arguments looks for a stanza with that count and errors if there is none; it does not silently fall back. A failed validation expression stops the search before dispatch, so you get an error rather than zero results.
 
 ## Worked examples
 
-Splunk tutorial data (Buttercup Games) in index=main, sourcetypes access_combined_wcookie, vendor_sales, secure.
+The practice dataset from lab setup: index=web, index=security, index=cisco.
 
 ### 1. Zero-argument macro standardising the index and sourcetype prefix
 
-Macro `bc_web`, no arguments, definition `index=main sourcetype=access_combined_wcookie`.
+Macro `bc_web`, no arguments, definition `index=web sourcetype=access_combined`.
 
 ```spl
 `bc_web` status=200 | stats count by action
 ```
 
-Expands to `index=main sourcetype=access_combined_wcookie status=200 | stats count by action` and returns a two-column table, action and count, one row per distinct action. Highest-value real-world use: the index and sourcetype pair is written once, so every search stays correct when the index is renamed.
+Expands to `index=web sourcetype=access_combined status=200 | stats count by action` and returns a two-column table, action and count, one row per distinct action. Highest-value real-world use: the index and sourcetype pair is written once, so every search stays correct when the index is renamed.
 
 ### 2. Nested macro
 
 Macro `bc_purchases`, no arguments, definition `` `bc_web` action=purchase ``.
 
 ```spl
-`bc_purchases` | stats sum(price) as revenue by product_name | sort - revenue
+`bc_purchases` | stats sum(bytes) as revenue by categoryId | sort - revenue
 ```
 
-Expansion runs in two passes: `bc_purchases` becomes `` `bc_web` action=purchase ``, then `bc_web` becomes the index and sourcetype terms. Result: a two-column table, product_name and revenue, sorted descending.
+Expansion runs in two passes: `bc_purchases` becomes `` `bc_web` action=purchase ``, then `bc_web` becomes the index and sourcetype terms. Result: a two-column table, categoryId and revenue, sorted descending.
 
 ### 3. Wrapping an expensive transaction, plus a parameterised span
 
@@ -154,7 +149,7 @@ Invoked as `` `pageviews_per_session(span=1h)` ``. The argument value is the who
 
 ### 4. Two arguments with Boolean validation
 
-Name `bc_status_band(2)`, Arguments `lo, hi`, definition `index=main sourcetype=access_combined_wcookie status>=$lo$ status<$hi$`, validation expression `isnum($lo$) AND isnum($hi$)`, validation error message `Both lo and hi must be numeric HTTP status codes.`
+Name `bc_status_band(2)`, Arguments `lo, hi`, definition `index=web sourcetype=access_combined status>=$lo$ status<$hi$`, validation expression `isnum($lo$) AND isnum($hi$)`, validation error message `Both lo and hi must be numeric HTTP status codes.`
 
 ```spl
 `bc_status_band(400,500)` | stats count by status, uri_path | sort - count
@@ -164,13 +159,13 @@ Returns client-error events only, as a three-column table. Called as `` `bc_stat
 
 ### 5. Non-Boolean validation with validate()
 
-Name `bc_top(1)`, Arguments `count`, definition `index=main sourcetype=access_combined_wcookie action=purchase | top limit=$count$ product_name`, validation expression:
+Name `bc_top(1)`, Arguments `count`, definition `index=web sourcetype=access_combined action=purchase | top limit=$count$ categoryId`, validation expression:
 
 ```spl
 validate(isnum($count$), "count must be a number", $count$ > 0 AND $count$ <= 100, "count must be between 1 and 100")
 ```
 
-validate() "takes a list of conditions and values and returns the value that corresponds to the condition that evaluates to FALSE" and defaults to NULL when all conditions are true. Because this expression is not Boolean, NULL means success and any returned string is itself the message, so the Validation error message field is unused. `` `bc_top(10)` `` returns the standard top output (product_name, count, percent), ten rows. `` `bc_top(500)` `` never runs and reports "count must be between 1 and 100".
+validate() "takes a list of conditions and values and returns the value that corresponds to the condition that evaluates to FALSE" and defaults to NULL when all conditions are true. Because this expression is not Boolean, NULL means success and any returned string is itself the message, so the Validation error message field is unused. `` `bc_top(10)` `` returns the standard top output (categoryId, count, percent), ten rows. `` `bc_top(500)` `` never runs and reports "count must be between 1 and 100".
 
 ### 6. Eval-based definition
 
@@ -180,7 +175,7 @@ Name `bc_span(1)`, Arguments `seconds`, Use eval-based definition? checked, defi
 `bc_web` | timechart `bc_span(3600)` count by status
 ```
 
-Substitution happens first, so the expression evaluated is `if(3600 >= 86400, "span=1d", "span=1h")`, which returns the string `span=1h`, and that string is spliced into the search. The final search is `index=main sourcetype=access_combined_wcookie | timechart span=1h count by status`. Two syntax points catch people: the expression must return a string, so literal SPL text inside it needs double quotation marks, and the whole thing must still be valid eval syntax after substitution.
+Substitution happens first, so the expression evaluated is `if(3600 >= 86400, "span=1d", "span=1h")`, which returns the string `span=1h`, and that string is spliced into the search. The final search is `index=web sourcetype=access_combined | timechart span=1h count by status`. Two syntax points catch people: the expression must return a string, so literal SPL text inside it needs double quotation marks, and the whole thing must still be valid eval syntax after substitution.
 
 ## Decision rules
 
@@ -211,7 +206,7 @@ Substitution happens first, so the expression evaluated is `if(3600 >= 86400, "s
 
 **T-07-06** A validation failure is an error, not an empty result set. Wrong belief: a bad argument yields zero events. Correct: validation runs before dispatch, so the search does not run and the user sees the validation error message.
 
-**T-07-07** Editing macros.conf does not require a restart. Wrong belief, stated outright by the Apress guide: a full restart is needed. Correct: the Admin Manual page on when to restart lists macros.conf among search-time files whose settings take effect without one, and refreshing the endpoints is sufficient. The line inside macros.conf.spec reading "You must restart the Splunk instance to enable configuration changes" is generic boilerplate copied into every spec file.
+**T-07-07** Editing macros.conf does not require a restart. Wrong belief, stated outright in some secondary material: a full restart is needed. Correct: the Admin Manual page on when to restart lists macros.conf among search-time files whose settings take effect without one, and refreshing the endpoints is sufficient. The line inside macros.conf.spec reading "You must restart the Splunk instance to enable configuration changes" is generic boilerplate copied into every spec file.
 
 **T-07-08** Macros are not part of the search-time operations sequence. Wrong belief: macro expansion sits among field aliases, calculated fields, and lookups and obeys the same precedence reasoning. Correct: the documented nine-step sequence contains no macro step, because expansion is textual and precedes parsing.
 
@@ -233,23 +228,23 @@ Substitution happens first, so the expression evaluated is `if(3600 >= 86400, "s
 
 **T-07-17** Macros live under Advanced search, not Fields. Wrong belief: macros are configured in Settings, then Fields, with the other search-time objects, or under Searches, reports, and alerts because a macro is search text. Correct, verbatim: "Select Settings > Advanced Search > Search macros."
 
-**T-07-18** A pipe may follow a macro reference. Wrong belief: a macro has to end the search, or piping after a reference requires the macro to be shared globally. Correct: a reference behaves like the text it becomes, and the manual's own example pipes into one (`` sourcetype=access_* | `mymacro` ``) with nothing stopping further commands after it. Sharing decides whether the macro resolves, not what may follow it.
+**T-07-18** A pipe may follow a macro reference. Wrong belief: a macro has to end the search, or piping after a reference requires the macro to be shared globally. Correct: a reference behaves like the text it becomes, and the manual's own example pipes into one (`` index=web sourcetype=access_combined | `mymacro` ``) with nothing stopping further commands after it. Sharing decides whether the macro resolves, not what may follow it.
 
 ## Lab
 
-Fifteen minutes, single-node Splunk Enterprise 10.x, tutorial data in index=main.
+Fifteen minutes, single-node Splunk Enterprise 10.x, the practice dataset loaded.
 
-1. Go to Settings, then Advanced search, then Search macros, then create a new macro. Destination app: Search and Reporting. Name: `bc_web`. Definition: `index=main sourcetype=access_combined_wcookie`. Leave Use eval-based definition? unchecked and Arguments, Validation expression, and Validation error message empty. Save.
+1. Go to Settings, then Advanced search, then Search macros, then create a new macro. Destination app: Search and Reporting. Name: `bc_web`. Definition: `index=web sourcetype=access_combined`. Leave Use eval-based definition? unchecked and Arguments, Validation expression, and Validation error message empty. Save.
 2. Create another macro. Name: `bc_purchases`. Definition: `` `bc_web` action=purchase ``. Save.
-3. Create a third. Name: `bc_status_band(2)`. Definition: `index=main sourcetype=access_combined_wcookie status>=$lo$ status<$hi$`. Arguments: `lo, hi`. Validation expression: `isnum($lo$) AND isnum($hi$)`. Validation error message: `Both lo and hi must be numeric HTTP status codes.` Save.
+3. Create a third. Name: `bc_status_band(2)`. Definition: `index=web sourcetype=access_combined status>=$lo$ status<$hi$`. Arguments: `lo, hi`. Validation expression: `isnum($lo$) AND isnum($hi$)`. Validation error message: `Both lo and hi must be numeric HTTP status codes.` Save.
 4. On the Search macros listing page, in the `bc_web` row, click Permissions. Set "Object should appear in" to All apps, give Everyone Read, and Save.
-5. Run the nested macro over a time range that covers the tutorial data:
+5. Run the nested macro over a time range that covers the practice data (All time):
 
 ```spl
-`bc_purchases` | stats sum(price) as revenue by product_name | sort - revenue
+`bc_purchases` | stats sum(bytes) as revenue by categoryId | sort - revenue
 ```
 
-6. With the cursor in the search bar, press Control-Shift-E (Command-Shift-E on macOS). Confirm the preview reads `index=main sourcetype=access_combined_wcookie action=purchase | stats sum(price) as revenue by product_name | sort - revenue`, proving both levels of nesting resolved.
+6. With the cursor in the search bar, press Control-Shift-E (Command-Shift-E on macOS). Confirm the preview reads `index=web sourcetype=access_combined action=purchase | stats sum(bytes) as revenue by categoryId | sort - revenue`, proving both levels of nesting resolved.
 7. Trigger validation failure deliberately with `` `bc_status_band(four_hundred,500)` `` and confirm you get the error message, not an empty table.
 8. Run the valid form and confirm real results:
 
@@ -295,7 +290,7 @@ Fifteen minutes, single-node Splunk Enterprise 10.x, tutorial data in index=main
    C. Macro references inside quoted values are not expanded, but argument tokens are substituted even inside quotation marks
    D. Argument tokens inside quoted values are not substituted, but macro references are expanded
 
-5. A macro definition is `tstats count where index=main by sourcetype`. How should it be referenced?
+5. A macro definition is `tstats count where index=web by sourcetype`. How should it be referenced?
 
    A. `` `mymacro` ``
    B. `` | `mymacro` ``
@@ -360,7 +355,7 @@ Fifteen minutes, single-node Splunk Enterprise 10.x, tutorial data in index=main
 
 7. **C.** Expansion is textual and precedes parsing, which is why the search-time operations sequence has no macro entry. A and B place macros inside that sequence, whose real members are field filters, field extractions, field aliasing, calculated fields, lookups, event types, and tags. D is wrong because macros are a search-time object stored in macros.conf and have nothing to do with index-time processing.
 
-8. **C.** The Admin Manual lists macros.conf among the search-time files that do not require a restart. A is the specific error the Apress guide makes. B is wrong additionally because macros are a search-head-tier object. D is wrong because Splunk Web reads the same macros.conf layer stack, subject to configuration file precedence.
+8. **C.** The Admin Manual lists macros.conf among the search-time files that do not require a restart. A is the specific error circulating material makes. B is wrong additionally because macros are a search-head-tier object. D is wrong because Splunk Web reads the same macros.conf layer stack, subject to configuration file precedence.
 
 9. **B.** The argument count is part of a macro's identity, so `[peak_hours]` and a hypothetical `[peak_hours(2)]` are different objects; a two-value invocation looks for the two-argument stanza, finds nothing, and errors. A is the silent-fallback belief: there is no fallback to the zero-argument form. C is wrong because substitution only happens into `$name$` tokens, and this definition contains none. D states a rule that does not exist: a pipe may follow a macro reference, and here the reference itself is what fails.
 

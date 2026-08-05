@@ -34,17 +34,17 @@ document.documentElement.dataset.theme=s;})();</script>
 </details>
 <details class="tree-group" open>
 <summary>Sections</summary>
-<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
-<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span><span class="tree-chip">cram</span></a>
+<a class="tree-item" href="../topics/00-foundations-refresher.html"><span class="tree-sec">0.0</span><span class="tree-label">Foundations refresher</span></a>
+<a class="tree-item" href="../topics/01-transforming-commands.html"><span class="tree-sec">1.0</span><span class="tree-label">Transforming commands</span><span class="tree-wt">5%</span></a>
+<a class="tree-item" href="../topics/02-filtering-and-formatting.html"><span class="tree-sec">2.0</span><span class="tree-label">Filtering and formatting</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/03-correlating-events.html"><span class="tree-sec">3.0</span><span class="tree-label">Correlating events</span><span class="tree-wt">15%</span></a>
+<a class="tree-item" href="../topics/04-field-extractions.html"><span class="tree-sec">4.0</span><span class="tree-label">Field extractions</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/05-aliases-and-calculated-fields.html"><span class="tree-sec">5.0</span><span class="tree-label">Aliases and calculated fields</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/06-tags-and-event-types.html"><span class="tree-sec">6.0</span><span class="tree-label">Tags and event types</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/07-macros.html"><span class="tree-sec">7.0</span><span class="tree-label">Macros</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/08-workflow-actions.html"><span class="tree-sec">8.0</span><span class="tree-label">Workflow actions</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/09-data-models-and-pivot.html"><span class="tree-sec">9.0</span><span class="tree-label">Data models and pivot</span><span class="tree-wt">10%</span></a>
+<a class="tree-item" href="../topics/10-cim.html"><span class="tree-sec">10.0</span><span class="tree-label">CIM</span><span class="tree-wt">10%</span></a>
 </details>
 <details class="tree-group" open>
 <summary>Reference</summary>
@@ -65,9 +65,6 @@ document.documentElement.dataset.theme=s;})();</script>
 <a class="tree-item" href="../practice/README.html"><span class="tree-label">How to drill</span></a>
 <a class="tree-item" href="../practice/tracker.html"><span class="tree-label">Attempt tracker</span></a>
 <a class="tree-item" href="../practice/weak-areas.html"><span class="tree-label">Weak areas</span></a>
-<a class="tree-item" href="../source-notes/apress-errata.html"><span class="tree-label">Apress errata</span></a>
-<a class="tree-item" href="../source-notes/apress-part1-notes.html"><span class="tree-label">Apress part 1 notes</span></a>
-<a class="tree-item" href="../source-notes/udemy-module-map.html"><span class="tree-label">Udemy module map</span></a>
 <a class="tree-item" href="../exam/index.html"><span class="tree-label">Exam simulator</span></a>
 </details>
     </nav>
@@ -287,13 +284,13 @@ document.documentElement.dataset.theme=s;})();</script>
 </tbody>
 </table></div>
 <p>Configuration file syntax for a single source type that uses six of the stages:</p>
-<pre class="plain lang-ini"><code>[access_combined_wcookie]
+<pre class="plain lang-ini"><code>[access_combined]
 EXTRACT-sessionid = JSESSIONID=(?&lt;session_id&gt;\w+)
 REPORT-ua = extract_user_agent
 KV_MODE = auto
 FIELDALIAS-client = clientip AS src_ip
 EVAL-bytes_kb = round(bytes/1024, 2)
-LOOKUP-prices = prices_lookup productId OUTPUTNEW product_name, price</code></pre>
+LOOKUP-users = mock_users ip_address AS clientip OUTPUTNEW state, email</code></pre>
 <h2 id="the-consequences-table">The consequences table<a class="anchor" href="#the-consequences-table" aria-label="Link to this section">#</a></h2>
 <p>This is the payload. Every row is a question a paper writer can ask directly. &quot;Silently returns nothing&quot; is the correct failure mode to remember: Splunk does not error, the field is simply absent and the search returns zero rows or null values.</p>
 <div class="tw"><table>
@@ -429,7 +426,7 @@ LOOKUP-prices = prices_lookup productId OUTPUTNEW product_name, price</code></pr
 <p class="trap" id="T-KO-01"><span class="tid">T-KO-01</span> The six-step folk order versus the nine documented operations. <span class="wrong">Wrong belief</span>: the sequence is extraction, alias, calculated field, lookup, event type, tag, full stop. <span class="right">Correct fact</span>: the 10.4 docs list nine operations. Field filters is number 1, and field extraction is three separate operations, inline <code>EXTRACT-</code> at 2, transform-based <code>REPORT-</code> at 3, and automatic key-value extraction via <code>KV_MODE</code> at 4. The six-step version is items 2 through 9 collapsed.</p>
 <p class="trap" id="T-KO-02"><span class="tid">T-KO-02</span> Reversing aliases and calculated fields. <span class="wrong">Wrong belief</span>: calculated fields are evaluated before field aliases because eval &quot;feels&quot; more primitive. <span class="right">Correct fact</span>: field aliasing is stage 5 and calculated fields are stage 6. The docs say &quot;Calculated fields come after field aliasing but before lookups&quot;. A calculated field can use an alias; an alias cannot use a calculated field.</p>
 <p class="trap" id="T-KO-03"><span class="tid">T-KO-03</span> An alias built on a calculated field. <span class="wrong">Wrong belief</span>: <code>FIELDALIAS-x = my_eval_field AS foo</code> produces <code>foo</code>. <span class="right">Correct fact</span>: the source field does not exist at stage 5, so nothing is aliased. Worse, since 7.2.4, if the alias field already exists on the event and the source field does not, the alias field is removed from the event.</p>
-<p class="trap" id="T-KO-04"><span class="tid">T-KO-04</span> A calculated field built on a lookup output. <span class="wrong">Wrong belief</span>: <code>EVAL-margin = price - cost</code> works when <code>price</code> comes from an automatic lookup. <span class="right">Correct fact</span>: lookups are stage 7 and calculated fields are stage 6, so <code>price</code> is null when the eval runs. The docs state calculated fields cannot reference lookups, event types, or tags.</p>
+<p class="trap" id="T-KO-04"><span class="tid">T-KO-04</span> A calculated field built on a lookup output. <span class="wrong">Wrong belief</span>: <code>EVAL-margin = bytes - cost</code> works when <code>bytes</code> comes from an automatic lookup. <span class="right">Correct fact</span>: lookups are stage 7 and calculated fields are stage 6, so <code>bytes</code> is null when the eval runs. The docs state calculated fields cannot reference lookups, event types, or tags.</p>
 <p class="trap" id="T-KO-05"><span class="tid">T-KO-05</span> An event type defined in terms of a tag. <span class="wrong">Wrong belief</span>: <code>search = tag=authentication</code> is a valid event type definition. <span class="right">Correct fact</span>: &quot;Search strings that define event types cannot reference tags, because event types are always processed and added to events before tags.&quot; The event type will match nothing.</p>
 <p class="trap" id="T-KO-06"><span class="tid">T-KO-06</span> Believing tags cannot apply to event types. <span class="wrong">Wrong belief</span>: tags are only for raw extracted fields. <span class="right">Correct fact</span>: tags run last and can be applied to any field/value pair including <code>eventtype</code>, whether the field came from index time, search time, an event type, a lookup, or a calculated field. Tagging event types is the standard CIM normalization pattern, and the Splunk Web event type form has a Tag(s) field.</p>
 <p class="trap" id="T-KO-07"><span class="tid">T-KO-07</span> Placing macros somewhere in the nine. <span class="wrong">Wrong belief</span>: macros are applied after field extraction, or macros are a search-time knowledge object like the others. <span class="right">Correct fact</span>: macros are textual substitution into the search string during parsing, before any event is fetched and before stage 1. The sequence page does not list them. <code>limits.conf</code> bounds recursion with <code>max_macro_depth</code>, default 100, described as a guardrail on the parsing phase.</p>
@@ -447,16 +444,16 @@ LOOKUP-prices = prices_lookup productId OUTPUTNEW product_name, price</code></pr
 <p class="trap" id="T-KO-19"><span class="tid">T-KO-19</span> Assuming an alias always leaves both fields present. <span class="wrong">Wrong belief</span>: aliasing is purely additive and never removes anything. <span class="right">Correct fact</span>: &quot;An alias does not replace or remove the original field name&quot;, so the source field survives. But the destination behaves conditionally: since 7.2.4, if the source field is absent and the alias field is present, the alias field is removed from the event. Use <code>ASNEW</code>, or the Splunk Web &quot;Overwrite field values&quot; checkbox, to control this.</p>
 <p class="trap" id="T-KO-20"><span class="tid">T-KO-20</span> Getting the default field set wrong. <span class="wrong">Wrong belief</span>: <code>punct</code> and <code>linecount</code> are search-time extractions, or <code>_time</code> is derived at search time. <span class="right">Correct fact</span>: default fields are added at index time. Internal fields are <code>_raw</code>, <code>_time</code>, <code>_indextime</code>, <code>_cd</code>, and <code>_bkt</code>. Default fields are <code>host</code>, <code>index</code>, <code>linecount</code>, <code>punct</code>, <code>source</code>, <code>sourcetype</code>, <code>splunk_server</code>, and <code>timestamp</code>. Default datetime fields are <code>date_hour</code>, <code>date_mday</code>, <code>date_minute</code>, <code>date_month</code>, <code>date_second</code>, <code>date_wday</code>, <code>date_year</code>, <code>date_zone</code>.</p>
 <h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
-<p><strong>1.</strong> A <code>props.conf</code> stanza for <code>sourcetype=vendor_sales</code> contains an automatic lookup that outputs <code>product_name</code>, and a calculated field <code>EVAL-label = product_name . &quot; (&quot; . VendorID . &quot;)&quot;</code>. A search on that source type returns events where <code>label</code> is null. Why?</p>
+<p><strong>1.</strong> A <code>props.conf</code> stanza for <code>index=web sourcetype=access_combined action=purchase</code> contains an automatic lookup that outputs <code>categoryId</code>, and a calculated field <code>EVAL-label = categoryId . &quot; (&quot; . clientip . &quot;)&quot;</code>. A search on that source type returns events where <code>label</code> is null. Why?</p>
 <ul>
 <li>A. The lookup ran but <code>OUTPUTNEW</code> suppressed the field</li>
-<li>B. Calculated fields are evaluated before lookups, so <code>product_name</code> did not exist yet</li>
+<li>B. Calculated fields are evaluated before lookups, so <code>categoryId</code> did not exist yet</li>
 <li>C. The concatenation operator is not valid in <code>EVAL-</code> settings</li>
 <li>D. Calculated fields cannot be scoped to a source type</li>
 </ul>
 <p><strong>2.</strong> Which of these definitions will silently match nothing?</p>
 <ul>
-<li>A. An event type whose search string is <code>sourcetype=access_combined_wcookie status=404</code></li>
+<li>A. An event type whose search string is <code>index=web sourcetype=access_combined status=404</code></li>
 <li>B. An event type whose search string is <code>tag=web_error</code></li>
 <li>C. A tag applied to the field/value pair <code>eventtype=failed_purchase</code></li>
 <li>D. A lookup whose input field is a field alias</li>
@@ -483,7 +480,7 @@ LOOKUP-prices = prices_lookup productId OUTPUTNEW product_name, price</code></pr
 <li>D. The lexicographical order of the <code>KV_MODE</code> class names</li>
 </ul>
 <details><summary>Answers</summary>
-<p><strong>1. B.</strong> Field aliasing is stage 5, calculated fields are stage 6, lookups are stage 7. The eval runs one stage before the lookup populates <code>product_name</code>, so the concatenation operates on a null and yields null. The About calculated fields page states directly that calculated fields cannot reference lookups, event types, or tags. A is wrong because <code>OUTPUTNEW</code> only declines to overwrite a field that already exists; it still adds a field that is not present. C is wrong because <code>EVAL-</code> accepts any SPL eval expression, and <code>.</code> is the standard concatenation operator. D is wrong because scoping a calculated field to a source type is the normal case; what the docs say is unsupported is scoping one to an <em>aliased</em> host, source, or source type.</p>
+<p><strong>1. B.</strong> Field aliasing is stage 5, calculated fields are stage 6, lookups are stage 7. The eval runs one stage before the lookup populates <code>categoryId</code>, so the concatenation operates on a null and yields null. The About calculated fields page states directly that calculated fields cannot reference lookups, event types, or tags. A is wrong because <code>OUTPUTNEW</code> only declines to overwrite a field that already exists; it still adds a field that is not present. C is wrong because <code>EVAL-</code> accepts any SPL eval expression, and <code>.</code> is the standard concatenation operator. D is wrong because scoping a calculated field to a source type is the normal case; what the docs say is unsupported is scoping one to an <em>aliased</em> host, source, or source type.</p>
 <p><strong>2. B.</strong> Event types are stage 8 and tags are stage 9, so a tag does not exist when the event type search is evaluated. The docs say so explicitly. A is a valid event type: <code>sourcetype</code> is a default field and <code>status</code> comes from extraction at stage 2 to 4, both earlier. C is valid and is the normal pattern, because tags run after event types, so <code>eventtype</code> is a real field by then. D is valid because aliasing is stage 5 and lookups are stage 7, and the docs give keying a lookup on an alias as the reason for that ordering.</p>
 <p><strong>3. A.</strong> Inline extractions are processed in lexicographical order of the class name, and the docs define lexicographical order as the UTF-8 encoding order, a superset of ASCII, in which uppercase letters sort before lowercase letters. <code>Alpha</code> therefore precedes <code>beta</code>. The docs' own example makes the same point in the direction that trips people: <code>EXTRACT-ZZZ</code> is processed before <code>EXTRACT-aaa</code>. B is wrong because it inverts the case rule, which is the single most common misreading of lexicographical order. C is wrong because the class name determines the order, not the position of the setting in the file; if file position mattered the docs would not warn about naming. D is wrong because processing order is a property of the configuration, not of where a match happens to occur inside the raw text.</p>
 <p><strong>4. B.</strong> Field aliases are search-time knowledge objects, evaluated on each search against <code>_raw</code> and the fields already on disk, so they apply retroactively to all existing data. A describes index-time behavior, which is the opposite case: <code>TRANSFORMS-</code>, line breaking, timestamping, host and source type assignment are baked in at index time and need a reindex. C is wrong because nothing is rewritten on disk for a search-time object, so no rebuild is involved. D is wrong because sharing scope is a permissions question, not a data-age question, and does not change whether old data is covered.</p>

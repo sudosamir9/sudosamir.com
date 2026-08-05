@@ -13,12 +13,7 @@ Two knowledge objects that add fields to events before the first pipe, and one o
 
 Exam context: 65 questions, 60 minutes total (which includes 3 minutes to review the exam agreement), entry-level. At 10%, expect roughly 6 or 7 scored items from this section.
 
-| Sub-objective | Udemy (Hailie Shaw) | Apress (Deep Mehta, 2021) | Honest note on the secondary sources |
-| --- | --- | --- | --- |
-| 5.1 Field aliases | Modules 6A, 6B | Chapter 3, Field Aliases | The Apress answer key for question E says aliases normalize over "Host, Source, Events". The scoping triple in the product is host, source, sourcetype. "Events" is not a scope, and the book's own body text contradicts the key. The Udemy modules walk the UI form correctly but never state the AS versus ASNEW semantics or what the Overwrite field values checkbox does, which is where the harder alias questions live. |
-| 5.2 Calculated fields | Modules 12A, 21A | Absent | Calculated fields as a knowledge object do not appear in the Apress book at all, so there is no answer key to distrust. Module 12A covers the `eval` command well but treats calculated fields as "eval you saved", which hides the two rules that get tested: the parallel evaluation of `EVAL-` statements inside one stanza, and the ban on referencing lookup output fields. |
-
-Read the Apress chapter for vocabulary only. Take no answer key from it without checking against help.splunk.com.
+Take no answer key from secondary material without checking it against help.splunk.com.
 
 ## What it is
 
@@ -87,7 +82,7 @@ FIELDALIAS-<class> = (<orig_field_name> AS|ASNEW <new_field_name>)+
 Multiple pairs are legal in one setting, separated by whitespace or continued with a trailing backslash:
 
 ```ini
-[vendor_sales]
+[access_combined]
 FIELDALIAS-vendor = vendor_identifier AS vendor_id \
                     vendor_identifier AS vendor_name
 FIELDALIAS-foo = user AS myuser id AS myid
@@ -118,7 +113,7 @@ The two omissions in the last row are the single most common data-entry error an
 ### Calculated field, props.conf
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 EVAL-kb = round(bytes/1024, 2)
 ```
 
@@ -138,7 +133,7 @@ Wildcards rescue this less often than people assume. The props.conf spec documen
 
 Both objects are applied per event, before the first pipe, and neither changes the number of events returned. There is no streaming versus transforming distinction here, because neither is a search command: both run during search-time schema construction, upstream of every SPL command in the pipeline.
 
-Field alias output shape, with `FIELDALIAS-cim = clientip AS src_ip` on `access_combined_wcookie`:
+Field alias output shape, with `FIELDALIAS-cim = clientip AS src_ip` on `access_combined`:
 
 | _time | clientip | src_ip | status |
 | --- | --- | --- | --- |
@@ -167,7 +162,7 @@ Calculated field output shape, with `EVAL-kb = round(bytes/1024, 2)`:
 
 If the calculated field name collides with an extracted field name, the calculated field wins. The docs are unambiguous: the calculated field overrides the extracted field even if the eval statement evaluates to null. The two documented escapes are `EVAL-field = coalesce(field, <eval expression>)` to keep the extracted value when the expression returns a value, and `EVAL-field = coalesce(<eval expression>, field)` to keep the extracted value only when the expression returns null.
 
-Because both objects run before the pipeline, both names are usable as base-search filters. `sourcetype=access_combined_wcookie src_ip=87.194.216.51 kb>50` is a valid base search. The docs demonstrate exactly this for calculated fields with `source=eqs7day-M1.csv Description=Deep`.
+Because both objects run before the pipeline, both names are usable as base-search filters. `index=web sourcetype=access_combined src_ip=87.194.216.51 kb>50` is a valid base search. The docs demonstrate exactly this for calculated fields with `source=eqs7day-M1.csv Description=Deep`.
 
 The ordered-pair consequences table. "Silent" means no error message, the field is simply absent or the expression yields null.
 
@@ -209,17 +204,17 @@ EVAL-bitrate = bytes*1000/response_time
 
 ## Worked examples
 
-These assume the Splunk tutorial dataset (Buttercup Games) is loaded, with source types `access_combined_wcookie`, `vendor_sales`, and `secure`.
+These assume the practice dataset from [lab setup](../lab-setup.md) is loaded, with source types `access_combined`, `linux_secure` and `cisco:wsa:squid`.
 
 ### 1. Alias a field, then prove the original survives
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 FIELDALIAS-cim_src = clientip AS src_ip
 ```
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | table _time, clientip, src_ip, status
 | head 5
 ```
@@ -229,29 +224,29 @@ Five rows, four columns, `clientip` and `src_ip` identical on every row. This is
 ### 2. One field, two aliases
 
 ```ini
-[vendor_sales]
-FIELDALIAS-vendor = VendorID AS vendor_id \
-                    VendorID AS vendor_identifier
+[access_combined]
+FIELDALIAS-vendor = clientip AS vendor_id \
+                    clientip AS vendor_identifier
 ```
 
 ```spl
-sourcetype=vendor_sales
-| stats dc(VendorID) AS orig, dc(vendor_id) AS a1, dc(vendor_identifier) AS a2
+index=web sourcetype=access_combined action=purchase
+| stats dc(clientip) AS orig, dc(vendor_id) AS a1, dc(vendor_identifier) AS a2
 ```
 
-One row, three columns, all three counts equal. A field can have multiple aliases. The inverse is blocked: a single alias can only apply to one field, so `AcctID AS vendor_id` alongside `VendorID AS vendor_id` is an invalid configuration in which only one of the two takes effect.
+One row, three columns, all three counts equal. A field can have multiple aliases. The inverse is blocked: a single alias can only apply to one field, so `JSESSIONID AS vendor_id` alongside `clientip AS vendor_id` is an invalid configuration in which only one of the two takes effect.
 
 ### 3. A calculated field that consumes an alias
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 FIELDALIAS-cim_src = clientip AS src_ip
 EVAL-src_first_octet = mvindex(split(src_ip,"."),0)
 EVAL-kb = round(bytes/1024, 2)
 ```
 
 ```spl
-sourcetype=access_combined_wcookie kb>50
+index=web sourcetype=access_combined kb>50
 | stats count BY src_first_octet
 | sort - count
 ```
@@ -261,13 +256,13 @@ Two things are proven at once. The eval expression reads `src_ip`, an alias, whi
 ### 4. The parallel-evaluation trap, made visible
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 EVAL-bytes = bytes * 2
 EVAL-bytes_doubled = bytes * 2
 ```
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | table bytes, bytes_doubled
 | head 5
 ```
@@ -279,12 +274,12 @@ Both columns hold the same number. The intuitive reading, that `bytes_doubled` i
 Mapping two source fields onto one normalised name cannot be done with an alias. It is done with a calculated field:
 
 ```ini
-[access_combined_wcookie]
+[access_combined]
 EVAL-ip = coalesce(clientip, ipaddress)
 ```
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | stats count(clientip) AS from_clientip, count(ip) AS normalised
 ```
 
@@ -300,8 +295,8 @@ Here the extracted `user` wins whenever it has a value, and the literal fills in
 ### 6. What a lookup can and cannot see
 
 ```ini
-[vendor_sales]
-FIELDALIAS-vendorlookup = VendorID AS vendor_key
+[access_combined]
+FIELDALIAS-vendorlookup = clientip AS vendor_key
 LOOKUP-vendors = vendors_lookup vendor_key OUTPUT VendorCountry
 EVAL-country_upper = upper(VendorCountry)
 ```
@@ -348,7 +343,7 @@ Scope rule for both objects: the target is always a host, a source, or a source 
 
 **T-05-10** Aliases and calculated fields can only be used after a pipe. Wrong belief: you must write `sourcetype=x | search src_ip=1.2.3.4` because the alias is not real until the pipeline runs. Correct fact: both objects are applied during search-time schema construction, before the first pipe, so both are valid base-search terms. The docs demonstrate `source=eqs7day-M1.csv Description=Deep` against a calculated field.
 
-**T-05-11** The scope choices are host, source, and event, or host, source, and index. Wrong belief, and the Apress book's answer key for question E encodes exactly this error with "Host, Source, Events". Correct fact: both the alias form and the calculated field form scope to a host, a source, or a source type. Nothing else. This is the same triple that every props.conf stanza type maps to.
+**T-05-11** The scope choices are host, source, and event, or host, source, and index. Wrong belief, and an answer key error found in circulating material for question E encodes exactly this error with "Host, Source, Events". Correct fact: both the alias form and the calculated field form scope to a host, a source, or a source type. Nothing else. This is the same triple that every props.conf stanza type maps to.
 
 **T-05-12** A calculated field can be scoped to an aliased source type. Wrong belief: alias a source type value, then point the `EVAL-` stanza at the alias. Correct fact: creation of a calculated field on an aliased source is not supported, and you cannot create a calculated field that is scoped to an aliased host, source, or source type. The documented workaround is to filter inside the expression instead, for example `if(response_code=200,len(app),null)`.
 
@@ -366,14 +361,14 @@ Scope rule for both objects: the target is always a host, a source, or a source 
 
 ## Lab
 
-Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutorial data loaded. Work in the Search & Reporting app throughout.
+Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded. Work in the Search & Reporting app throughout.
 
 ### Part 1: create the alias (4 minutes)
 
 1. Settings, then Fields, then Field aliases, then New Field Alias.
 2. Destination app: `search`.
 3. Name: `cim_src`.
-4. Apply to: `sourcetype`, named: `access_combined_wcookie`.
+4. Apply to: `sourcetype`, named: `access_combined`.
 5. Field aliases: left box `clientip`, right box `src_ip`.
 6. Leave Overwrite field values cleared.
 7. Save.
@@ -381,7 +376,7 @@ Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the tutori
 Verification:
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | table _time, clientip, src_ip
 | head 5
 ```
@@ -389,9 +384,9 @@ sourcetype=access_combined_wcookie
 Both columns are populated and identical. Now confirm the alias is a real search term rather than a display artefact:
 
 ```spl
-sourcetype=access_combined_wcookie src_ip=*
+index=web sourcetype=access_combined src_ip=*
 | stats count AS via_alias
-| appendcols [ search sourcetype=access_combined_wcookie clientip=* | stats count AS via_original ]
+| appendcols [ search index=web sourcetype=access_combined clientip=* | stats count AS via_original ]
 ```
 
 Both counts match.
@@ -400,7 +395,7 @@ Both counts match.
 
 1. Settings, then Fields, then the Calculated Fields row, then Add new.
 2. Destination app: `search`.
-3. Apply to: `sourcetype`, named: `access_combined_wcookie`.
+3. Apply to: `sourcetype`, named: `access_combined`.
 4. Name: `kb`.
 5. Eval expression: `round(bytes/1024, 2)`. No `eval`, no `kb =`.
 6. Save.
@@ -408,7 +403,7 @@ Both counts match.
 Verification, including a base-search filter to prove it exists before the first pipe:
 
 ```spl
-sourcetype=access_combined_wcookie kb>50
+index=web sourcetype=access_combined kb>50
 | stats count, avg(kb) AS avg_kb, max(bytes) AS max_bytes
 ```
 
@@ -416,12 +411,12 @@ sourcetype=access_combined_wcookie kb>50
 
 Add a second calculated field that consumes the alias. Same path, Name `src_first_octet`, Eval expression `mvindex(split(src_ip,"."),0)`. Save.
 
-Now attempt the illegal direction. Settings, then Fields, then Field aliases, then New Field Alias. Name `bad_alias`, Apply to `sourcetype` named `access_combined_wcookie`, left box `kb`, right box `kilobytes`. Save.
+Now attempt the illegal direction. Settings, then Fields, then Field aliases, then New Field Alias. Name `bad_alias`, Apply to `sourcetype` named `access_combined`, left box `kb`, right box `kilobytes`. Save.
 
 Single verification search that shows the legal reference working and the illegal one producing nothing:
 
 ```spl
-sourcetype=access_combined_wcookie
+index=web sourcetype=access_combined
 | stats count AS events,
         count(src_ip) AS alias_ok,
         count(src_first_octet) AS calc_reads_alias_ok,
@@ -437,7 +432,7 @@ Delete `bad_alias` from Settings, then Fields, then Field aliases. Keep `cim_src
 
 ## Self-check
 
-**Q1.** A field alias is created on source type `access_combined_wcookie` mapping `clientip` to `src_ip`. Which statement is true after the alias is saved and shared?
+**Q1.** A field alias is created on source type `access_combined` mapping `clientip` to `src_ip`. Which statement is true after the alias is saved and shared?
 
 A. Searching `clientip=10.1.1.1` returns no events, because the field has been renamed.
 B. Both `clientip` and `src_ip` are present on the event and either can be searched.
@@ -446,7 +441,7 @@ D. The alias is written to the indexed data, so previously indexed events are un
 
 **Q2.** Which configuration is invalid?
 
-A. `FIELDALIAS-a = VendorID AS vendor_id VendorID AS vendor_name`
+A. `FIELDALIAS-a = clientip AS vendor_id clientip AS vendor_name`
 B. `FIELDALIAS-b = userID AS user loginID AS user`
 C. `EVAL-user = coalesce(userID, loginID)`
 D. `FIELDALIAS-c = ip AS ipaddress`
@@ -512,7 +507,7 @@ B. Events from `iis_web` only, because an alias configuration is specific to one
 C. Events from both source types, but only if they are written to the same index.
 D. No events, because `user` cannot be used in the base search.
 
-**Q10.** A calculated field is defined on `access_combined_wcookie`, where `src_ip` is a field alias of `clientip`:
+**Q10.** A calculated field is defined on `access_combined`, where `src_ip` is a field alias of `clientip`:
 
 ```ini
 EVAL-src_label = "ip: " . src_ip

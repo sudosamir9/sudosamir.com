@@ -148,7 +148,7 @@ The distinction to hold: a CIM required field describes what your data must supp
 
 ## Terminology that changed
 
-Splunk renamed several long-standing terms and older study material has not caught up. The current exam uses the new names; the Apress book uses the old ones throughout, so treat its vocabulary as dated rather than wrong.
+Splunk renamed several long-standing terms and older study material has not caught up. The current exam uses the new names; older material uses the old ones throughout, so treat its vocabulary as dated rather than wrong.
 
 | Old term | Current term |
 | --- | --- |

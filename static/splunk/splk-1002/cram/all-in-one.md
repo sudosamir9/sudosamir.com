@@ -152,7 +152,7 @@ Decide: naming a set of values of one field, tag; naming a whole event category,
 ```ini
 [bc_status_band(2)]
 args = lo, hi
-definition = index=main status>=$lo$ status<$hi$
+definition = index=web status>=$lo$ status<$hi$
 validation = isnum($lo$) AND isnum($hi$)
 ```
 
@@ -209,9 +209,9 @@ Decide: simple constraint with no pipes and acceleration wanted, Root Event; nee
 ```
 
 ```ini
-[buttercup_web]
-search = sourcetype=access_combined_wcookie
-[eventtype=buttercup_web]
+[web_activity]
+search = index=web sourcetype=access_combined
+[eventtype=web_activity]
 web = enabled
 ```
 
