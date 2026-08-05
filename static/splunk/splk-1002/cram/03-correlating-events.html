@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.0 Correlating Events (15%) - cram | SPLK-1002</title>
+<meta name="description" content="Correlating events, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="cram/03-correlating-events" data-section="3">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html" aria-current="page"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Correlating events</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/03-correlating-events.html">Study</a><a class="on" href="03-correlating-events.html">Cram</a></div>
+      </div>
+<h1 id="3.0-correlating-events-15---cram">3.0 Correlating Events- cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">transaction</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">name</span><span class="t-op">=&lt;</span><span class="t-field">txn-name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">txn_definition-options</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">memcontrol-options</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">rendering-options</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">txn_definition</span> <span class="t-op">=</span> <span class="t-field">maxspan</span> <span class="t-pipe">|</span> <span class="t-field">maxpause</span> <span class="t-pipe">|</span> <span class="t-field">maxevents</span> <span class="t-pipe">|</span> <span class="t-field">startswith</span> <span class="t-pipe">|</span> <span class="t-field">endswith</span> <span class="t-pipe">|</span> <span class="t-field">connected</span> <span class="t-pipe">|</span> <span class="t-field">unifyends</span> <span class="t-pipe">|</span> <span class="t-field">keeporphans</span>
+<span class="t-opt">memcontrol</span>     <span class="t-op">=</span> <span class="t-field">maxopentxn</span> <span class="t-pipe">|</span> <span class="t-field">maxopenevents</span> <span class="t-pipe">|</span> <span class="t-field">keepevicted</span>
+<span class="t-opt">rendering</span>      <span class="t-op">=</span> <span class="t-field">delim</span> <span class="t-pipe">|</span> <span class="t-field">mvlist</span> <span class="t-pipe">|</span> <span class="t-field">mvraw</span> <span class="t-pipe">|</span> <span class="t-field">nullstr</span>
+<span class="t-field">filter-string</span>  <span class="t-op">=</span> <span class="t-op">&lt;</span><span class="t-field">search-expression</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">quoted-search-expression</span><span class="t-op">&gt;</span><span class="t-op">)</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span><span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span><span class="t-op">)</span>
+
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-field">clientip</span> <span class="t-opt">startswith</span><span class="t-op">=</span><span class="t-str">&quot;view&quot;</span> <span class="t-opt">endswith</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">30m</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">duration</span><span class="t-op">&gt;</span><span class="t-num">0</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">range</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">duration</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">eventcount</span><span class="t-op">,</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">actions</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxspan</code></td>
+<td><code>-1</code> (no limit)</td>
+<td>earliest to latest; negative deactivates; needs descending <code>_time</code></td>
+</tr>
+<tr>
+<td><code>maxpause</code></td>
+<td><code>-1</code> (no limit)</td>
+<td>gap between consecutive events; negative deactivates; needs descending <code>_time</code></td>
+</tr>
+<tr>
+<td><code>maxevents</code></td>
+<td><code>1000</code></td>
+<td>negative deactivates</td>
+</tr>
+<tr>
+<td><code>startswith</code></td>
+<td>none / empty string</td>
+<td>closes a transaction (reverse chronological processing)</td>
+</tr>
+<tr>
+<td><code>endswith</code></td>
+<td>none / empty string</td>
+<td>does NOT set <code>closed_txn=1</code></td>
+</tr>
+<tr>
+<td><code>connected</code></td>
+<td><code>true</code></td>
+<td>only when a field list is given</td>
+</tr>
+<tr>
+<td><code>unifyends</code></td>
+<td><code>true</code>, same default as <code>connected</code></td>
+<td>follows <code>connected</code></td>
+</tr>
+<tr>
+<td><code>keeporphans</code></td>
+<td><code>false</code></td>
+<td>orphans get <code>_txn_orphan=1</code></td>
+</tr>
+<tr>
+<td><code>keepevicted</code></td>
+<td><code>false</code> (<code>0</code>)</td>
+<td>evicted get <code>closed_txn=0</code></td>
+</tr>
+<tr>
+<td><code>maxopentxn</code></td>
+<td>from <code>limits.conf [transactions]</code>, shipped <code>5000</code></td>
+<td>LRU eviction</td>
+</tr>
+<tr>
+<td><code>maxopenevents</code></td>
+<td>from <code>limits.conf [transactions]</code>, shipped <code>100000</code></td>
+<td>LRU eviction</td>
+</tr>
+<tr>
+<td><code>mvlist</code></td>
+<td><code>false</code></td>
+<td><code>false</code> = unique set, alphabetical; <code>true</code> = list, arrival order</td>
+</tr>
+<tr>
+<td><code>mvraw</code></td>
+<td><code>false</code></td>
+<td>makes <code>_raw</code> multivalue</td>
+</tr>
+<tr>
+<td><code>delim</code></td>
+<td><code>&quot; &quot;</code> (whitespace)</td>
+<td>value separator</td>
+</tr>
+<tr>
+<td><code>nullstr</code></td>
+<td><code>NULL</code></td>
+<td>missing value placeholder in lists</td>
+</tr>
+<tr>
+<td><code>match</code></td>
+<td><code>closest</code> only supported value</td>
+<td></td>
+</tr>
+<tr>
+<td>Fields created</td>
+<td><code>duration</code> (seconds), <code>eventcount</code>, <code>closed_txn</code></td>
+<td>output also carries <code>linecount</code>, <code>field_match_sum</code></td>
+</tr>
+<tr>
+<td><code>_time</code> of result</td>
+<td>timestamp of the EARLIEST member</td>
+<td></td>
+</tr>
+<tr>
+<td><code>_raw</code> of result</td>
+<td>raw text of every member</td>
+<td></td>
+</tr>
+<tr>
+<td>Events shown per txn</td>
+<td>first <code>5</code>, rest collapsed</td>
+<td></td>
+</tr>
+<tr>
+<td><code>transaction</code> type</td>
+<td>centralized streaming (search head only)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>stats</code> type</td>
+<td>transforming (distributable reduce)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td><code>type=inner</code>, <code>max=1</code>, <code>usetime=false</code>, <code>earlier=true</code>, <code>overwrite=true</code></td>
+<td>50,000 rows / 60 s cap</td>
+</tr>
+<tr>
+<td><code>append</code> / <code>appendcols</code> / <code>union</code></td>
+<td><code>maxout=50000</code>, <code>maxtime=60</code>; <code>override=false</code>; <code>timeout=60</code>/<code>300</code></td>
+<td>no <code>transaction</code> after <code>append</code></td>
+</tr>
+<tr>
+<td><code>selfjoin</code></td>
+<td><code>keepsingle=false</code>, <code>max=1</code>, <code>overwrite=true</code></td>
+<td>main results capped at 100,000</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unique ID + aggregates only; large or distributed</td>
+<td><code>stats</code></td>
+</tr>
+<tr>
+<td>Raw event text preserved in the group</td>
+<td><code>transaction</code></td>
+</tr>
+<tr>
+<td>ID reused over time</td>
+<td><code>transaction ... maxspan=/maxpause=</code></td>
+</tr>
+<tr>
+<td>Group bounded by a start or end message</td>
+<td><code>transaction ... startswith=/endswith=</code></td>
+</tr>
+<tr>
+<td>Sequence, not a shared key</td>
+<td><code>transaction</code></td>
+</tr>
+<tr>
+<td>After an <code>append</code></td>
+<td><code>stats</code> (never <code>transaction</code>)</td>
+</tr>
+<tr>
+<td>Small static right-side dataset</td>
+<td><code>lookup</code> before <code>join</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>maxspan</code> and <code>maxpause</code> default to <code>-1</code> (no limit); only <code>maxevents</code> has a positive default, <code>1000</code>.</li>
+<li><code>closed_txn=1</code> only when <code>maxevents</code>, <code>maxspan</code>, <code>maxpause</code>, or <code>startswith</code> is specified. <code>endswith</code> alone leaves it <code>0</code>.</li>
+<li><code>transaction</code> creates <code>eventcount</code>, not <code>count</code>; <code>duration</code> is in seconds and is <code>0</code> for a one-event transaction.</li>
+<li><code>_time</code> of the transaction is the earliest member's timestamp; <code>_raw</code> is the concatenated raw text of all members.</li>
+<li>Input must be in descending chronological order; <code>| sort -_time</code> goes immediately before <code>| transaction</code>, and ascending input silently returns wrong results.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-03-01 <code>-1</code>/<code>-1</code>/<code>1000</code>. T-03-02 descending order. T-03-03 <code>duration</code> seconds. T-03-04 <code>_time</code> earliest. T-03-05 <code>endswith</code> never closes. T-03-06 <code>_txn_orphan=1</code>. T-03-07 <code>mvlist=false</code> set. T-03-08 <code>unifyends</code> follows <code>connected</code>. T-03-09 transforming vs centralized streaming. T-03-10 <code>eventcount</code> not <code>count</code>. T-03-11 no <code>transaction</code> after <code>append</code>. T-03-12 <code>first</code>/<code>last</code> vs <code>earliest</code>/<code>latest</code>. T-03-13 <code>values()</code> vs <code>list()</code>. T-03-14 negative deactivates. T-03-15 not regex. T-03-16 field list not strict AND. T-03-17 <code>join max=1</code>. T-03-18 <code>connected</code> needs fields. T-03-19 <code>1000</code> is settable. T-03-20 <code>keepevicted</code> vs <code>keeporphans</code>.</p>
+
+<nav class="pn" aria-label="Section"><a href="02-filtering-and-formatting.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">2.0</span><span class="pn-label">Filtering and formatting</span></a><a href="04-field-extractions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">4.0</span><span class="pn-label">Field extractions</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#syntax"><span>Syntax</span></a></li>
+<li><a class="lvl2" href="#defaults-and-limits"><span>Defaults and limits</span></a></li>
+<li><a class="lvl2" href="#decision-rule"><span>Decision rule</span></a></li>
+<li><a class="lvl2" href="#five-facts-they-test"><span>Five facts they test</span></a></li>
+<li><a class="lvl2" href="#trap-ids"><span>Trap IDs</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">15% of the exam</span>
+      <span>4 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

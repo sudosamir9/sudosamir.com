@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search-time knowledge object precedence | SPLK-1002</title>
+<meta name="description" content="Search-time precedence, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/knowledge-object-precedence" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html" aria-current="page"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>Search-time precedence</span>
+        
+      </div>
+<h1 id="search-time-knowledge-object-precedence">Search-time knowledge object precedence</h1>
+<p>The single ordering that blueprint sections 4.0, 5.0, 6.0, 9.0 and 10.0 all reduce to: which knowledge object Splunk applies first, which it applies last, and therefore which definitions can see which fields. Roughly half the SPLK-1002 exam by weight is a restatement of this one table.</p>
+<h2 id="scope-and-source-of-truth">Scope and source of truth<a class="anchor" href="#scope-and-source-of-truth" aria-label="Link to this section">#</a></h2>
+<p>The authoritative page is &quot;The sequence of search-time operations&quot; in the Knowledge Management Manual for Splunk Enterprise 10.4. Everything numbered in this file comes from that page unless another page is named. The page opens: &quot;When you run a search, Splunk software runs several operations to derive various knowledge objects and apply them to the events returned by the search. These knowledge objects include extracted fields, calculated fields, lookup fields, field aliases, tags, and event types.&quot; It then states the governing rule: &quot;Splunk software performs these operations in a specific sequence. This sequence can cause problems if you configure something at the top of the process order with a definition that references the result of a configuration that is farther down in the process order.&quot;</p>
+<p>The constraint stated on that page is the whole exam topic in one sentence: &quot;Each operation can have configurations that reference fields derived by operations that precede them in the sequence. However, those same configurations cannot contain fields that are derived by operations that follow them in the sequence.&quot;</p>
+<p>Docs URL that establishes the sequence: https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations</p>
+<h2 id="the-documented-sequence-nine-operations">The documented sequence, nine operations<a class="anchor" href="#the-documented-sequence-nine-operations" aria-label="Link to this section">#</a></h2>
+<p>The folk version taught in most courses is six steps: extraction, alias, calculated field, lookup, event type, tag. The docs list nine, because field extraction is split into three distinct operations and because field filters were added at the front. Learn the nine. The six-step version is a lossy compression of items 2 through 9, and the exam has questions that turn on the split between EXTRACT and REPORT.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Operation</th>
+<th>Backed by</th>
+<th>One-line meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Field filters</td>
+<td><code>field_filters.conf</code>, a <code>fieldFilterName</code> stanza; also configurable in Splunk Web</td>
+<td>Removes or replaces specific indexed, <code>_raw</code>, search-time, and default fields before anything else sees them</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Inline field extraction</td>
+<td><code>EXTRACT-&lt;class&gt;</code> in <code>props.conf</code></td>
+<td>Search-time regex extraction defined entirely in <code>props.conf</code>, no transform referenced</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Field extraction using a field transform</td>
+<td><code>REPORT-&lt;class&gt;</code> in <code>props.conf</code> pointing at a <code>transforms.conf</code> stanza</td>
+<td>Search-time extraction whose regex and options live in a reusable transform</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Automatic key-value field extraction</td>
+<td><code>KV_MODE</code> in <code>props.conf</code></td>
+<td>Splunk's own key-value, JSON, XML, or whitespace parsing of the raw text</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Field aliasing</td>
+<td><code>FIELDALIAS-&lt;class&gt;</code> in <code>props.conf</code></td>
+<td>Gives an existing field a second name</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Calculated fields</td>
+<td><code>EVAL-&lt;fieldname&gt;</code> in <code>props.conf</code></td>
+<td>Creates a field from an eval expression over fields that already exist</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Lookups</td>
+<td><code>LOOKUP-&lt;class&gt;</code> in <code>props.conf</code> pointing at a <code>transforms.conf</code> lookup stanza</td>
+<td>Automatic lookups that add output fields to matching events</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Event types</td>
+<td><code>eventtypes.conf</code></td>
+<td>Adds <code>eventtype</code> field values to events matching a saved search string</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Tags</td>
+<td><code>tags.conf</code></td>
+<td>Adds tag labels to field/value pairs, including <code>eventtype</code> values</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two corroborating statements from separate pages, useful because the exam likes to quote them: &quot;Calculated fields come after field aliasing but before lookups&quot; (About calculated fields), &quot;Event types come before tags, but after lookups&quot; (About event types), and &quot;Tags come last in the sequence of search-time operations&quot; (About tags and aliases). The field alias page states the same thing from its own side: aliases are applied &quot;after key-value extraction but before field lookups&quot;, and specifically before calculated fields, lookups, event types, and tags.</p>
+<h2 id="where-macro-expansion-sits-and-why-it-is-not-in-the-list">Where macro expansion sits, and why it is not in the list<a class="anchor" href="#where-macro-expansion-sits-and-why-it-is-not-in-the-list" aria-label="Link to this section">#</a></h2>
+<p>Search macros are not in the nine. They are not applied to events at all. A macro is textual substitution into the search string, performed while the search string is being parsed, before any event is retrieved and therefore before every one of the nine operations above. The sequence page does not list macros anywhere in its main content, which is itself the evidence: macros are gone by the time the sequence begins.</p>
+<p>The mechanics: <code>limits.conf</code> documents <code>max_macro_depth</code> as the maximum recursion depth for macros, that is the maximum levels for macro expansion, with a default of 100, and describes it as a guardrail on memory usage during the parsing phase of searches. A search goes through multiple rounds of parsing, expansion, and optimization before the final optimized search string exists. Expansion is one of those rounds.</p>
+<p>The practical consequence is visible in the docs topic &quot;Use macros with event types and tags&quot;. Its opening instruction is: &quot;When using macros containing concatenated expressions in searches with event types and tags, enclose the macro definitions with parentheses.&quot; The worked example shows a search <code>index=_audit OR tag=&quot;IDtag&quot;</code> where the tag resolves to a definition containing a macro, and the expanded <code>litsearch</code> string comes out as <code>litsearch (index=_audit OR index=_internal sourcetype=splunk_btool)</code>. The macro definition was substituted as raw text, so the <code>OR</code> binds against only the first term of the definition. The fix is in the macro definition: <code>(index=_internal sourcetype=splunk_btool)</code>.</p>
+<p>Read that example twice. It proves both halves of the point. Macro text is substituted literally, and it is substituted into the search string, not applied to events.</p>
+<h2 id="where-index-time-processing-sits">Where index-time processing sits<a class="anchor" href="#where-index-time-processing-sits" aria-label="Link to this section">#</a></h2>
+<p>Everything above happens after retrieval. The sequence page is explicit about what is not in its list: &quot;This list does not include index-time operations, such as default and indexed field extraction. Index-time operations precede all search-time operations.&quot;</p>
+<p>The &quot;Index time versus search time&quot; page in the indexer manual splits the two phases. Index-time processes take place between the point when the data is consumed and the point when it is written to disk. They are: default field extraction (such as <code>host</code>, <code>source</code>, <code>sourcetype</code>, and <code>timestamp</code>), static or dynamic host assignment for specific inputs, default host assignment overrides, source type customization, custom index-time field extraction, structured data field extraction, event timestamping, event linebreaking, and event segmentation. Search-time processes take place while a search is run, as events are collected by the search. That page lists them as: field filters, event segmentation, event type matching, search-time field extraction (automatic and custom field extractions, including multivalue fields and calculated fields), field aliasing, addition of fields from lookups, source type renaming, and tagging. Event segmentation appears in both lists.</p>
+<p>Note carefully that the indexer manual's search-time list is a category list, not an ordering. It prints &quot;event type matching&quot; before &quot;search-time field extraction&quot;, which is the reverse of the real sequence. The ordered authority is the Knowledge Management page, not this one.</p>
+<h3 id="default-fields">Default fields<a class="anchor" href="#default-fields" aria-label="Link to this section">#</a></h3>
+<p>Default fields are added at index time. The &quot;Use default fields&quot; page groups them as follows. Internal fields, which begin with an underscore: <code>_raw</code> (the original raw data of an event), <code>_time</code> (the event timestamp expressed in UNIX time), <code>_indextime</code> (the time the event was indexed, in UNIX time), <code>_cd</code> (an address for an event within the index), and <code>_bkt</code> (the id of the bucket the event is stored in). Default fields: <code>host</code>, <code>index</code>, <code>linecount</code>, <code>punct</code>, <code>source</code>, <code>sourcetype</code>, <code>splunk_server</code>, and <code>timestamp</code>. Default datetime fields derived from the event timestamp: <code>date_hour</code>, <code>date_mday</code>, <code>date_minute</code>, <code>date_month</code>, <code>date_second</code>, <code>date_wday</code>, <code>date_year</code>, <code>date_zone</code>.</p>
+<h3 id="why-index-time-changes-need-reindexing-and-search-time-ones-do-not">Why index-time changes need reindexing and search-time ones do not<a class="anchor" href="#why-index-time-changes-need-reindexing-and-search-time-ones-do-not" aria-label="Link to this section">#</a></h3>
+<p>A search-time knowledge object is evaluated on every search, against data already on disk, so a new <code>EXTRACT-</code>, <code>FIELDALIAS-</code>, <code>EVAL-</code>, <code>LOOKUP-</code>, event type, or tag applies retroactively to every event already indexed. Nothing is rewritten. An index-time change alters what gets written to disk, so it only affects data indexed after the change. The docs put the strongest version of this on the source type side: &quot;After indexing, you cannot change the host or source type assignments&quot;, and the recommendation is to reindex the data or to work around it at search time. The general guidance is the same: &quot;it is better to perform most knowledge-building activities, such as field extraction, at search time&quot;, because index-time custom field extraction degrades performance at both index time and search time, slowing indexing and enlarging the index so that later searches are slower.</p>
+<p>Source type renaming is the exception that people misfile. <code>rename = &lt;string&gt;</code> in a <code>props.conf</code> source type stanza is a search-time operation. &quot;The renaming of source types occurs only at search time.&quot; The original source type is moved to a field called <code>_sourcetype</code>. The sting in the tail: &quot;Data from a renamed source type uses only the search-time configuration for the target source type.&quot; Rename <code>whoops</code> to <code>cheese_shop</code> and the <code>EXTRACT-</code> settings in the <code>[whoops]</code> stanza stop applying.</p>
+<h2 id="the-full-pipeline">The full pipeline<a class="anchor" href="#the-full-pipeline" aria-label="Link to this section">#</a></h2>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 1044 1539" width="1044" height="1539" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M434.27500000000003 41.0 C434.27500000000003 61.0 455.725 61.0 455.725 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M455.725 124.0 C455.725 144.0 255.52499999999998 144.0 255.52499999999998 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M255.52499999999998 207.0 C255.52499999999998 227.0 369.925 227.0 369.925 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M369.925 290.0 C369.925 310.0 522.475 310.0 522.475 330.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 373.0 C522.475 393.0 522.475 393.0 522.475 413.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M653.575 41.0 C653.575 61.0 589.225 61.0 589.225 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M589.225 124.0 C589.225 144.0 728.65 144.0 728.65 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M728.65 207.0 C728.65 227.0 907.4000000000001 227.0 907.4000000000001 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M907.4000000000001 290.0 C907.4000000000001 393.0 522.475 393.0 522.475 496.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 456.0 C522.475 476.0 522.475 476.0 522.475 496.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 539.0 C522.475 559.0 522.475 559.0 522.475 579.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 622.0 C522.475 642.0 522.475 642.0 522.475 662.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 705.0 C522.475 725.0 522.475 725.0 522.475 745.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 788.0 C522.475 808.0 522.475 808.0 522.475 828.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 871.0 C522.475 891.0 522.475 891.0 522.475 911.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 954.0 C522.475 974.0 522.475 974.0 522.475 994.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1037.0 C522.475 1057.0 522.475 1057.0 522.475 1077.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1120.0 C522.475 1140.0 522.475 1140.0 522.475 1160.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1203.0 C522.475 1223.0 522.475 1223.0 522.475 1243.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1286.0 C522.475 1306.0 522.475 1306.0 522.475 1326.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1369.0 C522.475 1389.0 522.475 1389.0 522.475 1409.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M522.475 1452.0 C522.475 1472.0 522.475 1472.0 522.475 1492.0"/><rect class="dg-node" x="320.175" y="2.0" width="228.20000000000002" height="39" rx="5"/><text class="dg-text" x="434.27500000000003" y="22.5" text-anchor="middle" dominant-baseline="middle">Raw data arrives at an input</text><rect class="dg-node" x="405.975" y="85.0" width="99.5" height="39" rx="5"/><text class="dg-text" x="455.725" y="105.5" text-anchor="middle" dominant-baseline="middle">INDEX TIME</text><rect class="dg-node" x="66.34999999999997" y="168.0" width="378.35" height="39" rx="5"/><text class="dg-text" x="255.52499999999998" y="188.5" text-anchor="middle" dominant-baseline="middle">Line breaking, timestamp extraction, segmentation</text><rect class="dg-node" x="2.0" y="251.0" width="735.85" height="39" rx="5"/><text class="dg-text" x="369.925" y="271.5" text-anchor="middle" dominant-baseline="middle">Default fields: host, source, sourcetype, index, _time, _indextime, linecount, punct, splunk_server</text><rect class="dg-node" x="186.72500000000002" y="334.0" width="671.5" height="39" rx="5"/><text class="dg-text" x="522.475" y="354.5" text-anchor="middle" dominant-baseline="middle">Index-time field extractions: TRANSFORMS- in props.conf plus WRITE_META in transforms.conf</text><rect class="dg-node" x="361.9" y="417.0" width="321.15000000000003" height="39" rx="5"/><text class="dg-text" x="522.475" y="437.5" text-anchor="middle" dominant-baseline="middle">(&quot;Index on disk: _raw plus indexed fields</text><rect class="dg-node" x="582.375" y="2.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="653.575" y="22.5" text-anchor="middle" dominant-baseline="middle">User submits SPL</text><rect class="dg-node" x="539.475" y="85.0" width="99.5" height="39" rx="5"/><text class="dg-text" x="589.225" y="105.5" text-anchor="middle" dominant-baseline="middle">PARSE TIME</text><rect class="dg-node" x="478.7" y="168.0" width="499.90000000000003" height="39" rx="5"/><text class="dg-text" x="728.65" y="188.5" text-anchor="middle" dominant-baseline="middle">Search macro expansion, backtick substitution, max_macro_depth 100</text><rect class="dg-node" x="771.85" y="251.0" width="271.1" height="39" rx="5"/><text class="dg-text" x="907.4000000000001" y="271.5" text-anchor="middle" dominant-baseline="middle">Search string parsed and optimized</text><rect class="dg-node" x="397.65000000000003" y="500.0" width="249.65" height="39" rx="5"/><text class="dg-text" x="522.475" y="520.5" text-anchor="middle" dominant-baseline="middle">Events retrieved from the index</text><rect class="dg-node" x="386.925" y="583.0" width="271.1" height="39" rx="5"/><text class="dg-text" x="522.475" y="603.5" text-anchor="middle" dominant-baseline="middle">SEARCH TIME, applied in this order</text><rect class="dg-node" x="451.27500000000003" y="666.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="522.475" y="686.5" text-anchor="middle" dominant-baseline="middle">1. Field filters</text><rect class="dg-node" x="401.225" y="749.0" width="242.5" height="39" rx="5"/><text class="dg-text" x="522.475" y="769.5" text-anchor="middle" dominant-baseline="middle">2. Inline extraction, EXTRACT-</text><rect class="dg-node" x="394.07500000000005" y="832.0" width="256.8" height="39" rx="5"/><text class="dg-text" x="522.475" y="852.5" text-anchor="middle" dominant-baseline="middle">3. Transform extraction, REPORT-</text><rect class="dg-node" x="358.32500000000005" y="915.0" width="328.3" height="39" rx="5"/><text class="dg-text" x="522.475" y="935.5" text-anchor="middle" dominant-baseline="middle">4. Automatic key-value extraction, KV_MODE</text><rect class="dg-node" x="404.8" y="998.0" width="235.35000000000002" height="39" rx="5"/><text class="dg-text" x="522.475" y="1018.5" text-anchor="middle" dominant-baseline="middle">5. Field aliases, FIELDALIAS-</text><rect class="dg-node" x="411.95000000000005" y="1081.0" width="221.05" height="39" rx="5"/><text class="dg-text" x="522.475" y="1101.5" text-anchor="middle" dominant-baseline="middle">6. Calculated fields, EVAL-</text><rect class="dg-node" x="440.55" y="1164.0" width="163.85" height="39" rx="5"/><text class="dg-text" x="522.475" y="1184.5" text-anchor="middle" dominant-baseline="middle">7. Lookups, LOOKUP-</text><rect class="dg-node" x="397.65000000000003" y="1247.0" width="249.65" height="39" rx="5"/><text class="dg-text" x="522.475" y="1267.5" text-anchor="middle" dominant-baseline="middle">8. Event types, eventtypes.conf</text><rect class="dg-node" x="444.125" y="1330.0" width="156.70000000000002" height="39" rx="5"/><text class="dg-text" x="522.475" y="1350.5" text-anchor="middle" dominant-baseline="middle">9. Tags, tags.conf</text><rect class="dg-node" x="251.075" y="1413.0" width="542.8000000000001" height="39" rx="5"/><text class="dg-text" x="522.475" y="1433.5" text-anchor="middle" dominant-baseline="middle">Fully decorated events enter the first SPL command after the base search</text><rect class="dg-node" x="465.57500000000005" y="1496.0" width="113.80000000000001" height="39" rx="5"/><text class="dg-text" x="522.475" y="1516.5" text-anchor="middle" dominant-baseline="middle">Result table</text></svg></figure>
+<h2 id="which-configuration-file-backs-each-stage">Which configuration file backs each stage<a class="anchor" href="#which-configuration-file-backs-each-stage" aria-label="Link to this section">#</a></h2>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 436 664" width="436" height="664" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C179.55 159.5 179.55 21.5 229.0 21.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C181.33750000000003 159.5 181.33750000000003 90.5 232.57500000000002 90.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C190.27500000000003 159.5 190.27500000000003 159.5 250.45000000000002 159.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C174.18750000000003 159.5 174.18750000000003 228.5 218.27500000000003 228.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C177.76250000000002 159.5 177.76250000000002 297.5 225.425 297.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M130.10000000000002 159.5 C181.33750000000003 159.5 181.33750000000003 366.5 232.57500000000002 366.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M147.97500000000002 228.5 C190.27500000000003 228.5 190.27500000000003 90.5 232.57500000000002 90.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M147.97500000000002 228.5 C190.27500000000003 228.5 190.27500000000003 366.5 232.57500000000002 366.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M158.70000000000002 297.5 C220.66250000000002 297.5 220.66250000000002 435.5 282.625 435.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M147.97500000000002 366.5 C215.3 366.5 215.3 504.5 282.625 504.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M126.525 435.5 C204.575 435.5 204.575 573.5 282.625 573.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.675 504.5 C174.1875 504.5 174.1875 642.5 214.70000000000002 642.5"/><rect class="dg-node" x="30.60000000000001" y="140.0" width="99.5" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="160.5" text-anchor="middle" dominant-baseline="middle">props.conf</text><rect class="dg-node" x="233.0" y="2.0" width="185.3" height="39" rx="5"/><text class="dg-text" x="325.65" y="22.5" text-anchor="middle" dominant-baseline="middle">EXTRACT-class, stage 2</text><rect class="dg-node" x="236.57500000000002" y="71.0" width="178.15" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="91.5" text-anchor="middle" dominant-baseline="middle">REPORT-class, stage 3</text><rect class="dg-node" x="254.45000000000002" y="140.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="160.5" text-anchor="middle" dominant-baseline="middle">KV_MODE, stage 4</text><rect class="dg-node" x="222.27500000000003" y="209.0" width="206.75" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="229.5" text-anchor="middle" dominant-baseline="middle">FIELDALIAS-class, stage 5</text><rect class="dg-node" x="229.425" y="278.0" width="192.45000000000002" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="298.5" text-anchor="middle" dominant-baseline="middle">EVAL-fieldname, stage 6</text><rect class="dg-node" x="236.57500000000002" y="347.0" width="178.15" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="367.5" text-anchor="middle" dominant-baseline="middle">LOOKUP-class, stage 7</text><rect class="dg-node" x="12.725000000000009" y="209.0" width="135.25" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="229.5" text-anchor="middle" dominant-baseline="middle">transforms.conf</text><rect class="dg-node" x="2.0" y="278.0" width="156.70000000000002" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="298.5" text-anchor="middle" dominant-baseline="middle">field_filters.conf</text><rect class="dg-node" x="286.625" y="416.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="325.65" y="436.5" text-anchor="middle" dominant-baseline="middle">Stage 1</text><rect class="dg-node" x="12.725000000000009" y="347.0" width="135.25" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="367.5" text-anchor="middle" dominant-baseline="middle">eventtypes.conf</text><rect class="dg-node" x="286.625" y="485.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="325.65" y="505.5" text-anchor="middle" dominant-baseline="middle">Stage 8</text><rect class="dg-node" x="34.175000000000004" y="416.0" width="92.35000000000001" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="436.5" text-anchor="middle" dominant-baseline="middle">tags.conf</text><rect class="dg-node" x="286.625" y="554.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="325.65" y="574.5" text-anchor="middle" dominant-baseline="middle">Stage 9</text><rect class="dg-node" x="27.025000000000006" y="485.0" width="106.65" height="39" rx="5"/><text class="dg-text" x="80.35000000000001" y="505.5" text-anchor="middle" dominant-baseline="middle">macros.conf</text><rect class="dg-node" x="218.70000000000002" y="623.0" width="213.9" height="39" rx="5"/><text class="dg-text" x="325.65000000000003" y="643.5" text-anchor="middle" dominant-baseline="middle">Parse time, before stage 1</text></svg></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Setting or file</th>
+<th>Splunk Web path</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parse time</td>
+<td><code>macros.conf</code>, stanza <code>[&lt;STANZA_NAME&gt;]</code> or <code>[&lt;STANZA_NAME&gt;(&lt;numargs&gt;)]</code></td>
+<td>Settings &gt; Advanced Search &gt; Search macros &gt; New</td>
+<td>Settings: <code>args</code>, <code>definition</code> (required), <code>validation</code>, <code>errormsg</code>, <code>iseval</code> (default <code>false</code>), <code>description</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>field_filters.conf</code>, <code>fieldFilterName</code> stanza</td>
+<td>Configurable in Splunk Web</td>
+<td>Removes or replaces indexed, <code>_raw</code>, search-time, and default fields</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>props.conf</code> <code>EXTRACT-&lt;class&gt;</code></td>
+<td>Settings &gt; Fields &gt; Field extractions</td>
+<td>Inline regex, no transform</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>props.conf</code> <code>REPORT-&lt;class&gt;</code> plus <code>transforms.conf</code></td>
+<td>Settings &gt; Fields &gt; Field transformations, then Field extractions</td>
+<td>Transform holds <code>REGEX</code>, <code>FORMAT</code>, <code>SOURCE_KEY</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>props.conf</code> <code>KV_MODE</code></td>
+<td>Not a Settings page, edit <code>props.conf</code></td>
+<td>Values <code>auto</code>, <code>none</code>, <code>json</code>, <code>xml</code>, <code>whitespace</code>. Default <code>auto</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>props.conf</code> <code>FIELDALIAS-&lt;class&gt; = &lt;orig_field_name&gt; AS &lt;new_field_name&gt;</code></td>
+<td>Settings &gt; Fields &gt; Field aliases</td>
+<td><code>ASNEW</code> is the non-overwriting variant</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>props.conf</code> <code>EVAL-&lt;fieldname&gt; = &lt;expression&gt;</code></td>
+<td>Settings &gt; Fields &gt; Calculated Fields &gt; Add new</td>
+<td>Multiple <code>EVAL-</code> in one stanza run in parallel</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>props.conf</code> <code>LOOKUP-&lt;class&gt; = $TRANSFORM &lt;match_field_in_lookup_table&gt; OUTPUT|OUTPUTNEW &lt;output_field_in_lookup_table&gt;</code></td>
+<td>Settings &gt; Lookups &gt; Automatic lookups &gt; Add new</td>
+<td>Transform holds <code>filename</code>, <code>collection</code>, <code>max_matches</code>, <code>case_sensitive_match</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>eventtypes.conf</code>, stanza <code>[$EVENTTYPE]</code></td>
+<td>Settings &gt; Event Types &gt; New</td>
+<td>Settings: <code>search</code>, <code>priority</code>, <code>color</code>, <code>description</code>, <code>disabled</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>tags.conf</code></td>
+<td>Settings &gt; Tags, then List by field-value pair, List by tag name, or All unique tag objects</td>
+<td>Tags attach to a field/value pair, not to a field</td>
+</tr>
+</tbody>
+</table></div>
+<p>Configuration file syntax for a single source type that uses six of the stages:</p>
+<pre class="plain lang-ini"><code>[access_combined]
+EXTRACT-sessionid = JSESSIONID=(?&lt;session_id&gt;\w+)
+REPORT-ua = extract_user_agent
+KV_MODE = auto
+FIELDALIAS-client = clientip AS src_ip
+EVAL-bytes_kb = round(bytes/1024, 2)
+LOOKUP-users = mock_users ip_address AS clientip OUTPUTNEW state, email</code></pre>
+<h2 id="the-consequences-table">The consequences table<a class="anchor" href="#the-consequences-table" aria-label="Link to this section">#</a></h2>
+<p>This is the payload. Every row is a question a paper writer can ask directly. &quot;Silently returns nothing&quot; is the correct failure mode to remember: Splunk does not error, the field is simply absent and the search returns zero rows or null values.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Can this reference that</th>
+<th>Verdict</th>
+<th>Why, grounded in the ordering</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Field alias (5) references a calculated field (6)</td>
+<td>No</td>
+<td>Aliasing runs before calculated fields, so the source field does not exist yet. The alias is skipped and, per the post 7.2.4 behavior, an existing alias field is removed</td>
+</tr>
+<tr>
+<td>Calculated field (6) references a field alias (5)</td>
+<td>Yes</td>
+<td>Aliasing already completed, so the alias name is a real field by the time the eval runs. The docs give this as the reason aliasing is placed before calculated fields</td>
+</tr>
+<tr>
+<td>Calculated field (6) references a lookup output field (7)</td>
+<td>No</td>
+<td>Lookups run after calculated fields. The About calculated fields page states outright that calculated fields cannot reference lookups, event types, or tags</td>
+</tr>
+<tr>
+<td>Lookup (7) input field is a field alias (5)</td>
+<td>Yes</td>
+<td>Aliasing completes two stages earlier. The field alias docs give this as an explicit design reason: perform aliasing before lookups so you can key a lookup on an alias</td>
+</tr>
+<tr>
+<td>Lookup (7) input field is a calculated field (6)</td>
+<td>Yes</td>
+<td>Calculated fields complete one stage earlier</td>
+</tr>
+<tr>
+<td>Automatic lookup (7) uses a field output by another automatic lookup (7)</td>
+<td>No</td>
+<td>Same stage, and the docs are categorical: &quot;Splunk software does not support nested automatic lookups.&quot; Chain lookups explicitly with the <code>lookup</code> command in SPL instead</td>
+</tr>
+<tr>
+<td>Event type search (8) references a lookup output field (7)</td>
+<td>Yes</td>
+<td>Lookups complete before event types are matched</td>
+</tr>
+<tr>
+<td>Event type search (8) references a calculated field (6) or an alias (5)</td>
+<td>Yes</td>
+<td>Both complete earlier in the sequence</td>
+</tr>
+<tr>
+<td>Event type search (8) references a tag (9)</td>
+<td>No</td>
+<td>Docs are explicit: &quot;Search strings that define event types cannot reference tags, because event types are always processed and added to events before tags&quot;</td>
+</tr>
+<tr>
+<td>Tag (9) applied to an event type value</td>
+<td>Yes</td>
+<td>Tags run last, so <code>eventtype</code> already exists as a field. Tagging <code>eventtype</code> values is the normal CIM pattern</td>
+</tr>
+<tr>
+<td>Tag (9) applied to a lookup output field or a calculated field</td>
+<td>Yes</td>
+<td>Docs: tags apply to &quot;any field/value pair in an event, whether it is extracted at index time, search time, or added through some other method, such as an event type, lookup, or calculated field&quot;</td>
+</tr>
+<tr>
+<td>Calculated field (6) references an <code>eventtype</code> value (8)</td>
+<td>No</td>
+<td>Event types are two stages later. Use the event type in the search string instead</td>
+</tr>
+<tr>
+<td>Field alias (5) references another field alias (5)</td>
+<td>Not a documented capability</td>
+<td>Aliases are a single operation processed in lexicographical order by class name. The docs never document alias chaining; when two alias configurations collide on the same destination field the collision is resolved by lexicographical sort order and the last one applied wins. The documented way to combine or fall back across several source fields is a calculated field with <code>coalesce</code>, <code>mvappend</code>, or <code>mvdedup</code></td>
+</tr>
+<tr>
+<td>Inline extraction (2) references a field from a transform extraction (3)</td>
+<td>No</td>
+<td><code>EXTRACT-</code> runs before <code>REPORT-</code></td>
+</tr>
+<tr>
+<td>Transform extraction (3) references a field from an inline extraction (2)</td>
+<td>Yes, with a setting</td>
+<td>The ordering permits it, but a transform reads <code>_raw</code> by default. Set <code>SOURCE_KEY</code> in the <code>transforms.conf</code> stanza to the field you want to parse. <code>SOURCE_KEY</code> default is <code>_raw</code></td>
+</tr>
+<tr>
+<td>Any extraction (2, 3, 4) references an alias, calculated field, lookup, event type, or tag</td>
+<td>No</td>
+<td>All four of those stages are later</td>
+</tr>
+<tr>
+<td>Field filter (1) affects a lookup output, event type, or tag</td>
+<td>Yes</td>
+<td>Field filters run first, so redacting a field there breaks everything downstream that depends on it</td>
+</tr>
+<tr>
+<td>Macro used inside an event type definition</td>
+<td>Yes</td>
+<td>Macro expansion completes at parse time, long before stage 8. Wrap concatenated macro definitions in parentheses or the expansion loses operator grouping</td>
+</tr>
+<tr>
+<td>A search-time change applies to data already indexed</td>
+<td>Yes</td>
+<td>Search-time objects are evaluated per search against existing <code>_raw</code>. Index-time changes affect only data indexed after the change</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ordering-inside-a-single-stage-lexicographical-order">Ordering inside a single stage: lexicographical order<a class="anchor" href="#ordering-inside-a-single-stage-lexicographical-order" aria-label="Link to this section">#</a></h2>
+<p>Several stages contain many configurations, and Splunk needs a tie-break. The docs: &quot;Splunk software processes the following knowledge objects in lexicographical order, according to the host, source, or source type they belong to: Inline field extractions, Field extractions that use a field transform, Field aliases, Event types, after they are sorted according to priority, Lookups.&quot; Tags are also processed in lexicographical order, but &quot;they are not associated with a specific host, source, or source type&quot;. The tags page phrases the same rule as ASCII sort order.</p>
+<p>Lexicographical order is not alphabetical order and not numeric order. The docs define it as sorting &quot;based on the values used to encode the items in computer memory. In Splunk software, this is almost always UTF-8 encoding, which is a superset of ASCII.&quot; The consequences the exam uses: numbers sort before letters, numbers sort on the first digit so that 10, 9, 70, 100 sort as 10, 100, 70, 9, uppercase letters sort before lowercase letters, and symbols are not standard.</p>
+<p>The docs' own example: <code>EXTRACT-ZZZ</code> is processed before <code>EXTRACT-aaa</code>, because uppercase sorts first, so &quot;you cannot reference a field extracted by <code>EXTRACT-aaa</code> in the field extraction definition for <code>EXTRACT-ZZZ</code>&quot;. If you need ordering, name the classes with a numeric prefix and pad the digits.</p>
+<p>Two special cases sit on top of lexicographical order. Event types are sorted by <code>priority</code> first and only then lexicographically, where &quot;1 is the highest priority and 10 is the lowest priority&quot;. Calculated fields do not use lexicographical order at all: &quot;All <code>EVAL-&lt;fieldname&gt;</code> configurations within a single <code>props.conf</code> stanza are processed in parallel instead of sequentially&quot;, which is exactly why one calculated field cannot consume another calculated field defined in the same stanza.</p>
+<h2 id="configuration-file-precedence-is-a-different-thing">Configuration file precedence is a different thing<a class="anchor" href="#configuration-file-precedence-is-a-different-thing" aria-label="Link to this section">#</a></h2>
+<p>This is a separate mechanism with a confusingly similar name, and conflating the two is a standard distractor. Search-time object ordering answers &quot;in what order are knowledge objects applied to my events&quot;. Configuration file precedence answers &quot;when the same setting appears in more than one copy of the same <code>.conf</code> file, which copy wins&quot;. Neither one influences the other.</p>
+<p>Splunk merges the settings from all copies of a file and uses a location-based prioritization scheme. Files operate in either a global context or in the context of the current app and user, and the two contexts have different, in part opposite, precedence orders.</p>
+<p>Global context, highest priority first:</p>
+<ol>
+<li><code>$SPLUNK_HOME/etc/system/local/*</code></li>
+<li><code>$SPLUNK_HOME/etc/apps/A/local/*</code> through <code>$SPLUNK_HOME/etc/apps/z/local/*</code></li>
+<li><code>$SPLUNK_HOME/etc/apps/A/default/*</code> through <code>$SPLUNK_HOME/etc/apps/z/default/*</code></li>
+<li><code>$SPLUNK_HOME/etc/system/default/*</code></li>
+</ol>
+<p>App or user context, highest priority first:</p>
+<ol>
+<li><code>$SPLUNK_HOME/etc/users/*</code> for the current user</li>
+<li>App directories for the currently running app, <code>local</code> then <code>default</code></li>
+<li>App directories for all other apps, <code>local</code> then <code>default</code>, for exported settings only</li>
+<li>System directories, <code>local</code> then <code>default</code></li>
+</ol>
+<p>Three facts to hold onto. <code>local</code> always beats <code>default</code> at the same level, which is why you never edit files under <code>default</code>. In the global context, system <code>local</code> is at the top and system <code>default</code> is at the bottom, so system straddles the whole app layer. In the app or user context, user beats app beats system, so system <code>local</code> is near the bottom rather than at the top. Where several apps supply the same setting, the global context breaks the tie by lexicographical order of the app directory names, and the app or user context breaks it by reverse-lexicographical order, so the two contexts resolve app collisions in opposite directions.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-KO-01"><span class="tid">T-KO-01</span> The six-step folk order versus the nine documented operations. <span class="wrong">Wrong belief</span>: the sequence is extraction, alias, calculated field, lookup, event type, tag, full stop. <span class="right">Correct fact</span>: the 10.4 docs list nine operations. Field filters is number 1, and field extraction is three separate operations, inline <code>EXTRACT-</code> at 2, transform-based <code>REPORT-</code> at 3, and automatic key-value extraction via <code>KV_MODE</code> at 4. The six-step version is items 2 through 9 collapsed.</p>
+<p class="trap" id="T-KO-02"><span class="tid">T-KO-02</span> Reversing aliases and calculated fields. <span class="wrong">Wrong belief</span>: calculated fields are evaluated before field aliases because eval &quot;feels&quot; more primitive. <span class="right">Correct fact</span>: field aliasing is stage 5 and calculated fields are stage 6. The docs say &quot;Calculated fields come after field aliasing but before lookups&quot;. A calculated field can use an alias; an alias cannot use a calculated field.</p>
+<p class="trap" id="T-KO-03"><span class="tid">T-KO-03</span> An alias built on a calculated field. <span class="wrong">Wrong belief</span>: <code>FIELDALIAS-x = my_eval_field AS foo</code> produces <code>foo</code>. <span class="right">Correct fact</span>: the source field does not exist at stage 5, so nothing is aliased. Worse, since 7.2.4, if the alias field already exists on the event and the source field does not, the alias field is removed from the event.</p>
+<p class="trap" id="T-KO-04"><span class="tid">T-KO-04</span> A calculated field built on a lookup output. <span class="wrong">Wrong belief</span>: <code>EVAL-margin = bytes - cost</code> works when <code>bytes</code> comes from an automatic lookup. <span class="right">Correct fact</span>: lookups are stage 7 and calculated fields are stage 6, so <code>bytes</code> is null when the eval runs. The docs state calculated fields cannot reference lookups, event types, or tags.</p>
+<p class="trap" id="T-KO-05"><span class="tid">T-KO-05</span> An event type defined in terms of a tag. <span class="wrong">Wrong belief</span>: <code>search = tag=authentication</code> is a valid event type definition. <span class="right">Correct fact</span>: &quot;Search strings that define event types cannot reference tags, because event types are always processed and added to events before tags.&quot; The event type will match nothing.</p>
+<p class="trap" id="T-KO-06"><span class="tid">T-KO-06</span> Believing tags cannot apply to event types. <span class="wrong">Wrong belief</span>: tags are only for raw extracted fields. <span class="right">Correct fact</span>: tags run last and can be applied to any field/value pair including <code>eventtype</code>, whether the field came from index time, search time, an event type, a lookup, or a calculated field. Tagging event types is the standard CIM normalization pattern, and the Splunk Web event type form has a Tag(s) field.</p>
+<p class="trap" id="T-KO-07"><span class="tid">T-KO-07</span> Placing macros somewhere in the nine. <span class="wrong">Wrong belief</span>: macros are applied after field extraction, or macros are a search-time knowledge object like the others. <span class="right">Correct fact</span>: macros are textual substitution into the search string during parsing, before any event is fetched and before stage 1. The sequence page does not list them. <code>limits.conf</code> bounds recursion with <code>max_macro_depth</code>, default 100, described as a guardrail on the parsing phase.</p>
+<p class="trap" id="T-KO-08"><span class="tid">T-KO-08</span> Thinking a new field extraction needs a reindex. <span class="wrong">Wrong belief</span>: adding <code>EXTRACT-</code> means old events do not get the field until you reindex. <span class="right">Correct fact</span>: search-time objects are evaluated per search against existing data, so they apply retroactively to every event already on disk. Only index-time changes such as <code>TRANSFORMS-</code>, line breaking, timestamping, host assignment, and source type assignment require reindexing.</p>
+<p class="trap" id="T-KO-09"><span class="tid">T-KO-09</span> Chaining automatic lookups. <span class="wrong">Wrong belief</span>: <code>LOOKUP-a</code> outputs <code>dept</code>, so <code>LOOKUP-b</code> can key on <code>dept</code>. <span class="right">Correct fact</span>: &quot;Splunk software does not support nested automatic lookups.&quot; Both configurations belong to the same stage. Chain them explicitly with the <code>lookup</code> command in SPL, where pipeline order is under your control.</p>
+<p class="trap" id="T-KO-10"><span class="tid">T-KO-10</span> Chaining field aliases. <span class="wrong">Wrong belief</span>: <code>FIELDALIAS-a = clientip AS ip</code> then <code>FIELDALIAS-b = ip AS src</code> gives you <code>src</code>. <span class="right">Correct fact</span>: aliases are one operation, processed in lexicographical order by class name, and chaining is not a documented capability. When two alias configurations write the same destination field the lexicographically last one wins. The documented way to build a field from several possible sources is a calculated field using <code>coalesce</code>, <code>mvappend</code>, or <code>mvdedup</code>.</p>
+<p class="trap" id="T-KO-11"><span class="tid">T-KO-11</span> Confusing search-time sequence with configuration file precedence. <span class="wrong">Wrong belief</span>: &quot;precedence&quot; is one concept, so <code>local</code> beating <code>default</code> somehow determines whether a lookup can see an alias. <span class="right">Correct fact</span>: they are unrelated. The sequence decides in what order objects are applied to events. Configuration file precedence decides which copy of a duplicated setting survives the merge.</p>
+<p class="trap" id="T-KO-12"><span class="tid">T-KO-12</span> Assuming app directory ordering works the same in both contexts. <span class="wrong">Wrong belief</span>: apps are always evaluated in lexicographical order. <span class="right">Correct fact</span>: the global context uses lexicographical order of app directory names, the app or user context uses reverse-lexicographical order. The two contexts resolve app collisions in opposite directions.</p>
+<p class="trap" id="T-KO-13"><span class="tid">T-KO-13</span> Treating lexicographical order as alphabetical or numeric. <span class="wrong">Wrong belief</span>: <code>EXTRACT-aaa</code> runs before <code>EXTRACT-ZZZ</code>, and <code>EXTRACT-9</code> runs before <code>EXTRACT-10</code>. <span class="right">Correct fact</span>: uppercase sorts before lowercase, so <code>ZZZ</code> runs first, and numbers sort on the first digit, so 10, 100, 70, 9 is the sorted order. Pad numeric prefixes if you need real ordering.</p>
+<p class="trap" id="T-KO-14"><span class="tid">T-KO-14</span> Chaining calculated fields inside a stanza. <span class="wrong">Wrong belief</span>: <code>EVAL-a</code> can feed <code>EVAL-b</code> if you name them in the right order. <span class="right">Correct fact</span>: &quot;All <code>EVAL-&lt;fieldname&gt;</code> configurations within a single <code>props.conf</code> stanza are processed in parallel instead of sequentially.&quot; Lexicographical order does not save you. Also note that a calculated field overrides an extracted field of the same name even when the eval returns null, which is why <code>coalesce</code> is the documented guard.</p>
+<p class="trap" id="T-KO-15"><span class="tid">T-KO-15</span> <code>OUTPUT</code> versus <code>OUTPUTNEW</code>. <span class="wrong">Wrong belief</span>: they are interchangeable, or <code>OUTPUTNEW</code> means &quot;only new rows in the lookup table&quot;. <span class="right">Correct fact</span>: with <code>OUTPUT</code>, output fields that already exist in the event are overwritten. With <code>OUTPUTNEW</code>, Splunk adds only the output fields that are new to the event, leaving existing values alone. The same distinction exists for field aliases as <code>AS</code> versus <code>ASNEW</code>.</p>
+<p class="trap" id="T-KO-16"><span class="tid">T-KO-16</span> Event type priority direction. <span class="wrong">Wrong belief</span>: 10 is the best priority because bigger is better. <span class="right">Correct fact</span>: &quot;1 is the highest priority and 10 is the lowest priority.&quot; Priority determines the display order of matching event types in the expanded event, and which color shows when several matching event types define one. Splunk processes event types by priority first, then lexicographically. The docs publish the 1 to 10 range but do not publish a default value for <code>priority</code> in <code>eventtypes.conf</code>, in the eventtypes configuration topic, or on the Splunk Web event type page.</p>
+<p class="trap" id="T-KO-17"><span class="tid">T-KO-17</span> Source type renaming. <span class="wrong">Wrong belief</span>: <code>rename</code> in <code>props.conf</code> is an index-time change and requires reindexing, or the old stanza's extractions keep working. <span class="right">Correct fact</span>: &quot;The renaming of source types occurs only at search time.&quot; The original source type moves to <code>_sourcetype</code>. And &quot;Data from a renamed source type uses only the search-time configuration for the target source type&quot;, so the extractions defined under the original stanza name stop applying.</p>
+<p class="trap" id="T-KO-18"><span class="tid">T-KO-18</span> Quoting the indexer manual's search-time list as an ordering. <span class="wrong">Wrong belief</span>: event type matching happens before field extraction, because the &quot;Index time versus search time&quot; page prints it in that order. <span class="right">Correct fact</span>: that page is a category list of which activities happen in which phase. The ordered authority is &quot;The sequence of search-time operations&quot;, where event types are stage 8 and extraction is stages 2 through 4.</p>
+<p class="trap" id="T-KO-19"><span class="tid">T-KO-19</span> Assuming an alias always leaves both fields present. <span class="wrong">Wrong belief</span>: aliasing is purely additive and never removes anything. <span class="right">Correct fact</span>: &quot;An alias does not replace or remove the original field name&quot;, so the source field survives. But the destination behaves conditionally: since 7.2.4, if the source field is absent and the alias field is present, the alias field is removed from the event. Use <code>ASNEW</code>, or the Splunk Web &quot;Overwrite field values&quot; checkbox, to control this.</p>
+<p class="trap" id="T-KO-20"><span class="tid">T-KO-20</span> Getting the default field set wrong. <span class="wrong">Wrong belief</span>: <code>punct</code> and <code>linecount</code> are search-time extractions, or <code>_time</code> is derived at search time. <span class="right">Correct fact</span>: default fields are added at index time. Internal fields are <code>_raw</code>, <code>_time</code>, <code>_indextime</code>, <code>_cd</code>, and <code>_bkt</code>. Default fields are <code>host</code>, <code>index</code>, <code>linecount</code>, <code>punct</code>, <code>source</code>, <code>sourcetype</code>, <code>splunk_server</code>, and <code>timestamp</code>. Default datetime fields are <code>date_hour</code>, <code>date_mday</code>, <code>date_minute</code>, <code>date_month</code>, <code>date_second</code>, <code>date_wday</code>, <code>date_year</code>, <code>date_zone</code>.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>1.</strong> A <code>props.conf</code> stanza for <code>index=web sourcetype=access_combined action=purchase</code> contains an automatic lookup that outputs <code>categoryId</code>, and a calculated field <code>EVAL-label = categoryId . &quot; (&quot; . clientip . &quot;)&quot;</code>. A search on that source type returns events where <code>label</code> is null. Why?</p>
+<ul>
+<li>A. The lookup ran but <code>OUTPUTNEW</code> suppressed the field</li>
+<li>B. Calculated fields are evaluated before lookups, so <code>categoryId</code> did not exist yet</li>
+<li>C. The concatenation operator is not valid in <code>EVAL-</code> settings</li>
+<li>D. Calculated fields cannot be scoped to a source type</li>
+</ul>
+<p><strong>2.</strong> Which of these definitions will silently match nothing?</p>
+<ul>
+<li>A. An event type whose search string is <code>index=web sourcetype=access_combined status=404</code></li>
+<li>B. An event type whose search string is <code>tag=web_error</code></li>
+<li>C. A tag applied to the field/value pair <code>eventtype=failed_purchase</code></li>
+<li>D. A lookup whose input field is a field alias</li>
+</ul>
+<p><strong>3.</strong> A source type has two inline field extractions, <code>EXTRACT-Alpha</code> and <code>EXTRACT-beta</code>. Which statement matches the documented processing order?</p>
+<ul>
+<li>A. <code>EXTRACT-Alpha</code> is processed first, because uppercase letters sort before lowercase letters in lexicographical order</li>
+<li>B. <code>EXTRACT-beta</code> is processed first, because lowercase letters sort before uppercase letters in lexicographical order</li>
+<li>C. Whichever appears first in <code>props.conf</code> is processed first</li>
+<li>D. Whichever field appears first in <code>_raw</code> is extracted first</li>
+</ul>
+<p><strong>4.</strong> A user adds a new field alias to a source type on Monday. On Tuesday they search over data indexed last month. What happens?</p>
+<ul>
+<li>A. Nothing, index-time changes only apply to data indexed after the change</li>
+<li>B. The alias applies, because it is a search-time object evaluated against existing data</li>
+<li>C. The alias applies only after the buckets are rebuilt</li>
+<li>D. The alias applies only to the current app's data</li>
+</ul>
+<p><strong>5.</strong> Two apps both define <code>KV_MODE</code> for the same source type in their <code>default</code> directories, and no <code>local</code> copy exists anywhere. Which mechanism decides the winner?</p>
+<ul>
+<li>A. The sequence of search-time operations</li>
+<li>B. Configuration file precedence, resolving the app collision by directory name ordering</li>
+<li>C. Event type priority</li>
+<li>D. The lexicographical order of the <code>KV_MODE</code> class names</li>
+</ul>
+<details><summary>Answers</summary>
+<p><strong>1. B.</strong> Field aliasing is stage 5, calculated fields are stage 6, lookups are stage 7. The eval runs one stage before the lookup populates <code>categoryId</code>, so the concatenation operates on a null and yields null. The About calculated fields page states directly that calculated fields cannot reference lookups, event types, or tags. A is wrong because <code>OUTPUTNEW</code> only declines to overwrite a field that already exists; it still adds a field that is not present. C is wrong because <code>EVAL-</code> accepts any SPL eval expression, and <code>.</code> is the standard concatenation operator. D is wrong because scoping a calculated field to a source type is the normal case; what the docs say is unsupported is scoping one to an <em>aliased</em> host, source, or source type.</p>
+<p><strong>2. B.</strong> Event types are stage 8 and tags are stage 9, so a tag does not exist when the event type search is evaluated. The docs say so explicitly. A is a valid event type: <code>sourcetype</code> is a default field and <code>status</code> comes from extraction at stage 2 to 4, both earlier. C is valid and is the normal pattern, because tags run after event types, so <code>eventtype</code> is a real field by then. D is valid because aliasing is stage 5 and lookups are stage 7, and the docs give keying a lookup on an alias as the reason for that ordering.</p>
+<p><strong>3. A.</strong> Inline extractions are processed in lexicographical order of the class name, and the docs define lexicographical order as the UTF-8 encoding order, a superset of ASCII, in which uppercase letters sort before lowercase letters. <code>Alpha</code> therefore precedes <code>beta</code>. The docs' own example makes the same point in the direction that trips people: <code>EXTRACT-ZZZ</code> is processed before <code>EXTRACT-aaa</code>. B is wrong because it inverts the case rule, which is the single most common misreading of lexicographical order. C is wrong because the class name determines the order, not the position of the setting in the file; if file position mattered the docs would not warn about naming. D is wrong because processing order is a property of the configuration, not of where a match happens to occur inside the raw text.</p>
+<p><strong>4. B.</strong> Field aliases are search-time knowledge objects, evaluated on each search against <code>_raw</code> and the fields already on disk, so they apply retroactively to all existing data. A describes index-time behavior, which is the opposite case: <code>TRANSFORMS-</code>, line breaking, timestamping, host and source type assignment are baked in at index time and need a reindex. C is wrong because nothing is rewritten on disk for a search-time object, so no rebuild is involved. D is wrong because sharing scope is a permissions question, not a data-age question, and does not change whether old data is covered.</p>
+<p><strong>5. B.</strong> This is configuration file precedence, not search-time sequencing. Two copies of the same setting in two apps' <code>default</code> directories are merged by location-based priority, and the app collision is broken by app directory name ordering, lexicographical in the global context and reverse-lexicographical in the app or user context. A is wrong because the search-time sequence decides in what order object types are applied to events, not which duplicate setting survives. C applies only to event types. D is a category error: <code>KV_MODE</code> has no class suffix, and lexicographical class ordering resolves ordering within a stage, not file merge conflicts.</p>
+</details>
+<h2 id="cram-block">Cram block<a class="anchor" href="#cram-block" aria-label="Link to this section">#</a></h2>
+<p>Sequence, memorise as nine: filters, inline extract, transform extract, auto key-value, alias, calculated field, lookup, event type, tag. Mnemonic on the last five: Alias, Eval, Lookup, Eventtype, Tag.</p>
+<p>Before all nine: macro expansion at parse time. Before that: index time, where default fields and indexed fields are written.</p>
+<p>Reference rule: an object can see fields from stages above it, never below it.</p>
+<p>Six one-liners: calculated field can use an alias, alias cannot use a calculated field; lookup can key on an alias or a calculated field; calculated field cannot use a lookup output; event type cannot use a tag; tag can be applied to an event type; automatic lookups cannot nest.</p>
+<p>Ordering within a stage: lexicographical, uppercase before lowercase, numbers on first digit. Event types sort by priority first, 1 best and 10 worst. <code>EVAL-</code> settings in one stanza run in parallel, so they never chain.</p>
+<p>Different concept, same word: configuration file precedence. <code>local</code> beats <code>default</code>. Global context runs system <code>local</code>, app <code>local</code>, app <code>default</code>, system <code>default</code>. App or user context runs user, current app, other apps, system.</p>
+<p>Trap IDs: T-KO-01 through T-KO-20.</p>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<p>Read in this order.</p>
+<ol>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations The nine-operation table, the reference rule, and the lexicographical order section. This is the page the exam is written from. 15 minutes, then reread the table until you can write it from memory.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/administer/manage-indexers-and-indexer-clusters/10.4/indexing-overview/index-time-versus-search-time The two lists of processes and the argument for doing knowledge work at search time. 8 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/use-default-fields The internal, default, and default datetime field lists. 6 minutes, memorise the three groups.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/welcome-to-knowledge-management/what-is-splunk-knowledge The five categories of knowledge object and the index-time versus search-time framing. 5 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/field-aliases/configure-field-aliases-with-props.conf <code>FIELDALIAS-&lt;class&gt;</code> syntax and the placement argument for stage 5. 6 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/about-calculated-fields The stage 6 placement, the parallel-evaluation rule, and the null-override behavior. 8 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-configuration-files-to-configure-lookups/make-your-lookup-automatic <code>LOOKUP-&lt;class&gt;</code> syntax, <code>OUTPUT</code> versus <code>OUTPUTNEW</code>, and the no-nested-lookups rule. 8 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-types Stage 8 placement, the no-tags rule, priority then lexicographical processing, and multivalue <code>eventtype</code>. 6 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/about-tags-and-aliases Stage 9 placement, ASCII sort order, and what can be tagged. 5 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/use-search-macros-in-searches Backtick syntax, arguments, quoting, and the leading pipe rule for generating macros. 8 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/use-macros-with-event-types-and-tags The parentheses example. Short but it is the clearest proof that expansion is textual and early. 4 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/administer-splunk-enterprise-with-configuration-files/configuration-file-precedence The two context orderings and the app directory tie-break. Read it once and label it mentally as the other precedence. 10 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/get-started/get-data-in/10.4/configure-source-types/rename-source-types-at-search-time <code>rename</code>, <code>_sourcetype</code>, and the target-stanza configuration rule. 5 minutes.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/props.conf Reference only. Look up <code>EXTRACT-</code>, <code>REPORT-</code>, <code>KV_MODE</code>, <code>FIELDALIAS-</code>, <code>EVAL-</code>, <code>LOOKUP-</code> when you need exact syntax. Do not read start to finish.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/transforms.conf Reference only. <code>SOURCE_KEY</code>, <code>REGEX</code>, <code>FORMAT</code> for extraction transforms, <code>filename</code>, <code>collection</code>, <code>max_matches</code>, <code>case_sensitive_match</code> for lookup transforms.</li>
+<li>https://help.splunk.com/en/splunk-enterprise/release-notes-and-updates/release-notes/10.2/known-issues-for-this-release/field-alias-behavior-change The <code>AS</code> versus <code>ASNEW</code> matrix and the source-absent removal behavior. The 10.2 release note is the latest published copy of this topic. 5 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="exam-traps.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Trap inventory</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#scope-and-source-of-truth"><span>Scope and source of truth</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#the-documented-sequence-nine-operations"><span>The documented sequence, nine operations</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#where-macro-expansion-sits-and-why-it-is-not-in-the-list"><span>Where macro expansion sits, and why it is not in the list</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#where-index-time-processing-sits"><span>Where index-time processing sits</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#default-fields"><span>Default fields</span></a></li>
+<li><a class="lvl3" href="#why-index-time-changes-need-reindexing-and-search-time-ones-do-not"><span>Why index-time changes need reindexing and search-time ones do not</span></a></li>
+<li><a class="lvl2" href="#the-full-pipeline"><span>The full pipeline</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#which-configuration-file-backs-each-stage"><span>Which configuration file backs each stage</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#the-consequences-table"><span>The consequences table</span><span class="min">4m</span></a></li>
+<li><a class="lvl2" href="#ordering-inside-a-single-stage-lexicographical-order"><span>Ordering inside a single stage: lexicographical order</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#configuration-file-precedence-is-a-different-thing"><span>Configuration file precedence is a different thing</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">5m</span></a></li>
+<li><a class="lvl2" href="#cram-block"><span>Cram block</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">2m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>31 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

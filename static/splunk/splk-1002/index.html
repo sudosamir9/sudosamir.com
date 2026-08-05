@@ -3,31 +3,258 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SPLK-1002 Study Site</title>
-<meta name="description" content="Splunk Core Certified Power User (SPLK-1002) study site.">
-<link rel="canonical" href="https://sudosamir.com/splunk/splk-1002/site/">
-<meta http-equiv="refresh" content="0; url=site/">
-<script>location.replace("site/");</script>
-<style>
-  :root { color-scheme: light dark; }
-  body {
-    margin: 0; min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-    background: #f4f6f9; color: #1b2028;
-  }
-  @media (prefers-color-scheme: dark) {
-    body { background: #12151c; color: #e3e8ef; }
-  }
-  main { text-align: center; padding: 2rem; }
-  a { color: #0b7a55; font-weight: 600; }
-  @media (prefers-color-scheme: dark) { a { color: #5ee6a8; } }
-</style>
+<title>SPLK-1002: Splunk Core Certified Power User | SPLK-1002</title>
+<meta name="description" content="Read me first, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
 </head>
-<body>
-<main>
-  <p>Redirecting to the SPLK-1002 study site.</p>
-  <p><a href="site/">Continue to the study site</a></p>
-</main>
+<body data-page="README" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="index.html" aria-current="page"><span class="t">Read me first</span></a>
+<a class="navitem" href="00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Start here</span><span class="sep">/</span>
+        <span>Read me first</span>
+        
+      </div>
+<h1 id="splk-1002-splunk-core-certified-power-user">SPLK-1002: Splunk Core Certified Power User</h1>
+<p>A self-contained study system for the Splunk Core Certified Power User exam, built entirely from <code>help.splunk.com</code> 10.4. Everything you need is in this folder: the concepts, the option defaults, worked SPL against a practice dataset you install locally, the traps, and a 200-question exam simulator. No other book or course is required.</p>
+<p>If you want a video course alongside it, &quot;Splunk: Zero to Power User&quot; by Hailie Shaw on Udemy is a reasonable companion for building intuition. It is not a prerequisite for anything here.</p>
+<p>Start with <a href="00-exam-overview.html"><code>00-exam-overview</code></a>.</p>
+<h2 id="the-exam-in-four-lines">The exam in four lines<a class="anchor" href="#the-exam-in-four-lines" aria-label="Link to this section">#</a></h2>
+<p>65 questions, 60 minutes (three of which are the exam agreement), $130, no prerequisite exam. Splunk publishes no passing score, so ignore the &quot;70%&quot; that circulates. Ten blueprint sections; the heaviest is 3.0 Correlating Events at 15%. <strong>Lookups, dashboards, reports and alerts are not on this exam</strong>, however much space they get in general Splunk training.</p>
+<h2 id="reading-order">Reading order<a class="anchor" href="#reading-order" aria-label="Link to this section">#</a></h2>
+<p><strong>1. Orient.</strong> <a href="00-exam-overview.html"><code>00-exam-overview</code></a> for the verified blueprint, weights and what the exam is not.</p>
+<p><strong>2. Set up the lab.</strong> <a href="lab-setup.html"><code>lab-setup</code></a>. About twenty minutes on your local 10.x instance. Every topic file ends with an exercise that assumes this is done.</p>
+<p><strong>3. Read the one file that carries 50% of the exam.</strong> <a href="reference/knowledge-object-precedence.html"><code>reference/knowledge-object-precedence</code></a>. Sections 4, 5, 6, 9 and 10 all reduce to the search-time operation order. Read it before the topic files, not after.</p>
+<p><strong>4. Work the sections.</strong> In blueprint order, or heaviest first if you are short on time. Each file is concept, every option with its default, output shape, worked SPL, decision rules, traps, a lab, self-check questions, and the docs to read. Read the topic file first, then its pages in <a href="reference/docs-by-blueprint.html"><code>reference/docs-by-blueprint</code></a>, which numbers all 154 documentation pages in blueprint order from 1.1 through 10.3.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Section</th>
+<th>Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="topics/00-foundations-refresher.html"><code>topics/00-foundations-refresher</code></a></td>
+<td>Assumed knowledge, off blueprint</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a href="topics/01-transforming-commands.html"><code>topics/01-transforming-commands</code></a></td>
+<td>1.0 Using Transforming Commands for Visualizations</td>
+<td>5%</td>
+</tr>
+<tr>
+<td><a href="topics/02-filtering-and-formatting.html"><code>topics/02-filtering-and-formatting</code></a></td>
+<td>2.0 Filtering and Formatting Results</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/03-correlating-events.html"><code>topics/03-correlating-events</code></a></td>
+<td>3.0 Correlating Events</td>
+<td><strong>15%</strong></td>
+</tr>
+<tr>
+<td><a href="topics/04-field-extractions.html"><code>topics/04-field-extractions</code></a></td>
+<td>4.0 Creating and Managing Fields</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/05-aliases-and-calculated-fields.html"><code>topics/05-aliases-and-calculated-fields</code></a></td>
+<td>5.0 Creating Field Aliases and Calculated Fields</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/06-tags-and-event-types.html"><code>topics/06-tags-and-event-types</code></a></td>
+<td>6.0 Creating Tags and Event Types</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/07-macros.html"><code>topics/07-macros</code></a></td>
+<td>7.0 Creating and Using Macros</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/08-workflow-actions.html"><code>topics/08-workflow-actions</code></a></td>
+<td>8.0 Creating and Using Workflow Actions</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/09-data-models-and-pivot.html"><code>topics/09-data-models-and-pivot</code></a></td>
+<td>9.0 Creating Data Models</td>
+<td>10%</td>
+</tr>
+<tr>
+<td><a href="topics/10-cim.html"><code>topics/10-cim</code></a></td>
+<td>10.0 Using the Common Information Model (CIM) Add-On</td>
+<td>10%</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>5. Drill.</strong> Open the <a href="exam/index.html">exam simulator</a>. 200 questions, every one checked against the documentation. Untimed practice reveals the answer, the traps it bites and the reasoning behind every option the moment you submit; the timed mode is 65 questions in 60 minutes under exam conditions.</p>
+<p><strong>6. Cram.</strong> The <code>cram/</code> folder has one screen per section, reachable from the Study / Cram control at the top of each topic page, and <a href="cram/all-in-one.html"><code>cram/all-in-one</code></a> is the single sheet for the last hour.</p>
+<h2 id="reference-layer">Reference layer<a class="anchor" href="#reference-layer" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="reference/knowledge-object-precedence.html"><code>reference/knowledge-object-precedence</code></a></td>
+<td>The search-time operation order and what each stage can see. The highest-yield file here</td>
+</tr>
+<tr>
+<td><a href="reference/exam-traps.html"><code>reference/exam-traps</code></a></td>
+<td>Every trap in the guide by stable ID, plus the top twenty and a final-review list</td>
+</tr>
+<tr>
+<td><a href="reference/docs-by-blueprint.html"><code>reference/docs-by-blueprint</code></a></td>
+<td><strong>All 154 documentation pages, numbered 1 to 154 in blueprint order.</strong> Read top to bottom and you have covered the exam</td>
+</tr>
+<tr>
+<td><a href="reference/doc-links.html"><code>reference/doc-links</code></a></td>
+<td>The same pages grouped by Splunk manual with <code>DL-nnn</code> ids, for looking one up</td>
+</tr>
+<tr>
+<td><a href="reference/spl-command-reference.html"><code>reference/spl-command-reference</code></a></td>
+<td>Every command in scope by type, plus the commands that look alike</td>
+</tr>
+<tr>
+<td><a href="reference/eval-functions.html"><code>reference/eval-functions</code></a></td>
+<td>Corrected eval function catalogue</td>
+</tr>
+<tr>
+<td><a href="reference/stats-and-chart-functions.html"><code>reference/stats-and-chart-functions</code></a></td>
+<td>Aggregate, event-order, multivalue and rate functions, and the by/over/split-by shapes</td>
+</tr>
+<tr>
+<td><a href="reference/time-modifiers.html"><code>reference/time-modifiers</code></a></td>
+<td><code>earliest</code>/<code>latest</code>, snap-to, <code>span</code>, and the strftime table</td>
+</tr>
+<tr>
+<td><a href="reference/regex-for-splunk.html"><code>reference/regex-for-splunk</code></a></td>
+<td>Reading what the Field Extractor generates, plus <code>rex</code>, <code>erex</code> and <code>regex</code></td>
+</tr>
+<tr>
+<td><a href="reference/cim-data-models.html"><code>reference/cim-data-models</code></a></td>
+<td>The CIM model catalogue with required, recommended and optional fields</td>
+</tr>
+<tr>
+<td><a href="reference/glossary.html"><code>reference/glossary</code></a></td>
+<td>Terms the exam uses precisely, including the three that mean two things</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="two-things-to-know-before-you-start">Two things to know before you start<a class="anchor" href="#two-things-to-know-before-you-start" aria-label="Link to this section">#</a></h2>
+<p><strong>Answer keys in circulation are unreliable.</strong> Several widely-shared study guides key the data model to Pivot relationship backwards, which is blueprint objective 9.1 verbatim, and contradict themselves on field-value case sensitivity and on whether the delimiters method is for structured data. Every claim in this guide traces to a documentation page, and <a href="reference/exam-traps.html"><code>reference/exam-traps</code></a> records each of those errors with a stable ID so you meet them here rather than in the exam.</p>
+<p><strong>Splunk's own course path has a hole.</strong> The blueprint names eight suggested courses and none of them covers section 10.0, CIM, which is 10% of the exam. <a href="topics/10-cim.html"><code>topics/10-cim</code></a> and <a href="reference/cim-data-models.html"><code>reference/cim-data-models</code></a> are written to stand alone because of it.</p>
+
+<nav class="pn" aria-label="Section"><a href="00-exam-overview.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Exam overview</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#the-exam-in-four-lines"><span>The exam in four lines</span></a></li>
+<li><a class="lvl2" href="#reading-order"><span>Reading order</span></a></li>
+<li><a class="lvl2" href="#reference-layer"><span>Reference layer</span></a></li>
+<li><a class="lvl2" href="#two-things-to-know-before-you-start"><span>Two things to know before you start</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>4 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="progress.js"></script>
+<script src="search-index.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

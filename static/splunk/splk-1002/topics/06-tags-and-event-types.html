@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.0 Creating Tags and Event Types | SPLK-1002</title>
+<meta name="description" content="Tags and event types, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="topics/06-tags-and-event-types" data-section="6">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="06-tags-and-event-types.html" aria-current="page"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Tags and event types</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="06-tags-and-event-types.html">Study</a><a class="" href="../cram/06-tags-and-event-types.html">Cram</a></div>
+      </div>
+<h1 id="6.0-creating-tags-and-event-types-10">6.0 Creating Tags and Event Types</h1>
+<p>This section is the classification half of Splunk knowledge management: tags label field-value pairs so you can search by meaning instead of by literal value, and event types label whole events so you can search by category instead of by search string. They are the two knowledge objects at the very end of the search-time sequence, and almost every wrong answer here comes from one of four confusions: what a tag is attached to, exactly how a tag search is written, what an event type search may contain, and which end of the priority scale wins.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<ul>
+<li>Section 6.0 Creating Tags and Event Types, 10% of the exam</li>
+<li>6.1 Create and use tags</li>
+<li>6.2 Describe event types and their uses</li>
+<li>6.3 Create an event type</li>
+</ul>
+<p>Read both secondary sources for orientation only. Every default, every option name and every click path below comes from help.splunk.com for Splunk Enterprise 10.4.</p>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>A <strong>tag</strong> is a label attached to a <strong>field-value pair</strong>. Not to an event. Not to a field. The unit of tagging is the combination of one field name and one specific value of that field, written <code>&lt;field&gt;=&lt;value&gt;</code>. The docs state it directly: tags &quot;enable you to assign names to specific field and value combinations, including event type, host, source, or source type.&quot; One field-value pair can carry many tags, and one tag can be attached to many field-value pairs. That two-way many-to-many relationship is the whole point: an IP address of a router located in San Francisco inside Building 1 could carry the tags <code>router</code>, <code>SF</code> and <code>Building1</code>, and every router IP in the estate can share the single tag <code>router</code>.</p>
+<p>The stated purpose is readability: tags track abstract field values, IP addresses and ID numbers, by giving them descriptive names, and group several distinct values under one searchable name. &quot;Tags make your data more understandable&quot; is therefore always a true statement about tags, and it is what separates them from event types, which categorise events using a saved search string. The pair you tag can come from anywhere, since tags apply to fields &quot;extracted at index time, search time, or added through some other method&quot;. The tag itself is always search-time, because &quot;tags come last in the sequence of search-time operations&quot;. A tag is never created at index time.</p>
+<p>An <strong>event type</strong> is a saved search string that classifies events. Any event returned by that search string gets the field <code>eventtype</code> set to the event type's name at search time. It is a categorization system, not a shortcut for typing. Splunk's own guidance is that &quot;using event types as a short cut for search is not recommended&quot; and that search macros are the better tool for shortening a search, because macros can contain other search commands, can be parameterized, and do not incur costs when events are retrieved.</p>
+<p>Both objects are applied at search time, and their position in the sequence is examinable. The full documented sequence of search-time operations is:</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 332 709" width="332" height="709" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 41.0 C166.15 61.0 166.15 61.0 166.15 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 124.0 C166.15 144.0 166.15 144.0 166.15 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 207.0 C166.15 227.0 166.15 227.0 166.15 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 290.0 C166.15 310.0 166.15 310.0 166.15 330.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 373.0 C166.15 393.0 166.15 393.0 166.15 413.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 456.0 C166.15 476.0 166.15 476.0 166.15 496.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 539.0 C166.15 559.0 166.15 559.0 166.15 579.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M166.15 622.0 C166.15 642.0 166.15 642.0 166.15 662.0"/><rect class="dg-node" x="94.95" y="2.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="166.15" y="22.5" text-anchor="middle" dominant-baseline="middle">1. Field filters</text><rect class="dg-node" x="59.2" y="85.0" width="213.9" height="39" rx="5"/><text class="dg-text" x="166.15" y="105.5" text-anchor="middle" dominant-baseline="middle">2. Inline field extraction</text><rect class="dg-node" x="2.0" y="168.0" width="328.3" height="39" rx="5"/><text class="dg-text" x="166.15" y="188.5" text-anchor="middle" dominant-baseline="middle">3. Field extraction using field transforms</text><rect class="dg-node" x="12.724999999999994" y="251.0" width="306.85" height="39" rx="5"/><text class="dg-text" x="166.15" y="271.5" text-anchor="middle" dominant-baseline="middle">4. Automatic key-value field extraction</text><rect class="dg-node" x="91.375" y="334.0" width="149.55" height="39" rx="5"/><text class="dg-text" x="166.15" y="354.5" text-anchor="middle" dominant-baseline="middle">5. Field aliasing</text><rect class="dg-node" x="80.65" y="417.0" width="171.0" height="39" rx="5"/><text class="dg-text" x="166.15" y="437.5" text-anchor="middle" dominant-baseline="middle">6. Calculated fields</text><rect class="dg-node" x="116.4" y="500.0" width="99.5" height="39" rx="5"/><text class="dg-text" x="166.15" y="520.5" text-anchor="middle" dominant-baseline="middle">7. Lookups</text><rect class="dg-node" x="102.1" y="583.0" width="128.10000000000002" height="39" rx="5"/><text class="dg-text" x="166.15" y="603.5" text-anchor="middle" dominant-baseline="middle">8. Event types</text><rect class="dg-node" x="127.125" y="666.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="166.15" y="686.5" text-anchor="middle" dominant-baseline="middle">9. Tags</text></svg></figure>
+<p>The consequences fall straight out of that ordering. Calculated fields (6) cannot reference lookups, event types or tags. Lookups (7) cannot reference event types or tags. An event type search string <strong>can</strong> reference a lookup output field, because 7 runs before 8, but it cannot reference a tag. Tags (9) can be applied to any field-value pair produced by any earlier operation, which is exactly why you can tag an event type: <code>eventtype</code> is just another field by the time step 9 runs.</p>
+<p>That last point is the mechanism the Common Information Model is built on.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 768 146" width="768" height="146" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="192.45000000000002" height="56" rx="5"/><text class="dg-text" x="98.22500000000001" y="22.5" text-anchor="middle" dominant-baseline="middle">Raw events from a TA</text><text class="dg-text" x="98.22500000000001" y="39.5" text-anchor="middle" dominant-baseline="middle">(sourcetype=nessus:scan</text><rect class="dg-node" x="228.45000000000002" y="2" width="99.5" height="56" rx="5"/><text class="dg-text" x="278.20000000000005" y="22.5" text-anchor="middle" dominant-baseline="middle">Event type</text><text class="dg-text" x="278.20000000000005" y="39.5" text-anchor="middle" dominant-baseline="middle">[nessus</text><rect class="dg-node" x="361.95000000000005" y="2" width="221.05" height="56" rx="5"/><text class="dg-text" x="472.475" y="22.5" text-anchor="middle" dominant-baseline="middle">eventtype=nessus</text><text class="dg-text" x="472.475" y="39.5" text-anchor="middle" dominant-baseline="middle">set on every matching event</text><rect class="dg-node" x="617.0" y="2" width="149.55" height="56" rx="5"/><text class="dg-text" x="691.775" y="22.5" text-anchor="middle" dominant-baseline="middle">tags.conf</text><text class="dg-text" x="691.775" y="39.5" text-anchor="middle" dominant-baseline="middle">[eventtype=nessus</text><rect class="dg-node" x="2" y="88" width="228.20000000000002" height="56" rx="5"/><text class="dg-text" x="116.10000000000001" y="108.5" text-anchor="middle" dominant-baseline="middle">CIM data model constraint</text><text class="dg-text" x="116.10000000000001" y="125.5" text-anchor="middle" dominant-baseline="middle">tag=vulnerability tag=report</text><rect class="dg-node" x="264.20000000000005" y="88" width="306.85" height="56" rx="5"/><text class="dg-text" x="417.62500000000006" y="108.5" text-anchor="middle" dominant-baseline="middle">Vulnerabilities data model</text><text class="dg-text" x="417.62500000000006" y="125.5" text-anchor="middle" dominant-baseline="middle">pivot, dashboards, accelerated searches</text><path class="dg-edge" marker-end="url(#ah)" d="M194.45000000000002 30.0 L224.45000000000002 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M327.95000000000005 30.0 L357.95000000000005 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M583.0 30.0 L613.0 30.0"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M691.775 58 L691.775 73.0 L116.10000000000001 73.0 L116.10000000000001 84"/><path class="dg-edge" marker-end="url(#ah)" d="M230.20000000000002 116.0 L260.20000000000005 116.0"/></svg></figure>
+<p>CIM never tags raw events directly. A technology add-on defines event types over its sourcetypes, tags those event types in <code>tags.conf</code>, and the CIM data model constrains on those tags. Change the event type definition and every downstream model follows.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<h3 id="tag-search-syntax">Tag search syntax<a class="anchor" href="#tag-search-syntax" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">tag</span><span class="t-op">=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span>
+<span class="t-field">tag::</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Those two forms are the only documented ones. <code>tag=&lt;tagname&gt;</code> matches events where <strong>any</strong> tagged field-value pair carries that tag. <code>tag::&lt;field&gt;=&lt;tagname&gt;</code> restricts the match to tags attached to values of that one field. The separator is a <strong>double colon</strong> with no space around it, it sits between <code>tag</code> and the field name, and the term is <code>tag</code>, singular. Both forms end in a tag name, so <code>tag::&lt;field&gt;</code> on its own is not a search.</p>
+<p>The asterisk wildcard is documented on the tag name: <code>tag::eventtype=IP-*</code>, <code>tag::host=*local*</code>, and <code>NOT tag::eventtype=*</code>. The docs also state generally that you can use the asterisk when you search keywords and field values, &quot;including for eventtypes and tags&quot;, so the unscoped form takes it too. <code>tag=Priv*</code> is as legal as the scoped examples, and a wildcard is the safe way to match a tag name whose exact capitalisation you are unsure of (see T-06-12).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag=&lt;tagname&gt;</code></td>
+<td>any tag name, wildcards allowed</td>
+<td>none (required)</td>
+<td>Matches events with that tag on any field-value pair</td>
+</tr>
+<tr>
+<td><code>tag::&lt;field&gt;=&lt;tagname&gt;</code></td>
+<td>any field name and tag name, wildcards documented on the tag name</td>
+<td>none (required)</td>
+<td>Matches events where that specific field's value carries that tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>Documented wildcard examples: <code>tag::eventtype=IP-*</code> matches event types tagged <code>IP-src</code>, <code>IP-dest</code> and so on; <code>tag::host=*local*</code> finds hosts whose tags contain <code>local</code>; <code>NOT tag::eventtype=*</code> finds event types with no tags at all. Tag terms combine with Boolean operators like any other search term: <code>tag=router tag=SF NOT (tag=Building1)</code>.</p>
+<h3 id="tags.conf">tags.conf<a class="anchor" href="#tags.conf" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[&lt;fieldname&gt;=&lt;value&gt;]
+&lt;tag1&gt; = &lt;enabled|disabled&gt;
+&lt;tag2&gt; = &lt;enabled|disabled&gt;</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stanza <code>[&lt;fieldname&gt;=&lt;value&gt;]</code></td>
+<td>one field-value pair per stanza</td>
+<td>none (required)</td>
+<td>The field name and value the tags in the stanza apply to, for example <code>host=localhost</code></td>
+</tr>
+<tr>
+<td><code>&lt;tag&gt;</code></td>
+<td><code>enabled</code> or <code>disabled</code></td>
+<td>None stated in the spec, so write it explicitly. Every stanza in <code>tags.conf.example</code> uses <code>enabled</code></td>
+<td>Enables or disables that one tag for this field-value pair</td>
+</tr>
+</tbody>
+</table></div>
+<p>Spec rules that are easy to test on: only one tag is allowed per stanza line; do not put the tag value in quotes (<code>foo=enabled</code>, never <code>&quot;foo&quot;=enabled</code>); each stanza refers to exactly one field-value pair; URL-encode the value when it contains <code>\n</code>, <code>=</code> or <code>[ ]</code>. There is no <code>tags.conf</code> in <code>$SPLUNK_HOME/etc/system/default/</code>, so every tag on the system is something a person or an app created.</p>
+<h3 id="eventtypes.conf">eventtypes.conf<a class="anchor" href="#eventtypes.conf" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[$EVENTTYPE]
+disabled = &lt;1|0&gt;
+search = &lt;string&gt;
+description = &lt;string&gt;
+priority = &lt;integer&gt;
+color = &lt;string&gt;</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stanza <code>[$EVENTTYPE]</code></td>
+<td>any unique name</td>
+<td>none (required)</td>
+<td>The event type name, which becomes the value of the <code>eventtype</code> field</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>a search string with no pipe after the simple search, no subsearch, no <code>savedsearch</code> reference</td>
+<td>none (required)</td>
+<td>The classifier. Every event this search returns gets <code>eventtype=&lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td><code>1</code> or <code>0</code></td>
+<td>None stated in the spec. The spec says &quot;Set to 1 to disable&quot;, so a stanza with no <code>disabled</code> line is active</td>
+<td>Turns the event type off without deleting it</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>free text</td>
+<td>none</td>
+<td>Human readable explanation shown in Settings</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>integer 1 through 10, declared in the spec as <code>priority = &lt;integer, 1 through 10&gt;</code></td>
+<td>none (the attribute is omitted when you do not set one)</td>
+<td>&quot;1 is the highest priority and 10 is the lowest priority.&quot; Controls display order and colour precedence</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>none</code>, <code>et_blue</code>, <code>et_green</code>, <code>et_magenta</code>, <code>et_orange</code>, <code>et_purple</code>, <code>et_red</code>, <code>et_sky</code>, <code>et_teal</code>, <code>et_yellow</code></td>
+<td><code>none</code></td>
+<td>Colour band drawn beside matching events in the events list</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>free text</td>
+<td>none</td>
+<td><strong>Deprecated.</strong> The spec points you to <code>tags.conf.spec</code> instead</td>
+</tr>
+</tbody>
+</table></div>
+<p>That table is the whole surface of an event type: <code>disabled</code>, <code>search</code>, <code>description</code>, <code>priority</code>, <code>color</code>, plus the deprecated <code>tags</code>, and nothing else. There is no time-range attribute, no result-formatting attribute, no rank and no weight. An event type cannot pin itself to the last 24 hours; the time range is whatever the running search uses. That is the sharpest discriminator against a saved search, which stores a search plus its time range and its formatting, while an event type contributes a searchable field value you can drop into any future search over any time range.</p>
+<p>File precedence locations: <code>$SPLUNK_HOME/etc/system/default/eventtypes.conf</code> holds the few shipped event types, <code>$SPLUNK_HOME/etc/system/local/</code> and <code>$SPLUNK_HOME/etc/apps/&lt;app&gt;/local/</code> hold administrator and app definitions, and anything you create in Splunk Web lands in <code>$SPLUNK_HOME/etc/users/&lt;username&gt;/&lt;app&gt;/local/eventtypes.conf</code> until you share it.</p>
+<h3 id="routes-to-create-an-event-type">Routes to create an event type<a class="anchor" href="#routes-to-create-an-event-type" aria-label="Link to this section">#</a></h3>
+<p>Three routes exist in Splunk Web, and the fourth is the file itself. Know all four by their exact menu wording, because the exam builds options out of near-miss menu names.</p>
+<ol>
+<li><strong>Run a search, then Save As, Event Type.</strong> The search bar contents become the definition, so the dialog has no Search String box. You supply Name, and optionally Tag(s), Color and Priority.</li>
+<li><strong>Settings, Event Types, New.</strong> The full form, including Destination App and a Search String you type yourself. Use it when you are not currently looking at results.</li>
+<li><strong>Expand an event in the results, click Event Actions, select Build Event Type.</strong> This opens the Event Type Builder, where you pick which of the event's own fields and terms form the classifier and set a Style (the colour) and a Priority. It turns one interesting event into a category without writing the search string by hand.</li>
+<li><strong>Edit <code>eventtypes.conf</code> directly</strong> in <code>$SPLUNK_HOME/etc/system/local/</code> or an app's <code>local/</code> directory, then reload.</li>
+</ol>
+<p>One command is worth knowing so you do not mistake it for a creation route. <code>findtypes</code> analyses the events returned by the search in front of it and prints candidate event type definitions, 10 by default, changeable with <code>max</code>, from at most 5000 events. It finds and prints. It saves nothing. There is no <code>searchtypes</code> command.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;failed password&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">findtypes</span></code></pre></div>
+<h3 id="splunk-web-form-fields">Splunk Web form fields<a class="anchor" href="#splunk-web-form-fields" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Form field</th>
+<th>Present in Save As, Event Type</th>
+<th>Present in Settings, Event Types, New</th>
+<th>Required</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destination App</td>
+<td>no (uses current app context)</td>
+<td>yes</td>
+<td>no</td>
+<td>current app context</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes, and must be unique</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Search String</td>
+<td>no (taken from the search bar)</td>
+<td>yes</td>
+<td>yes</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Tag(s)</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Color</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+<td><code>eventtypes.conf</code> documents <code>priority = &lt;integer, 1 through 10&gt;</code> and states that 1 is the highest priority and 10 the lowest. No default is documented.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p>Neither a tag nor an event type is a search command, so neither transforms the result set. Both are <strong>search-time field enrichments</strong> applied before your first pipe. Nothing is dropped, no rows are collapsed, and the shape of your result table is unchanged by their existence.</p>
+<p>What they add:</p>
+<ul>
+<li><strong>Event types add one field: <code>eventtype</code>.</strong> It is set on every event matching the event type's search string. When an event matches two or more event types, <code>eventtype</code> becomes a <strong>multivalue field</strong> holding every matching name. Splunk orders those values by priority score first and then lexicographically.</li>
+<li><strong>Tags add nothing to the event body.</strong> The one ordering statement in the docs is that Splunk &quot;applies tags to field/value pairs in events in ASCII sort order&quot;, which is order of application, not precedence: no tag overrides another. A tag is a search-time alias for a field-value pair. Tagging <code>host=web01</code> with <code>webserver</code> does not change the value of <code>host</code>; the docs are explicit that &quot;tagging the host field with an alternate hostname doesn't change the actual value of the host field, but it lets you search for the tag you specified instead.&quot; The <code>tag</code> and <code>tag::&lt;field&gt;</code> forms are documented as searchable terms. Grouping on them as ordinary fields, as in <code>| stats count by tag</code>, works in the product, but no 10.4 page states it, so do not answer a question on that basis. [verify]</li>
+</ul>
+<p>A concrete shape. Suppose <code>all_system_errors</code> (priority 7, colour <code>et_orange</code>) and <code>critical_disk_error</code> (priority 3, colour <code>et_purple</code>) both exist, and <code>critical_disk_error</code> is tagged <code>urgent</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>host</th>
+<th>eventtype</th>
+<th>tag::eventtype</th>
+<th>colour band shown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12:00:01</td>
+<td>web01</td>
+<td>all_system_errors</td>
+<td>(none)</td>
+<td>orange</td>
+</tr>
+<tr>
+<td>12:00:04</td>
+<td>db02</td>
+<td>critical_disk_error<br/>all_system_errors</td>
+<td>urgent</td>
+<td>purple</td>
+</tr>
+</tbody>
+</table></div>
+<p>Row two shows the three testable behaviours at once: <code>eventtype</code> is multivalue, the better priority value (3) sorts <code>critical_disk_error</code> first, and only one colour is displayed for an event, the colour belonging to the event type with the best priority.</p>
+<p>Tags do not create a colour band and have no priority. Colour and priority are event type properties only.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>All examples assume the practice dataset from <a href="../lab-setup.html">lab setup</a> is loaded: <code>index=web</code> (<code>access_combined</code>), <code>index=security</code> (<code>linux_secure</code>), and <code>index=cisco</code> (<code>cisco:wsa:squid</code>).</p>
+<p><strong>1. Tag a set of HTTP status values, then search by meaning.</strong></p>
+<pre class="plain lang-ini"><code>[status=404]
+client_error = enabled
+[status=403]
+client_error = enabled
+[status=500]
+server_error = enabled
+[status=503]
+server_error = enabled</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">tag</span><span class="t-op">=</span><span class="t-field">client_error</span></code></pre></div>
+<p>Returns every 403 and every 404 without naming either code. Four separate <code>tags.conf</code> stanzas, because each stanza describes exactly one field-value pair, and two distinct tags across those four pairs.</p>
+<p><strong>2. Restrict a tag search to one field.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-field">tag::status</span><span class="t-op">=</span><span class="t-field">client_error</span></code></pre></div>
+<p>Identical results to example 1 here, but different semantics. If someone later tags <code>http_status=404</code> or <code>error_code=404</code> with <code>client_error</code> in another app, example 1 would widen and this one would not. Use the double-colon form whenever a tag name is reused across fields.</p>
+<p><strong>3. Create an event type over the tagged values and count by it.</strong></p>
+<pre class="plain lang-ini"><code>[web_client_error]
+search = index=web sourcetype=access_combined status&gt;=400 status&lt;500
+priority = 3
+color = et_red</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">eventtype</span><span class="t-op">=</span><span class="t-field">web_client_error</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">status</span><span class="t-op">,</span> <span class="t-field">clientip</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p>The <code>eventtype=web_client_error</code> term is a plain field-value match against the field the event type set at step 8 of the search-time sequence. The <code>| stats</code> pipe is in your ad hoc search, not in the event type definition, which is what keeps the definition legal.</p>
+<p><strong>4. Find purchases that a lookup confirms, using a lookup output field inside an event type.</strong></p>
+<pre class="plain lang-ini"><code>[confirmed_vip_purchase]
+search = index=web sourcetype=access_combined action=purchase vip_status=gold
+priority = 1
+color = et_purple</code></pre>
+<p><code>vip_status</code> here is an output field from an automatic lookup on <code>clientip</code>. This is legal precisely because lookups run at step 7 and event types at step 8. Reverse the dependency (a calculated field in <code>props.conf</code> that references <code>eventtype=confirmed_vip_purchase</code>) and it silently fails, because calculated fields run at step 6.</p>
+<p><strong>5. Nest an event type inside another event type and then tag the outer one.</strong></p>
+<pre class="plain lang-ini"><code>[web_purchase]
+search = index=web sourcetype=access_combined action=purchase
+priority = 1
+
+[web_failed_purchase]
+search = eventtype=web_purchase status&gt;=400
+priority = 2</code></pre>
+<pre class="plain lang-ini"><code>[eventtype=web_failed_purchase]
+failed_transaction = enabled
+alert = enabled</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-field">failed_transaction</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">clientip</span></code></pre></div>
+<p>An event type search string may reference another event type, but only when the inner one is processed first. The one ordering rule inside step 8 is that Splunk &quot;processes event types first by priority score and then by lexicographical order&quot;, which is why the inner event type carries priority 1: on names alone <code>web_f...</code> sorts before <code>web_p...</code> and the outer one would be evaluated before the field it depends on exists. No 10.4 page states outright that nesting is supported, and the exam does not test it. [verify] The tag search reaches the events through two indirections, tag to event type to event, which is the CIM add-on pattern: one narrow event type per sourcetype plus a tag layer that data models constrain on.</p>
+<p><strong>6. Audit your own knowledge objects.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-op">*</span> <span class="t-kw">NOT</span> <span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">eventtype</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">eventtype</span><span class="t-op">,</span> <span class="t-field">tag</span></code></pre></div>
+<p>The first finds event types nobody has tagged, which in a CIM deployment means data that will never appear in a data model. The second cross-tabulates classification against labelling for the security sourcetype.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I want to search several values of one field by a single name.</td>
+<td>Tag each field-value pair with the same tag name.</td>
+</tr>
+<tr>
+<td>I want to attach several names to one value.</td>
+<td>Tag the same field-value pair repeatedly. Many tags per pair is normal.</td>
+</tr>
+<tr>
+<td>I want a name for a whole category of events, not a single value.</td>
+<td>Event type. Tags cannot classify an event, only a field-value pair.</td>
+</tr>
+<tr>
+<td>The classifier needs a pipe, <code>stats</code>, <code>eval</code>, or a subsearch.</td>
+<td>Not an event type. Use a report, or a search macro if you want a reusable fragment.</td>
+</tr>
+<tr>
+<td>I want a reusable search fragment I can drop into other searches.</td>
+<td>Search macro, per Splunk's own recommendation. Event types are for classification.</td>
+</tr>
+<tr>
+<td>I want a saved search I run on demand or on a schedule.</td>
+<td>Report (or alert). An event type is never &quot;run&quot;; it is applied automatically to every matching event.</td>
+</tr>
+<tr>
+<td>The saved object must always cover the same time range, or carry its own formatting.</td>
+<td>Report. An event type stanza has no time-range and no formatting attribute.</td>
+</tr>
+<tr>
+<td>I want the classifier reusable inside future searches over any time range.</td>
+<td>Event type. It becomes <code>eventtype=&lt;name&gt;</code>, a plain search term.</td>
+</tr>
+<tr>
+<td>I want a classifier built from one interesting event, without typing a search string.</td>
+<td>Expand the event, Event Actions, Build Event Type.</td>
+</tr>
+<tr>
+<td>Two event types match the same event and I care which colour shows.</td>
+<td>Give the more specific event type the better (lower) priority. 1 wins over 10.</td>
+</tr>
+<tr>
+<td>I need to restrict a tag search to one field.</td>
+<td><code>tag::&lt;field&gt;=&lt;tagname&gt;</code>, double colon.</td>
+</tr>
+<tr>
+<td>I need my event type to use a lookup output field.</td>
+<td>Legal. Lookups run before event types.</td>
+</tr>
+<tr>
+<td>I need a calculated field that depends on an event type.</td>
+<td>Impossible. Calculated fields run before lookups, event types and tags.</td>
+</tr>
+<tr>
+<td>I need a data model to pick up my sourcetype.</td>
+<td>Create an event type over the sourcetype, tag the event type with the CIM tags, and let the model constrain on the tags.</td>
+</tr>
+<tr>
+<td>I want the tag to disappear for one app only.</td>
+<td>Do not use Settings, Tags, List by tag name to disable it. That disables it across all apps that contain the tag.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-06-01"><span class="tid">T-06-01</span> Tags attach to events. <strong>Wrong.</strong> A tag attaches to a field-value pair, <code>&lt;field&gt;=&lt;value&gt;</code>. You cannot tag &quot;this event&quot;; you tag <code>host=web01</code>, <code>index=security sourcetype=linux_secure</code>, <code>status=404</code> or <code>eventtype=failed_login</code>. The event picks up the tag only because it contains that pair. This is the single most tested fact in the section, and the most common distractor pair is &quot;a tag is applied to a field&quot; versus &quot;a tag is applied to a field-value pair&quot;. Choose the pair.</p>
+<p class="trap" id="T-06-02"><span class="tid">T-06-02</span> <code>tag:&lt;field&gt;=&lt;name&gt;</code> with one colon, or <code>tag.&lt;field&gt;</code>, or <code>tag[field]</code>. <strong>Wrong.</strong> The field-scoped form is <code>tag::&lt;field&gt;=&lt;tagname&gt;</code> with exactly two colons and no spaces. <code>tag=&lt;tagname&gt;</code> with no field scope searches every tagged field-value pair. Both forms accept the <code>*</code> wildcard.</p>
+<p class="trap" id="T-06-03"><span class="tid">T-06-03</span> An event type can contain a pipe as long as the pipe comes last. <strong>Wrong.</strong> The documentation forbids a search that &quot;includes a pipe operator after a simple search&quot; and a search that &quot;includes a subsearch&quot;. Position does not rescue it. If a question shows <code>index=web sourcetype=access_combined status=404 | stats count</code> as a candidate event type definition, that option is invalid regardless of what else it does.</p>
+<p class="trap" id="T-06-04"><span class="tid">T-06-04</span> An event type can reference a report with <code>savedsearch</code>. <strong>Wrong.</strong> The same restriction list forbids referencing a report with the <code>savedsearch</code> command inside an event type definition.</p>
+<p class="trap" id="T-06-05"><span class="tid">T-06-05</span> Priority 10 is the highest priority. <strong>Wrong.</strong> Priority is an integer 1 through 10 and &quot;1 is the best Priority and 10 is the worst&quot;. Lower number wins. The docs' own example gives <code>critical_disk_error</code> priority 3 and <code>all_system_errors</code> priority 7, and 3 is described as the better value.</p>
+<p class="trap" id="T-06-06"><span class="tid">T-06-06</span> Priority only affects sort order. <strong>Incomplete, and the exam exploits it.</strong> Priority does two things: event types with a priority are listed above event types without one and are ordered by their priority value, and only one event type colour can be displayed per event, so the colour of the event type with the best priority is the one that renders. Event types with no priority set are ordered alphabetically below those that have one.</p>
+<p class="trap" id="T-06-07"><span class="tid">T-06-07</span> <code>eventtype</code> is a single-valued field. <strong>Wrong.</strong> A single event can match multiple event types, and when it matches two or more, <code>eventtype</code> acts as a multivalue field. Splunk orders the values by priority score first and then lexicographically.</p>
+<p class="trap" id="T-06-08"><span class="tid">T-06-08</span> An event type is the same thing as a saved search or a report. <strong>Wrong on the dimensions the exam cares about.</strong> A report is a saved search you run, on demand or on a schedule; it returns a result set and it stores its own time range and formatting. An event type is a classification applied automatically at search time to every matching event of every search; you never run it, you search for the field value it produces. A report may contain pipes, transforming commands and subsearches. An event type may not.</p>
+<p class="trap" id="T-06-09"><span class="tid">T-06-09</span> Tags run before event types, or lookups run after event types. <strong>Wrong.</strong> The documented order is field filters, inline field extraction, field extraction using field transforms, automatic key-value field extraction, field aliasing, calculated fields, lookups, event types, tags. Tags are last. Event types are second to last, immediately after lookups. Therefore: a tag can be applied to an event type; an event type search can reference a lookup output field; a calculated field cannot reference an event type; a lookup cannot reference an event type or a tag; an event type cannot reference a tag.</p>
+<p class="trap" id="T-06-10"><span class="tid">T-06-10</span> Settings, Tags has one list. <strong>Wrong.</strong> It has three views: <strong>List by field-value pair</strong>, <strong>List by tag name</strong>, and <strong>All unique tag objects</strong>. They are not interchangeable. Disabling a tag from the List by tag name page disables it across all apps that contain it, which is a scope trap the exam can build a scenario around. All unique tag objects is the view that exposes each tag-name to field-value-pair to app combination for per-object permission edits.</p>
+<p class="trap" id="T-06-11"><span class="tid">T-06-11</span> You define tags for an event type using the <code>tags</code> attribute in <code>eventtypes.conf</code>. <strong>Wrong.</strong> That attribute exists but the spec marks it deprecated and points to <code>tags.conf.spec</code>. Tags on an event type live in <code>tags.conf</code> under a stanza header of the form <code>[eventtype=&lt;name&gt;]</code>, exactly like any other field-value pair. This is the CIM pattern.</p>
+<p class="trap" id="T-06-12"><span class="tid">T-06-12</span> Field names versus field values in a tag search. The documented rule is &quot;field names are case sensitive, but field values are not&quot;, so <code>tag::Host=webserver</code> and <code>tag::host=webserver</code> are different searches because <code>Host</code> and <code>host</code> are different field names. That part is settled.</p>
+<p>Whether the <strong>tag name itself</strong> is case sensitive is not settled. The 10.4 tags pages and the tag-search page state nothing about it either way. Two readings exist, and the exam may test either:</p>
+<ul>
+<li>A tag name is matched as a value of the <code>tag</code> pseudo-field, and field values are not case sensitive, so <code>tag=WebServer</code> and <code>tag=webserver</code> would match the same pairs. This is an inference from the general rule, not a documented sentence.</li>
+<li>Tag names are case sensitive in their own right. This is asserted widely in unofficial material and stated nowhere in the docs. If it holds, a question of the form &quot;which search finds the tag <code>Privileged</code>&quot; has exactly one right answer instead of several.</li>
+</ul>
+<p>Two consequences. A wildcard that preserves the original capitalisation, <code>tag=Priv*</code>, matches under either reading, so prefer it when it is offered. And you can <strong>resolve this on your own instance in under a minute</strong>: tag a pair with <code>Privileged</code>, run <code>tag=privileged</code>, <code>tag=Privileged</code> and <code>tag=priv*</code>, record which return events in <code>source-notes/</code>, and the trap closes. Field-value case sensitivity is a different question and is settled: see <code>topics/04-field-extractions</code>. [verify]</p>
+<p class="trap" id="T-06-13"><span class="tid">T-06-13</span> Material in circulation keys &quot;tags use event types, you can set priority and color&quot; as false, while its own worked example creates an event type with a priority and a colour and then tags it. The correct reading: priority and colour are set <strong>on the event type</strong>, and that event type can then be tagged. Priority and colour are never properties of a tag.</p>
+<p class="trap" id="T-06-14"><span class="tid">T-06-14</span> Tagging <code>host=web01</code> renames the host. <strong>Wrong.</strong> Tagging never changes the underlying field value. It adds a searchable alternate label. This is why tagging is the standard remedy when a host value changed for an input and historical events still carry the old value: tag both values with one tag and search the tag.</p>
+<p class="trap" id="T-06-15"><span class="tid">T-06-15</span> The search term is <code>tags=&lt;tagname&gt;</code>, or a bare <code>tag::&lt;fieldname&gt;</code> finds everything tagged on that field. <strong>Wrong on both counts.</strong> The term is singular, <code>tag</code>, and the scoped form always ends with <code>=&lt;tagname&gt;</code>, because the tag name is what you match. Wrong options here are mutations of the two real forms: pluralised, single-coloned, colons after the field name instead of before it, or a field name where the tag name belongs. If no option is exactly <code>tag=&lt;tagname&gt;</code> or <code>tag::&lt;field&gt;=&lt;tagname&gt;</code>, none of them is right.</p>
+<p class="trap" id="T-06-16"><span class="tid">T-06-16</span> Event types are defined in <code>props.conf</code>, or created with a <code>searchtypes</code> command. <strong>Wrong.</strong> Definitions are stanzas in <code>eventtypes.conf</code>, the stanza header being the event type name; <code>props.conf</code> holds extractions, aliases, calculated fields and lookup bindings, and has no <code>event_type</code> stanza. The discovery command is <code>findtypes</code>, and it only suggests. The three Splunk Web routes are Save As, Event Type; Settings, Event Types, New; and Event Actions, Build Event Type.</p>
+<p class="trap" id="T-06-17"><span class="tid">T-06-17</span> An event type stores a time range, output formatting, a rank or a weight. <strong>Wrong.</strong> The stanza has five live attributes: <code>disabled</code>, <code>search</code>, <code>description</code>, <code>priority</code> and <code>color</code>. A stored time range and stored formatting belong to a report. Rank and weight are not event type concepts at all, so when they appear as options against &quot;what decides which colour an event shows&quot;, the answer is <strong>priority</strong>.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes, single-node Splunk Enterprise 10.4, practice dataset loaded, logged in as <code>admin</code>.</p>
+<p><strong>Step 1, tag a field-value pair from search results (about 3 minutes).</strong></p>
+<p>Run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">404</span> <span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">20</span></code></pre></div>
+<p>Expand any result row, find the <code>status</code> field with value <code>404</code>, click the arrow in its <strong>Actions</strong> column and select <strong>Edit Tags</strong>. The Field Value box should already read <code>status=404</code>. In the Tags box type <code>client_error, page_missing</code> (comma or space separated both work). Click <strong>Save</strong>. Repeat for <code>status=403</code> with the tag <code>client_error</code>.</p>
+<p><strong>Step 2, confirm the three views (about 2 minutes).</strong></p>
+<p>Go to <strong>Settings</strong>, <strong>Tags</strong>. Confirm the three views: <strong>List by field-value pair</strong>, <strong>List by tag name</strong> and <strong>All unique tag objects</strong>. In List by tag name, <code>client_error</code> shows two field-value pairs. In List by field-value pair, <code>status=404</code> shows two tags.</p>
+<p><strong>Step 3, create an event type from Settings (about 4 minutes).</strong></p>
+<p>Go to <strong>Settings</strong>, <strong>Event Types</strong>, click <strong>New</strong>. Set Destination App to <code>search</code>. Name: <code>bc_web_client_error</code>. Search String: <code>index=web sourcetype=access_combined status&gt;=400 status&lt;500</code>. Tag(s): <code>web_error</code>. Color: pick <strong>Red</strong>. Priority: <strong>2</strong>. Click <strong>Save</strong>.</p>
+<p><strong>Step 4, create a second, broader event type to prove colour precedence (about 3 minutes).</strong></p>
+<p>From the search bar run:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-field">status</span><span class="t-op">&gt;=</span><span class="t-num">400</span></code></pre></div>
+<p>Click <strong>Save As</strong>, then <strong>Event Type</strong>. Name: <code>bc_web_any_error</code>. Color: <strong>Orange</strong>. Priority: <strong>8</strong>. Save. Then try the third route without saving: expand any event, click <strong>Event Actions</strong>, select <strong>Build Event Type</strong>, and note that the builder offers Style and Priority.</p>
+<p><strong>Step 5, verify (about 3 minutes).</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">eventtype</span><span class="t-op">=</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">eventtype</span></code></pre></div>
+<p>You should see rows for <code>bc_web_any_error</code> alone and for the multivalue combination containing both event types. Now check colour precedence and ordering:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">404</span> <span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<p>In the events list the colour band should be <strong>red</strong>, not orange, because priority 2 beats priority 8, and in the expanded <code>eventtype</code> field <code>bc_web_client_error</code> should be listed before <code>bc_web_any_error</code>.</p>
+<p>Finally verify the tag layer reaches through the event type:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-field">web_error</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">status</span></code></pre></div>
+<p>This should return only 4xx rows. If it returns nothing, the event type tag was not saved: reopen it in <strong>Settings</strong>, <strong>Event Types</strong>, confirm the Tags field contains <code>web_error</code>, and Save.</p>
+<p>Optional inspection of what you wrote to disk:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-pipe">|</span> <span class="t-cmd">rest</span> <span class="t-op">/</span><span class="t-field">servicesNS</span><span class="t-op">/</span><span class="t-op">-</span><span class="t-op">/</span><span class="t-op">-</span><span class="t-op">/</span><span class="t-field">configs</span><span class="t-op">/</span><span class="t-field">conf-eventtypes</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">title</span><span class="t-op">=</span><span class="t-field">bc_web_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">title</span><span class="t-op">,</span> <span class="t-field">search</span><span class="t-op">,</span> <span class="t-field">priority</span><span class="t-op">,</span> <span class="t-field">color</span><span class="t-op">,</span> <span class="t-field">eai:acl.app</span><span class="t-op">,</span> <span class="t-field">eai:acl.sharing</span></code></pre></div>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>1.</strong> A tag in Splunk is applied to which of the following?</p>
+<p>A. An individual event
+B. A field name
+C. A field-value pair
+D. A sourcetype only</p>
+<p><strong>2.</strong> Which search returns events where the <code>host</code> field's value carries a tag whose name begins with <code>prod</code>?</p>
+<p>A. <code>tag=host:prod*</code>
+B. <code>tag::host=prod*</code>
+C. <code>tag.host=prod*</code>
+D. <code>host::tag=prod*</code></p>
+<p><strong>3.</strong> Which of these is a valid event type definition?</p>
+<p>A. <code>index=web sourcetype=access_combined action=purchase | stats sum(bytes) by categoryId</code>
+B. <code>index=web sourcetype=access_combined action=purchase [search index=web sourcetype=access_combined action=purchase | fields productId]</code>
+C. <code>index=web sourcetype=access_combined action=purchase productId=DB-SG-G01 vip_status=gold</code> where <code>vip_status</code> comes from an automatic lookup
+D. <code>| savedsearch daily_sales_report</code></p>
+<p><strong>4.</strong> An event matches <code>all_errors</code> (priority 9, colour orange) and <code>disk_failure</code> (priority 2, colour purple). What does the events list show?</p>
+<p>A. A purple band, and <code>disk_failure</code> listed before <code>all_errors</code> in the <code>eventtype</code> field
+B. An orange band, and <code>all_errors</code> listed before <code>disk_failure</code>
+C. Both bands, one above the other
+D. No band, because a conflict suppresses colouring</p>
+<p><strong>5.</strong> A knowledge manager wants a calculated field <code>error_class</code> that is set only when <code>eventtype=web_client_error</code>. What happens?</p>
+<p>A. It works, because calculated fields are evaluated last
+B. It fails, because calculated fields are evaluated before event types
+C. It works only if the event type has a priority of 1
+D. It works only if the event type is shared globally</p>
+<p><strong>6.</strong> Which statement about <code>eventtype</code> is correct?</p>
+<p>A. An event can match at most one event type
+B. <code>eventtype</code> is an index-time field
+C. <code>eventtype</code> becomes a multivalue field when an event matches two or more event types
+D. <code>eventtype</code> is only populated when the search explicitly names the event type</p>
+<p><strong>7.</strong> Where do tags applied to an event type live?</p>
+<p>A. In the <code>tags</code> attribute of the event type's stanza in <code>eventtypes.conf</code>
+B. In <code>tags.conf</code> under a stanza header <code>[eventtype=&lt;name&gt;]</code>
+C. In <code>props.conf</code> under the sourcetype stanza
+D. In <code>savedsearches.conf</code></p>
+<p><strong>8.</strong> A user disables the tag <code>deprecated_host</code> from Settings, Tags, List by tag name. What is the scope of that change?</p>
+<p>A. Only the current app
+B. Only the field-value pair that was selected
+C. All apps that contain the tag
+D. Only the current user's private objects</p>
+<p><strong>9.</strong> An analyst runs this search:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;failed password&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">findtypes</span></code></pre></div>
+<p>What is the result?</p>
+<p>A. Splunk creates event types for the patterns it discovers and lists them in Settings, Event Types
+B. Splunk returns suggested event type definitions built from the matching events, and saves nothing
+C. Splunk returns the existing event types that already match those events
+D. The search fails, because the command that discovers event types is <code>searchtypes</code></p>
+<p><strong>10.</strong> A knowledge manager writes this stanza, intending the event type to classify only the last 24 hours of data:</p>
+<pre class="plain lang-ini"><code>[recent_failed_logins]
+search = index=security sourcetype=linux_secure &quot;failed password&quot;
+priority = 4
+color = et_red
+earliest = -24h</code></pre>
+<p>What is the effect on classification?</p>
+<p>A. Only events from the last 24 hours receive <code>eventtype=recent_failed_logins</code>, in every search that runs
+B. The search string alone decides what matches, and the time range is whatever the running search uses
+C. The definition is invalid for the same reason a pipe is invalid, so no event is classified
+D. The event type is now schedulable and runs itself every 24 hours</p>
+<details><summary>Answers</summary>
+<p><strong>1. C.</strong> A tag is assigned to a specific field and value combination. <strong>A is wrong</strong>: an event only inherits a tag because it contains the tagged pair; you never tag an event directly, and no UI path lets you. <strong>B is wrong</strong>: tagging a field name alone would label every value of that field, which is what a field alias or a calculated field does, not a tag. <strong>D is wrong</strong>: <code>sourcetype=&lt;value&gt;</code> is one of many taggable pairs (host, source, sourcetype and eventtype are all named in the docs), not the only one.</p>
+<p><strong>2. B.</strong> The field-scoped tag syntax is <code>tag::&lt;field&gt;=&lt;tagname&gt;</code> with a double colon, and the <code>*</code> wildcard is documented on the tag name side (<code>tag::eventtype=IP-*</code>). <strong>A is wrong</strong>: there is no <code>tag=&lt;field&gt;:&lt;name&gt;</code> form; the field goes after <code>tag::</code>, not inside the value. <strong>C is wrong</strong>: dot notation is not tag syntax anywhere in SPL. <strong>D is wrong</strong>: the operand order is inverted; <code>tag</code> is always the left-hand side.</p>
+<p><strong>3. C.</strong> Event types may reference lookup output fields because lookups run at step 7 of the search-time sequence and event types at step 8. <strong>A is wrong</strong>: it includes a pipe operator after the simple search, which the docs forbid. <strong>B is wrong</strong>: it includes a subsearch, also explicitly forbidden. <strong>D is wrong</strong>: the docs forbid referencing a report with the <code>savedsearch</code> command inside an event type, and it also begins with a pipe.</p>
+<p><strong>4. A.</strong> 1 is the best priority and 10 is the worst, so priority 2 beats priority 9. Only one event type colour is displayed per event and it belongs to the event type with the best priority, so the band is purple; the same priority ordering sorts the multivalue <code>eventtype</code> field. <strong>B is wrong</strong>: it inverts the scale, the single most common distractor here. <strong>C is wrong</strong>: the docs state only one event type colour can be displayed for each event. <strong>D is wrong</strong>: priority exists precisely to resolve this, so nothing is suppressed.</p>
+<p><strong>5. B.</strong> The documented sequence puts calculated fields at step 6 and event types at step 8, and the docs state directly that calculated fields cannot reference lookups, event types or tags. <strong>A is wrong</strong>: tags are last, not calculated fields. <strong>C is wrong</strong>: priority controls display order and colour precedence, never evaluation order relative to other knowledge object types. <strong>D is wrong</strong>: sharing changes visibility and permissions, not the search-time sequence.</p>
+<p><strong>6. C.</strong> A single event can match multiple event types, and <code>eventtype</code> acts as a multivalue field when it matches two or more. <strong>A is wrong</strong>: multiple matches are normal and are the reason priority exists. <strong>B is wrong</strong>: event types are applied at search time, step 8, not at index time. <strong>D is wrong</strong>: every event type whose search matches is applied to every event any search returns, whether or not you mention it.</p>
+<p><strong>7. B.</strong> Tags on an event type are ordinary tags on the field-value pair <code>eventtype=&lt;name&gt;</code>, so they live in <code>tags.conf</code> under <code>[eventtype=&lt;name&gt;]</code>. This is the CIM mechanism. <strong>A is wrong</strong>: the <code>tags</code> attribute does exist in <code>eventtypes.conf</code> but the spec marks it deprecated and redirects to <code>tags.conf.spec</code>. <strong>C is wrong</strong>: <code>props.conf</code> holds extractions, aliases, calculated fields and lookups, not tags. <strong>D is wrong</strong>: <code>savedsearches.conf</code> holds reports and alerts.</p>
+<p><strong>8. C.</strong> The docs state that disabling a tag through the List by tag name page disables the tag across all apps that contain the tag. <strong>A is wrong</strong>: app scoping applies to where an object is defined and shared, not to this particular disable action. <strong>B is wrong</strong>: per-pair disabling is what the List by field-value pair view and the All unique tag objects view give you. <strong>D is wrong</strong>: the action is not scoped to the user's private objects.</p>
+<p><strong>9. B.</strong> <code>findtypes</code> analyses the events returned by the search in front of it and prints candidate event type definitions, 10 by default and from at most 5000 events. It is a discovery aid, not a creation route. <strong>A is wrong</strong>: nothing is saved, and the three Splunk Web creation routes are Save As, Event Type; Settings, Event Types, New; and Event Actions, Build Event Type. <strong>C is wrong</strong>: existing event types already appear on the events in the <code>eventtype</code> field, so listing them is a job for <code>| stats count by eventtype</code>. <strong>D is wrong</strong>: the command is <code>findtypes</code>; <code>searchtypes</code> does not exist.</p>
+<p><strong>10. B.</strong> An <code>eventtypes.conf</code> stanza has five live attributes, <code>disabled</code>, <code>search</code>, <code>description</code>, <code>priority</code> and <code>color</code>, and no time-range attribute to honour. The event type is applied to whatever events the running search returns, so the time range comes from that search. If a fixed time range is a requirement, the object needed is a report. <strong>A is wrong</strong>: that is what a saved search stores. <strong>C is wrong</strong>: the documented restrictions concern the <code>search</code> value itself (no pipe after the simple search, no subsearch, no <code>savedsearch</code> reference), and this search string breaks none of them, so classification still happens. <strong>D is wrong</strong>: an event type is never run; it is applied automatically to every matching event of every search, which is why priority and colour exist.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<p>Read in this order.</p>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/about-tags-and-aliases" target="_blank" rel="noopener">About tags and aliases</a> - a tag attaches to a field-value pair, and how tags differ from field aliases. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search" target="_blank" rel="noopener">Tag field-value pairs in Search</a> - the Actions, Edit Tags click path, both syntax forms, every wildcard example. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/define-and-manage-tags-in-settings" target="_blank" rel="noopener">Define and manage tags in Settings</a> - the three views and the cross-app disable warning. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-the-host-field" target="_blank" rel="noopener">Tag the host field</a> - tagging does not change the field value. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-types" target="_blank" rel="noopener">About event types</a> - definition, the pipe and subsearch restrictions, the multivalue <code>eventtype</code> field, the &quot;use a macro instead&quot; guidance. 12 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/define-event-types-in-splunk-web" target="_blank" rel="noopener">Define event types in Splunk Web</a> - the Settings and Save As routes and every form field. Memorise the field order. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-type-priorities" target="_blank" rel="noopener">About event type priorities</a> - entirely examinable: 1 is best, 10 is worst, one colour per event. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/automatically-find-and-build-event-types" target="_blank" rel="noopener">Automatically find and build event types</a> - the Build Event Type route and the <code>findtypes</code> command. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/configure-event-types-in-eventtypes.conf" target="_blank" rel="noopener">Configure event types in eventtypes.conf</a> - stanza syntax, the colour list, file locations. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-event-types" target="_blank" rel="noopener">Tag event types</a> - the tag layer on top of the event type layer. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations</a> - the nine steps and the can-reference rules. Worth memorising outright. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions" target="_blank" rel="noopener">Manage knowledge object permissions</a> - Private, App, All apps, and which roles may promote. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time" target="_blank" rel="noopener">Use the CIM to normalize data at search time</a> - why event types get tagged, with the <code>[eventtype=nessus]</code> example. Context only, not directly examined. 6 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="05-aliases-and-calculated-fields.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">5.0</span><span class="pn-label">Aliases and calculated fields</span></a><a href="07-macros.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">7.0</span><span class="pn-label">Macros</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#blueprint-mapping"><span>Blueprint mapping</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#what-it-is"><span>What it is</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#syntax-and-options"><span>Syntax and options</span><span class="min">6m</span></a></li>
+<li><a class="lvl3" href="#tag-search-syntax"><span>Tag search syntax</span></a></li>
+<li><a class="lvl3" href="#tags.conf"><span>tags.conf</span></a></li>
+<li><a class="lvl3" href="#eventtypes.conf"><span>eventtypes.conf</span></a></li>
+<li><a class="lvl3" href="#routes-to-create-an-event-type"><span>Routes to create an event type</span></a></li>
+<li><a class="lvl3" href="#splunk-web-form-fields"><span>Splunk Web form fields</span></a></li>
+<li><a class="lvl2" href="#result-contract"><span>Result contract</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#worked-examples"><span>Worked examples</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#decision-rules"><span>Decision rules</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#lab"><span>Lab</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>34 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

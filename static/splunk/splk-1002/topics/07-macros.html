@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.0 Creating and Using Macros | SPLK-1002</title>
+<meta name="description" content="Macros, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="topics/07-macros" data-section="7">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="07-macros.html" aria-current="page"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Macros</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="07-macros.html">Study</a><a class="" href="../cram/07-macros.html">Cram</a></div>
+      </div>
+<h1 id="7.0-creating-and-using-macros-10">7.0 Creating and Using Macros</h1>
+<p>Search macros are reusable chunks of SPL substituted into a search as text before the search is parsed, and the exam weights them at 10% because the syntax is small, exact, and easy to write unambiguous questions about: backticks, the argument count in the name, and the dollar-sign tokens.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Section 7.0 Creating and Using Macros, 10% of the exam</li>
+<li>7.1 Describe macros</li>
+<li>7.2 Create and use a basic macro</li>
+<li>7.3 Define arguments and variables for a macro</li>
+<li>7.4 Add and use arguments with a macro</li>
+</ul>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>The Knowledge Management Manual states it plainly: &quot;Search macros are reusable chunks of Search Processing Language (SPL) that you can insert into other searches. Search macros can be any part of a search, such as an eval statement or search term, and do not need to be a complete command.&quot;</p>
+<p>Three properties follow, and the exam leans on all three. A macro need not be a whole search or even a whole command, so it can expand to a single search term, a command fragment, or part of one argument to a command. The reverse holds too: a macro can be an entire search, base terms and every piped command included. Any claim that a macro must contain the full search, or must contain only a portion of one, is wrong on the word must. Nothing fixes the time range either. A definition has no time range of its own unless you write earliest or latest into it, so the search inherits whatever the time picker or the saved search supplies. That is all the phrase &quot;flexible time range&quot; amounts to, and it is not documentation wording. Expansion is textual: the macro reference is replaced by the definition string with argument tokens substituted, and only then is the result handed to the SPL parser. And because expansion precedes parsing, a macro is never applied to events the way a field alias, a calculated field, or a lookup is applied.</p>
+<p>That last point is the structural distinction the exam wants. The page &quot;The sequence of search-time operations&quot; lists nine operations, from field filters and the extraction steps through field aliasing, calculated fields, lookups, event types, and tags, and search macros are not among them. A macro is a knowledge object, managed in Settings alongside the others and stored in macros.conf, but it never takes a turn in that sequence, because by the time the sequence begins the macro has already become ordinary search text.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 940 709" width="940" height="709" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 41.0 C470.02500000000003 61.0 470.02500000000003 61.0 470.02500000000003 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 124.0 C470.02500000000003 185.5 470.0250000000001 185.5 470.0250000000001 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.0250000000001 290.0 C470.0250000000001 227.0 470.02500000000003 227.0 470.02500000000003 164.0"/><rect class="dg-lblbg" x="455.5000000000001" y="215.0" width="29.05" height="16" rx="3"/><text class="dg-lbl" x="470.0250000000001" y="224.0" text-anchor="middle" dominant-baseline="middle">yes</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 207.0 C470.02500000000003 227.0 470.0250000000001 227.0 470.0250000000001 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.0250000000001 290.0 C470.0250000000001 310.0 470.02500000000003 310.0 470.02500000000003 330.0"/><rect class="dg-lblbg" x="458.67500000000007" y="298.0" width="22.700000000000003" height="16" rx="3"/><text class="dg-lbl" x="470.0250000000001" y="307.0" text-anchor="middle" dominant-baseline="middle">no</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 373.0 C470.02500000000003 393.0 349.65000000000003 393.0 349.65000000000003 413.0"/><rect class="dg-lblbg" x="388.96250000000003" y="381.0" width="41.75" height="16" rx="3"/><text class="dg-lbl" x="409.83750000000003" y="390.0" text-anchor="middle" dominant-baseline="middle">fails</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 373.0 C470.02500000000003 393.0 679.7750000000001 393.0 679.7750000000001 413.0"/><rect class="dg-lblbg" x="550.8500000000001" y="381.0" width="48.1" height="16" rx="3"/><text class="dg-lbl" x="574.9000000000001" y="390.0" text-anchor="middle" dominant-baseline="middle">passes</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M679.7750000000001 456.0 C679.7750000000001 476.0 470.0250000000001 476.0 470.0250000000001 496.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.0250000000001 539.0 C470.0250000000001 559.0 470.02500000000003 559.0 470.02500000000003 579.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M470.02500000000003 622.0 C470.02500000000003 642.0 470.02500000000003 642.0 470.02500000000003 662.0"/><rect class="dg-node" x="166.45000000000005" y="2.0" width="607.15" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="22.5" text-anchor="middle" dominant-baseline="middle">Search string submitted from the search bar, a saved search, a dashboard, or REST</text><rect class="dg-node" x="187.90000000000003" y="85.0" width="564.25" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="105.5" text-anchor="middle" dominant-baseline="middle">Macro expansion: reference replaced by definition, $arg$ tokens substituted</text><path class="dg-node dg-diamond" d="M470.0250000000001 251.0 L666.3500000000001 270.5 L470.0250000000001 290.0 L273.70000000000005 270.5 z"/><text class="dg-text" x="470.0250000000001" y="271.5" text-anchor="middle" dominant-baseline="middle">Does the expansion contain another macro reference?</text><rect class="dg-node" x="187.90000000000003" y="168.0" width="564.25" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="188.5" text-anchor="middle" dominant-baseline="middle">Expand the nested macro, repeat until none remain or max_macro_depth is hit</text><rect class="dg-node" x="209.35000000000002" y="334.0" width="521.35" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="354.5" text-anchor="middle" dominant-baseline="middle">Validation expressions evaluated against the supplied argument values</text><rect class="dg-node" x="156.90000000000003" y="417.0" width="385.5" height="39" rx="5"/><text class="dg-text" x="349.65000000000003" y="437.5" text-anchor="middle" dominant-baseline="middle">Search does not run, errormsg returned to the user</text><rect class="dg-node" x="576.4000000000001" y="417.0" width="206.75" height="39" rx="5"/><text class="dg-text" x="679.7750000000001" y="437.5" text-anchor="middle" dominant-baseline="middle">Fully expanded SPL string</text><rect class="dg-node" x="273.70000000000005" y="500.0" width="392.65000000000003" height="39" rx="5"/><text class="dg-text" x="470.0250000000001" y="520.5" text-anchor="middle" dominant-baseline="middle">SPL parsed into a command pipeline, then dispatched</text><rect class="dg-node" x="345.20000000000005" y="583.0" width="249.65" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="603.5" text-anchor="middle" dominant-baseline="middle">Events retrieved from the index</text><rect class="dg-node" x="2.0" y="666.0" width="936.0500000000001" height="39" rx="5"/><text class="dg-text" x="470.02500000000003" y="686.5" text-anchor="middle" dominant-baseline="middle">Search-time operations sequence: field filters, field extractions, field aliases, calculated fields, lookups, event types, tags</text></svg></figure>
+<p>Each macros.conf stanza is one macro, and because the stanza name carries the argument count a name can be overloaded: the spec states that &quot;[foobar], [foobar(1)], [foobar(2)], and so forth&quot; are not the same macro. Permissions follow the normal knowledge object model: a new macro belongs to the app context you created it in, a macro shared at app level resolves only inside that app, and only the admin and power roles can share or promote by default. A macro that is not visible from the app you are searching in produces an unknown-macro error, not an empty result.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<p>Invocation uses backtick characters, one before the macro name and one after. On most English-language keyboards the backtick shares a key with the tilde.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-macro">`mymacro`</span></code></pre></div>
+<p>Because the reference becomes ordinary search text before parsing, it carries no placement rule of its own: it can open a search, sit mid-pipeline, or be followed by a pipe and any number of further commands, as the manual's example above shows. What it does need is visibility. The user must have read permission on the macro and must be searching from an app context where it resolves; ownership is not part of it. The one placement rule that does exist runs the other way and concerns generating commands, below.</p>
+<p>Arguments go in parentheses inside the backticks, positionally or by name.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-macro">`argmacro(120,300)`</span>
+<span class="t-macro">`argmacro(lo=120,hi=300)`</span>
+<span class="t-macro">`argmacro(hi=300,lo=120)`</span></code></pre></div>
+<p>Those three are equivalent for a two-argument macro whose arguments are named lo and hi. Escape quotation marks inside a quoted argument value with backslashes: <code>`mymacro(&quot;He said \&quot;hello!\&quot;&quot;)`</code>. If the definition begins with a generating command (the docs name from, search, metadata, inputlookup, pivot, tstats, and rest), leave the leading pipe out of the definition and write it in front of the macro reference instead, as <code>| `mygeneratingmacro`</code>.</p>
+<p>The Splunk Web form is at Settings, then Advanced search, then Search macros, then the button to create a new macro (the documentation step reads &quot;Click New&quot;; in Splunk Enterprise 10.x the button is labelled New Search Macro [verify]). Step one of the documented procedure is verbatim &quot;Select Settings &gt; Advanced Search &gt; Search macros.&quot; Memorise that location, because macros are the odd one out: field extractions, field transformations, field aliases, calculated fields, and workflow actions all sit under Settings, then Fields. Reaching for Fields, or for Searches, reports, and alerts, is the standard wrong turn. The fields, in documentation order:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destination app</td>
+<td>Any app the user can write to</td>
+<td>The app you are currently in</td>
+<td>Restricts the macro to that app and decides which app directory the macros.conf stanza is written to.</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>Unique string. If the macro takes arguments, append the argument count in parentheses, e.g. mymacro(2)</td>
+<td>none, required</td>
+<td>Becomes the macros.conf stanza name and the token you type between backticks. The number is a count, not an index or a version.</td>
+</tr>
+<tr>
+<td>Definition</td>
+<td>Any SPL fragment, with argument tokens written as $argname$</td>
+<td>none, required</td>
+<td>The string the macro expands to. Argument substitution is global across the string, including inside quotation marks.</td>
+</tr>
+<tr>
+<td>Use eval-based definition?</td>
+<td>Checkbox, on or off</td>
+<td>off (macros.conf iseval = false)</td>
+<td>When on, the Definition is an eval expression that must return a string, and that returned string is the expansion.</td>
+</tr>
+<tr>
+<td>Arguments</td>
+<td>Comma-delimited list of names in order. Alphanumerics, underscores, and hyphens only. No repeats. Written without dollar signs.</td>
+<td>none (empty)</td>
+<td>Declares the names the $argname$ tokens refer to. Ignored if the stanza name says the macro takes no arguments.</td>
+</tr>
+<tr>
+<td>Validation expression</td>
+<td>An eval expression returning a Boolean or a string</td>
+<td>none (empty)</td>
+<td>Checked against supplied argument values before the search is dispatched.</td>
+</tr>
+<tr>
+<td>Validation error message</td>
+<td>Free text</td>
+<td>none (empty)</td>
+<td>Returned when a Boolean validation expression does not evaluate to true.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Only two of those fields are required, and the documented step list says so by prefixing every other step with &quot;(Optional)&quot;: Destination app, Use eval-based definition?, Arguments, Validation expression, and Validation error message. &quot;Enter a unique Name&quot; and &quot;In Definition, enter the search string&quot; carry no such prefix. A macro is a name plus a definition; the rest is refinement. Note too that neither the form nor macros.conf has an argument-count setting. The count is written once, inside the name, and args holds names rather than a number.</p>
+<p>Names and values belong to different moments, and the exam tests the split. Names are declared when the macro is created, in the Arguments field (macros.conf args), and referenced in the Definition as <code>$name$</code> tokens. Values are supplied at execution, inside the backticks: <code>`mymacro(value1,value2)`</code>, comma-separated, with no dollar signs anywhere in the invocation. Those values resolve the search string as the macro expands, and they are what the validation expression is checked against. Nothing about a value is known at creation time, and nothing about a name is decided at execution.</p>
+<p>The same seven things are the macros.conf settings, plus an optional description.</p>
+<pre class="plain lang-ini"><code>[bc_status_band(2)]
+args = lo, hi
+definition = index=web sourcetype=access_combined status&gt;=$lo$ status&lt;$hi$
+validation = isnum($lo$) AND isnum($hi$)
+errormsg = Both lo and hi must be numeric HTTP status codes.
+iseval = false
+description = Web access events in a half-open HTTP status range.</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>macros.conf setting</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stanza name</td>
+<td><code>&lt;name&gt;</code> or <code>&lt;name&gt;(&lt;numargs&gt;)</code></td>
+<td>none, required</td>
+<td>Identifies the macro. Macros can be overloaded on argument count.</td>
+</tr>
+<tr>
+<td>args</td>
+<td>Comma-separated names, alphanumerics, underscores and hyphens only, no repeats</td>
+<td>none</td>
+<td>Argument names. Ignored when the stanza name indicates no arguments.</td>
+</tr>
+<tr>
+<td>definition</td>
+<td>String</td>
+<td>none</td>
+<td>What the macro expands to after substitution. The spec: &quot;The Splunk platform replaces the $<arg>$ pattern globally in the string, even inside quotation marks.&quot;</td>
+</tr>
+<tr>
+<td>validation</td>
+<td>An eval expression evaluating to a Boolean or a string</td>
+<td>none</td>
+<td>Boolean form: true passes, false or NULL fails and errormsg is returned. Non-Boolean form: NULL passes, and any returned string is itself the error message.</td>
+</tr>
+<tr>
+<td>errormsg</td>
+<td>String</td>
+<td>none</td>
+<td>Used only by the Boolean form of validation.</td>
+</tr>
+<tr>
+<td>iseval</td>
+<td>true or false</td>
+<td>false</td>
+<td>true means definition is an eval expression returning the expansion string.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>String</td>
+<td>none</td>
+<td>Optional documentation of what the macro does.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two escaping rules matter, and they pull in opposite directions. Inside a definition, <code>$argname$</code> is the substitution token, and a literal dollar sign is written by doubling it as <code>$$</code> [verify]. Inside a search, a macro reference sitting inside a quoted value is not expanded at all: the spec gives <code>&quot;foo`bar`baz&quot;</code>, the manual <code>&quot;audit`users`local&quot;</code>. So argument tokens are substituted even inside quotation marks, while macro references inside quotation marks are inert.</p>
+<p>Nesting is supported and, per the spec, &quot;nesting can be indefinite and cycles will be detected and result in an error&quot;. The practical ceiling is limits.conf, [search] stanza, max_macro_depth: the maximum recursion depth for macro expansion, minimum 1, default 100.</p>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p>A macro has no result contract of its own: it is not a command, so it creates no fields, drops none, and changes no row or column shape. The contract of a search containing a macro is entirely that of the expanded SPL, and whether the search is streaming or transforming is decided by the commands the macro expanded into. A macro expanding to <code>stats count by categoryId</code> makes the search transforming at that point; one expanding to <code>eval ratio=bytes/1024</code> leaves it streaming.</p>
+<p>The one output a macro produces directly is the expansion preview. With the cursor in the search bar, press Control-Shift-E on Linux and Windows, or Command-Shift-E on macOS. The preview shows the expanded search string including all nested search macros and saved searches, and offers Open in Search. Using the macros defined below:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Search as typed</th>
+<th>Search after expansion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>`bc_web`</code></td>
+<td><code>index=web sourcetype=access_combined</code></td>
+</tr>
+<tr>
+<td><code>`bc_purchases`</code></td>
+<td><code>index=web sourcetype=access_combined action=purchase</code></td>
+</tr>
+<tr>
+<td><code>`bc_status_band(400,500)`</code></td>
+<td><code>index=web sourcetype=access_combined status&gt;=400 status&lt;500</code></td>
+</tr>
+<tr>
+<td><code>`bc_span(3600)`</code> (eval-based)</td>
+<td><code>span=1h</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Failure modes are part of the contract too. An unknown macro name, or one not visible from the current app, errors and the search does not run. Calling with the wrong number of arguments looks for a stanza with that count and errors if there is none; it does not silently fall back. A failed validation expression stops the search before dispatch, so you get an error rather than zero results.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>The practice dataset from lab setup: index=web, index=security, index=cisco.</p>
+<h3 id="1.-zero-argument-macro-standardising-the-index-and-sourcetype-prefix">1. Zero-argument macro standardising the index and sourcetype prefix<a class="anchor" href="#1.-zero-argument-macro-standardising-the-index-and-sourcetype-prefix" aria-label="Link to this section">#</a></h3>
+<p>Macro <code>bc_web</code>, no arguments, definition <code>index=web sourcetype=access_combined</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-macro">`bc_web`</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">action</span></code></pre></div>
+<p>Expands to <code>index=web sourcetype=access_combined status=200 | stats count by action</code> and returns a two-column table, action and count, one row per distinct action. Highest-value real-world use: the index and sourcetype pair is written once, so every search stays correct when the index is renamed.</p>
+<h3 id="2.-nested-macro">2. Nested macro<a class="anchor" href="#2.-nested-macro" aria-label="Link to this section">#</a></h3>
+<p>Macro <code>bc_purchases</code>, no arguments, definition <code>`bc_web` action=purchase</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-macro">`bc_purchases`</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-field">revenue</span> <span class="t-kw">by</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">revenue</span></code></pre></div>
+<p>Expansion runs in two passes: <code>bc_purchases</code> becomes <code>`bc_web` action=purchase</code>, then <code>bc_web</code> becomes the index and sourcetype terms. Result: a two-column table, categoryId and revenue, sorted descending.</p>
+<h3 id="3.-wrapping-an-expensive-transaction-plus-a-parameterised-span">3. Wrapping an expensive transaction, plus a parameterised span<a class="anchor" href="#3.-wrapping-an-expensive-transaction-plus-a-parameterised-span" aria-label="Link to this section">#</a></h3>
+<p>Adapted from the documentation examples page. Macro <code>makesessions</code>, no arguments, definition <code>transaction clientip maxpause=30m</code>. Macro <code>pageviews_per_session(1)</code>, Arguments field <code>span</code>, definition:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-macro">`bc_web`</span> <span class="t-pipe">|</span> <span class="t-macro">`makesessions`</span> <span class="t-pipe">|</span> <span class="t-cmd">timechart</span> $<span class="t-field">span</span>$ <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">eventcount</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-field">pageviews</span> <span class="t-func">count</span> <span class="t-kw">as</span> <span class="t-field">sessions</span></code></pre></div>
+<p>Invoked as <code>`pageviews_per_session(span=1h)`</code>. The argument value is the whole string <code>span=1h</code>, so <code>$span$</code> supplies an entire option to timechart rather than just a value: the concrete demonstration of &quot;a macro can be any part of a search&quot;. The result is a timechart, a _time column plus pageviews and sessions, one row per hour.</p>
+<h3 id="4.-two-arguments-with-boolean-validation">4. Two arguments with Boolean validation<a class="anchor" href="#4.-two-arguments-with-boolean-validation" aria-label="Link to this section">#</a></h3>
+<p>Name <code>bc_status_band(2)</code>, Arguments <code>lo, hi</code>, definition <code>index=web sourcetype=access_combined status&gt;=$lo$ status&lt;$hi$</code>, validation expression <code>isnum($lo$) AND isnum($hi$)</code>, validation error message <code>Both lo and hi must be numeric HTTP status codes.</code></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-macro">`bc_status_band(400,500)`</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">status</span><span class="t-op">,</span> <span class="t-field">uri_path</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p>Returns client-error events only, as a three-column table. Called as <code>`bc_status_band(four_hundred,500)`</code> the search never dispatches and the user sees the error message. The docs show two writing styles for validation: the Knowledge Management Manual uses the token form <code>isnum($rate$)</code>, while macros.conf.example uses bare argument names, as in <code>validation = foo &gt; bar</code>. Both are official; prefer the token form, which is what the exam-facing manual teaches.</p>
+<h3 id="5.-non-boolean-validation-with-validate">5. Non-Boolean validation with validate()<a class="anchor" href="#5.-non-boolean-validation-with-validate" aria-label="Link to this section">#</a></h3>
+<p>Name <code>bc_top(1)</code>, Arguments <code>count</code>, definition <code>index=web sourcetype=access_combined action=purchase | top limit=$count$ categoryId</code>, validation expression:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-func">validate</span><span class="t-op">(</span><span class="t-func">isnum</span><span class="t-op">(</span>$<span class="t-func">count</span>$<span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;count must be a number&quot;</span><span class="t-op">,</span> $<span class="t-func">count</span>$ <span class="t-op">&gt;</span> <span class="t-num">0</span> <span class="t-kw">AND</span> $<span class="t-func">count</span>$ <span class="t-op">&lt;=</span> <span class="t-num">100</span><span class="t-op">,</span> <span class="t-str">&quot;count must be between 1 and 100&quot;</span><span class="t-op">)</span></code></pre></div>
+<p>validate() &quot;takes a list of conditions and values and returns the value that corresponds to the condition that evaluates to FALSE&quot; and defaults to NULL when all conditions are true. Because this expression is not Boolean, NULL means success and any returned string is itself the message, so the Validation error message field is unused. <code>`bc_top(10)`</code> returns the standard top output (categoryId, count, percent), ten rows. <code>`bc_top(500)`</code> never runs and reports &quot;count must be between 1 and 100&quot;.</p>
+<h3 id="6.-eval-based-definition">6. Eval-based definition<a class="anchor" href="#6.-eval-based-definition" aria-label="Link to this section">#</a></h3>
+<p>Name <code>bc_span(1)</code>, Arguments <code>seconds</code>, Use eval-based definition? checked, definition <code>if($seconds$ &gt;= 86400, &quot;span=1d&quot;, &quot;span=1h&quot;)</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-macro">`bc_web`</span> <span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-macro">`bc_span(3600)`</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">status</span></code></pre></div>
+<p>Substitution happens first, so the expression evaluated is <code>if(3600 &gt;= 86400, &quot;span=1d&quot;, &quot;span=1h&quot;)</code>, which returns the string <code>span=1h</code>, and that string is spliced into the search. The final search is <code>index=web sourcetype=access_combined | timechart span=1h count by status</code>. Two syntax points catch people: the expression must return a string, so literal SPL text inside it needs double quotation marks, and the whole thing must still be valid eval syntax after substitution.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The chunk is always the same text</td>
+<td>Zero-argument macro. Do not add an argument you will always call with one value.</td>
+</tr>
+<tr>
+<td>The chunk varies by a caller-supplied value</td>
+<td>Add arguments. Name the macro with the count, list names in Arguments, reference them as $name$ in Definition.</td>
+</tr>
+<tr>
+<td>The chunk varies by a whole option or clause</td>
+<td>Still an argument. Pass <code>span=1h</code> as the value, as in <code>`pageviews_per_session(span=1h)`</code>.</td>
+</tr>
+<tr>
+<td>The expansion text must be chosen conditionally</td>
+<td>Eval-based definition returning the expansion string.</td>
+</tr>
+<tr>
+<td>The caller could supply a nonsense value</td>
+<td>Validation expression. Boolean form plus Validation error message for one condition; validate() non-Boolean form for several conditions with distinct messages.</td>
+</tr>
+<tr>
+<td>The definition starts with a generating command</td>
+<td>Drop the leading pipe from the definition, write it before the backtick in the search.</td>
+</tr>
+<tr>
+<td>The macro is needed from more than one app</td>
+<td>Share globally (All apps). App-level sharing resolves only inside that app.</td>
+</tr>
+<tr>
+<td>The reference would sit inside a quoted string</td>
+<td>It will not expand. Restructure so the backticks are outside the quotation marks.</td>
+</tr>
+<tr>
+<td>You need to know what the search really is</td>
+<td>Control-Shift-E, or Command-Shift-E on macOS.</td>
+</tr>
+<tr>
+<td>You edited macros.conf on disk</td>
+<td>Refresh the endpoints, for example <code>http://&lt;server&gt;:8000/en-US/debug/refresh</code>. macros.conf is on the Admin Manual's no-restart list.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-07-01"><span class="tid">T-07-01</span> Backticks, not quotation marks. <span class="wrong">Wrong belief</span>: a macro is invoked as <code>'mymacro'</code>, because the glyphs look alike in some fonts. Correct: the delimiter is the backtick, the character sharing a key with the tilde. Single or double quotation marks do not invoke a macro; the text is just a search term. Any option using <code>'</code> or <code>&quot;</code> around the macro name is wrong.</p>
+<p class="trap" id="T-07-02"><span class="tid">T-07-02</span> The number in the name is the argument count. <span class="wrong">Wrong belief</span>: <code>mymacro(2)</code> means &quot;the second form&quot; or &quot;use argument 2&quot;. Correct, verbatim: &quot;if your search macro mymacro includes two arguments, name it mymacro(2)&quot;. You store <code>mymacro(2)</code> and invoke <code>`mymacro(foo,bar)`</code>. The stored name carries a count, the invocation carries values.</p>
+<p class="trap" id="T-07-03"><span class="tid">T-07-03</span> Arguments field takes bare names; Definition uses dollar tokens. <span class="wrong">Wrong belief</span>: you write <code>$val$, $rate$</code> in the Arguments field to match the definition. Correct: Arguments is &quot;a comma-delimited string of argument names&quot;, written bare as <code>val, rate</code>, while the Definition references them as <code>$val$</code> and <code>$rate$</code>.</p>
+<p class="trap" id="T-07-04"><span class="tid">T-07-04</span> Quotation marks affect references and tokens differently. <span class="wrong">Wrong belief</span>: one rule covers both. Correct, from the same spec file: &quot;The Splunk platform does not expand macros when they are inside quoted values&quot;, and, separately, &quot;The Splunk platform replaces the $<arg>$ pattern globally in the string, even inside quotation marks.&quot;</p>
+<p class="trap" id="T-07-05"><span class="tid">T-07-05</span> Validation semantics are asymmetric. <span class="wrong">Wrong belief</span>: returning a string means success, or errormsg is always what the user sees. Correct: a Boolean validation expression succeeds on true and fails on false or NULL, with errormsg supplying the message; a non-Boolean validation expression succeeds on NULL and fails when a string is returned, and the returned string is itself the message, so errormsg is unused.</p>
+<p class="trap" id="T-07-06"><span class="tid">T-07-06</span> A validation failure is an error, not an empty result set. <span class="wrong">Wrong belief</span>: a bad argument yields zero events. Correct: validation runs before dispatch, so the search does not run and the user sees the validation error message.</p>
+<p class="trap" id="T-07-07"><span class="tid">T-07-07</span> Editing macros.conf does not require a restart. <span class="wrong">Wrong belief</span>, stated outright in some secondary material: a full restart is needed. Correct: the Admin Manual page on when to restart lists macros.conf among search-time files whose settings take effect without one, and refreshing the endpoints is sufficient. The line inside macros.conf.spec reading &quot;You must restart the Splunk instance to enable configuration changes&quot; is generic boilerplate copied into every spec file.</p>
+<p class="trap" id="T-07-08"><span class="tid">T-07-08</span> Macros are not part of the search-time operations sequence. <span class="wrong">Wrong belief</span>: macro expansion sits among field aliases, calculated fields, and lookups and obeys the same precedence reasoning. Correct: the documented nine-step sequence contains no macro step, because expansion is textual and precedes parsing.</p>
+<p class="trap" id="T-07-09"><span class="tid">T-07-09</span> Leading pipes and generating commands. <span class="wrong">Wrong belief</span>: a definition starting with tstats or inputlookup keeps its leading pipe. Correct: remove the leading pipe from the definition and put it in the search in front of the reference, as <code>| `mygeneratingmacro`</code>.</p>
+<p class="trap" id="T-07-10"><span class="tid">T-07-10</span> Hyphens are legal in argument names and hostile in macro names. <span class="wrong">Wrong belief</span>: the naming rule is the same for both. Correct: argument names &quot;can only contain alphanumeric characters, underscores ( _ ), and hyphens ( - )&quot; with no repeats, while the manual warns &quot;Don't include macros with hyphens in your searches; the Search app doesn't support hyphens in macro names.&quot;</p>
+<p class="trap" id="T-07-11"><span class="tid">T-07-11</span> Overloading on argument count creates distinct objects. <span class="wrong">Wrong belief</span>: <code>[foobar]</code> and <code>[foobar(1)]</code> are one macro with an optional argument. Correct, from the spec: &quot;[foobar], [foobar(1)], [foobar(2)], and so forth&quot; are not the same macro. Calling <code>`foobar(x)`</code> when only <code>[foobar]</code> exists is an error, not a call with an ignored argument.</p>
+<p class="trap" id="T-07-12"><span class="tid">T-07-12</span> Named arguments are allowed and order-independent. <span class="wrong">Wrong belief</span>: arguments are always positional. Correct, from macros.conf.example, a two-argument macro &quot;could be invoked equivalently as <code>foobar(1,2)</code> <code>foobar(foo=1,bar=2)</code> or <code>foobar(bar=2,foo=1)</code>&quot;. The documentation's own example uses the named form, <code>`iis_search(fragment=TM)`</code>.</p>
+<p class="trap" id="T-07-13"><span class="tid">T-07-13</span> An eval-based definition returns the expansion, not a result. <span class="wrong">Wrong belief</span>: iseval makes the macro run an eval command, or computes a value that appears in your results. Correct: iseval = true means &quot;the 'definition' setting is expected to be an eval expression that returns a string representing the expansion of this macro&quot;, default false. <code>`fooeval(10,20)`</code> is replaced by the text <code>10 + 20</code>, which the surrounding search then has to make sense of.</p>
+<p class="trap" id="T-07-14"><span class="tid">T-07-14</span> App scope decides whether the macro resolves at all. <span class="wrong">Wrong belief</span>: a macro created in Search and Reporting is available everywhere. Correct: a new knowledge object is associated with the app context it was created in, and app-level sharing makes it available only to users of that app. Sharing must be All apps to use it elsewhere, and only admin and power roles can share and promote by default.</p>
+<p class="trap" id="T-07-15"><span class="tid">T-07-15</span> Names at creation, values at execution. <span class="wrong">Wrong belief</span>: arguments are defined when the macro runs, or the values are baked into the search string when the macro is saved. Correct: the Arguments field fixes the names at creation time, and the invocation supplies the values, which resolve the search string at execution by substituting into the <code>$name$</code> tokens. Validation is checked against those supplied values, so it happens at execution too.</p>
+<p class="trap" id="T-07-16"><span class="tid">T-07-16</span> Name and Definition are the only required fields. <span class="wrong">Wrong belief</span>: a macro with arguments must also carry a validation expression and an error message. Correct: the documented procedure marks every step except Name and Definition as &quot;(Optional)&quot;, Destination app included.</p>
+<p class="trap" id="T-07-17"><span class="tid">T-07-17</span> Macros live under Advanced search, not Fields. <span class="wrong">Wrong belief</span>: macros are configured in Settings, then Fields, with the other search-time objects, or under Searches, reports, and alerts because a macro is search text. Correct, verbatim: &quot;Select Settings &gt; Advanced Search &gt; Search macros.&quot;</p>
+<p class="trap" id="T-07-18"><span class="tid">T-07-18</span> A pipe may follow a macro reference. <span class="wrong">Wrong belief</span>: a macro has to end the search, or piping after a reference requires the macro to be shared globally. Correct: a reference behaves like the text it becomes, and the manual's own example pipes into one (<code>index=web sourcetype=access_combined | `mymacro`</code>) with nothing stopping further commands after it. Sharing decides whether the macro resolves, not what may follow it.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes, single-node Splunk Enterprise 10.x, the practice dataset loaded.</p>
+<ol>
+<li>Go to Settings, then Advanced search, then Search macros, then create a new macro. Destination app: Search and Reporting. Name: <code>bc_web</code>. Definition: <code>index=web sourcetype=access_combined</code>. Leave Use eval-based definition? unchecked and Arguments, Validation expression, and Validation error message empty. Save.</li>
+<li>Create another macro. Name: <code>bc_purchases</code>. Definition: <code>`bc_web` action=purchase</code>. Save.</li>
+<li>Create a third. Name: <code>bc_status_band(2)</code>. Definition: <code>index=web sourcetype=access_combined status&gt;=$lo$ status&lt;$hi$</code>. Arguments: <code>lo, hi</code>. Validation expression: <code>isnum($lo$) AND isnum($hi$)</code>. Validation error message: <code>Both lo and hi must be numeric HTTP status codes.</code> Save.</li>
+<li>On the Search macros listing page, in the <code>bc_web</code> row, click Permissions. Set &quot;Object should appear in&quot; to All apps, give Everyone Read, and Save.</li>
+<li>Run the nested macro over a time range that covers the practice data (All time):</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-macro">`bc_purchases`</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">as</span> <span class="t-field">revenue</span> <span class="t-kw">by</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">revenue</span></code></pre></div>
+<ol start="6">
+<li>With the cursor in the search bar, press Control-Shift-E (Command-Shift-E on macOS). Confirm the preview reads <code>index=web sourcetype=access_combined action=purchase | stats sum(bytes) as revenue by categoryId | sort - revenue</code>, proving both levels of nesting resolved.</li>
+<li>Trigger validation failure deliberately with <code>`bc_status_band(four_hundred,500)`</code> and confirm you get the error message, not an empty table.</li>
+<li>Run the valid form and confirm real results:</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-macro">`bc_status_band(400,500)`</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">status</span></code></pre></div>
+<ol start="9">
+<li>Verification search proving the three objects exist as knowledge objects:</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-pipe">|</span> <span class="t-cmd">rest</span> <span class="t-op">/</span><span class="t-field">servicesNS</span><span class="t-op">/</span><span class="t-op">-</span><span class="t-op">/</span><span class="t-op">-</span><span class="t-op">/</span><span class="t-field">admin</span><span class="t-op">/</span><span class="t-field">macros</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">title</span><span class="t-op">=</span><span class="t-field">bc_</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">title</span><span class="t-op">,</span> <span class="t-field">definition</span><span class="t-op">,</span> <span class="t-field">args</span><span class="t-op">,</span> <span class="t-field">validation</span><span class="t-op">,</span> <span class="t-field">errormsg</span><span class="t-op">,</span> <span class="t-field">iseval</span><span class="t-op">,</span> <span class="t-field">eai:acl.app</span><span class="t-op">,</span> <span class="t-field">eai:acl.sharing</span></code></pre></div>
+<ol start="10">
+<li>Optional: open <code>$SPLUNK_HOME/etc/apps/search/local/macros.conf</code> (or the equivalent under <code>etc/users/&lt;you&gt;/search/local/</code> if the macro is still private) and confirm the stanza is <code>[bc_status_band(2)]</code> with <code>args</code>, <code>definition</code>, <code>validation</code>, and <code>errormsg</code> keys. Change the errormsg on disk, load <code>http://localhost:8000/en-US/debug/refresh</code>, rerun step 7, and confirm the new message appears without a restart.</li>
+</ol>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>
+<p>A search macro named <code>netscan</code> takes three arguments. What is its correct name in Settings, and how is it invoked?</p>
+<p>A. Name <code>netscan</code>, invoked as <code>`netscan(3)`</code>
+B. Name <code>netscan(3)</code>, invoked as <code>`netscan(a,b,c)`</code>
+C. Name <code>netscan(a,b,c)</code>, invoked as <code>`netscan(3)`</code>
+D. Name <code>netscan(3)</code>, invoked as <code>'netscan(a,b,c)'</code></p>
+</li>
+<li>
+<p>In the Splunk Web macro form, which field takes a comma-delimited list of names written without dollar signs?</p>
+<p>A. Definition
+B. Validation expression
+C. Arguments
+D. Name</p>
+</li>
+<li>
+<p>A macro's Validation expression is <code>isnum($retries$)</code> and its Validation error message is set. A user calls the macro with <code>retries=many</code>. What happens?</p>
+<p>A. The search runs and returns zero events
+B. The search runs and <code>retries</code> is treated as a string
+C. The search does not run and the Validation error message is returned
+D. The search runs and the message appears as a warning in the job inspector</p>
+</li>
+<li>
+<p>Which statement about macro expansion and quotation marks is correct?</p>
+<p>A. Both macro references and argument tokens are expanded inside quoted values
+B. Neither macro references nor argument tokens are expanded inside quoted values
+C. Macro references inside quoted values are not expanded, but argument tokens are substituted even inside quotation marks
+D. Argument tokens inside quoted values are not substituted, but macro references are expanded</p>
+</li>
+<li>
+<p>A macro definition is <code>tstats count where index=web by sourcetype</code>. How should it be referenced?</p>
+<p>A. <code>`mymacro`</code>
+B. <code>| `mymacro`</code>
+C. <code>`| mymacro`</code>
+D. <code>search `mymacro`</code></p>
+</li>
+<li>
+<p>Use eval-based definition? is checked. What does the Definition field now contain?</p>
+<p>A. An eval command that will be appended to the search
+B. An eval expression that must return a string, and that string becomes the macro expansion
+C. A Boolean expression that gates whether the macro expands
+D. A field name calculated at search time</p>
+</li>
+<li>
+<p>Which is true of search macros in Splunk's processing model?</p>
+<p>A. Macros are applied after field aliases and before calculated fields
+B. Macros are applied after lookups and before tags
+C. Macros are expanded into search text before the search is parsed, and do not appear in the search-time operations sequence
+D. Macros are applied at index time along with default field extraction</p>
+</li>
+<li>
+<p>An admin edits <code>$SPLUNK_HOME/etc/apps/search/local/macros.conf</code> directly. What is required for the change to take effect?</p>
+<p>A. A full restart of splunkd
+B. A rolling restart of the indexer cluster
+C. A refresh of the endpoints, for example via the debug refresh URL, because macros.conf settings apply at search time
+D. Nothing, because Splunk Web writes and reads a separate copy</p>
+</li>
+<li>
+<p>A single stanza exists in macros.conf:</p>
+<pre class="plain lang-ini"><code>[peak_hours]
+definition = date_hour&gt;=9 date_hour&lt;17</code></pre>
+<p>A user runs <code>`peak_hours(9,17)` | stats count by host</code>. What happens?</p>
+<p>A. The definition expands as written and the two supplied values are ignored
+B. The search fails, because no macro named <code>peak_hours(2)</code> exists
+C. The values 9 and 17 are substituted positionally into the first two comparisons
+D. The search fails, because a pipe cannot follow a macro reference</p>
+</li>
+<li>
+<p>A macro named <code>top_talkers</code> is saved in an app called netops and shared at app level. An analyst with the user role, working in Search and Reporting, runs <code>`top_talkers` | stats sum(bytes) by src_ip</code>. What happens?</p>
+<p>A. The search runs, because app-level sharing makes a macro readable from any app
+B. The search runs but returns no results, because the macro expands to an empty string
+C. The search fails with an unknown macro error; the macro has to be shared to All apps, or the search run from the netops app
+D. The search fails because the analyst does not own the macro</p>
+</li>
+</ol>
+<details><summary>Answers</summary>
+<ol>
+<li>
+<p><strong>B.</strong> The stored name carries the argument count and the invocation carries the values. A reverses the two. C puts argument names in the Name field, where the count belongs. D has the right name but uses single quotation marks instead of backticks, which does not invoke a macro.</p>
+</li>
+<li>
+<p><strong>C.</strong> Arguments is documented as &quot;a comma-delimited string of argument names&quot;, written bare. A is wrong because Definition references those names as <code>$name$</code> tokens. B holds an eval expression, not a name list. D holds the macro name plus, if applicable, the argument count in parentheses.</p>
+</li>
+<li>
+<p><strong>C.</strong> Validation runs before dispatch, so failure stops the search and returns the message. A is the most common misconception: a validation failure is an error condition, not an empty result set. B is wrong because the point of <code>isnum()</code> is to reject non-numeric input rather than coerce it. D is wrong because the message comes back as a search error, not a job inspector warning.</p>
+</li>
+<li>
+<p><strong>C.</strong> Both halves are quoted from macros.conf.spec, and they point in opposite directions. A, B, and D each assume a single consistent rule and get one half wrong.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>tstats</code> is generating, so the leading pipe is removed from the definition and written before the reference. A leaves the expanded search starting with a generating command in a non-generating position, which fails to parse. C puts the pipe inside the backticks, making it part of the macro name. D is wrong because prefixing <code>search</code> does not legalise a generating command in that position.</p>
+</li>
+<li>
+<p><strong>B.</strong> The spec says iseval = true means the definition &quot;is expected to be an eval expression that returns a string representing the expansion of this macro&quot;. A is wrong because nothing is appended to the pipeline; only the returned string is spliced in. C describes the Validation expression. D describes a calculated field, a different knowledge object.</p>
+</li>
+<li>
+<p><strong>C.</strong> Expansion is textual and precedes parsing, which is why the search-time operations sequence has no macro entry. A and B place macros inside that sequence, whose real members are field filters, field extractions, field aliasing, calculated fields, lookups, event types, and tags. D is wrong because macros are a search-time object stored in macros.conf and have nothing to do with index-time processing.</p>
+</li>
+<li>
+<p><strong>C.</strong> The Admin Manual lists macros.conf among the search-time files that do not require a restart. A is the specific error circulating material makes. B is wrong additionally because macros are a search-head-tier object. D is wrong because Splunk Web reads the same macros.conf layer stack, subject to configuration file precedence.</p>
+</li>
+<li>
+<p><strong>B.</strong> The argument count is part of a macro's identity, so <code>[peak_hours]</code> and a hypothetical <code>[peak_hours(2)]</code> are different objects; a two-value invocation looks for the two-argument stanza, finds nothing, and errors. A is the silent-fallback belief: there is no fallback to the zero-argument form. C is wrong because substitution only happens into <code>$name$</code> tokens, and this definition contains none. D states a rule that does not exist: a pipe may follow a macro reference, and here the reference itself is what fails.</p>
+</li>
+<li>
+<p><strong>C.</strong> An object shared at app level resolves only inside that app, so from Search and Reporting the reference is an unknown macro and the search never runs. A is the common overreach: only All apps sharing makes a macro usable regardless of app context. B is wrong because an unresolved macro is an error, not an empty expansion. D is wrong because ownership is never a requirement; read permission plus a resolving app context is.</p>
+</li>
+</ol>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros" target="_blank" rel="noopener">Use search macros in searches</a> - backtick syntax, argument forms, quote escaping, the generating-command pipe rule, the not-expanded-inside-quotes rule, the no-hyphens warning, Control-Shift-E. Ten minutes, highest yield page in the section.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/define-search-macros-in-settings" target="_blank" rel="noopener">Define search macros in Settings</a> - the ten numbered UI steps plus &quot;Design a search macro definition&quot; and &quot;Validate search macro arguments&quot;. Read the validation paragraphs twice. Fifteen minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/search-macro-examples" target="_blank" rel="noopener">Search macro examples</a> - iis_search(1), the expansion preview, makesessions plus pageviews_per_session(1), newrate(2). Ten minutes; rebuild one on your own instance.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/macros.conf" target="_blank" rel="noopener">macros.conf</a> - spec plus macros.conf.example. The stanza-name comment, the definition comment, the validation comment, and the stanzas foovalid(1), foovalid(2), fooeval(2). Ten minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations</a> - read it to confirm macros are absent. Three minutes, settles T-07-08.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions" target="_blank" rel="noopener">Manage knowledge object permissions</a> - private versus app versus all apps, who may share, the app-context rule. Five minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/administer-splunk-enterprise-with-configuration-files/when-to-restart-splunk-enterprise-after-a-configuration-file-change" target="_blank" rel="noopener">When to restart Splunk Enterprise after a configuration file change</a> - confirm macros.conf is on the no-restart list, note the debug refresh URL. Three minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions" target="_blank" rel="noopener">Comparison and Conditional functions</a> - the validate() entry only, plus the note that case, if, and validate accept Boolean input. Three minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="06-tags-and-event-types.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">6.0</span><span class="pn-label">Tags and event types</span></a><a href="08-workflow-actions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">8.0</span><span class="pn-label">Workflow actions</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#blueprint-mapping"><span>Blueprint mapping</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#what-it-is"><span>What it is</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#syntax-and-options"><span>Syntax and options</span><span class="min">6m</span></a></li>
+<li><a class="lvl2" href="#result-contract"><span>Result contract</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#worked-examples"><span>Worked examples</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#1.-zero-argument-macro-standardising-the-index-and-sourcetype-prefix"><span>1. Zero-argument macro standardising the index and sourcetype prefix</span></a></li>
+<li><a class="lvl3" href="#2.-nested-macro"><span>2. Nested macro</span></a></li>
+<li><a class="lvl3" href="#3.-wrapping-an-expensive-transaction-plus-a-parameterised-span"><span>3. Wrapping an expensive transaction, plus a parameterised span</span></a></li>
+<li><a class="lvl3" href="#4.-two-arguments-with-boolean-validation"><span>4. Two arguments with Boolean validation</span></a></li>
+<li><a class="lvl3" href="#5.-non-boolean-validation-with-validate"><span>5. Non-Boolean validation with validate()</span></a></li>
+<li><a class="lvl3" href="#6.-eval-based-definition"><span>6. Eval-based definition</span></a></li>
+<li><a class="lvl2" href="#decision-rules"><span>Decision rules</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">5m</span></a></li>
+<li><a class="lvl2" href="#lab"><span>Lab</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">6m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>29 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

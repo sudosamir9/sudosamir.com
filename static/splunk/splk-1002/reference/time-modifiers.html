@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time and time modifiers (reference) | SPLK-1002</title>
+<meta name="description" content="Time modifiers, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/time-modifiers" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html" aria-current="page"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>Time modifiers</span>
+        
+      </div>
+<h1 id="time-and-time-modifiers-reference">Time and time modifiers (reference)</h1>
+<p>Time is not a blueprint section on SPLK-1002, and that is precisely why it is worth a file of its own: it is load-bearing under sections 1.0, 2.0 and 3.0, and a question that looks like it is about <code>timechart</code> or <code>transaction</code> is often really about what <code>-1d@d</code> resolves to. <code>topics/00-foundations-refresher</code> states the docs-verified core (epoch storage, the four modifiers, the unit alias table, offset before snap, snapping rounds down, picker precedence). This file assumes all of that and goes past it: the fields that carry time, the full snap grammar with resolved examples, the eval time functions with a complete <code>strftime</code> variable table, <code>bin</code> versus <code>timechart span</code>, and real-time semantics.</p>
+<h2 id="1.-where-time-lives-on-an-event">1. Where time lives on an event<a class="anchor" href="#1.-where-time-lives-on-an-event" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Created</th>
+<th>Contains</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_time</code></td>
+<td>Index time, from the event's timestamp</td>
+<td>UNIX epoch seconds, an absolute instant</td>
+<td>The field every time range, <code>timechart</code>, <code>bin</code> and sort-by-time operation uses. Rendered in the viewing user's time zone, never stored in one.</td>
+</tr>
+<tr>
+<td><code>_indextime</code></td>
+<td>Index time, from the indexer's clock</td>
+<td>UNIX epoch seconds, the moment the event was written to the index</td>
+<td>Not shown in the events list and not in the fields sidebar. Retrieve it with <code>eval it=_indextime</code> or filter it with <code>_index_earliest</code> and <code>_index_latest</code>.</td>
+</tr>
+<tr>
+<td><code>date_hour</code>, <code>date_mday</code>, <code>date_minute</code>, <code>date_month</code>, <code>date_second</code>, <code>date_wday</code>, <code>date_year</code>, <code>date_zone</code></td>
+<td>Index time, parsed out of the timestamp text</td>
+<td>The components of the timestamp exactly as it was written in the raw event</td>
+<td>Present only for events that carried timestamp information generated by the source system.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>_time</code> is an integer, so two users in Dublin and Tokyo searching <code>earliest=-24h</code> get the identical event set and see different clock faces. The moment a range references a calendar boundary (<code>@d</code>, <code>@mon</code>, the <code>Today</code> or <code>Since 00:00:00</code> presets), that equivalence breaks: local midnight is a different epoch instant in each zone, so the two users genuinely get different events. The docs state the storage rule plainly: &quot;Regardless of how time is specified in your events, timestamps are converted to UNIX time and stored in the <code>_time</code> field when your data is indexed.&quot;</p>
+<p>Why the <code>date_*</code> fields are a trap rather than a convenience:</p>
+<ul>
+<li>They exist only when the source system put a timestamp in the event. Events whose time Splunk had to infer (file modification time, index time, an upstream default) have no <code>date_*</code> fields at all, so <code>date_hour&gt;=9</code> silently drops them.</li>
+<li>They describe the timestamp as written, including whatever zone that timestamp was written in, with <code>date_zone</code> carrying the offset. They do not follow the viewing user's time zone preference the way a rendered <code>_time</code> does. Two events that are simultaneous in absolute terms can carry different <code>date_hour</code> values.</li>
+<li><code>date_wday</code> and <code>date_month</code> are lowercase names (<code>wednesday</code>, <code>july</code>), not numbers, so range comparisons on them do not do what an unwary <code>where</code> expects.</li>
+<li>They are index-time fields, so they are fixed at ingest and cannot be corrected by a search-time knowledge object.</li>
+</ul>
+<p>The portable replacement is always to derive from <code>_time</code>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">hour</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">,</span> <span class="t-str">&quot;%H&quot;</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-opt">wday</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">,</span> <span class="t-str">&quot;%A&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">hour</span></code></pre></div>
+<p><code>_indextime</code> earns its keep for one job: measuring ingest lag, and finding events that arrived long after they happened.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-time">-7d@d</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-func">now</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">lag_seconds</span> <span class="t-op">=</span> <span class="t-field">_indextime</span> <span class="t-op">-</span> <span class="t-field">_time</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">lag_seconds</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_lag</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">lag_seconds</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">worst_lag</span> <span class="t-kw">BY</span> <span class="t-field">sourcetype</span></code></pre></div>
+<h2 id="2.-the-four-time-modifiers">2. The four time modifiers<a class="anchor" href="#2.-the-four-time-modifiers" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Filters on</th>
+<th>Default when omitted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>earliest</code></td>
+<td><code>_time</code></td>
+<td>The Time Range Picker value, or the beginning of the index if the range is All time</td>
+</tr>
+<tr>
+<td><code>latest</code></td>
+<td><code>_time</code></td>
+<td><code>now()</code>. Specifying only <code>earliest</code> sets <code>latest</code> to the current time.</td>
+</tr>
+<tr>
+<td><code>_index_earliest</code></td>
+<td><code>_indextime</code></td>
+<td>None. Nothing is filtered by index time unless you ask.</td>
+</tr>
+<tr>
+<td><code>_index_latest</code></td>
+<td><code>_indextime</code></td>
+<td>None.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rules that decide questions:</p>
+<ul>
+<li>A time range specified in the search bar, or in a saved search, overrides the range selected in the Time Range Picker. Picker set to <code>Last 7 days</code> plus <code>earliest=-30m</code> in the bar gives you thirty minutes.</li>
+<li><code>latest</code> is exclusive at the boundary. With <code>latest=02:00:00</code>, an event stamped exactly 02:00:00 is out. This is what makes <code>earliest=-1d@d latest=@d</code> a clean, non-overlapping &quot;yesterday&quot;.</li>
+<li>Time modifiers do not cross the subsearch boundary in either direction. A subsearch with no modifiers of its own inherits the picker, not the outer search's inline range.</li>
+<li><code>earliest=1 latest=now()</code> is an effective all-time search, starting one second after the epoch.</li>
+<li>The two index-time modifiers are written with a leading underscore. The docs are explicit about the pairing requirement: &quot;When using index-time based modifiers such as <code>_index_earliest</code> and <code>_index_latest</code>, your search must also have an event-time window which will retrieve the events.&quot; A search for events indexed in the last hour whose event time is three days old needs a wide <code>earliest</code> as well, or it returns nothing and looks broken.</li>
+</ul>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-time">-30d@d</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-func">now</span> <span class="t-opt">_index_earliest</span><span class="t-op">=</span><span class="t-time">-1h@h</span> <span class="t-opt">_index_latest</span><span class="t-op">=</span><span class="t-time">@h</span></code></pre></div>
+<p>Absolute times use the <code>timeformat</code> default <code>%m/%d/%Y:%H:%M:%S</code>, quoted:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-str">&quot;11/15/2022:20:00:00&quot;</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-str">&quot;11/22/2022:20:00:00&quot;</span></code></pre></div>
+<h2 id="3.-relative-time-syntax-in-full">3. Relative time syntax in full<a class="anchor" href="#3.-relative-time-syntax-in-full" aria-label="Link to this section">#</a></h2>
+<pre class="plain"><code>[+|-]&lt;time_integer&gt;&lt;time_unit&gt;@&lt;time_unit&gt;</code></pre>
+<p>Everything is optional except that something must be there. <code>-1d</code>, <code>@d</code>, <code>-1d@d</code> and <code>-1d@d+3h</code> are all legal. A missing integer means one: <code>-h</code> is <code>-1h</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Every accepted spelling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subseconds</td>
+<td><code>us</code> (microseconds), <code>ms</code> (milliseconds), <code>cs</code> (centiseconds), <code>ds</code> (deciseconds)</td>
+</tr>
+<tr>
+<td>Second</td>
+<td><code>s</code>, <code>sec</code>, <code>secs</code>, <code>second</code>, <code>seconds</code></td>
+</tr>
+<tr>
+<td>Minute</td>
+<td><code>m</code>, <code>min</code>, <code>mins</code>, <code>minute</code>, <code>minutes</code></td>
+</tr>
+<tr>
+<td>Hour</td>
+<td><code>h</code>, <code>hr</code>, <code>hrs</code>, <code>hour</code>, <code>hours</code></td>
+</tr>
+<tr>
+<td>Day</td>
+<td><code>d</code>, <code>day</code>, <code>days</code></td>
+</tr>
+<tr>
+<td>Week</td>
+<td><code>w</code>, <code>week</code>, <code>weeks</code></td>
+</tr>
+<tr>
+<td>Month</td>
+<td><code>mon</code>, <code>month</code>, <code>months</code></td>
+</tr>
+<tr>
+<td>Quarter</td>
+<td><code>q</code>, <code>qtr</code>, <code>qtrs</code>, <code>quarter</code>, <code>quarters</code></td>
+</tr>
+<tr>
+<td>Year</td>
+<td><code>y</code>, <code>yr</code>, <code>yrs</code>, <code>year</code>, <code>years</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Note what is not on that list: <code>M</code> for month and <code>mm</code> for minute do not exist. <code>m</code> is always minutes. Months are always <code>mon</code> or longer.</p>
+<p>Snapping, stated as three rules:</p>
+<ol>
+<li>Snapping always rounds <strong>down</strong>, to the latest time that is not after the value being snapped. There is no round-up and no round-to-nearest. Snapping also zeroes every unit smaller than the snap unit.</li>
+<li>The offset on the left of <code>@</code> is applied <strong>before</strong> the snap on the right. <code>-2h@h</code> is &quot;go back two hours, then drop to the top of that hour&quot;.</li>
+<li>An offset written <strong>after</strong> the snap unit is applied last. <code>@d-2h</code> is &quot;start of today, then back two hours&quot; and <code>-1d@d+3h</code> is &quot;yesterday, snap to its start, then forward three hours&quot;, which is 03:00 yesterday.</li>
+</ol>
+<p>Day-of-week snapping uses <code>@w0</code> through <code>@w7</code>. <code>w0</code> and <code>w7</code> are both Sunday, <code>w1</code> is Monday and <code>w6</code> is Saturday. A bare <code>@w</code> (or <code>@week</code>) snaps to the start of the week, which is Sunday, not Monday. A business week that starts on Monday must be written <code>@w1</code>.</p>
+<h3 id="resolved-against-a-concrete-now">Resolved against a concrete now<a class="anchor" href="#resolved-against-a-concrete-now" aria-label="Link to this section">#</a></h3>
+<p>Take now as <strong>Wednesday 22 July 2026, 14:37:12</strong> in the user's time zone.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Resolves to</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>now</code></td>
+<td>Wed 22 Jul 14:37:12</td>
+<td>As a modifier it is bare <code>now</code>; in <code>eval</code> it is <code>now()</code>.</td>
+</tr>
+<tr>
+<td><code>@s</code></td>
+<td>Wed 22 Jul 14:37:12</td>
+<td>Drops subseconds only.</td>
+</tr>
+<tr>
+<td><code>@m</code></td>
+<td>Wed 22 Jul 14:37:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-15m@m</code></td>
+<td>Wed 22 Jul 14:22:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-1h@h</code></td>
+<td>Wed 22 Jul 13:00:00</td>
+<td>Pair with <code>latest=@h</code> for the last complete hour.</td>
+</tr>
+<tr>
+<td><code>@h</code></td>
+<td>Wed 22 Jul 14:00:00</td>
+<td>Start of the current, incomplete hour.</td>
+</tr>
+<tr>
+<td><code>-24h</code></td>
+<td>Tue 21 Jul 14:37:12</td>
+<td>What the <code>Last 24 hours</code> preset means.</td>
+</tr>
+<tr>
+<td><code>-1d</code></td>
+<td>Tue 21 Jul 14:37:12</td>
+<td>Same instant as <code>-24h</code> except across a DST change.</td>
+</tr>
+<tr>
+<td><code>-1d@d</code></td>
+<td>Tue 21 Jul 00:00:00</td>
+<td>Start of yesterday, 38 hours 37 minutes ago, not 24.</td>
+</tr>
+<tr>
+<td><code>@d</code></td>
+<td>Wed 22 Jul 00:00:00</td>
+<td>Start of today.</td>
+</tr>
+<tr>
+<td><code>@d-2h</code></td>
+<td>Tue 21 Jul 22:00:00</td>
+<td>Snap first, then offset.</td>
+</tr>
+<tr>
+<td><code>-1d@d+3h</code></td>
+<td>Tue 21 Jul 03:00:00</td>
+<td>Offset, snap, offset.</td>
+</tr>
+<tr>
+<td><code>+1d@d</code></td>
+<td>Thu 23 Jul 00:00:00</td>
+<td>Forward offsets are legal and useful for <code>latest</code>.</td>
+</tr>
+<tr>
+<td><code>-7d@d</code></td>
+<td>Wed 15 Jul 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-30d@d</code></td>
+<td>Mon 22 Jun 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>@w</code> / <code>@w0</code> / <code>@w7</code></td>
+<td>Sun 19 Jul 00:00:00</td>
+<td>Week starts Sunday.</td>
+</tr>
+<tr>
+<td><code>@w1</code></td>
+<td>Mon 20 Jul 00:00:00</td>
+<td>This week's Monday.</td>
+</tr>
+<tr>
+<td><code>@w6</code></td>
+<td>Sat 18 Jul 00:00:00</td>
+<td>The most recent Saturday, which is in the previous week.</td>
+</tr>
+<tr>
+<td><code>-1w@w</code></td>
+<td>Sun 12 Jul 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-5d@w1</code></td>
+<td>Mon 13 Jul 00:00:00</td>
+<td>With <code>latest=@w6</code> this is the previous business week.</td>
+</tr>
+<tr>
+<td><code>@mon</code></td>
+<td>Wed 1 Jul 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-1mon@mon</code></td>
+<td>Mon 1 Jun 00:00:00</td>
+<td>Start of last calendar month.</td>
+</tr>
+<tr>
+<td><code>@q</code></td>
+<td>Wed 1 Jul 00:00:00</td>
+<td>Q3 2026 begins.</td>
+</tr>
+<tr>
+<td><code>-1q@q</code></td>
+<td>Wed 1 Apr 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>@y</code></td>
+<td>Thu 1 Jan 2026 00:00:00</td>
+<td></td>
+</tr>
+<tr>
+<td><code>-1y@y</code></td>
+<td>Wed 1 Jan 2025 00:00:00</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 768 180" width="768" height="180" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="83.925" y="22.5" text-anchor="middle" dominant-baseline="middle">-1d@d</text><text class="dg-text" x="83.925" y="39.5" text-anchor="middle" dominant-baseline="middle">Tue 21 Jul 00:00:00</text><text class="dg-text" x="83.925" y="56.5" text-anchor="middle" dominant-baseline="middle">start of yesterday</text><rect class="dg-node" x="199.85" y="2" width="171.0" height="73" rx="5"/><text class="dg-text" x="285.35" y="22.5" text-anchor="middle" dominant-baseline="middle">-1d and -24h</text><text class="dg-text" x="285.35" y="39.5" text-anchor="middle" dominant-baseline="middle">Tue 21 Jul 14:37:12</text><text class="dg-text" x="285.35" y="56.5" text-anchor="middle" dominant-baseline="middle">exactly one day back</text><rect class="dg-node" x="404.85" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="486.77500000000003" y="22.5" text-anchor="middle" dominant-baseline="middle">@d</text><text class="dg-text" x="486.77500000000003" y="39.5" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 00:00:00</text><text class="dg-text" x="486.77500000000003" y="56.5" text-anchor="middle" dominant-baseline="middle">start of today</text><rect class="dg-node" x="602.7" y="2" width="163.85" height="73" rx="5"/><text class="dg-text" x="684.625" y="31.0" text-anchor="middle" dominant-baseline="middle">-1h@h</text><text class="dg-text" x="684.625" y="48.0" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 13:00:00</text><rect class="dg-node" x="2" y="105" width="163.85" height="73" rx="5"/><text class="dg-text" x="83.925" y="134.0" text-anchor="middle" dominant-baseline="middle">now</text><text class="dg-text" x="83.925" y="151.0" text-anchor="middle" dominant-baseline="middle">Wed 22 Jul 14:37:12</text><path class="dg-edge" marker-end="url(#ah)" d="M165.85 38.5 L195.85 38.5"/><path class="dg-edge" marker-end="url(#ah)" d="M370.85 38.5 L400.85 38.5"/><path class="dg-edge" marker-end="url(#ah)" d="M568.7 38.5 L598.7 38.5"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M684.625 75 L684.625 90.0 L83.925 90.0 L83.925 101"/></svg></figure>
+<p>Read that left to right as earlier to later. <code>-1d@d</code> sits to the <strong>left</strong> of <code>-1d</code>, because the snap moved backwards from Tuesday afternoon to Tuesday midnight. That single ordering fact is the whole of trap T-TM-01.</p>
+<p>Picker equivalents worth memorising, because the exam phrases questions in picker language and answers them in modifier language:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Equivalent modifiers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Last 15 minutes</td>
+<td><code>earliest=-15m latest=now</code></td>
+</tr>
+<tr>
+<td>Last 24 hours</td>
+<td><code>earliest=-24h latest=now</code></td>
+</tr>
+<tr>
+<td>Today</td>
+<td><code>earliest=@d latest=now</code></td>
+</tr>
+<tr>
+<td>Yesterday</td>
+<td><code>earliest=-1d@d latest=@d</code></td>
+</tr>
+<tr>
+<td>Previous week</td>
+<td><code>earliest=-1w@w latest=@w</code></td>
+</tr>
+<tr>
+<td>Week to date</td>
+<td><code>earliest=@w latest=now</code></td>
+</tr>
+<tr>
+<td>Business week to date</td>
+<td><code>earliest=@w1 latest=now</code></td>
+</tr>
+<tr>
+<td>Previous month</td>
+<td><code>earliest=-1mon@mon latest=@mon</code></td>
+</tr>
+<tr>
+<td>Year to date</td>
+<td><code>earliest=@y latest=now</code></td>
+</tr>
+<tr>
+<td>All time</td>
+<td><code>earliest=1 latest=now</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="4.-time-functions-in-eval">4. Time functions in eval<a class="anchor" href="#4.-time-functions-in-eval" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Behaviour worth knowing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>now()</code></td>
+<td>Epoch seconds</td>
+<td>The time the search started, or the scheduled run time for a scheduled search. Constant for every row in the result set.</td>
+</tr>
+<tr>
+<td><code>time()</code></td>
+<td>Epoch seconds with microsecond resolution</td>
+<td>Wall-clock time at the moment each result passes through, so it differs row to row. In a real-time search it is current machine time.</td>
+</tr>
+<tr>
+<td><code>relative_time(&lt;epoch&gt;, &lt;specifier&gt;)</code></td>
+<td>Epoch seconds</td>
+<td>Applies the full section 3 grammar to any epoch value, not just to now. The specifier is a quoted string.</td>
+</tr>
+<tr>
+<td><code>strftime(&lt;epoch&gt;, &lt;format&gt;)</code></td>
+<td>String</td>
+<td>Requires the input in <strong>seconds</strong>. Millisecond, microsecond or nanosecond values must be divided by 10^3, 10^6 or 10^9 first.</td>
+</tr>
+<tr>
+<td><code>strptime(&lt;string&gt;, &lt;format&gt;)</code></td>
+<td>Epoch seconds</td>
+<td>Needs a day component (a month and year alone will not parse), accepts dates of 1 January 1971 or later, and does nothing at all if pointed at <code>_time</code>, which is already epoch.</td>
+</tr>
+</tbody>
+</table></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">start_of_yesterday</span> <span class="t-op">=</span> <span class="t-func">relative_time</span><span class="t-op">(</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">,</span> <span class="t-str">&quot;-1d@d&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">as_text</span> <span class="t-op">=</span> <span class="t-func">strftime</span><span class="t-op">(</span><span class="t-field">start_of_yesterday</span><span class="t-op">,</span> <span class="t-str">&quot;%A %d %B %Y %H:%M:%S&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">parsed</span> <span class="t-op">=</span> <span class="t-func">strptime</span><span class="t-op">(</span><span class="t-str">&quot;2026-07-22 14:37:12&quot;</span><span class="t-op">,</span> <span class="t-str">&quot;%Y-%m-%d %H:%M:%S&quot;</span><span class="t-op">)</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">age_days</span> <span class="t-op">=</span> <span class="t-func">round</span><span class="t-op">(</span><span class="t-op">(</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span> <span class="t-op">-</span> <span class="t-field">parsed</span><span class="t-op">)</span> <span class="t-op">/</span> <span class="t-num">86400</span><span class="t-op">,</span> <span class="t-num">2</span><span class="t-op">)</span></code></pre></div>
+<h3 id="format-variables">Format variables<a class="anchor" href="#format-variables" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%H</code></td>
+<td>Hour, 24-hour clock, 00 to 23</td>
+</tr>
+<tr>
+<td><code>%k</code></td>
+<td>Hour, 24-hour clock, leading zero replaced by a space</td>
+</tr>
+<tr>
+<td><code>%I</code></td>
+<td>Hour, 12-hour clock, 01 to 12. Pair with <code>%p</code>.</td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>AM or PM</td>
+</tr>
+<tr>
+<td><code>%M</code></td>
+<td>Minute, 00 to 59</td>
+</tr>
+<tr>
+<td><code>%S</code></td>
+<td>Second, 00 to 59</td>
+</tr>
+<tr>
+<td><code>%N</code></td>
+<td>Subsecond digits, default <code>%9N</code>. <code>%3N</code> milliseconds, <code>%6N</code> microseconds, <code>%9N</code> nanoseconds.</td>
+</tr>
+<tr>
+<td><code>%Q</code></td>
+<td>Subsecond component of a UTC timestamp, default milliseconds (<code>%3Q</code>)</td>
+</tr>
+<tr>
+<td><code>%f</code></td>
+<td>Microseconds as a decimal number</td>
+</tr>
+<tr>
+<td><code>%s</code></td>
+<td>UNIX epoch time, seconds since 1970-01-01 00:00:00 UTC</td>
+</tr>
+<tr>
+<td><code>%T</code></td>
+<td>Time in 24-hour notation, equivalent to <code>%H:%M:%S</code></td>
+</tr>
+<tr>
+<td><code>%X</code></td>
+<td>Time in the current locale's format</td>
+</tr>
+<tr>
+<td><code>%F</code></td>
+<td>Equivalent to <code>%Y-%m-%d</code>, the ISO 8601 date</td>
+</tr>
+<tr>
+<td><code>%Y</code></td>
+<td>Year with century, for example 2026</td>
+</tr>
+<tr>
+<td><code>%y</code></td>
+<td>Year without century, 00 to 99</td>
+</tr>
+<tr>
+<td><code>%C</code></td>
+<td>Century as a 2-digit number</td>
+</tr>
+<tr>
+<td><code>%G</code> / <code>%g</code></td>
+<td>ISO 8601 week-based year, with and without century</td>
+</tr>
+<tr>
+<td><code>%m</code></td>
+<td>Month, 01 to 12</td>
+</tr>
+<tr>
+<td><code>%b</code> / <code>%B</code></td>
+<td>Abbreviated and full month name</td>
+</tr>
+<tr>
+<td><code>%d</code></td>
+<td>Day of the month, 01 to 31</td>
+</tr>
+<tr>
+<td><code>%e</code></td>
+<td>Day of the month, leading zero replaced by a space</td>
+</tr>
+<tr>
+<td><code>%j</code></td>
+<td>Day of the year, 001 to 366</td>
+</tr>
+<tr>
+<td><code>%a</code> / <code>%A</code></td>
+<td>Abbreviated and full weekday name</td>
+</tr>
+<tr>
+<td><code>%w</code></td>
+<td>Weekday as a number, 0 Sunday to 6 Saturday</td>
+</tr>
+<tr>
+<td><code>%V</code> / <code>%U</code></td>
+<td>Week of the year. <code>%V</code> starts at 1, <code>%U</code> starts at 0.</td>
+</tr>
+<tr>
+<td><code>%x</code></td>
+<td>Date in the current locale's format</td>
+</tr>
+<tr>
+<td><code>%Z</code></td>
+<td>Time zone abbreviation</td>
+</tr>
+<tr>
+<td><code>%z</code></td>
+<td>Time zone offset from UTC as <code>+hhmm</code> or <code>-hhmm</code></td>
+</tr>
+<tr>
+<td><code>%Ez</code></td>
+<td>Splunk-specific time zone measurement in minutes</td>
+</tr>
+<tr>
+<td><code>%c</code></td>
+<td>Date and time in the server operating system's locale format</td>
+</tr>
+<tr>
+<td><code>%+</code></td>
+<td>Date and time with time zone in the locale format</td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td>A literal percent sign</td>
+</tr>
+</tbody>
+</table></div>
+<p>Recipes that come up constantly: <code>&quot;%F %T&quot;</code> for a sortable timestamp, <code>&quot;%Y-%m&quot;</code> for month grouping, <code>&quot;%H&quot;</code> for hour-of-day profiling, <code>&quot;%A&quot;</code> for day-of-week profiling, and <code>&quot;%d/%b/%Y:%H:%M:%S %z&quot;</code> for parsing an Apache access log timestamp with <code>strptime</code>.</p>
+<h2 id="5.-bin-bucket-and-span">5. bin, bucket and span<a class="anchor" href="#5.-bin-bucket-and-span" aria-label="Link to this section">#</a></h2>
+<p><code>bucket</code> is an alias for <code>bin</code>. Both are dataset processing commands, so they hold the full result set before emitting.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-cmd">bin</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">bin-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">newfield</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Syntax</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bins</code></td>
+<td><code>bins=&lt;int&gt;</code></td>
+<td><code>100</code></td>
+<td>Maximum number of bins. Splunk picks the smallest bin size that produces no more than this many, so you often get fewer.</td>
+</tr>
+<tr>
+<td><code>span</code></td>
+<td><code>span=&lt;log-span&gt;</code> or <code>span=&lt;span-length&gt;</code></td>
+<td>none</td>
+<td>Explicit bin size. Wins over <code>bins</code>.</td>
+</tr>
+<tr>
+<td><code>minspan</code></td>
+<td><code>minspan=&lt;span-length&gt;</code></td>
+<td>none</td>
+<td>Floor on the inferred span.</td>
+</tr>
+<tr>
+<td><code>start</code> / <code>end</code></td>
+<td><code>start=&lt;num&gt;</code> / <code>end=&lt;num&gt;</code></td>
+<td>none</td>
+<td>Numeric range to bin over. Values outside are still returned.</td>
+</tr>
+<tr>
+<td><code>aligntime</code></td>
+<td><code>aligntime=(earliest|latest|&lt;time-specifier&gt;)</code></td>
+<td>none</td>
+<td>Aligns bins to something other than epoch 0. Ignored if <code>span</code> is in days, months or years.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Span forms:</p>
+<ul>
+<li>Log span: <code>[&lt;num&gt;]log[&lt;num&gt;]</code>, coefficient at least 1.0 and less than the base, base greater than 1.0.</li>
+<li>Span length: <code>&lt;int&gt;&lt;timescale&gt;</code>, defaulting to seconds if the timescale is omitted, so <code>span=300</code> is five minutes.</li>
+<li>Subsecond spans use <code>us</code>, <code>ms</code>, <code>cs</code>, <code>ds</code> and should divide evenly into a second. The documented valid millisecond values are 1, 2, 4, 5, 8, 10, 20, 25, 40, 50, 100, 125, 200, 250 and 500.</li>
+<li>A span of a day or more is aligned to midnight.</li>
+<li><code>1mon</code> is a calendar month, not thirty days, and <code>1q</code> is a calendar quarter. <code>timechart</code> documents <code>sec</code>, <code>min</code>, <code>hr</code>, <code>day</code>, <code>week</code>, <code>month</code>, <code>quarter</code> and subseconds as span-length timescales; years are not on that list. Use <code>span=12mon</code> rather than <code>span=1y</code>.</li>
+<li>Snap-to spans are restricted on <code>timechart</code> to weeks: <code>span=w@w1</code> for weeks starting Monday.</li>
+</ul>
+<h3 id="bin-plus-stats-versus-timechart-span">bin plus stats versus timechart span<a class="anchor" href="#bin-plus-stats-versus-timechart-span" aria-label="Link to this section">#</a></h3>
+<p>They are not interchangeable, and the differences are all testable.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Behaviour</th>
+<th><code>bin _time span=1h | stats count BY _time, host</code></th>
+<th><code>timechart span=1h count BY host</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Output shape</td>
+<td>Long: one row per bucket per host</td>
+<td>Wide: one row per bucket, one column per host</td>
+</tr>
+<tr>
+<td>Empty buckets</td>
+<td>Absent. A quiet hour produces no row.</td>
+<td>Filled. <code>cont=true</code> keeps the series continuous with zeros or nulls.</td>
+</tr>
+<tr>
+<td>Partial first and last bucket</td>
+<td>Whatever the data gives</td>
+<td><code>partial=true</code> retains them, and only the first and last can be partial</td>
+</tr>
+<tr>
+<td>Search range</td>
+<td>Only buckets that contain events appear</td>
+<td><code>fixedrange=true</code> enforces the search range even where there are no events</td>
+</tr>
+<tr>
+<td>Split cardinality</td>
+<td>Unlimited</td>
+<td>Capped at the top 10 split values by default, with the rest folded into <code>OTHER</code></td>
+</tr>
+<tr>
+<td>Number of grouping fields</td>
+<td>Any number</td>
+<td>One split field only, because <code>_time</code> already occupies the row axis</td>
+</tr>
+<tr>
+<td>Field flexibility</td>
+<td>Any numeric field, not just <code>_time</code></td>
+<td><code>_time</code> only</td>
+</tr>
+</tbody>
+</table></div>
+<p>The practical rule: use <code>bin</code> when you want time as one grouping key among several, or when you need the long shape for a downstream <code>stats</code>, <code>xyseries</code> or <code>eventstats</code>. Use <code>timechart</code> when you want a chartable time series with gap filling.</p>
+<h3 id="when-span-is-omitted-on-timechart">When span is omitted on timechart<a class="anchor" href="#when-span-is-omitted-on-timechart" aria-label="Link to this section">#</a></h3>
+<p><code>timechart</code> falls back to <code>bins=100</code> as a maximum and to a preset-dependent default span. If both <code>bins</code> and <code>span</code> are given, <code>span</code> wins and <code>bins</code> is ignored.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Time range preset</th>
+<th>Default span</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Last 15 minutes</td>
+<td>10 seconds</td>
+</tr>
+<tr>
+<td>Last 60 minutes</td>
+<td>1 minute</td>
+</tr>
+<tr>
+<td>Last 4 hours</td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Last 24 hours</td>
+<td>30 minutes</td>
+</tr>
+<tr>
+<td>Last 7 days</td>
+<td>1 day</td>
+</tr>
+<tr>
+<td>Last 30 days</td>
+<td>1 day</td>
+</tr>
+<tr>
+<td>Previous year</td>
+<td>1 month</td>
+</tr>
+</tbody>
+</table></div>
+<p>The consequence is that identical SPL changes granularity when someone moves the picker. Pin the span whenever the number of rows matters, and remember that <code>span</code> and <code>bins</code> must be written before the split-by field or Splunk applies them to the split field instead.</p>
+<h2 id="6.-real-time-versus-historical">6. Real-time versus historical<a class="anchor" href="#6.-real-time-versus-historical" aria-label="Link to this section">#</a></h2>
+<p>A historical search reads events that are already indexed, over a bounded range, and finishes. A real-time search scans events as they arrive for indexing, looks for index-time fields suggesting a possible match, and periodically evaluates the scanned events against the search criteria within the sliding window you defined. It does not finish; you stop it.</p>
+<p>Real-time ranges use the same relative grammar with an <code>rt</code> prefix, <code>rt[+|-]&lt;time_integer&gt;&lt;time_unit&gt;@&lt;time_unit&gt;</code>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">503</span> <span class="t-opt">earliest</span><span class="t-op">=</span><span class="t-field">rt-5m</span> <span class="t-opt">latest</span><span class="t-op">=</span><span class="t-field">rt</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Windowed real-time</th>
+<th>All time (real-time)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What it covers</td>
+<td>A sliding window of the stated width</td>
+<td>Every event from the start of the search onward, with no window</td>
+</tr>
+<tr>
+<td>Event lifetime in the results</td>
+<td>Events drop out of the results when they age past the window edge</td>
+<td>Events accumulate and persist</td>
+</tr>
+<tr>
+<td>Practical ceiling</td>
+<td>The window</td>
+<td>The display uses a circular buffer, so once results pass roughly 1,000 you see approximately the most recent 1,000</td>
+</tr>
+<tr>
+<td>Picker labels</td>
+<td><code>30 second window</code>, <code>1 minute window</code>, <code>5 minute window</code>, <code>30 minute window</code>, <code>1 hour window</code></td>
+<td><code>All time (real-time)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Operational facts that make good distractors: real-time search is turned on by default in Splunk Enterprise, but running or saving one requires the <code>admin</code>, <code>sc_admin</code> or <code>power</code> role, or any role holding the <code>rtsearch</code> capability. Concurrent real-time searches can hurt indexing performance, which is why <strong>indexed real-time search</strong> exists as a lower-impact variant; it is off by default in Splunk Enterprise. Windowed real-time searches can be backfilled through <code>limits.conf</code>, which runs a historical search first to populate the window and then hands over to the live search, so a dashboard panel is not empty for the first five minutes.</p>
+<h2 id="7.-decision-rules">7. Decision rules<a class="anchor" href="#7.-decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;The last complete hour&quot;</td>
+<td><code>earliest=-1h@h latest=@h</code>, never <code>-1h</code> to <code>now</code></td>
+</tr>
+<tr>
+<td>&quot;Yesterday&quot;</td>
+<td><code>earliest=-1d@d latest=@d</code></td>
+</tr>
+<tr>
+<td>&quot;The last 24 hours&quot;</td>
+<td><code>earliest=-24h latest=now</code></td>
+</tr>
+<tr>
+<td>&quot;So far this week, business definition&quot;</td>
+<td><code>earliest=@w1 latest=now</code></td>
+</tr>
+<tr>
+<td>&quot;Events indexed recently regardless of when they happened&quot;</td>
+<td><code>_index_earliest</code> plus a deliberately wide <code>earliest</code></td>
+</tr>
+<tr>
+<td>Hour-of-day analysis</td>
+<td><code>eval hour=strftime(_time,&quot;%H&quot;)</code>, not <code>date_hour</code></td>
+</tr>
+<tr>
+<td>Need time as one grouping key among several</td>
+<td><code>bin _time span=... </code> then <code>stats ... BY _time, other</code></td>
+</tr>
+<tr>
+<td>Need a gap-filled chartable series</td>
+<td><code>timechart span=...</code></td>
+</tr>
+<tr>
+<td>Row count must be stable across picker changes</td>
+<td>Set <code>span</code> explicitly</td>
+</tr>
+<tr>
+<td>Comparing two arbitrary epoch values relatively</td>
+<td><code>relative_time()</code>, not string arithmetic</td>
+</tr>
+<tr>
+<td>A months-ago boundary must be deterministic</td>
+<td>Always snap: <code>-1mon@mon</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="8.-traps">8. Traps<a class="anchor" href="#8.-traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-TM-01"><span class="tid">T-TM-01</span> <code>-1d@d</code> means twenty-four hours ago. Wrong. The offset applies first, giving this time yesterday, then the snap rounds down to the start of that day. At 14:37 on Wednesday it resolves to Tuesday 00:00:00, which is over 38 hours back. Twenty-four hours ago is <code>-24h</code> or bare <code>-1d</code>.</p>
+<p class="trap" id="T-TM-02"><span class="tid">T-TM-02</span> <code>@w</code> snaps to Monday because the working week starts on Monday. Wrong. The week snap lands on <strong>Sunday</strong>. <code>@w</code>, <code>@w0</code> and <code>@w7</code> are all Sunday, <code>@w1</code> is Monday and <code>@w6</code> is Saturday. A business-week range must say <code>@w1</code> explicitly.</p>
+<p class="trap" id="T-TM-03"><span class="tid">T-TM-03</span> Snapping rounds to the nearest boundary. Wrong. Snapping always rounds <strong>down</strong>, to the latest time that is not after the value, and zeroes every smaller unit. <code>-30m@h</code> at 14:50 gives 14:00 and can never give 15:00.</p>
+<p class="trap" id="T-TM-04"><span class="tid">T-TM-04</span> &quot;Yesterday&quot; is <code>earliest=-1d</code>. Wrong, and this is the picker-versus-modifier trap in its purest form. <code>Yesterday</code> is <code>earliest=-1d@d latest=@d</code>, a fixed calendar day. <code>Last 24 hours</code> is <code>earliest=-24h latest=now</code>, a rolling window. Only the second one moves with the clock.</p>
+<p class="trap" id="T-TM-05"><span class="tid">T-TM-05</span> <code>-1mon</code> from 31 March gives 31 February, or gives thirty days earlier. Wrong on both counts. <code>mon</code> is a calendar unit, so <code>-1mon</code> from 22 July is 22 June, not 22 June minus a day, and from 31 March there is no 31 February, so the result is clamped into February [verify] (the docs do not state the clamping rule, and month-end arithmetic is the one place the syntax is genuinely ambiguous). The deterministic form is <code>-1mon@mon</code>, which always lands on the first of the previous month at 00:00:00.</p>
+<p class="trap" id="T-TM-06"><span class="tid">T-TM-06</span> Snapping is absolute, so <code>@d</code> is the same instant for everybody. Wrong. <code>_time</code> is absolute, but the snap is evaluated in the searching user's time zone. <code>@d</code>, <code>@w</code>, <code>@mon</code> and the <code>Today</code> and <code>Since 00:00:00</code> presets produce different epoch instants for users in different zones and therefore different result sets. <code>earliest=-24h</code> does not have this problem. The docs recommend specifying ranges based on the time zone where the indexer resides.</p>
+<p class="trap" id="T-TM-07"><span class="tid">T-TM-07</span> <code>m</code> means month. Wrong. <code>m</code> is minutes. Months are <code>mon</code>, <code>month</code> or <code>months</code>. <code>-3m</code> is three minutes ago, and a question that reads <code>earliest=-6m</code> next to answer options about half a year is testing exactly this.</p>
+<p class="trap" id="T-TM-08"><span class="tid">T-TM-08</span> In <code>-2h@h</code> the snap runs first. Wrong. Left of <code>@</code> runs before right of <code>@</code>. An offset written after the snap unit runs last, which is why <code>-1d@d+3h</code> (03:00 yesterday) and <code>@d-2h</code> (22:00 the previous night) are different instants and neither equals <code>-1d@d</code>.</p>
+<p class="trap" id="T-TM-09"><span class="tid">T-TM-09</span> <code>latest</code> is inclusive, and omitting it means &quot;no upper bound&quot;. Wrong twice. <code>latest</code> is exclusive at the boundary, so <code>latest=@d</code> stops just before midnight and does not double-count the first event of today. Omitting <code>latest</code> sets it to <code>now()</code>, which excludes nothing in practice but is not the same as unbounded.</p>
+<p class="trap" id="T-TM-10"><span class="tid">T-TM-10</span> <code>_index_earliest=-1h@h</code> on its own returns everything indexed in the last hour. Wrong. Index-time modifiers filter <code>_indextime</code> but do not widen the event-time window: &quot;your search must also have an event-time window which will retrieve the events&quot;. Backfilled data indexed today with an event time of last week needs <code>earliest=-7d</code> as well, otherwise the search returns nothing and looks like a broken index.</p>
+<p class="trap" id="T-TM-11"><span class="tid">T-TM-11</span> <code>date_hour</code> is the hour of the event in my time zone. Wrong. The <code>date_*</code> fields are parsed from the timestamp as written in the raw event, exist only when the source system supplied timestamp information, and do not follow the viewing user's time zone preference. Events with an inferred timestamp have no <code>date_*</code> fields at all. Use <code>strftime(_time, &quot;%H&quot;)</code>.</p>
+<p class="trap" id="T-TM-12"><span class="tid">T-TM-12</span> <code>bin _time span=1h | stats count</code> is just a longer way of writing <code>timechart span=1h count</code>. Wrong. <code>stats</code> emits nothing for empty buckets and produces long-format rows with no split limit; <code>timechart</code> fills gaps, enforces the search range, keeps partial end buckets, produces wide format, and caps split values at the top ten with the remainder in <code>OTHER</code>.</p>
+<p class="trap" id="T-TM-13"><span class="tid">T-TM-13</span> A <code>timechart</code> with no <code>span</code> always produces the same granularity. Wrong. With <code>span</code> omitted it falls back to a maximum of <code>bins=100</code> and to a preset-dependent default (10 seconds for Last 15 minutes, 30 minutes for Last 24 hours, 1 day for Last 7 days, 1 month for Previous year), so moving the picker changes the row count without touching the SPL. If both are supplied, <code>span</code> wins and <code>bins</code> is ignored.</p>
+<p class="trap" id="T-TM-14"><span class="tid">T-TM-14</span> <code>span=1y</code> and <code>span=1d@d</code> are valid on <code>timechart</code>. Wrong. The documented span-length timescales are seconds, minutes, hours, days, weeks, months, quarters and subseconds; years are not listed, so use <code>span=12mon</code>. Snap-to spans are supported only for weeks, as in <code>span=w@w1</code>. Separately, <code>aligntime</code> is ignored when the span is in days, months or years.</p>
+<p class="trap" id="T-TM-15"><span class="tid">T-TM-15</span> <code>strftime()</code> will format any epoch value, and <code>strptime()</code> will normalise <code>_time</code>. Wrong on both. <code>strftime()</code> requires seconds, so a millisecond field must be divided by 1000 first or you get a date in the year 55000. <code>strptime()</code> on <code>_time</code> does nothing, because <code>_time</code> is already epoch; it also needs a day component in the string and rejects dates before 1 January 1971.</p>
+<p class="trap" id="T-TM-16"><span class="tid">T-TM-16</span> An all-time real-time search shows every matching event indefinitely. Wrong in practice. Results accumulate rather than ageing out of a window, but the display is a circular buffer holding roughly the most recent 1,000 results. Real-time search also needs the <code>rtsearch</code> capability (held by <code>admin</code>, <code>sc_admin</code> and <code>power</code>), and indexed real-time search, the lower-impact variant, is off by default in Splunk Enterprise.</p>
+<p class="trap" id="T-TM-17"><span class="tid">T-TM-17</span> <code>now()</code> and <code>time()</code> are the same function. Wrong. <code>now()</code> is fixed for the whole search, set at search start or at the scheduled run time, so every row gets the same value. <code>time()</code> is evaluated per result with microsecond resolution, so it varies row to row. Use <code>now()</code> for anything you intend to compare across rows.</p>
+
+<nav class="pn" aria-label="Section"><a href="stats-and-chart-functions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Stats and chart functions</span></a><a href="regex-for-splunk.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Regex for Splunk</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#1.-where-time-lives-on-an-event"><span>1. Where time lives on an event</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#2.-the-four-time-modifiers"><span>2. The four time modifiers</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#3.-relative-time-syntax-in-full"><span>3. Relative time syntax in full</span><span class="min">5m</span></a></li>
+<li><a class="lvl3" href="#resolved-against-a-concrete-now"><span>Resolved against a concrete now</span></a></li>
+<li><a class="lvl2" href="#4.-time-functions-in-eval"><span>4. Time functions in eval</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#format-variables"><span>Format variables</span></a></li>
+<li><a class="lvl2" href="#5.-bin-bucket-and-span"><span>5. bin, bucket and span</span><span class="min">4m</span></a></li>
+<li><a class="lvl3" href="#bin-plus-stats-versus-timechart-span"><span>bin plus stats versus timechart span</span></a></li>
+<li><a class="lvl3" href="#when-span-is-omitted-on-timechart"><span>When span is omitted on timechart</span></a></li>
+<li><a class="lvl2" href="#6.-real-time-versus-historical"><span>6. Real-time versus historical</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#7.-decision-rules"><span>7. Decision rules</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#8.-traps"><span>8. Traps</span><span class="min">5m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>24 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

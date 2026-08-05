@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9.0 Creating Data Models | SPLK-1002</title>
+<meta name="description" content="Data models and pivot, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="topics/09-data-models-and-pivot" data-section="9">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="09-data-models-and-pivot.html" aria-current="page"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Data models and pivot</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="09-data-models-and-pivot.html">Study</a><a class="" href="../cram/09-data-models-and-pivot.html">Cram</a></div>
+      </div>
+<h1 id="9.0-creating-data-models-10">9.0 Creating Data Models</h1>
+<p>Data models are the search-time schema layer that turns raw events into a named, typed, hierarchical dataset a non-SPL user can report on through Pivot, and the exam weights this section at 10% because it is the only section where a Power User is expected to build a knowledge object that other people consume rather than just run a search.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<ul>
+<li>Section 9.0 Creating Data Models, weight 10%</li>
+<li>9.1 Describe the relationship between data models and pivot</li>
+<li>9.2 Identify data model attributes</li>
+<li>9.3 Create a data model</li>
+</ul>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>A data model is, in the documentation's own words, &quot;a hierarchically structured search-time mapping of semantic knowledge about one or more datasets&quot;. Hold on to the word hierarchically: a data model is an ordered parent-child tree, so an option calling it a randomly structured collection of datasets fails on that word alone. It is a knowledge object, it is fully permissionable, and its permissions cover all of its datasets at once. It contains no data. It contains constraints (searches) and field definitions (extractions, evals, lookups, regexes) applied at search time to produce a dataset. The docs put the same breakdown at dataset level: &quot;Data model datasets are defined by characteristics that mostly break down into constraints and fields.&quot; The two parts of a root event dataset are therefore its constraints and its fields. Attribute is a synonym for field here, which is why objective 9.2 says attributes while the editor says fields, so an option offering &quot;fields and attributes&quot; as the two parts has named one thing twice.</p>
+<p>The relationship the exam asks about in 9.1 runs one way only: the data model provides the dataset, and Pivot consumes it. Pivot is the drag-and-drop reporting interface that lets a user who cannot write SPL build a table or chart from a data model dataset. Pivot cannot exist without a data model behind it. The Pivot documentation states that Pivot &quot;uses data models to define the broad category of event data that you're working with, and then uses hierarchically arranged collections of data model datasets to further subdivide the original dataset&quot;. If an exam option says Pivot supplies data to the data model, it is wrong.</p>
+<p>Who does what matters as much as which way the arrow points. Knowledge managers design and maintain the data models and their datasets; the people who use Pivot are ordinary users who want a report and do not write SPL. The Pivot manual opens with &quot;The Pivot tool lets you report on a specific data set without the Splunk Search Processing Language (SPL)&quot;, and describes a drag-and-drop interface producing tables, charts and other visualizations that are saved as reports or dashboard panels. So Pivot is a tool rather than a knowledge object, it creates no datasets and no lookups, and building models is a knowledge manager job restricted by role rather than something each user does for themselves.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 630 377" width="630" height="377" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M187.6 41.0 C187.6 61.0 315.125 61.0 315.125 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M315.125 124.0 C315.125 144.0 315.125 144.0 315.125 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M315.125 207.0 C315.125 227.0 119.67500000000001 227.0 119.67500000000001 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M315.125 207.0 C315.125 227.0 449.80000000000007 227.0 449.80000000000007 247.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M119.67500000000001 290.0 C119.67500000000001 310.0 315.125 310.0 315.125 330.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M449.80000000000007 290.0 C449.80000000000007 310.0 315.125 310.0 315.125 330.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M396.17499999999995 41.0 C396.17499999999995 144.0 449.80000000000007 144.0 449.80000000000007 247.0"/><rect class="dg-node" x="123.54999999999998" y="2.0" width="128.10000000000002" height="39" rx="5"/><text class="dg-text" x="187.6" y="22.5" text-anchor="middle" dominant-baseline="middle">Indexed events</text><rect class="dg-node" x="136.67499999999998" y="85.0" width="356.90000000000003" height="39" rx="5"/><text class="dg-text" x="315.125" y="105.5" text-anchor="middle" dominant-baseline="middle">Data model: constraints plus field definitions</text><rect class="dg-node" x="150.975" y="168.0" width="328.3" height="39" rx="5"/><text class="dg-text" x="315.125" y="188.5" text-anchor="middle" dominant-baseline="middle">Data model dataset (rows and typed columns</text><rect class="dg-node" x="2.0" y="251.0" width="235.35000000000002" height="39" rx="5"/><text class="dg-text" x="119.67500000000001" y="271.5" text-anchor="middle" dominant-baseline="middle">Pivot Editor (no SPL required</text><rect class="dg-node" x="271.35" y="251.0" width="356.90000000000003" height="39" rx="5"/><text class="dg-text" x="449.80000000000007" y="271.5" text-anchor="middle" dominant-baseline="middle">SPL: pivot, datamodel, from datamodel:, tstats</text><rect class="dg-node" x="211.75" y="334.0" width="206.75" height="39" rx="5"/><text class="dg-text" x="315.125" y="354.5" text-anchor="middle" dominant-baseline="middle">Report or dashboard panel</text><rect class="dg-node" x="285.65" y="2.0" width="221.05" height="39" rx="5"/><text class="dg-text" x="396.17499999999995" y="22.5" text-anchor="middle" dominant-baseline="middle">tsidx summaries on indexers</text></svg></figure>
+<p>A data model is built from datasets. There are three root dataset types and one child type, and the exam can ask the count either way, so hold both framings. The docs state it as four: &quot;Datasets break down into four types. These types are: Event datasets, search datasets, transaction datasets, and child datasets.&quot; The Pivot manual says the same thing independently, &quot;There are four dataset types&quot;, ending its list with child datasets. Courseware usually states it as three, counting only the root types, which is the right answer to a question worded &quot;a data model consists of which THREE types of datasets&quot;. The collective term comes from the same page: &quot;The top-level event, search, and transaction datasets in data models are collectively referred to as root datasets.&quot; Read the stem carefully: if an option offers &quot;any child of event, transaction and search datasets&quot; alongside the three root types in a choose-all-that-apply question, the docs support selecting it. Whichever count the stem wants, Pivot is never one of the answers. Pivot consumes datasets and is not a dataset type.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Dataset type</th>
+<th>Constraint form</th>
+<th>Can add auto-extracted fields</th>
+<th>Persistently accelerable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root event</td>
+<td>A simple search, no pipes and no search commands. &quot;Constraints look like the first part of a search, before pipe characters and additional search commands are added.&quot;</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Root search</td>
+<td>An arbitrary SPL search, pipes and transforming commands allowed</td>
+<td>Yes</td>
+<td>Only if it uses streaming commands only. &quot;You cannot accelerate root search datasets that use transforming searches.&quot;</td>
+</tr>
+<tr>
+<td>Root transaction</td>
+<td>A <code>transaction</code> over one or more Group Datasets already defined in this data model, plus Group by, Max Pause or Max Span</td>
+<td>Yes</td>
+<td>No. &quot;Root transaction datasets and their children do not benefit from data model acceleration.&quot;</td>
+</tr>
+<tr>
+<td>Child</td>
+<td>One or more additional constraints, in the same simple-search form. Search macros are not allowed.</td>
+<td>No, it inherits them from its root</td>
+<td>Yes, if its root hierarchy is accelerable</td>
+</tr>
+</tbody>
+</table></div>
+<p>Constraint inheritance is cumulative and narrowing. A child dataset inherits all constraints and all fields from every ancestor and then adds its own. The documentation's own example composes a root event constraint <code>index=web sourcetype=access_combined</code>, a parent constraint <code>action=purchase</code>, and a child constraint <code>status=200</code> into the effective search <code>index=web sourcetype=access_combined action=purchase status=200</code>. Each level down the tree returns fewer events and exposes more fields.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 1180 313" width="1180" height="313" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M590.4000000000001 75.0 C590.4000000000001 95.0 590.4000000000001 95.0 590.4000000000001 115.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M590.4000000000001 192.0 C590.4000000000001 212.0 280.55 212.0 280.55 232.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M590.4000000000001 192.0 C590.4000000000001 212.0 885.95 212.0 885.95 232.0"/><rect class="dg-node" x="404.80000000000007" y="2.0" width="371.20000000000005" height="73" rx="5"/><text class="dg-text" x="590.4000000000001" y="22.5" text-anchor="middle" dominant-baseline="middle">Root event: Web_Access</text><text class="dg-text" x="590.4000000000001" y="39.5" text-anchor="middle" dominant-baseline="middle">constraint: index=web sourcetype=access_combined</text><text class="dg-text" x="590.4000000000001" y="56.5" text-anchor="middle" dominant-baseline="middle">fields: _time, host, source, sourcetype</text><rect class="dg-node" x="351.17500000000007" y="119.0" width="478.45000000000005" height="73" rx="5"/><text class="dg-text" x="590.4000000000001" y="139.5" text-anchor="middle" dominant-baseline="middle">Child: Purchases</text><text class="dg-text" x="590.4000000000001" y="156.5" text-anchor="middle" dominant-baseline="middle">own constraint: action=purchase</text><text class="dg-text" x="590.4000000000001" y="173.5" text-anchor="middle" dominant-baseline="middle">effective: index=web sourcetype=access_combined action=purchase</text><rect class="dg-node" x="2.0" y="236.0" width="557.1" height="73" rx="5"/><text class="dg-text" x="280.55" y="256.5" text-anchor="middle" dominant-baseline="middle">Child: Successful_Purchases</text><text class="dg-text" x="280.55" y="273.5" text-anchor="middle" dominant-baseline="middle">own constraint: status=200</text><text class="dg-text" x="280.55" y="290.5" text-anchor="middle" dominant-baseline="middle">effective: index=web sourcetype=access_combined action=purchase status=200</text><rect class="dg-node" x="593.1" y="236.0" width="585.7" height="73" rx="5"/><text class="dg-text" x="885.95" y="256.5" text-anchor="middle" dominant-baseline="middle">Child: Failed_Purchases</text><text class="dg-text" x="885.95" y="273.5" text-anchor="middle" dominant-baseline="middle">own constraint: status&amp;gt;=400</text><text class="dg-text" x="885.95" y="290.5" text-anchor="middle" dominant-baseline="middle">effective: index=web sourcetype=access_combined action=purchase status&amp;gt;=400</text></svg></figure>
+<p>Where the definition lives: the model is a JSON file under <code>$SPLUNK_HOME/etc/apps/&lt;app&gt;/local/data/models/</code>, one file per model, which is why the CIM add-on ships its models in <code>Splunk_SA_CIM/default/data/models</code>. <code>datamodels.conf</code> is a separate file holding the acceleration settings in a <code>[&lt;data model name&gt;]</code> stanza. Download the JSON from the Data Model Editor and upload it on another instance with Upload Data Model on the Data Models management page, which validates that the file is valid JSON.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<h3 id="dataset-definition-settings">Dataset definition settings<a class="anchor" href="#dataset-definition-settings" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dataset Name</td>
+<td>Any character except asterisks; spaces allowed</td>
+<td>none</td>
+<td>Human-readable label shown in Pivot and the Datasets listing. Editable after save.</td>
+</tr>
+<tr>
+<td>Dataset ID</td>
+<td>Alphanumeric, underscores and hyphens only; no spaces</td>
+<td>Auto-populated from Dataset Name</td>
+<td>The identifier used in SPL (<code>datamodel=Model.Dataset_ID</code>). Cannot be edited after the dataset is saved.</td>
+</tr>
+<tr>
+<td>Constraints (root event, child)</td>
+<td>A simple search with no leading pipe and no commands</td>
+<td>none</td>
+<td>Filters the events that belong to the dataset. Child constraints cannot include search macros.</td>
+</tr>
+<tr>
+<td>Search (root search)</td>
+<td>Any SPL, including transforming commands</td>
+<td>none</td>
+<td>Defines the dataset from an arbitrary search. Transforming searches block acceleration.</td>
+</tr>
+<tr>
+<td>Group Dataset (root transaction)</td>
+<td>One or more event datasets (root event or child event), or one transaction dataset (root or child), or one search dataset (root or child), all from the current data model</td>
+<td>none</td>
+<td>The parent dataset or datasets whose events get grouped into transactions. At least one is required.</td>
+</tr>
+<tr>
+<td>Group by (root transaction)</td>
+<td>One or more field names</td>
+<td>none</td>
+<td>Field or fields whose shared value binds events into one transaction.</td>
+</tr>
+<tr>
+<td>Max Pause (root transaction)</td>
+<td>A time span</td>
+<td>none</td>
+<td>Maximum gap allowed between events in one transaction.</td>
+</tr>
+<tr>
+<td>Max Span (root transaction)</td>
+<td>A time span</td>
+<td>none</td>
+<td>Maximum total duration of one transaction.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A root transaction dataset requires a Dataset Name, a Dataset ID, and at least one Group Dataset, plus at least one of Group by, Max Pause or Max Span.</p>
+<h3 id="field-attribute-types">Field (attribute) types<a class="anchor" href="#field-attribute-types" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Field type</th>
+<th>Where it can be added</th>
+<th>Configuration form</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auto-Extracted</td>
+<td>Root datasets only. Child datasets inherit them.</td>
+<td>Check the fields you want in the Add Auto-Extracted Field dialog, or click Add by name to declare a field that has not been extracted yet</td>
+<td>Covers automatically extracted fields, indexed structured-data fields, and custom extractions, lookups and calculated fields defined in Settings or <code>props.conf</code>.</td>
+</tr>
+<tr>
+<td>Eval Expression</td>
+<td>Any dataset</td>
+<td>Eval Expression (just the expression, not the word <code>eval</code>), Field Name, Display Name, Type, Flags</td>
+<td>Can chain: a field it depends on must sit above it in the field list.</td>
+</tr>
+<tr>
+<td>Lookup</td>
+<td>Any dataset</td>
+<td>Lookup Table (an existing lookup definition), Input pairs (Field in Lookup matched to Field in Dataset), Output fields, Field Name, Display Name, Type, Flags</td>
+<td>At least one output field is required. The lookup definition and the data model must have matching permissions.</td>
+</tr>
+<tr>
+<td>Regular Expression</td>
+<td>Any dataset</td>
+<td>Extract From (any dataset field, or <code>_raw</code>), Regular Expression with at least one named capture group, Field Name, Display Name, Type, Flags</td>
+<td>Named groups become fields. Sed mode and sed expressions are not supported. Type defaults to String.</td>
+</tr>
+<tr>
+<td>Geo IP</td>
+<td>Any dataset that has a field with Type <code>ipv4</code> positioned above this field</td>
+<td>Pick the IPv4 field to match, pick the output fields (City, Region, Country, latitude, longitude), optionally rename them</td>
+<td>Geo IP fields are added as required fields and their Type values are predetermined; you cannot change either.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Once added, an auto-extracted field is an ordinary data model field, so the whole metadata set below applies to it. You can give it a Display Name for Pivot without changing the field name used in the index or in SPL, correct its Type when the guess is wrong (&quot;If an auto-extracted field's Type value is assigned incorrectly, you can provide the correct one&quot;, from Boolean, IPv4, Number and String), and set it Hidden, Required, or both. The dialog offers the fields already present in the events the dataset constraints return, and Add by name covers a field that has not surfaced yet. The one thing you cannot do is add an auto-extracted field to a child dataset.</p>
+<h3 id="field-attributes-metadata">Field attributes (metadata)<a class="anchor" href="#field-attributes-metadata" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Field Name</td>
+<td>No whitespace, single quotes, double quotes, curly braces or asterisks</td>
+<td>The extracted field name</td>
+<td>The name used in SPL and in the model JSON.</td>
+</tr>
+<tr>
+<td>Display Name</td>
+<td>Any text without asterisks</td>
+<td>Same as Field Name</td>
+<td>The label a Pivot user sees.</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>Boolean, IPv4, Number, String in the Add Field dialog. Timestamp exists as a data model field type for time fields such as <code>_time</code> and drives the Pivot timestamp behaviours, but it is not offered in the Add Field type selector.</td>
+<td>String</td>
+<td>Controls which Pivot filters, split options and aggregation functions are offered for the field.</td>
+</tr>
+<tr>
+<td>Flags: visibility</td>
+<td>Shown, Hidden</td>
+<td>Shown</td>
+<td>&quot;A hidden field is not displayed to Pivot users when they select the dataset in a Pivot context. They will be unable to use it for the purpose of Pivot report definition.&quot;</td>
+</tr>
+<tr>
+<td>Flags: requirement</td>
+<td>Optional, Required</td>
+<td>Optional</td>
+<td>&quot;A required field must appear in every event represented by the dataset. This filters out any event that does not have the field. In effect this is another type of constraint on top of any formal constraints you've associated with the dataset.&quot;</td>
+</tr>
+</tbody>
+</table></div>
+<p>The Add Auto-Extracted Field dialog exposes the two flags as a single status picker with four values: Optional, Required, Hidden, and Hidden and Required.</p>
+<p>Fields fall into three categories in the editor: Inherited (the default fields on a root dataset, plus every field inherited from a parent), Extracted (auto-extracted fields added to this dataset), and Calculated (Eval Expression, Regular Expression, Lookup and Geo IP fields). Fields are processed in descending order from the top of the list to the bottom, which is why a calculated field must sit below anything it depends on.</p>
+<p>The default inherited fields on a root event dataset, per the documentation, are <code>_time</code>, <code>host</code>, <code>source</code>, and <code>sourcetype</code>. <code>_raw</code> is not listed among those default fields, although <code>_raw</code> is selectable as the Extract From source when you add a regular expression field.</p>
+<h3 id="spl-commands-that-read-a-data-model">SPL commands that read a data model<a class="anchor" href="#spl-commands-that-read-a-data-model" aria-label="Link to this section">#</a></h3>
+<p><code>datamodel</code> syntax:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">data</span> <span class="t-field">model</span> <span class="t-field">name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">dataset</span> <span class="t-field">name</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">data</span> <span class="t-field">model</span> <span class="t-field">search</span> <span class="t-func">mode</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">strict_fields</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;data model name&gt;</code></td>
+<td>A data model name</td>
+<td>none (optional)</td>
+<td>Restricts output to one model.</td>
+</tr>
+<tr>
+<td><code>&lt;dataset name&gt;</code></td>
+<td>A dataset ID inside that model</td>
+<td>none (optional)</td>
+<td>Restricts output to one dataset.</td>
+</tr>
+<tr>
+<td><code>&lt;data model search mode&gt;</code></td>
+<td><code>search</code>, <code>flat</code>, <code>acceleration_search</code>, <code>search_string</code>, <code>flat_string</code>, <code>acceleration_search_string</code></td>
+<td>none (optional); omitting it returns JSON</td>
+<td><code>search</code> runs the dataset search. <code>flat</code> runs it and strips the hierarchical field-name prefixes. <code>acceleration_search</code> uses the acceleration strategy. The three <code>_string</code> modes return the generated SPL instead of running it.</td>
+</tr>
+<tr>
+<td><code>strict_fields</code></td>
+<td><code>true</code>, <code>false</code></td>
+<td><code>true</code></td>
+<td><code>true</code> returns only the default fields and the fields in the dataset constraints. <code>false</code> returns every field defined on the dataset.</td>
+</tr>
+<tr>
+<td><code>allow_old_summaries</code></td>
+<td><code>true</code>, <code>false</code></td>
+<td><code>false</code></td>
+<td>Accelerated models only. Permits summary data built under an older data model definition.</td>
+</tr>
+<tr>
+<td><code>summariesonly</code></td>
+<td><code>true</code>, <code>false</code></td>
+<td><code>false</code></td>
+<td>Accelerated models only. <code>true</code> returns only summarized data.</td>
+</tr>
+</tbody>
+</table></div>
+<p>All three positional arguments are optional, but their order is fixed: model name first, dataset name second, search mode third. The docs state that the dataset name &quot;must be specified after the data model name&quot;, so in <code>| datamodel Application_State All_Application_State search</code> the model is <code>Application_State</code> and the dataset is <code>All_Application_State</code>, never the reverse. The mode is spelled <code>acceleration_search</code>, and there are six modes rather than three because each result mode has a <code>_string</code> twin. <code>datamodel</code> is a generating command, so it takes a leading pipe and sits first: <code>search datamodel=Web</code> reads no data model at all, it searches for a literal field named <code>datamodel</code>.</p>
+<p><code>from</code> syntax for data models:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:</span><span class="t-op">&lt;</span><span class="t-field">data_model_name</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">dataset_name</span><span class="t-op">&gt;</span></code></pre></div>
+<p><code>from</code> accepts <code>datamodel</code>, <code>lookup</code> and <code>savedsearch</code> dataset types. A space may replace the colon. Names containing spaces must be quoted.</p>
+<p><code>tstats</code> syntax:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-op">[</span><span class="t-opt">prestats</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">local</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">append</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">include_reduced_buckets</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allow_old_summaries</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">chunk_size</span><span class="t-op">=&lt;</span><span class="t-field">unsigned</span> <span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">fillnull_value</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">stats-func</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-cmd">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">data_model_name</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">root_dataset_name</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">where</span> <span class="t-opt">nodename</span><span class="t-op">=&lt;</span><span class="t-field">root_dataset_name</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">target_dataset_name</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-cmd">WHERE</span> <span class="t-op">&lt;</span><span class="t-field">search-query</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span> <span class="t-func">IN</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">value-list</span><span class="t-op">&gt;</span><span class="t-op">)</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-field">BY</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-field">PREFIX</span><span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">)</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-op">[</span><span class="t-opt">span</span><span class="t-op">=&lt;</span><span class="t-field">timespan</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prestats</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Emits the internal prestats format for piping into <code>chart</code>, <code>stats</code> or <code>timechart</code>. Changes <code>tstats</code> from a report-generating command into an event-generating command.</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Runs the search on the search head only.</td>
+</tr>
+<tr>
+<td><code>append</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Appends prestats results rather than generating a fresh set.</td>
+</tr>
+<tr>
+<td><code>summariesonly</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td><code>true</code> returns results only from the acceleration summary. <code>false</code> lets the search fall back to raw data outside the summary range.</td>
+</tr>
+<tr>
+<td><code>include_reduced_buckets</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Includes data from tsidx-reduced buckets.</td>
+</tr>
+<tr>
+<td><code>allow_old_summaries</code></td>
+<td>bool</td>
+<td><code>false</code></td>
+<td>Uses summary data built before the current data model definition.</td>
+</tr>
+<tr>
+<td><code>chunk_size</code></td>
+<td>unsigned int, minimum 10000</td>
+<td><code>10000000</code></td>
+<td>Events retrieved per tsidx file.</td>
+</tr>
+<tr>
+<td><code>fillnull_value</code></td>
+<td>string</td>
+<td>none</td>
+<td>Value substituted for null field values in the BY clause.</td>
+</tr>
+<tr>
+<td><code>FROM datamodel=</code></td>
+<td><code>&lt;model&gt;.&lt;root_dataset&gt;</code> optionally with <code>where nodename=&lt;path&gt;</code></td>
+<td>none</td>
+<td>Selects the data model to read. Note the equals sign, not a colon.</td>
+</tr>
+<tr>
+<td><code>WHERE</code></td>
+<td>Search expression or <code>&lt;field&gt; IN (...)</code></td>
+<td>none</td>
+<td>Filters on indexed fields and on fields held in the acceleration summary. Search-time extracted fields are not supported.</td>
+</tr>
+<tr>
+<td><code>BY ... span</code></td>
+<td><code>auto</code> or <code>&lt;int&gt;&lt;timescale&gt;</code></td>
+<td><code>auto</code></td>
+<td>Grouping. <code>span</code> is mandatory when grouping by <code>_time</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>pivot</code> syntax:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-pipe">|</span> <span class="t-cmd">pivot</span> <span class="t-op">&lt;</span><span class="t-field">datamodel-name</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">object-name</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">pivot-element</span><span class="t-op">&gt;</span></code></pre></div>
+<p><code>pivot</code> is a report-generating command and must be first in the search. The first pivot element must be a cell value; split rows, split columns, filters, limits and formatting follow.</p>
+<h3 id="acceleration-settings">Acceleration settings<a class="anchor" href="#acceleration-settings" aria-label="Link to this section">#</a></h3>
+<p>Persistent acceleration builds <code>.tsidx</code> summary files on the indexers, beside the buckets of the indexes the model searches, recording the indexed field and value combinations for the accelerated datasets so <code>tstats</code> can count them without opening raw events. The source index is untouched and the model's fields do not become index-time extracted fields.</p>
+<p>Acceleration is switched on per model but delivered per hierarchy. The model qualifies if it holds at least one root event hierarchy or one streaming-only root search hierarchy, and &quot;Data models can contain a mixture of accelerated and unaccelerated datasets.&quot; A model with two root event datasets gets both summarized. The only per-root behaviour documented is that Size on Disk under-reports on a multi-root model because it accounts for only one root object.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option (UI name)</th>
+<th><code>datamodels.conf</code> setting</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accelerate</td>
+<td><code>acceleration</code></td>
+<td>true, false</td>
+<td><code>false</code></td>
+<td>Turns persistent acceleration on. Off by default on every data model, including every CIM data model.</td>
+</tr>
+<tr>
+<td>Summary Range</td>
+<td><code>acceleration.earliest_time</code></td>
+<td>1 Day, 7 Days, 1 Month, 3 Months, 1 Year, All Time, Custom (relative time notation or Unix epoch)</td>
+<td>empty string, which represents All Time</td>
+<td>How far back the summary is maintained.</td>
+</tr>
+<tr>
+<td>Backfill Range</td>
+<td><code>acceleration.backfill_time</code></td>
+<td>Relative time</td>
+<td>empty string</td>
+<td>Builds a shorter partial summary first, then grows it toward the Summary Range.</td>
+</tr>
+<tr>
+<td>Summarization Period</td>
+<td><code>acceleration.cron_schedule</code></td>
+<td>Cron string</td>
+<td><code>*/5 * * * *</code> (every five minutes)</td>
+<td>How often the summarization search runs.</td>
+</tr>
+<tr>
+<td>Max Summarization Search Time</td>
+<td><code>acceleration.max_time</code></td>
+<td>Seconds</td>
+<td><code>3600</code> (1 hour)</td>
+<td>Maximum runtime for one summarization search.</td>
+</tr>
+<tr>
+<td>Maximum Concurrent Summarization Searches</td>
+<td><code>acceleration.max_concurrent</code></td>
+<td>Integer</td>
+<td><code>3</code></td>
+<td>Concurrent summarization jobs for this model.</td>
+</tr>
+<tr>
+<td>Manual Rebuilds</td>
+<td><code>acceleration.manual_rebuilds</code></td>
+<td>true, false</td>
+<td><code>false</code></td>
+<td>When false, Splunk rebuilds the summary automatically after the model definition changes.</td>
+</tr>
+<tr>
+<td>Poll Buckets Until Maxtime</td>
+<td><code>acceleration.poll_buckets_until_maxtime</code></td>
+<td>true, false</td>
+<td><code>false</code></td>
+<td>Keeps polling buckets until max_time is reached.</td>
+</tr>
+<tr>
+<td>Allow Old Summaries</td>
+<td><code>acceleration.allow_old_summaries</code></td>
+<td>true, false</td>
+<td><code>false</code></td>
+<td>Lets searches use summary data built under an older definition.</td>
+</tr>
+<tr>
+<td>Schedule Priority</td>
+<td><code>acceleration.schedule_priority</code></td>
+<td>default, higher, highest</td>
+<td><code>default</code></td>
+<td>Scheduler priority of the summarization search.</td>
+</tr>
+<tr>
+<td>Allow Skew</td>
+<td><code>acceleration.allow_skew</code></td>
+<td>Time or percentage</td>
+<td><code>0</code></td>
+<td>Randomizes the summarization start time.</td>
+</tr>
+<tr>
+<td>(not in UI)</td>
+<td><code>strict_fields</code></td>
+<td>true, false</td>
+<td><code>true</code></td>
+<td>Default value of <code>strict_fields</code> for the <code>datamodel</code> command against this model.</td>
+</tr>
+<tr>
+<td>(not in UI)</td>
+<td><code>tags_whitelist</code></td>
+<td>Comma-separated tag names</td>
+<td>empty (not set)</td>
+<td>Loads only the listed tags, improving performance on tag-heavy models.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p>A data model dataset is a table. Rows are the events surviving the accumulated constraints of the dataset and all of its ancestors, minus any event missing a Required field. Columns are the fields: the four default inherited fields, plus every inherited field from ancestors, plus this dataset's own extracted and calculated fields. Hidden fields still exist in the dataset and are still available to SPL; they are only suppressed in the Pivot field pickers.</p>
+<p><code>| datamodel</code> with no arguments returns a single-column result whose cells hold JSON for every data model available in the current app context. Add a model name to narrow it to one model. Add a dataset name and the <code>search</code> mode and it stops returning JSON and starts returning events.</p>
+<p><code>| datamodel &lt;model&gt; &lt;dataset&gt; search</code> returns events with fully qualified field names in the form <code>&lt;Root_Dataset&gt;.&lt;Child_Dataset&gt;.&lt;field&gt;</code>. The <code>flat</code> mode returns the same rows with the hierarchical prefixes stripped, so the columns are plain field names. This prefixing is the most common surprise when moving from Pivot to SPL.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Streaming or transforming</th>
+<th>Output shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>| datamodel M D search</code></td>
+<td>Generating, non-transforming</td>
+<td>Events, fields prefixed <code>D.field</code></td>
+</tr>
+<tr>
+<td><code>| datamodel M D flat</code></td>
+<td>Generating, non-transforming</td>
+<td>Events, unprefixed field names</td>
+</tr>
+<tr>
+<td><code>| from datamodel:M.D</code></td>
+<td>Generating, non-transforming</td>
+<td>Events from the dataset</td>
+</tr>
+<tr>
+<td><code>| tstats count FROM datamodel=M.D BY field</code></td>
+<td>Report-generating (transforming), unless <code>prestats=true</code></td>
+<td>Statistics table, one row per BY combination</td>
+</tr>
+<tr>
+<td><code>| pivot M D count(D) SPLITROW f</code></td>
+<td>Report-generating (transforming)</td>
+<td>Statistics table</td>
+</tr>
+</tbody>
+</table></div>
+<p>A pivot result is always a statistics table before it becomes a visualization. Rows come from split rows, columns from split columns, cells from column values, and filters cut the row count first. With no split rows and one column value you get a single-cell table. A four-element pivot with one filter (<code>action = purchase</code>), one split row (<code>categoryId</code>), one split column (<code>status</code>) and one column value (<code>Count of Purchases</code>) renders as:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>categoryId</th>
+<th>200</th>
+<th>400</th>
+<th>503</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STRATEGY</td>
+<td>1043</td>
+<td>12</td>
+<td>4</td>
+</tr>
+<tr>
+<td>SIMULATION</td>
+<td>887</td>
+<td>9</td>
+<td>2</td>
+</tr>
+<tr>
+<td>SHOOTER</td>
+<td>654</td>
+<td>7</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>tstats</code> returns a statistics table exactly like <code>stats</code>, with the aggregation names as column headers. Against a data model, column headers keep the dataset prefix unless you rename them.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>List every data model available in the current app context, as JSON.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span></code></pre></div>
+<p>One row per data model, each cell holding the full JSON definition: every dataset, constraint and field. This is how you read a model definition without opening the editor.</p>
+<ol start="2">
+<li>Return the events of a child dataset, with prefixed field names, then flatten them.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-field">search</span></code></pre></div>
+<p>Returns events matching <code>index=web sourcetype=access_combined action=purchase status=200</code>, with columns named <code>Web_Access.Purchases.Successful_Purchases.productId</code> and similar. Swap <code>search</code> for <code>flat</code> to get plain <code>productId</code>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-field">flat</span></code></pre></div>
+<ol start="3">
+<li>Show every field the model defines, not just the constrained ones.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-field">search</span> <span class="t-opt">strict_fields</span><span class="t-op">=</span><span class="t-kw">false</span></code></pre></div>
+<p>At the default <code>strict_fields=true</code> you get only the default fields and the fields named in the dataset constraints. Setting it <code>false</code> returns all fields defined on the dataset, which is what you want when a Pivot user reports a field they can see in Pivot missing from an SPL result.</p>
+<ol start="4">
+<li>Reproduce a Pivot table in SPL with <code>pivot</code>.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-pipe">|</span> <span class="t-cmd">pivot</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">Successful_Purchases</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-str">&quot;Purchases&quot;</span> <span class="t-field">SPLITROW</span> <span class="t-field">categoryId</span> <span class="t-kw">AS</span> <span class="t-str">&quot;Category&quot;</span> <span class="t-field">SPLITCOL</span> <span class="t-field">status</span> <span class="t-field">SORT</span> <span class="t-num">10</span> <span class="t-field">categoryId</span></code></pre></div>
+<p>Produces the same statistics table the Pivot Editor builds from one column value, one split row and one split column, which is how you turn a Pivot into a scheduled report you can edit as SPL.</p>
+<ol start="5">
+<li>Count purchases per category off the acceleration summary only.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-opt">summariesonly</span><span class="t-op">=</span><span class="t-field">t</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Web_Activity.Web_Access</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Web_Access.Purchases.Successful_Purchases</span> <span class="t-kw">BY</span> <span class="t-field">Successful_Purchases.categoryId</span></code></pre></div>
+<p>Runs against the tsidx summary and never touches raw events. If the search time range is wider than the Summary Range, results are silently incomplete: that is the bytes of <code>summariesonly=t</code>. At the default <code>summariesonly=f</code> the search falls back to raw data outside the summary range, returning complete results more slowly.</p>
+<ol start="6">
+<li>Chart purchase volume over time from the summary, one point per hour.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Web_Activity.Web_Access</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Web_Access.Purchases</span> <span class="t-kw">BY</span> <span class="t-field">_time</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span></code></pre></div>
+<p><code>span</code> is mandatory when the BY clause includes <code>_time</code>. Without it the search errors rather than defaulting to a sensible bucket.</p>
+<ol start="7">
+<li>Read a dataset with the <code>from</code> command instead, then keep using ordinary SPL.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:Web_Activity.Successful_Purchases</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">revenue</span></code></pre></div>
+<p><code>from</code> uses a colon between <code>datamodel</code> and the model name and a dot before the dataset, where <code>tstats</code> uses an equals sign.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The dataset is &quot;all events of this type&quot; and you want acceleration later</td>
+<td>Root event dataset</td>
+<td>Only root event hierarchies and streaming-only root search hierarchies can be persistently accelerated.</td>
+</tr>
+<tr>
+<td>You need a transforming search (<code>stats</code>, <code>chart</code>, <code>timechart</code>) as the basis of the dataset</td>
+<td>Root search dataset, and accept that it cannot be accelerated</td>
+<td>Transforming searches produce tables, not events, so there is nothing to summarize per bucket.</td>
+</tr>
+<tr>
+<td>You need to group related events across time</td>
+<td>Root transaction dataset with at least one Group Dataset and at least one of Group by, Max Pause, Max Span</td>
+<td>This is the only dataset type that runs <code>transaction</code>. It also gives up acceleration for itself and all of its children.</td>
+</tr>
+<tr>
+<td>You want a narrower slice of an existing dataset</td>
+<td>Child dataset with one or more extra constraints</td>
+<td>Inheritance is cumulative and narrowing; you never repeat the parent constraint.</td>
+</tr>
+<tr>
+<td>The field is already extracted by Splunk and you are on a root dataset</td>
+<td>Auto-Extracted field</td>
+<td>Only root datasets can add auto-extracted fields.</td>
+</tr>
+<tr>
+<td>The field is derived arithmetically or conditionally from other fields</td>
+<td>Eval Expression field, placed below the fields it reads</td>
+<td>Fields are processed top to bottom.</td>
+</tr>
+<tr>
+<td>The field comes from a CSV or KV store</td>
+<td>Lookup field, with matching permissions on the lookup definition</td>
+<td>The lookup definition and data model must share the same permission level.</td>
+</tr>
+<tr>
+<td>The field is buried inside a string</td>
+<td>Regular Expression field with named capture groups</td>
+<td>Sed mode is not supported here.</td>
+</tr>
+<tr>
+<td>You need city, region, country, latitude or longitude from an IP</td>
+<td>Geo IP field, below an existing field typed <code>ipv4</code></td>
+<td>Its output fields are forced to Required and their types cannot be changed.</td>
+</tr>
+<tr>
+<td>Every event in the dataset genuinely has the field and you want to enforce that</td>
+<td>Set the flag to Required</td>
+<td>Required silently filters out events lacking the field, which is a second constraint.</td>
+</tr>
+<tr>
+<td>The field is an implementation detail Pivot users should not see</td>
+<td>Set the flag to Hidden</td>
+<td>Hidden affects Pivot visibility only, not SPL access.</td>
+</tr>
+<tr>
+<td>A user has no SPL and needs a report</td>
+<td>Point them at Pivot on the dataset</td>
+<td>Pivot is the SPL-free front end to a data model.</td>
+</tr>
+<tr>
+<td>A user has a non-transforming search and wants a chart without leaving Search</td>
+<td>Statistics or Visualization tab, then Pivot</td>
+<td>This works only for non-transforming searches, and creates a private data model when saved.</td>
+</tr>
+<tr>
+<td>The model is large and searched often</td>
+<td>Enable persistent acceleration, share it at app or global level</td>
+<td>Private data models cannot be accelerated.</td>
+</tr>
+<tr>
+<td>You just want one fast Pivot on an unaccelerated model</td>
+<td>Do nothing; ad hoc acceleration happens automatically in the Pivot Editor</td>
+<td>Those summaries live in the dispatch directory and are deleted when you leave the Pivot Editor or switch datasets.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-09-01"><span class="tid">T-09-01</span> The direction of the data model and Pivot relationship. The wrong belief, stated outright in circulating answer keys, is that Pivot provides a dataset for the data model. The correct fact is the reverse: the data model provides the dataset, and Pivot is the SPL-free interface that consumes it to build a report. Pivot cannot run without a data model.</p>
+<p class="trap" id="T-09-02"><span class="tid">T-09-02</span> Child dataset inheritance. The wrong belief, marked false in circulating answer keys, is that a child dataset does not inherit from its parent. The correct fact is that a child dataset inherits all constraints and all fields from every ancestor, then adds its own. Inheritance is cumulative and each level down returns strictly fewer events.</p>
+<p class="trap" id="T-09-03"><span class="tid">T-09-03</span> CIM acceleration defaults. The wrong belief, stated in circulating answer keys, is that the CIM data models ship with acceleration enabled. The correct fact is that &quot;All data models included in the CIM add-on have data model acceleration turned off by default.&quot; You enable it per model on the CIM Setup page by selecting the model and checking Accelerate, which writes <code>acceleration = 1</code> for that model.</p>
+<p class="trap" id="T-09-04"><span class="tid">T-09-04</span> Which datasets can be accelerated. The wrong belief is that acceleration applies to every dataset in the model. The correct fact is that it requires at least one root event hierarchy, or one root search hierarchy using only streaming commands. Root search datasets built on transforming searches cannot be accelerated, and root transaction datasets and their children do not benefit.</p>
+<p class="trap" id="T-09-19"><span class="tid">T-09-19</span> Editing an accelerated data model. The wrong belief is that an accelerated data model is frozen and you must build a new one to change it. The correct fact, verbatim from Manage data models: &quot;After you accelerate a data model, you cannot edit it. To make changes to an accelerated data model, you must turn off its acceleration.&quot; Both halves matter. The model genuinely is uneditable while acceleration is on, so &quot;accelerated data models cannot be edited&quot; is a true statement; the remedy is to toggle acceleration off, edit, and turn it back on, never to create a replacement model. Turning acceleration off discards the existing summaries, so the model rebuilds them afterwards.</p>
+<p class="trap" id="T-09-05"><span class="tid">T-09-05</span> Auto-extracted fields on child datasets. The wrong belief is that you add auto-extracted fields wherever you need them. The correct fact is that only root datasets can add auto-extracted fields; child datasets inherit them. Eval expression, lookup, regular expression and Geo IP fields can be added to any dataset.</p>
+<p class="trap" id="T-09-06"><span class="tid">T-09-06</span> What Required does. The wrong belief is that Required is a documentation hint or a Pivot form validation. The correct fact is that Required filters out any event that does not have the field, acting as another constraint on top of the formal constraints. Marking a sparse field Required will shrink your dataset without warning.</p>
+<p class="trap" id="T-09-07"><span class="tid">T-09-07</span> What Hidden does. The wrong belief is that a hidden field is removed from the dataset or from search results. The correct fact is that a hidden field is only suppressed for Pivot users defining a report; the field still exists in the dataset and is still reachable from SPL.</p>
+<p class="trap" id="T-09-08"><span class="tid">T-09-08</span> Root event constraint syntax. The wrong belief is that a root event dataset constraint can contain a pipe and a command such as <code>| stats count</code>. The correct fact is that constraints &quot;look like the first part of a search, before pipe characters and additional search commands are added&quot;. If you need a pipe, you need a root search dataset, and you give up acceleration if that search is transforming.</p>
+<p class="trap" id="T-09-09"><span class="tid">T-09-09</span> Dataset ID immutability. The wrong belief is that both the Dataset Name and the Dataset ID can be renamed later. The correct fact is that the Dataset Name accepts any character except asterisks and can be changed, while the Dataset ID accepts only alphanumerics, underscores and hyphens, cannot contain spaces, and cannot be edited after the dataset is saved.</p>
+<p class="trap" id="T-09-10"><span class="tid">T-09-10</span> <code>tstats</code> versus <code>from</code> syntax. The wrong belief is that both use the same separator. The correct fact is that <code>tstats</code> uses <code>FROM datamodel=&lt;model&gt;.&lt;root_dataset&gt;</code> with an equals sign, while <code>from</code> uses <code>| from datamodel:&lt;model&gt;.&lt;dataset&gt;</code> with a colon. Options that swap the two are the standard distractor.</p>
+<p class="trap" id="T-09-11"><span class="tid">T-09-11</span> <code>summariesonly</code> default and effect. The wrong belief is that <code>tstats</code> reads only summaries, or that <code>summariesonly=true</code> is the default. The correct fact is that <code>summariesonly</code> defaults to <code>false</code>, and by default <code>tstats</code> runs over accelerated and unaccelerated data models alike. Setting it to <code>true</code> restricts results to summarized data, which is faster and may be incomplete outside the Summary Range.</p>
+<p class="trap" id="T-09-12"><span class="tid">T-09-12</span> <code>strict_fields</code> default on the <code>datamodel</code> command. The wrong belief is that <code>| datamodel M D search</code> returns every field the dataset defines. The correct fact is that <code>strict_fields</code> defaults to <code>true</code>, returning only the default fields and the fields used in the dataset constraints. Set <code>strict_fields=false</code> to get all defined fields.</p>
+<p class="trap" id="T-09-13"><span class="tid">T-09-13</span> Ad hoc acceleration persistence. The wrong belief is that using Pivot on an unaccelerated model builds a summary you keep. The correct fact is that ad hoc acceleration summaries live in the search head dispatch directory and are deleted when you leave the Pivot Editor or switch to a different dataset. Only persistent acceleration writes shared summaries to the indexers.</p>
+<p class="trap" id="T-09-14"><span class="tid">T-09-14</span> Private data models and acceleration. The wrong belief is that any user can accelerate their own data model. The correct fact is that you cannot accelerate data models that are private; the model must be shared at app level or globally, and the user needs a role with the <code>accelerate_datamodel</code> capability. By default only the admin and power roles can create data models at all.</p>
+<p class="trap" id="T-09-15"><span class="tid">T-09-15</span> Search macros in child constraints. The wrong belief is that a macro is just text substitution so it is safe anywhere. The correct fact is that child dataset constraints cannot include search macros, and searches referencing child datasets whose constraints contain macros will fail.</p>
+<p class="trap" id="T-09-16"><span class="tid">T-09-16</span> Geo IP field flags. The wrong belief is that Geo IP output fields behave like any other calculated field and can be set Optional. The correct fact is that Geo IP fields are added as Required fields and their Type values are predetermined; you cannot change either. They also need an existing field of Type <code>ipv4</code> positioned above them.</p>
+<p class="trap" id="T-09-17"><span class="tid">T-09-17</span> Field processing order. The wrong belief is that field definition order is cosmetic. The correct fact is that fields are processed in descending order from the top of the list to the bottom, so an eval expression that reads another calculated field must sit below it or it will evaluate to null.</p>
+<p class="trap" id="T-09-18"><span class="tid">T-09-18</span> Instant Pivot scope. The wrong belief is that you can open any search in Pivot. The correct fact is that the Pivot button on the Statistics or Visualization tab is available for non-transforming searches; and when you save the resulting table or chart, the data model created behind it is private and can only be seen by its creator until an admin or power user shares it.</p>
+<p class="trap" id="T-09-20"><span class="tid">T-09-20</span> Acceleration with several root datasets. The wrong belief is that when a data model has more than one root dataset, only the first one is accelerated. The correct fact is that every qualifying hierarchy in the model is summarized, and the docs state plainly that &quot;Data models can contain a mixture of accelerated and unaccelerated datasets&quot;. The one thing that really is single-root is the Size on Disk metric, which under-reports on a multi-root model because it accounts for only one root object.</p>
+<p class="trap" id="T-09-21"><span class="tid">T-09-21</span> What acceleration does to fields. The wrong belief is that persistent acceleration turns all the fields in the model into indexed fields. The correct fact is that acceleration writes <code>.tsidx</code> summary files alongside the buckets on the indexers, holding the indexed field and value combinations for the accelerated datasets. Nothing is added to the source index and no index-time extraction is created.</p>
+<p class="trap" id="T-09-22"><span class="tid">T-09-22</span> Child datasets as a dataset type. The wrong belief is that a child of an event, search or transaction dataset is not one of the data model dataset types, because a data model has only three. The correct fact is that three is the count of root types. The docs count four dataset types overall, event, search, transaction and child, so a stem asking what a data model is composed of should include children.</p>
+<p class="trap" id="T-09-23"><span class="tid">T-09-23</span> <code>datamodel</code> argument order and mode names. The wrong belief is that the first name after <code>| datamodel</code> is the dataset. The correct fact is model first, dataset second, mode third, because the dataset name must be specified after the data model name. Two distractors travel with this one: the acceleration mode is <code>acceleration_search</code>, not <code>accelerate_search</code>, and there are six modes, not three, since each result mode has a <code>_string</code> twin.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.</p>
+<ol>
+<li>
+<p>Create the model. Settings, Data Models, New Data Model. Title <code>Web Activity</code>, ID <code>Web_Activity</code>, App <code>Search</code>, then Create.</p>
+</li>
+<li>
+<p>Add the root event dataset. In the Data Model Editor click Add Dataset, then Root Event. Dataset Name <code>Web Access</code>, Dataset ID <code>Web_Access</code>, Constraints <code>index=web sourcetype=access_combined</code>. Click Preview to confirm events return, then Save. Confirm the Inherited fields section lists <code>_time</code>, <code>host</code>, <code>source</code> and <code>sourcetype</code>.</p>
+</li>
+<li>
+<p>Add auto-extracted fields. With <code>Web Access</code> selected, click Add Field, then Auto-Extracted. Tick <code>action</code>, <code>status</code>, <code>categoryId</code>, <code>productId</code>, <code>clientip</code>, <code>bytes</code>. Set the Type of <code>status</code> and <code>bytes</code> to Number and the Type of <code>clientip</code> to IPv4. Leave the rest as String and Optional. Save.</p>
+</li>
+<li>
+<p>Add a calculated field. Still on <code>Web Access</code>, click Add Field, then Eval Expression. Eval Expression <code>if(status&gt;=400,&quot;error&quot;,&quot;ok&quot;)</code>, Field Name <code>outcome</code>, Display Name <code>Outcome</code>, Type String, Flags Optional. Preview, then Save. Confirm <code>outcome</code> appears in the Calculated section below the extracted fields.</p>
+</li>
+<li>
+<p>Add the child datasets. Select <code>Web Access</code>, click Add Dataset, then Child. Dataset Name <code>Purchases</code>, Dataset ID <code>Purchases</code>, Constraints <code>action=purchase</code>. Save. Select <code>Purchases</code>, click Add Dataset, then Child. Dataset Name <code>Successful Purchases</code>, Dataset ID <code>Successful_Purchases</code>, Constraints <code>status=200</code>. Save. Confirm the Inherited section of <code>Successful Purchases</code> shows every field from <code>Web Access</code>.</p>
+</li>
+<li>
+<p>Share the model. On the Data Models management page, find <code>Web Activity</code> and select Edit, then Edit Permissions. Set Display For to <code>App</code>, give Everyone Read, and Save.</p>
+</li>
+<li>
+<p>Build a Pivot. Settings, Data Models, click Pivot on the <code>Web Activity</code> row, and select the <code>Successful Purchases</code> dataset. In the Pivot Editor set the time range to All time, set Split Rows to <code>categoryId</code>, set Column Values to <code>Count of Successful Purchases</code>, and set Split Columns to <code>outcome</code>. Click Save As, then Report, and name it <code>Web Activity purchases by category</code>.</p>
+</li>
+</ol>
+<p>Verification searches. Each should return rows.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-field">search</span> <span class="t-opt">strict_fields</span><span class="t-op">=</span><span class="t-kw">false</span> <span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:Web_Activity.Successful_Purchases</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span></code></pre></div>
+<p>A stronger proof that inheritance composed correctly, comparing the model result to the hand-written equivalent search. Both counts must match.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-16">Copy</button></div><pre id="spl-16"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Web_Activity</span> <span class="t-field">Successful_Purchases</span> <span class="t-field">flat</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">from_model</span>
+<span class="t-pipe">|</span> <span class="t-cmd">appendcols</span> <span class="t-op">[</span> <span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">from_raw</span> <span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">match</span><span class="t-op">=</span><span class="t-func">if</span><span class="t-op">(</span><span class="t-opt">from_model</span><span class="t-op">=</span><span class="t-field">from_raw</span><span class="t-op">,</span><span class="t-str">&quot;PASS&quot;</span><span class="t-op">,</span><span class="t-str">&quot;FAIL&quot;</span><span class="t-op">)</span></code></pre></div>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Which statement correctly describes the relationship between data models and Pivot?</li>
+</ol>
+<p>A. Pivot supplies the dataset that a data model reports on.
+B. A data model supplies the dataset that Pivot reports on.
+C. Pivot and data models are independent features that both read from summary indexes.
+D. A data model is generated automatically from a saved Pivot report.</p>
+<ol start="2">
+<li>You need a dataset defined by <code>index=web sourcetype=access_combined action=purchase | stats sum(bytes) BY VendorCountry</code>. Which dataset type must you use, and what do you give up?</li>
+</ol>
+<p>A. Root event; you give up field inheritance.
+B. Root search; you give up persistent acceleration.
+C. Root transaction; you give up child datasets.
+D. Child; you give up the ability to add auto-extracted fields.</p>
+<ol start="3">
+<li>A child dataset <code>Failed_Logins</code> has constraint <code>action=failure</code>. Its parent <code>Auth</code> has constraint <code>user=*</code>. The root event dataset <code>Secure</code> has constraint <code>index=security sourcetype=linux_secure</code>. What search does <code>Failed_Logins</code> effectively run?</li>
+</ol>
+<p>A. <code>action=failure</code>
+B. <code>index=security sourcetype=linux_secure action=failure</code>
+C. <code>index=security sourcetype=linux_secure user=* action=failure</code>
+D. <code>index=security sourcetype=linux_secure OR user=* OR action=failure</code></p>
+<ol start="4">
+<li>You mark the field <code>productId</code> as Required on a dataset built from <code>index=web sourcetype=access_combined</code>. What happens?</li>
+</ol>
+<p>A. Pivot users are forced to include <code>productId</code> in every report.
+B. Events that lack <code>productId</code> are filtered out of the dataset.
+C. <code>productId</code> is promoted to an indexed field.
+D. Nothing changes at search time; the flag is documentation only.</p>
+<ol start="5">
+<li>Which field type can only be added to a root dataset?</li>
+</ol>
+<p>A. Eval Expression
+B. Lookup
+C. Auto-Extracted
+D. Regular Expression</p>
+<ol start="6">
+<li>Which command and syntax correctly counts events in an accelerated data model using only summarized data?</li>
+</ol>
+<p>A. <code>| tstats summariesonly=t count FROM datamodel:Sales.Transactions</code>
+B. <code>| tstats summariesonly=t count FROM datamodel=Sales.Transactions</code>
+C. <code>| from datamodel=Sales.Transactions summariesonly=t | stats count</code>
+D. <code>| datamodel Sales Transactions tstats summariesonly=t</code></p>
+<ol start="7">
+<li>Which of these data models cannot be given persistent acceleration?</li>
+</ol>
+<p>A. A model whose root is an event dataset with two child datasets.
+B. A model whose root is a search dataset using only <code>eval</code> and <code>where</code>.
+C. A model whose root is a transaction dataset grouping an event dataset by <code>JSESSIONID</code>.
+D. A model whose root event dataset has a Geo IP field.</p>
+<ol start="8">
+<li>A colleague runs <code>| datamodel Web_Activity Successful_Purchases search</code> and complains that <code>outcome</code>, an eval expression field they can see in Pivot, is missing from the results. What is the fix?</li>
+</ol>
+<p>A. Rebuild the acceleration summary.
+B. Add <code>strict_fields=false</code>.
+C. Use <code>flat</code> instead of <code>search</code>.
+D. Move <code>outcome</code> above the extracted fields in the field list.</p>
+<ol start="9">
+<li>A data model contains two root event datasets, each with two child datasets, plus one root transaction dataset that groups one of those event datasets. The model is shared at app level and you enable acceleration on it. What gets summarized?</li>
+</ol>
+<p>A. Only the first root event dataset and its children; the rest of the model is skipped.
+B. Both root event hierarchies, including their child datasets; the transaction hierarchy does not benefit.
+C. Every dataset in the model, because acceleration is a model-level setting.
+D. Nothing, because a model containing a root transaction dataset cannot be accelerated at all.</p>
+<ol start="10">
+<li>On a root event dataset you add the auto-extracted field <code>clientip</code>, give it the Display Name <code>Client IP</code>, set its Type to IPv4, and set its status to Hidden. What is the result?</li>
+</ol>
+<p>A. Pivot users see the field listed as <code>Client IP</code> and can use it to split rows.
+B. Pivot users no longer see the field when defining a report, SPL can still reference <code>clientip</code>, and the dataset can now take a Geo IP field placed below it.
+C. Events that have no <code>clientip</code> value are dropped from the dataset.
+D. The field is renamed to <code>Client IP</code> everywhere, including in the index and in SPL.</p>
+<details><summary>Answers</summary>
+<ol>
+<li>
+<p><strong>B.</strong> The data model is a search-time mapping that produces a dataset, and Pivot is the SPL-free interface that consumes that dataset to build tables and charts. A is the a circulating answer key error, the relationship reversed. C is wrong because Pivot has no path to data except through a data model, and summary indexes are a different acceleration mechanism. D is wrong in the general case: saving an Instant Pivot from a non-transforming search does create a private data model, but a Pivot built on an existing model creates nothing.</p>
+</li>
+<li>
+<p><strong>B.</strong> A constraint containing a pipe and a transforming command requires a root search dataset, and the documentation states you cannot accelerate root search datasets that use transforming searches. A is wrong because root event constraints cannot contain pipes at all, and root event datasets do not give up field inheritance. C is wrong because a transaction dataset groups events rather than running <code>stats</code>, and transaction datasets can have children. D is wrong because a child dataset takes a simple constraint; child datasets really cannot add auto-extracted fields, but that is not the trade-off here.</p>
+</li>
+<li>
+<p><strong>C.</strong> Constraint inheritance is cumulative: the child inherits every ancestor constraint and adds its own, ANDed together. A ignores inheritance. B skips the middle dataset's constraint, which is still inherited. D is wrong because inherited constraints are combined implicitly with AND, not OR.</p>
+</li>
+<li>
+<p><strong>B.</strong> &quot;A required field must appear in every event represented by the dataset. This filters out any event that does not have the field.&quot; A describes a Pivot form behaviour that does not exist. C confuses a search-time data model flag with index-time field creation. D is the belief the trap is built on; Required has a real filtering effect.</p>
+</li>
+<li>
+<p><strong>C.</strong> Only root datasets can add auto-extracted fields; child datasets inherit them from the root. A, B and D are all addable to any dataset in the model, root or child.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>tstats</code> uses <code>FROM datamodel=&lt;model&gt;.&lt;root_dataset&gt;</code> with an equals sign, and <code>summariesonly=t</code> restricts results to the acceleration summary. A uses the colon form, which belongs to <code>from</code>. C mixes the two: <code>from</code> uses a colon and does not accept <code>summariesonly</code>. D is not valid syntax; <code>datamodel</code> and <code>tstats</code> are separate generating commands and neither takes the other as an argument.</p>
+</li>
+<li>
+<p><strong>C.</strong> Root transaction datasets and their children do not benefit from data model acceleration. A is the canonical accelerable shape. B qualifies because a root search dataset using only streaming commands can be accelerated, and <code>eval</code> and <code>where</code> are streaming. D is built on a real feature: a Geo IP field is a calculated field and has no bearing on acceleration.</p>
+</li>
+<li>
+<p><strong>B.</strong> <code>strict_fields</code> defaults to <code>true</code> on the <code>datamodel</code> command, returning only the default fields and the fields named in the dataset constraints. <code>outcome</code> is neither, so it is dropped until you set <code>strict_fields=false</code>. A is wrong because acceleration has no bearing on which fields are returned, and this model need not be accelerated at all. C changes field naming from prefixed to flat but adds no missing fields. D matters for evaluation order, which would produce a null <code>outcome</code>, not an absent column.</p>
+</li>
+<li>
+<p><strong>B.</strong> Acceleration is enabled once for the model but delivered per hierarchy: both root event hierarchies qualify and their children come with them, while the root transaction dataset and its children do not benefit. A is the first-root-only myth; nothing in the docs limits summarization to one root, and the only single-root behaviour is Size on Disk under-reporting. C is wrong because &quot;Data models can contain a mixture of accelerated and unaccelerated datasets&quot;, so the transaction hierarchy stays unaccelerated inside an accelerated model. D is wrong because the model only needs one qualifying root hierarchy and here it has two; an unaccelerable root does not disqualify the model.</p>
+</li>
+<li>
+<p><strong>B.</strong> Hidden suppresses the field for Pivot users defining a report and does nothing else, so the field remains in the dataset, reachable from SPL as <code>clientip</code>, and usable as the IPv4 source a Geo IP field needs above it. A would be right if the status had been left Optional, since Display Name is the Pivot label, but Hidden removes the field from the Pivot pickers. C describes Required, which filters out events lacking the field; Hidden changes no row counts. D confuses a label with a rename: Display Name changes only what Pivot shows, and the field name in the index and in SPL is untouched.</p>
+</li>
+</ol>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/about-data-models" target="_blank" rel="noopener">About data models</a> - the definition, the four dataset types and the three root types among them, constraint and field inheritance, and the default inherited fields. Read first, 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/design-data-models" target="_blank" rel="noopener">Design data models</a> - the exact Add Dataset flow for each dataset type, Dataset Name and Dataset ID rules, transaction Group Dataset requirements, and the macro restriction on child constraints. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/define-data-model-dataset-fields/define-dataset-fields" target="_blank" rel="noopener">Define dataset fields</a> - the five field types, the three field categories, the Type and Flags values, and what Required and Hidden actually do. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/define-data-model-dataset-fields/add-an-auto-extracted-field" target="_blank" rel="noopener">Add an auto-extracted field</a> - the root-dataset-only rule and the four-value status picker. 5 minutes. Skim the eval expression, lookup, regular expression and Geo IP siblings from the same chapter, 5 minutes each.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/manage-data-models" target="_blank" rel="noopener">Manage data models</a> - the Data Models management page, who can create data models, permissions, cloning, and JSON upload and download. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/pivot-manual/10.4/pivot-overview/introduction-to-pivot" target="_blank" rel="noopener">Introduction to Pivot</a> - the relationship statement in Splunk's own words and the two routes into the Pivot Editor. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/pivot-manual/10.4/building-pivots/design-pivot-tables-with-the-pivot-editor" target="_blank" rel="noopener">Design pivot tables with the Pivot Editor</a> - the four pivot element categories and the per-type filter, split and aggregation options. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/create-statistical-tables-and-chart-visualizations/open-a-non-transforming-search-in-pivot-to-create-tables-and-charts" target="_blank" rel="noopener">Open a non-transforming search in Pivot to create tables and charts</a> - Instant Pivot, the fieldset choices, and the private data model it creates on save. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-data-summaries-to-accelerate-searches/accelerate-data-models" target="_blank" rel="noopener">Accelerate data models</a> - what the high performance analytics store is, which hierarchies qualify, every acceleration setting and its default, and ad hoc versus persistent acceleration. 25 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/tstats" target="_blank" rel="noopener">tstats</a> - the FROM datamodel syntax, <code>summariesonly</code>, <code>allow_old_summaries</code>, and the indexed-fields-only restriction. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/datamodel" target="_blank" rel="noopener">datamodel</a> - the six search modes and the <code>strict_fields</code> default. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/spl-search-reference/10.4/search-commands/from" target="_blank" rel="noopener">from</a> - the <code>datamodel:</code> colon syntax and dotted dataset path. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/spl-search-reference/10.4/search-commands/pivot" target="_blank" rel="noopener">pivot</a> - the SPL equivalent of the Pivot Editor, useful for reading a saved pivot. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/datamodels.conf" target="_blank" rel="noopener">datamodels.conf</a> - every acceleration default in one place, plus <code>strict_fields</code> and <code>tags_whitelist</code>. Read last as a defaults reference, 10 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="08-workflow-actions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">8.0</span><span class="pn-label">Workflow actions</span></a><a href="10-cim.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">10.0</span><span class="pn-label">CIM</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#blueprint-mapping"><span>Blueprint mapping</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#what-it-is"><span>What it is</span><span class="min">5m</span></a></li>
+<li><a class="lvl2" href="#syntax-and-options"><span>Syntax and options</span><span class="min">12m</span></a></li>
+<li><a class="lvl3" href="#dataset-definition-settings"><span>Dataset definition settings</span></a></li>
+<li><a class="lvl3" href="#field-attribute-types"><span>Field (attribute) types</span></a></li>
+<li><a class="lvl3" href="#field-attributes-metadata"><span>Field attributes (metadata)</span></a></li>
+<li><a class="lvl3" href="#spl-commands-that-read-a-data-model"><span>SPL commands that read a data model</span></a></li>
+<li><a class="lvl3" href="#acceleration-settings"><span>Acceleration settings</span></a></li>
+<li><a class="lvl2" href="#result-contract"><span>Result contract</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#worked-examples"><span>Worked examples</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#decision-rules"><span>Decision rules</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">8m</span></a></li>
+<li><a class="lvl2" href="#lab"><span>Lab</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">2m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>44 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regular expressions for Splunk | SPLK-1002</title>
+<meta name="description" content="Regex for Splunk, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/regex-for-splunk" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html" aria-current="page"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>Regex for Splunk</span>
+        
+      </div>
+<h1 id="regular-expressions-for-splunk">Regular expressions for Splunk</h1>
+<p>Blueprint section 4.0 is 10 percent of the exam and the only section where regular expressions are unavoidable. The exam does not ask you to author a hard pattern under time pressure. It asks you to read a pattern that a machine generated, point at the named capture group, say which field it creates, and say which command or setting the pattern belongs in. <code>topics/04-field-extractions</code> owns the Field Extractor wizard and the commands as knowledge objects; this file owns the pattern language and the places it turns up.</p>
+<h2 id="the-flavour">The flavour<a class="anchor" href="#the-flavour" aria-label="Link to this section">#</a></h2>
+<p>The Knowledge Management Manual states it in one sentence: &quot;Splunk regular expressions are PCRE (Perl Compatible Regular Expressions) and use the PCRE C library.&quot; Everything you know from Perl, Python's <code>re</code>, PHP, or regex101 in PCRE mode transfers, with two Splunk-specific habits layered on top: named capture groups are how fields get created, and the pattern is almost always written inside a quoted SPL string or a configuration file value, which changes how you escape things.</p>
+<p>Splunk accepts <strong>both</strong> named capture group syntaxes. The same docs page shows <code>(?P&lt;field_name&gt;capture_pattern)</code> and <code>(?&lt;field_name&gt;capture_pattern)</code> as valid, and they are identical in effect: each creates a field named <code>field_name</code> holding the captured text. Hand-written documentation examples and <code>props.conf</code> stanzas use the short <code>(?&lt;name&gt;...)</code> form. Splunk's own generators emit the Python-style <code>(?P&lt;name&gt;...)</code> form: the documented <code>erex</code> example prints <code>(?i)^(?:[^\.]*\.){3}\d+\s+(?P&lt;port&gt;\w+\s+\d+)</code>, and the Field Extractor writes its expressions the same way. [verify]</p>
+<p>Exam consequence: if one option shows <code>(?P&lt;status&gt;\d+)</code> and another shows <code>(?&lt;status&gt;\d+)</code>, neither is wrong on syntax grounds, so look at what else differs. An option with <code>(?'status'\d+)</code>, or with a group that has no name at all, is the one being tested.</p>
+<h2 id="compact-syntax-table">Compact syntax table<a class="anchor" href="#compact-syntax-table" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Written</th>
+<th>Meaning and the Splunk-specific note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Literal</td>
+<td><code>abc</code></td>
+<td>Matches the characters exactly. Case sensitive.</td>
+</tr>
+<tr>
+<td>Any character</td>
+<td><code>.</code></td>
+<td>Any single character except a newline. This is why generated patterns keep adding <code>\n</code> to negated classes.</td>
+</tr>
+<tr>
+<td>Character class</td>
+<td><code>[abc]</code>, <code>[a-z0-9_-]</code></td>
+<td>One character from the set. Inside a class, <code>.</code> <code>?</code> <code>+</code> <code>*</code> <code>(</code> <code>)</code> are literal; only <code>^</code> <code>]</code> <code>-</code> <code>\</code> need care.</td>
+</tr>
+<tr>
+<td>Negated class</td>
+<td><code>[^&amp;&quot;\s]</code></td>
+<td>One character that is not in the set. The workhorse of a good Splunk extraction.</td>
+</tr>
+<tr>
+<td>Word, non-word</td>
+<td><code>\w</code>, <code>\W</code></td>
+<td>Letter, number, or underscore. <code>\W</code> is its complement.</td>
+</tr>
+<tr>
+<td>Digit, non-digit</td>
+<td><code>\d</code>, <code>\D</code></td>
+<td><code>0-9</code> and its complement.</td>
+</tr>
+<tr>
+<td>Whitespace</td>
+<td><code>\s</code>, <code>\S</code></td>
+<td>Space, tab, newline, and their complement. <code>\S+</code> is the correct way to say &quot;one token&quot;.</td>
+</tr>
+<tr>
+<td>Start, end</td>
+<td><code>^</code>, <code>$</code></td>
+<td>Start and end of the string being matched, which is <code>_raw</code> unless <code>field=</code> says otherwise.</td>
+</tr>
+<tr>
+<td>Word boundary</td>
+<td><code>\b</code>, <code>\B</code></td>
+<td>Zero-width position between a word and a non-word character. <code>\bWC\b</code> does match inside <code>WC-SH-A02</code>, because a hyphen is a non-word character.</td>
+</tr>
+<tr>
+<td>Zero or more</td>
+<td><code>*</code></td>
+<td>Greedy by default.</td>
+</tr>
+<tr>
+<td>One or more</td>
+<td><code>+</code></td>
+<td>Greedy by default.</td>
+</tr>
+<tr>
+<td>Zero or one</td>
+<td><code>?</code></td>
+<td>Marks the preceding token optional.</td>
+</tr>
+<tr>
+<td>Exact count</td>
+<td><code>{3}</code>, <code>{1,3}</code>, <code>{2,}</code></td>
+<td>Repetition counts. <code>\d{1,3}</code> is the standard octet.</td>
+</tr>
+<tr>
+<td>Lazy quantifier</td>
+<td><code>*?</code>, <code>+?</code>, <code>??</code>, <code>{n,m}?</code></td>
+<td>Stops at the first position that lets the rest of the pattern match.</td>
+</tr>
+<tr>
+<td>Possessive quantifier</td>
+<td><code>*+</code>, <code>++</code>, <code>?+</code></td>
+<td>Greedy with no backtracking. Fails rather than giving characters back. Rare in Splunk, but PCRE supports it and it is a legitimate distractor.</td>
+</tr>
+<tr>
+<td>Atomic group</td>
+<td><code>(?&gt;...)</code></td>
+<td>Same no-backtracking idea applied to a group.</td>
+</tr>
+<tr>
+<td>Alternation</td>
+<td><code>a|b</code></td>
+<td>Either side. Lowest precedence in the language, so parenthesise it: <code>(?:GET|POST)</code>.</td>
+</tr>
+<tr>
+<td>Capture group</td>
+<td><code>(...)</code></td>
+<td>Numbered group. In <code>rex</code> a numbered group captures nothing usable, because <code>rex</code> creates fields only from names.</td>
+</tr>
+<tr>
+<td>Non-capturing group</td>
+<td><code>(?:...)</code></td>
+<td>Groups for quantifying or alternation without creating a group. Generated Splunk regexes lean on it heavily.</td>
+</tr>
+<tr>
+<td>Named capture group</td>
+<td><code>(?&lt;name&gt;...)</code> or <code>(?P&lt;name&gt;...)</code></td>
+<td>Creates the field. This is the only construct the exam truly requires you to recognise.</td>
+</tr>
+<tr>
+<td>Lookahead</td>
+<td><code>(?=...)</code>, <code>(?!...)</code></td>
+<td>Zero-width assertion about what follows. <code>\d(?=\d{4})</code> matches a digit only if four digits follow it, which is how the account-masking sed example works.</td>
+</tr>
+<tr>
+<td>Lookbehind</td>
+<td><code>(?&lt;=...)</code>, <code>(?&lt;!...)</code></td>
+<td>Zero-width assertion about what precedes. Must be fixed width in PCRE, so <code>(?&lt;=\d{3})</code> is legal and <code>(?&lt;=\d+)</code> is not. The documented <code>regex</code> example <code>(?&lt;!\d)10\.\d{1,3}</code> uses a negative lookbehind to avoid matching <code>210.</code>.</td>
+</tr>
+<tr>
+<td>Backreference</td>
+<td><code>\1</code>, <code>\2</code>, <code>\k&lt;name&gt;</code></td>
+<td>Refers to what an earlier group captured. In <code>rex mode=sed</code> replacements the same <code>\1</code> syntax names the group in the replacement text.</td>
+</tr>
+<tr>
+<td>Inline flag</td>
+<td><code>(?i)</code>, <code>(?m)</code>, <code>(?s)</code></td>
+<td>Case-insensitive, multiline anchors, dot-matches-newline. <code>(?i)</code> at the front of the pattern is how you defeat case sensitivity.</td>
+</tr>
+<tr>
+<td>Escape</td>
+<td><code>\.</code> <code>\?</code> <code>\/</code> <code>|</code> <code>\(</code> <code>\[</code> <code>\$</code> <code>\^</code> <code>\+</code> <code>\*</code> <code>\\</code></td>
+<td>A backslash makes a metacharacter literal.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="what-the-field-extractor-actually-generates">What the Field Extractor actually generates<a class="anchor" href="#what-the-field-extractor-actually-generates" aria-label="Link to this section">#</a></h2>
+<p>The two generators in the product, the Field Extractor wizard and <code>erex</code>, build patterns the same way: anchor at the start of the event, walk forward through the sample text by counting delimiters, then capture. Neither understands what the log means.</p>
+<p>The documentation's own <code>erex</code> example is the cleanest published specimen. Run against <code>index=security sourcetype=linux_secure</code> failed-login events with <code>examples=&quot;port 3351, port 3768&quot;</code>, it produces:</p>
+<pre class="plain"><code>(?i)^(?:[^\.]*\.){3}\d+\s+(?P&lt;port&gt;\w+\s+\d+)</code></pre>
+<p>Token by token against <code>Failed password for invalid user jabber from 118.142.68.222 port 3187 ssh2</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Token</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(?i)</code></td>
+<td>Turns off case sensitivity for the whole pattern. Generators add this because they cannot tell whether the sample's capitalisation is stable.</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Anchors at the first character of <code>_raw</code>.</td>
+</tr>
+<tr>
+<td><code>(?:[^\.]*\.){3}</code></td>
+<td>Non-capturing group: any run of non-dot characters followed by a literal dot, three times. That consumes everything up to and including <code>118.142.68.</code></td>
+</tr>
+<tr>
+<td><code>\d+</code></td>
+<td>The final octet, <code>222</code>.</td>
+</tr>
+<tr>
+<td><code>\s+</code></td>
+<td>The whitespace after the IP address.</td>
+</tr>
+<tr>
+<td><code>(?P&lt;port&gt;\w+\s+\d+)</code></td>
+<td>The capture. It matches <code>port 3187</code>, so the field value is the string <code>port 3187</code>, not <code>3187</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>That last row matters. The generator captured the label because the examples included the label. Ask for <code>3351</code> and you get a pattern that captures digits; ask for <code>port 3351</code> and you get a field whose every value starts with the word <code>port</code>.</p>
+<p>Now the Apache case. Given an <code>access_combined</code> event whose request looks like <code>GET /product.screen?productId=WC-SH-A02&amp;JSESSIONID=SD0SL6FF7ADFF4953 HTTP 1.1</code>, highlighting <code>SD0SL6FF7ADFF4953</code> in the Field Extractor and naming it <code>JSESSIONID</code> yields a pattern of this shape:</p>
+<pre class="plain"><code>^(?:[^=\n]*=){2}(?P&lt;JSESSIONID&gt;\w+)</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Token</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^</code></td>
+<td>Start of <code>_raw</code>. The pattern is positional from character zero.</td>
+</tr>
+<tr>
+<td><code>(?:</code> ... <code>){2}</code></td>
+<td>Skip the same construct twice.</td>
+</tr>
+<tr>
+<td><code>[^=\n]*</code></td>
+<td>Any run of characters that are neither an equals sign nor a newline. The <code>\n</code> is leading context insurance: without it, <code>[^=]*</code> would happily run across line boundaries inside a multiline event.</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>A literal equals sign, consumed. Two iterations consume the <code>=</code> after <code>productId</code> and the <code>=</code> after <code>JSESSIONID</code>.</td>
+</tr>
+<tr>
+<td><code>(?P&lt;JSESSIONID&gt;\w+)</code></td>
+<td>Captures word characters until the first character that is not a letter, digit, or underscore, which is the space before <code>HTTP</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Splunk adds two things around your highlighted value. <strong>Leading context</strong> is the anchor plus a delimiter-counting skip, sometimes plus a literal string lifted straight out of the sample. <strong>Trailing context</strong> is a literal that tells the engine where to stop, added when the capture's own character class is not self-terminating; highlight a value followed by a quotation mark and you get a trailing <code>&quot;</code> in the pattern.</p>
+<p>Why this is more brittle than what you would write by hand:</p>
+<ul>
+<li>It is anchored. Any change earlier in the event, a different request method, an added header, a <code>-</code> where a user name used to be, shifts every count and the extraction silently returns nothing.</li>
+<li>It counts delimiters instead of naming the key. On a request with no <code>productId</code> parameter the second <code>=</code> is a different equals sign, and the field is filled with the wrong value. Wrong values are worse than missing values.</li>
+<li>It was inferred from one sample, or from the handful you added. Optional segments, empty values, and quoted values containing the delimiter stay invisible until the Validate step surfaces them.</li>
+<li><code>\w+</code> was chosen because the sample value happened to contain only word characters. A session id containing a hyphen truncates at the hyphen with no error.</li>
+</ul>
+<p>The hand-written equivalent, <code>JSESSIONID=(?&lt;JSESSIONID&gt;[^&amp;&quot;\s]+)</code>, is unanchored, keyed on the literal name, and explicit about its stop characters, so it survives reordering, added parameters, and a changed request line. The Field Extractor cannot infer any of that, which is why the Validate step and counterexamples exist, and why you read the generated regex before you save it.</p>
+<h2 id="rex-the-extracting-command">rex, the extracting command<a class="anchor" href="#rex-the-extracting-command" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">rex</span> <span class="t-op">[</span><span class="t-opt">field</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">(</span> <span class="t-op">&lt;</span><span class="t-field">regex-expression</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">max_match</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">offset_field</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">)</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-op">&lt;</span><span class="t-field">sed-expression</span><span class="t-op">&gt;</span><span class="t-op">)</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td><code>_raw</code></td>
+<td>The string the pattern is applied to. <code>^</code> and <code>$</code> then anchor to that field's value, not to the event.</td>
+</tr>
+<tr>
+<td><code>&lt;regex-expression&gt;</code></td>
+<td>required unless <code>mode=sed</code></td>
+<td>Quoted PCRE. Each named group creates a field. Unnamed groups create nothing.</td>
+</tr>
+<tr>
+<td><code>max_match</code></td>
+<td><code>1</code></td>
+<td>Number of matches allowed per event. <code>0</code> means unlimited. Anything above 1 produces a multivalue field.</td>
+</tr>
+<tr>
+<td><code>offset_field</code></td>
+<td>none</td>
+<td>Creates a field holding the zero-indexed start and end character positions of each match, rendered like <code>src_ip=71-83</code>.</td>
+</tr>
+<tr>
+<td><code>mode=sed</code></td>
+<td>none</td>
+<td>Switches to substitution. Mutually exclusive with the extraction form.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sed mode takes two expression types. Substitution is <code>&quot;s/&lt;regex&gt;/&lt;replacement&gt;/&lt;flags&gt;&quot;</code>, where the flags are <code>g</code> for every occurrence and a bare integer for the Nth occurrence only, and <code>\1</code> and <code>\2</code> in the replacement refer to capture groups in the search half. Transliteration is <code>&quot;y/&lt;string1&gt;/&lt;string2&gt;/&quot;</code>, which maps characters positionally, first character of <code>string1</code> to first character of <code>string2</code>, with no regular expression involved at all. Keep the two strings the same length.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">field</span><span class="t-op">=</span><span class="t-field">JSESSIONID</span> <span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-str">&quot;s/\d(?=\d{4})/x/g&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">field</span><span class="t-op">=</span><span class="t-field">Code</span> <span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-str">&quot;y/ABC/XYZ/&quot;</span></code></pre></div>
+<p>The first masks every digit that has four digits after it, leaving the last four visible, using a lookahead so the trailing digits are not consumed. The second rewrites the letter grade in place. Neither creates a field and neither touches the index; both rewrite the value in the result set only.</p>
+<h2 id="erex-the-generator">erex, the generator<a class="anchor" href="#erex-the-generator" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-cmd">erex</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-opt">examples</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">counterexamples</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">fromfield</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">maxtrainers</span><span class="t-op">=&lt;</span><span class="t-field">integer</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>examples</code> is required and takes comma-separated sample values that must actually occur in the events piped in, or the command errors. <code>counterexamples</code> lists values that must not be extracted, and is how you stop it capturing the destination port as well as the source port. <code>fromfield</code> defaults to <code>_raw</code>. <code>maxtrainers</code> defaults to 100, valid range 1 to 1000.</p>
+<p>The generated expression is not a result row. Splunk Web prints it in the job messages, reachable from the <strong>Job</strong> menu; in <code>search.log</code> you find it by searching for the phrase &quot;Successfully learned regex&quot;. The documentation is explicit about what to do next: replace the <code>erex</code> command with <code>rex</code> plus the generated expression, which it calls more cost effective than leaving <code>erex</code> in place. <code>erex</code> persists nothing and appears nowhere in Settings. It is a drafting tool.</p>
+<h2 id="regex-versus-rex">regex versus rex<a class="anchor" href="#regex-versus-rex" aria-label="Link to this section">#</a></h2>
+<p>The most reliable distractor pair in the section: the names differ by one letter and the behaviours have nothing in common.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th><code>rex</code></th>
+<th><code>regex</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Purpose</td>
+<td>Extracts fields, or rewrites a value in sed mode</td>
+<td>Filters events</td>
+</tr>
+<tr>
+<td>Syntax</td>
+<td><code>rex [field=&lt;f&gt;] &quot;&lt;pattern&gt;&quot;</code></td>
+<td><code>regex (&lt;field&gt;=&lt;pattern&gt; | &lt;field&gt;!=&lt;pattern&gt; | &lt;pattern&gt;)</code></td>
+</tr>
+<tr>
+<td>Default target</td>
+<td><code>_raw</code></td>
+<td><code>_raw</code></td>
+</tr>
+<tr>
+<td>Pattern anchoring</td>
+<td>Unanchored unless you write <code>^</code></td>
+<td>Documented as &quot;an unanchored Perl Compatible Regular Expression (PCRE library)&quot;</td>
+</tr>
+<tr>
+<td>Named groups</td>
+<td>Required, they are the point</td>
+<td>Pointless, nothing is captured</td>
+</tr>
+<tr>
+<td>Row count</td>
+<td>Unchanged, every input event is emitted</td>
+<td>Reduced, non-matching events are dropped</td>
+</tr>
+<tr>
+<td>New fields</td>
+<td>One per named group</td>
+<td>None, ever</td>
+</tr>
+<tr>
+<td>Command type</td>
+<td>Distributable streaming</td>
+<td>Distributable streaming</td>
+</tr>
+</tbody>
+</table></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-pipe">|</span> <span class="t-cmd">regex</span> <span class="t-opt">_raw</span><span class="t-op">=</span><span class="t-str">&quot;(?&lt;!\d)10\.\d{1,3}\.\d{1,3}\.\d{1,3}(?!\d)&quot;</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">regex</span> <span class="t-field">JSESSIONID</span><span class="t-op">!=</span><span class="t-str">&quot;^SD&quot;</span></code></pre></div>
+<p>One documented subtlety that makes a good question: <code>regex &lt;field&gt;!=&lt;pattern&gt;</code> does not behave like <code>search &lt;field&gt;!=&lt;value&gt;</code>. The <code>regex</code> form includes events where the field is undefined or null, because those events also fail to match. The <code>search</code> form excludes them.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 1238 211" width="1238" height="211" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M619.0500000000001 41.0 C619.0500000000001 61.0 147.10000000000008 61.0 147.10000000000008 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M619.0500000000001 41.0 C619.0500000000001 61.0 441.47500000000014 61.0 441.47500000000014 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M619.0500000000001 41.0 C619.0500000000001 61.0 764.4500000000002 61.0 764.4500000000002 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M619.0500000000001 41.0 C619.0500000000001 61.0 1076.7000000000003 61.0 1076.7000000000003 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M147.10000000000008 124.0 C147.10000000000008 144.0 33.875 144.0 33.875 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M441.47500000000014 124.0 C441.47500000000014 144.0 185.25 144.0 185.25 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M441.47500000000014 124.0 C441.47500000000014 144.0 536.825 144.0 536.825 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M764.4500000000002 124.0 C764.4500000000002 144.0 859.8000000000001 144.0 859.8000000000001 164.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M1076.7000000000003 124.0 C1076.7000000000003 144.0 1093.4 144.0 1093.4 164.0"/><rect class="dg-node" x="487.07500000000005" y="2.0" width="263.95000000000005" height="39" rx="5"/><text class="dg-text" x="619.0500000000001" y="22.5" text-anchor="middle" dominant-baseline="middle">I have a pattern. What do I want?</text><rect class="dg-node" x="29.425000000000068" y="85.0" width="235.35000000000002" height="39" rx="5"/><text class="dg-text" x="147.10000000000008" y="105.5" text-anchor="middle" dominant-baseline="middle">Drop events that do not match</text><rect class="dg-node" x="298.7750000000001" y="85.0" width="285.40000000000003" height="39" rx="5"/><text class="dg-text" x="441.47500000000014" y="105.5" text-anchor="middle" dominant-baseline="middle">Create a field from part of the text</text><rect class="dg-node" x="618.1750000000002" y="85.0" width="292.55" height="39" rx="5"/><text class="dg-text" x="764.4500000000002" y="105.5" text-anchor="middle" dominant-baseline="middle">Rewrite text inside an existing field</text><rect class="dg-node" x="944.7250000000001" y="85.0" width="263.95000000000005" height="39" rx="5"/><text class="dg-text" x="1076.7000000000003" y="105.5" text-anchor="middle" dominant-baseline="middle">A pattern, but I cannot write one</text><rect class="dg-node" x="2.0" y="168.0" width="63.75" height="39" rx="5"/><text class="dg-text" x="33.875" y="188.5" text-anchor="middle" dominant-baseline="middle">regex</text><rect class="dg-node" x="99.75" y="168.0" width="171.0" height="39" rx="5"/><text class="dg-text" x="185.25" y="188.5" text-anchor="middle" dominant-baseline="middle">One search only: rex</text><rect class="dg-node" x="304.75" y="168.0" width="464.15000000000003" height="39" rx="5"/><text class="dg-text" x="536.825" y="188.5" text-anchor="middle" dominant-baseline="middle">Permanent, for everyone: Field Extractor, EXTRACT- or REPORT-</text><rect class="dg-node" x="802.9000000000001" y="168.0" width="113.80000000000001" height="39" rx="5"/><text class="dg-text" x="859.8000000000001" y="188.5" text-anchor="middle" dominant-baseline="middle">rex mode=sed</text><rect class="dg-node" x="950.7" y="168.0" width="285.40000000000003" height="39" rx="5"/><text class="dg-text" x="1093.4" y="188.5" text-anchor="middle" dominant-baseline="middle">erex, then paste its output into rex</text></svg></figure>
+<h2 id="where-regex-turns-up-outside-rex">Where regex turns up outside rex<a class="anchor" href="#where-regex-turns-up-outside-rex" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Place</th>
+<th>Form</th>
+<th>The detail worth knowing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inline extraction</td>
+<td><code>props.conf</code>, <code>EXTRACT-&lt;class&gt; = &lt;regex&gt;</code></td>
+<td>The regex lives in <code>props.conf</code> itself. Optionally suffixed with <code>in &lt;src_field&gt;</code> to read a field other than <code>_raw</code>. This is what the Field Extractor regex method writes.</td>
+</tr>
+<tr>
+<td>Transform extraction</td>
+<td><code>transforms.conf</code>, <code>REGEX = &lt;regex&gt;</code> plus <code>props.conf</code>, <code>REPORT-&lt;class&gt;</code></td>
+<td><code>REGEX</code> defaults to an empty string and is required unless you are using <code>DELIMS</code>. <code>SOURCE_KEY</code> defaults to <code>_raw</code>. <code>MV_ADD</code> defaults to <code>false</code>, <code>CLEAN_KEYS</code> to <code>true</code>.</td>
+</tr>
+<tr>
+<td>Transform field naming</td>
+<td><code>transforms.conf</code>, <code>FORMAT</code></td>
+<td>Not needed when the regex uses named capture groups. With unnamed groups you supply it, as in <code>REGEX = ([a-z]+)=([a-z]+)</code> with <code>FORMAT = $1::$2</code>, which names the field from group 1 and its value from group 2.</td>
+</tr>
+<tr>
+<td>Eval function</td>
+<td><code>match(&lt;str&gt;,&lt;regex&gt;)</code></td>
+<td>Returns TRUE if the pattern matches anywhere in the string. Anchor with <code>^</code> and <code>$</code> for a whole-value match. It returns a Boolean, so under <code>eval</code> it must sit inside <code>if</code>, <code>case</code>, or <code>validate</code>; under <code>where</code> it stands alone.</td>
+</tr>
+<tr>
+<td>Eval function</td>
+<td><code>replace(&lt;str&gt;,&lt;regex&gt;,&lt;replacement&gt;)</code></td>
+<td>PCRE, replaces every occurrence, <code>\1</code> and <code>\2</code> available in the replacement. The eval-side twin of <code>rex mode=sed</code>.</td>
+</tr>
+<tr>
+<td>Eval function</td>
+<td><code>mvfilter(&lt;predicate&gt;)</code></td>
+<td>Filters a multivalue field, almost always with <code>match()</code> inside. The predicate may reference only one field.</td>
+</tr>
+<tr>
+<td>Eval function</td>
+<td><code>mvfind(&lt;mv&gt;,&lt;regex&gt;)</code></td>
+<td>Returns the index of the first value in a multivalue field that matches.</td>
+</tr>
+<tr>
+<td>Lookups</td>
+<td><code>transforms.conf</code>, <code>match_type = WILDCARD(&lt;field&gt;)</code></td>
+<td>Not regex. It is glob matching on <code>*</code> inside the lookup table values. <code>CIDR()</code> and the default <code>EXACT</code> are the other two match types.</td>
+</tr>
+<tr>
+<td>Data models</td>
+<td>Regular Expression field on any dataset</td>
+<td>Extract From accepts any dataset field or <code>_raw</code>, and the expression must contain at least one named capture group. Sed mode and sed expressions are not supported here.</td>
+</tr>
+<tr>
+<td>Search itself</td>
+<td><code>index=web uri_path=*cart*</code></td>
+<td>Also not regex. The asterisk in the <code>search</code> command is a glob over terms, and <code>like()</code> under <code>where</code> uses <code>%</code> and <code>_</code>. Neither accepts PCRE.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="worked-examples-against-the-guides-lab-data">Worked examples against the guide's lab data<a class="anchor" href="#worked-examples-against-the-guides-lab-data" aria-label="Link to this section">#</a></h2>
+<p>The practice dataset from lab setup: <code>index=web</code> (<code>access_combined</code>), <code>index=security</code> (<code>linux_secure</code>), <code>index=cisco</code> (<code>cisco:wsa:squid</code>).</p>
+<p><strong>1. JSESSIONID from an Apache access log.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-str">&quot;JSESSIONID=(?&lt;JSESSIONID&gt;[^&amp;\&quot;\s]+)&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">uri_path</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">pages_visited</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-field">pages_visited</span></code></pre></div>
+<p>The pattern is unanchored and keyed on the literal string <code>JSESSIONID=</code>, so the position of the parameter in the query string does not matter. The capture is a negated class rather than <code>\w+</code>, so it stops at an ampersand, a quotation mark, or whitespace, whichever comes first, and it survives a session id containing a hyphen. Note the <code>\&quot;</code> inside the class: the whole pattern is a double-quoted SPL string, so an inner double quote has to be escaped. Automatic key-value extraction has already produced <code>JSESSIONID</code> in this data, so the <code>rex</code> overwrites it, which is a cheap way to prove that a same-named capture group wins over what came before it in the pipeline.</p>
+<p><strong>2. User and source IP from an sshd failure.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-str">&quot;for (?:invalid user )?(?&lt;user&gt;\S+) from (?&lt;src_ip&gt;\d{1,3}(?:\.\d{1,3}){3}) port (?&lt;src_port&gt;\d+)&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">user</span><span class="t-op">,</span> <span class="t-field">src_ip</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p>Against <code>Failed password for invalid user jabber from 118.142.68.222 port 3187 ssh2</code> this returns <code>user=jabber</code>, <code>src_ip=118.142.68.222</code>, <code>src_port=3187</code>. Three constructs are doing real work. <code>(?:invalid user )?</code> is a non-capturing group made optional by <code>?</code>, so the same pattern also matches <code>Failed password for root from ...</code>, which a Field Extractor pattern built from one sample would not. <code>\S+</code> is the correct way to grab one whitespace-delimited token; <code>.*</code> would swallow the rest of the line and hand <code>user</code> the value <code>jabber from 118.142.68.222 port 3187 ssh2</code>. <code>(?:\.\d{1,3}){3}</code> repeats the dot-octet pair three times inside a non-capturing group, so no stray numbered group is created and the whole address lands in one field.</p>
+<p><strong>3. Three fields from the Squid proxy format.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-str">&quot;clientip=(?&lt;clientip&gt;\d+)\s+Code=(?&lt;Code&gt;\w+)\s+JSESSIONID=(?&lt;JSESSIONID&gt;\d+)&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">Code</span></code></pre></div>
+<p>Against <code>[01/Sep/2022:18:23:07] clientip=5037 Code=C JSESSIONID=5317605039838520</code> this fills all three fields in one pass, which is what the Field Extractor produces when you highlight three values in one sample event. <code>\s+</code> between the segments stays deliberately vague about how much whitespace separates them. To list the keys without knowing their names, use the multivalue form:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">max_match</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-str">&quot;(?&lt;kv_key&gt;\w+)=&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">kv_key</span></code></pre></div>
+<p><code>max_match=0</code> lifts the one-match-per-event limit, <code>kv_key</code> becomes multivalue, and <code>stats count BY</code> counts each value separately, so you get one row per distinct key name in the source.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-RX-01"><span class="tid">T-RX-01</span> Greedy quantifiers on a line with repeated delimiters. <span class="wrong">Wrong belief</span>: <code>&quot;\[(?&lt;ts&gt;.*)\]&quot;</code> extracts the timestamp from <code>[01/Sep/2022:18:23:07] clientip=5037</code>. <span class="right">Correct fact</span>: <code>.*</code> is greedy and runs to the end of the line before backtracking to the <strong>last</strong> <code>]</code>, so on any event containing a second closing bracket the field swallows everything in between. Use the lazy form <code>.*?</code> or, better, a negated class <code>[^\]]*</code> which cannot cross the delimiter at all.</p>
+<p class="trap" id="T-RX-02"><span class="tid">T-RX-02</span> An unescaped dot or question mark. <span class="wrong">Wrong belief</span>: <code>&quot;host=(?&lt;h&gt;web1.example.com)&quot;</code> and <code>&quot;screen?productId=(?&lt;p&gt;\w+)&quot;</code> say what they look like they say. <span class="right">Correct fact</span>: an unescaped <code>.</code> matches any character, so <code>web1.example.com</code> also matches <code>www1xexample!com</code>, and an unescaped <code>?</code> makes the preceding character optional, so <code>screen?</code> matches <code>scree</code> followed by an optional <code>n</code>. Write <code>www1\.example\.com</code> and <code>screen\?</code>.</p>
+<p class="trap" id="T-RX-03"><span class="tid">T-RX-03</span> Reaching for <code>.*</code> where a negated class is correct. <span class="wrong">Wrong belief</span>: <code>&quot;user (?&lt;user&gt;.*) from&quot;</code> is fine because the pattern ends at <code> from</code>. <span class="right">Correct fact</span>: on a line containing a second occurrence of <code> from</code> the greedy <code>.*</code> matches through the first one. <code>[^ ]*</code> or <code>\S+</code> is the correct token grab, cannot cross the space, and needs no backtracking. Prefer a negated class to a dot-star in every Splunk extraction.</p>
+<p class="trap" id="T-RX-04"><span class="tid">T-RX-04</span> A capture group name that is not a valid field name. <span class="wrong">Wrong belief</span>: any name works because it is just a label. <span class="right">Correct fact</span>: two rule sets apply. The Field Extractor states that &quot;Field names must start with a letter and contain only letters, numbers, and underscores.&quot; At the configuration-file level, &quot;Valid characters for field names are a-z, A-Z, 0-9, . , :, and _&quot; and &quot;Field names cannot begin with 0-9 or _&quot;, because leading underscores are reserved for Splunk internal variables. So <code>(?&lt;src-ip&gt;...)</code>, <code>(?&lt;2nd_ip&gt;...)</code> and <code>(?&lt;_ip&gt;...)</code> are all wrong, and the leading underscore is the one the exam likes.</p>
+<p class="trap" id="T-RX-05"><span class="tid">T-RX-05</span> Anchoring to <code>_raw</code> when the pattern runs against a named field. <span class="wrong">Wrong belief</span>: <code>^</code> and <code>$</code> always mean the start and end of the event. <span class="right">Correct fact</span>: they mean the start and end of whatever <code>rex</code> is reading. <code>| rex field=uri_query &quot;^(?&lt;first_param&gt;[^&amp;]+)&quot;</code> anchors at the first character of <code>uri_query</code>; drop the <code>field=</code> and the same pattern anchors on <code>_raw</code> and matches something entirely different. Generated patterns carry a <code>^</code>, so moving one from an FX extraction into <code>| rex field=something</code> breaks it.</p>
+<p class="trap" id="T-RX-06"><span class="tid">T-RX-06</span> Regular expressions in Splunk are case insensitive because field values are. <span class="wrong">Wrong belief</span>: since <code>status=Failed</code> matches <code>failed</code> in the search bar, <code>rex &quot;Failed password&quot;</code> matches <code>failed password</code>. <span class="right">Correct fact</span>: search-term matching on field values is case insensitive, and regular expression matching is case sensitive. <code>| rex &quot;(?&lt;u&gt;invalid user \S+)&quot;</code> will not fire on <code>Invalid user</code>. Prefix the pattern with <code>(?i)</code> to make it case insensitive, which is exactly why Splunk's own generators put <code>(?i)</code> at the front of what they produce.</p>
+<p class="trap" id="T-RX-07"><span class="tid">T-RX-07</span> <code>rex</code> and <code>regex</code> are the same command. <span class="wrong">Wrong belief</span>: both take a PCRE, so both do the same job. <span class="right">Correct fact</span>: <code>rex</code> extracts and never changes the row count; <code>regex</code> filters and never creates a field. A question that says &quot;500 events in, 120 match&quot; is testing this: <code>rex</code> emits 500, <code>regex</code> emits 120.</p>
+<p class="trap" id="T-RX-08"><span class="tid">T-RX-08</span> An unnamed capture group creates a field. <span class="wrong">Wrong belief</span>: <code>| rex &quot;port (\d+)&quot;</code> creates a field, perhaps called <code>1</code>. <span class="right">Correct fact</span>: <code>rex</code> creates fields from named groups only, so that command runs, matches, and produces nothing. In a <code>transforms.conf</code> transform an unnamed group is usable, but only because <code>FORMAT = $1::$2</code> supplies the naming that the regex left out.</p>
+<p class="trap" id="T-RX-09"><span class="tid">T-RX-09</span> <code>(?P&lt;name&gt;...)</code> is a different or a broken construct. <span class="wrong">Wrong belief</span>: the <code>P</code> is a typo, or Python syntax that Splunk rejects. <span class="right">Correct fact</span>: the docs list <code>(?P&lt;field_name&gt;...)</code> and <code>(?&lt;field_name&gt;...)</code> side by side as valid. Both create the same field. The generated expressions you will be shown on the exam are likelier to carry the <code>P</code>.</p>
+<p class="trap" id="T-RX-10"><span class="tid">T-RX-10</span> Quoting inside the pattern is free. <span class="wrong">Wrong belief</span>: <code>| rex &quot;\&quot;(?&lt;method&gt;\w+) &quot;</code> and <code>| rex &quot;(?&lt;agent&gt;Mozilla/5.0 (Windows...))&quot;</code> are fine. <span class="right">Correct fact</span>: the pattern is a double-quoted SPL string, so an inner double quote must be written <code>\&quot;</code>, and a literal parenthesis in the data must be escaped as <code>\(</code> or it opens a group. Both mistakes produce a search that either errors or silently matches nothing.</p>
+<p class="trap" id="T-RX-11"><span class="tid">T-RX-11</span> <code>erex</code> examples should include the label. <span class="wrong">Wrong belief</span>: <code>examples=&quot;port 3351&quot;</code> is a friendly way to say &quot;the port number&quot;. <span class="right">Correct fact</span>: <code>erex</code> captures whatever you show it. The documented output for that example is <code>(?P&lt;port&gt;\w+\s+\d+)</code>, whose values are the string <code>port 3351</code>, label included. Give it <code>3351</code> if you want digits, and add <code>counterexamples=</code> to steer it off the values it should leave alone.</p>
+<p class="trap" id="T-RX-12"><span class="tid">T-RX-12</span> Wildcards in searches and lookups are regular expressions. <span class="wrong">Wrong belief</span>: <code>uri_path=*cart*</code>, <code>like(user,&quot;admin%&quot;)</code> and <code>match_type = WILDCARD(host)</code> are PCRE under the hood. <span class="right">Correct fact</span>: the <code>search</code> asterisk is a glob over terms, <code>like()</code> uses <code>%</code> and <code>_</code> from SQL, and lookup <code>WILDCARD()</code> is glob matching on <code>*</code> inside the lookup table values. Only <code>rex</code>, <code>regex</code>, <code>erex</code>, <code>match()</code>, <code>replace()</code>, <code>mvfilter()</code> with <code>match()</code>, <code>mvfind()</code>, and the extraction settings in <code>props.conf</code> and <code>transforms.conf</code> take PCRE.</p>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/about-splunk-regular-expressions" target="_blank" rel="noopener">About Splunk regular expressions</a> - the PCRE statement, the symbol tables, both named capture group forms. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/about-regular-expressions-with-field-extractions" target="_blank" rel="noopener">About regular expressions with field extractions</a> - inline versus transform storage, field name character rules, key cleaning. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/regex" target="_blank" rel="noopener">regex</a> - the unanchored PCRE statement and the null-field behaviour of <code>!=</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/rex" target="_blank" rel="noopener">rex</a> - <code>field</code> default <code>_raw</code>, <code>max_match</code> default 1, <code>offset_field</code>, both sed forms. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/erex" target="_blank" rel="noopener">erex</a> - example 3 for the generated expression, the &quot;Successfully learned regex&quot; wording, and the advice to swap <code>erex</code> for <code>rex</code>. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-fields-step" target="_blank" rel="noopener">Field Extractor: Select Fields step</a> - field naming rules, required text, the point of no return on manual regex editing. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-configuration-files-to-configure-field-extractions/configure-advanced-extractions-with-field-transforms" target="_blank" rel="noopener">Configure advanced extractions with field transforms</a> - <code>REGEX</code>, <code>FORMAT</code>, <code>SOURCE_KEY</code>, <code>MV_ADD</code>, <code>CLEAN_KEYS</code> defaults. Reference only. 8 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="time-modifiers.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Time modifiers</span></a><a href="cim-data-models.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">CIM data models</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#the-flavour"><span>The flavour</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#compact-syntax-table"><span>Compact syntax table</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#what-the-field-extractor-actually-generates"><span>What the Field Extractor actually generates</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#rex-the-extracting-command"><span>rex, the extracting command</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#erex-the-generator"><span>erex, the generator</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#regex-versus-rex"><span>regex versus rex</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#where-regex-turns-up-outside-rex"><span>Where regex turns up outside rex</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#worked-examples-against-the-guides-lab-data"><span>Worked examples against the guide&#x27;s lab data</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">4m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>19 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

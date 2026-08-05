@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistical and charting functions | SPLK-1002</title>
+<meta name="description" content="Stats and chart functions, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/stats-and-chart-functions" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html" aria-current="page"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>Stats and chart functions</span>
+        
+      </div>
+<h1 id="statistical-and-charting-functions">Statistical and charting functions</h1>
+<p>The function catalogue that <code>stats</code>, <code>chart</code>, <code>timechart</code>, <code>eventstats</code>, <code>streamstats</code> and <code>tstats</code> share, plus the one piece of geometry the exam tests hardest: how <code>stats ... BY</code>, <code>chart ... OVER ... BY</code> and <code>timechart ... BY</code> turn the same events into three differently shaped tables.</p>
+<p>Command options and defaults for <code>chart</code>, <code>timechart</code>, <code>top</code> and <code>rare</code> live in <code>topics/01-transforming-commands</code>. The transaction-equivalence subset of these functions lives in <code>topics/03-correlating-events</code>. This file is the function-level companion to both and does not repeat their option tables beyond the aggregation limits, which are reproduced here because they are the reason a chart has columns you did not ask for.</p>
+<p>Blueprint note: only <code>chart</code> and <code>timechart</code> are named in section 1.0, but <code>stats</code> functions appear in every section that involves a search, and <code>eventstats</code>, <code>streamstats</code> and <code>tstats</code> show up as distractors. Nothing here is off-limits as a wrong answer.</p>
+<h2 id="how-to-read-the-quotworks-withquot-column">How to read the &quot;Works with&quot; column<a class="anchor" href="#how-to-read-the-quotworks-withquot-column" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S</td>
+<td><code>stats</code></td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>chart</code></td>
+</tr>
+<tr>
+<td>T</td>
+<td><code>timechart</code></td>
+</tr>
+<tr>
+<td>ES</td>
+<td><code>eventstats</code></td>
+</tr>
+<tr>
+<td>SS</td>
+<td><code>streamstats</code></td>
+</tr>
+<tr>
+<td>TS</td>
+<td><code>tstats</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The S, C, T and TS marks come from the per-function &quot;You can use this function with the ... commands&quot; line on the 10.4 function pages. Those lines also name <code>mstats</code>, which is the metrics-index command and is off blueprint; where a function is <code>mstats</code>-only that is called out in Notes. The ES and SS marks come from the <code>eventstats</code> and <code>streamstats</code> command pages, which list the aggregate, event-order and multivalue families as a group rather than repeating each usage line. One documented oddity: the <code>eventstats</code> list names <code>avg()</code> but not <code>mean()</code>.</p>
+<h2 id="aggregate-functions">Aggregate functions<a class="anchor" href="#aggregate-functions" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>What it returns</th>
+<th>Works with</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>avg</td>
+<td><code>avg(&lt;value&gt;)</code></td>
+<td>Arithmetic mean of the field's numeric values.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Sparkline-capable. Non-numeric values are ignored unless <code>allnum=true</code>, which discards the whole group instead.</td>
+</tr>
+<tr>
+<td>count, c</td>
+<td><code>count(&lt;value&gt;)</code>, <code>count</code>, <code>c(&lt;value&gt;)</code></td>
+<td>Number of occurrences of the field. Bare <code>count</code> with no argument counts events.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Processes values as strings. <code>count(status)</code> counts events in which <code>status</code> exists, which is not the same number as <code>count</code>. Conditional form is <code>count(eval(field=&quot;value&quot;))</code>.</td>
+</tr>
+<tr>
+<td>distinct_count, dc</td>
+<td><code>dc(&lt;value&gt;)</code>, <code>distinct_count(&lt;value&gt;)</code></td>
+<td>Exact count of the distinct values of the field.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Processes values as strings, so <code>200</code> and <code>&quot;200 &quot;</code> are two values. Expensive on high-cardinality fields.</td>
+</tr>
+<tr>
+<td>estdc</td>
+<td><code>estdc(&lt;value&gt;)</code></td>
+<td>Estimated count of the distinct values.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Not sparkline-capable, and not available on <code>mstats</code>. If the actual number of distinct values is below the <code>approx_dc_threshold</code> setting in <code>limits.conf</code> (1000), Splunk does not estimate at all and returns the exact count.</td>
+</tr>
+<tr>
+<td>estdc_error</td>
+<td><code>estdc_error(&lt;value&gt;)</code></td>
+<td>Theoretical error of the estimated distinct count, as the ratio <code>absolute_value(estimate_distinct_count - real_distinct_count)/real_distinct_count</code>.</td>
+<td>S, C, T, ES, SS</td>
+<td>The narrowest usage line in the whole catalogue: <code>chart</code>, <code>stats</code> and <code>timechart</code> only, no <code>tstats</code> and no <code>mstats</code>.</td>
+</tr>
+<tr>
+<td>exactperc</td>
+<td><code>exactperc&lt;percentile&gt;(&lt;value&gt;)</code></td>
+<td>The exact percentile value, for example <code>exactperc95(bytes)</code>.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Documented as very resource expensive for high-cardinality fields. Use it when the number has to be defensible, not in a dashboard that runs every minute.</td>
+</tr>
+<tr>
+<td>max</td>
+<td><code>max(&lt;value&gt;)</code></td>
+<td>Maximum value of the field.</td>
+<td>S, C, T, ES, SS</td>
+<td>Processes values as numbers if possible, otherwise lexicographically. The usage line names <code>chart</code>, <code>mstats</code>, <code>stats</code> and <code>timechart</code> and does not name <code>tstats</code>.</td>
+</tr>
+<tr>
+<td>mean</td>
+<td><code>mean(&lt;value&gt;)</code></td>
+<td>Arithmetic mean of the field.</td>
+<td>S, C, T, ES</td>
+<td>The same statistic as <code>avg()</code>. Its usage line does not name <code>tstats</code>, and the <code>eventstats</code> page lists <code>avg</code> but not <code>mean</code>. Write <code>avg()</code> and the question of which pages list it never arises.</td>
+</tr>
+<tr>
+<td>median</td>
+<td><code>median(&lt;value&gt;)</code></td>
+<td>Middle-most value of the field.</td>
+<td>S, C, T, ES, SS</td>
+<td>With an even number of events the calculation is by default approximated to the higher of the two middle values. Not sparkline-capable.</td>
+</tr>
+<tr>
+<td>min</td>
+<td><code>min(&lt;value&gt;)</code></td>
+<td>Minimum value of the field.</td>
+<td>S, C, T, ES, SS</td>
+<td>Numbers if possible, otherwise lexicographic. Not sparkline-capable.</td>
+</tr>
+<tr>
+<td>mode</td>
+<td><code>mode(&lt;value&gt;)</code></td>
+<td>Most frequent value of the field.</td>
+<td>S, C, T, ES, SS</td>
+<td>Processes values as strings. No <code>tstats</code>, no <code>mstats</code>. Returns a value, not its count.</td>
+</tr>
+<tr>
+<td>perc, p</td>
+<td><code>perc&lt;percentile&gt;(&lt;value&gt;)</code>, <code>p&lt;percentile&gt;(&lt;value&gt;)</code></td>
+<td>Approximate threshold such that the given percent of the field's values fall below it.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>The percentile may be a floating point number between 0 and 100, for example <code>perc99.95(bytes)</code>. Above 1000 distinct values a radix-tree digest algorithm approximates the answer, limiting the error to under 1 percent of rank error.</td>
+</tr>
+<tr>
+<td>range</td>
+<td><code>range(&lt;value&gt;)</code></td>
+<td>Difference between the maximum and minimum values. Values must be numeric.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td><code>range(_time)</code> is the <code>stats</code> equivalent of a transaction's <code>duration</code>. See the pairs section below.</td>
+</tr>
+<tr>
+<td>stdev</td>
+<td><code>stdev(&lt;value&gt;)</code></td>
+<td>Sample standard deviation, the n-1 denominator form.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Use when the events are a sample of a larger population, which is almost always true of log data.</td>
+</tr>
+<tr>
+<td>stdevp</td>
+<td><code>stdevp(&lt;value&gt;)</code></td>
+<td>Population standard deviation, the n denominator form.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Use only when the result set is the entire population.</td>
+</tr>
+<tr>
+<td>sum</td>
+<td><code>sum(&lt;value&gt;)</code></td>
+<td>Sum of the numeric values of the field.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Conditional form is <code>sum(eval(...))</code>. The default <code>chart</code> and <code>timechart</code> series ranking is by the sum of each series.</td>
+</tr>
+<tr>
+<td>sumsq</td>
+<td><code>sumsq(&lt;value&gt;)</code></td>
+<td>Sum of the squares of the values.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>The building block behind variance. Almost never the answer to a business question, frequently the answer to an exam question about what <code>sumsq</code> does.</td>
+</tr>
+<tr>
+<td>upperperc</td>
+<td><code>upperperc&lt;percentile&gt;(&lt;value&gt;)</code></td>
+<td>Approximate upper bound for the requested percentile when there are more than 1000 values.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Pair it with <code>perc</code> to bracket the estimate: <code>perc95</code> gives the lower end of the approximation, <code>upperperc95</code> the upper.</td>
+</tr>
+<tr>
+<td>var</td>
+<td><code>var(&lt;value&gt;)</code></td>
+<td>Sample variance.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td><code>stdev</code> squared.</td>
+</tr>
+<tr>
+<td>varp</td>
+<td><code>varp(&lt;value&gt;)</code></td>
+<td>Population variance.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td><code>stdevp</code> squared.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="event-order-and-time-order-functions">Event order and time order functions<a class="anchor" href="#event-order-and-time-order-functions" aria-label="Link to this section">#</a></h2>
+<p>The docs split this group across two pages, and the split is itself examinable. The Event order functions page documents exactly two functions, <code>first()</code> and <code>last()</code>. Everything else below, including <code>earliest()</code> and <code>latest()</code>, is documented on the Time functions page.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>What it returns</th>
+<th>Works with</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>first</td>
+<td><code>first(&lt;value&gt;)</code></td>
+<td>The first seen value of the field, meaning the most recent instance, based on the order in which events reach the command.</td>
+<td>S, C, T, ES, SS</td>
+<td>The order events are seen is not necessarily chronological order.</td>
+</tr>
+<tr>
+<td>last</td>
+<td><code>last(&lt;value&gt;)</code></td>
+<td>The last seen value, meaning the oldest instance in processing order.</td>
+<td>S, C, T, ES, SS</td>
+<td>Same caveat. Both flip meaning if anything upstream reorders results.</td>
+</tr>
+<tr>
+<td>earliest</td>
+<td><code>earliest(&lt;value&gt;)</code></td>
+<td>The chronologically earliest seen occurrence of a value in the field.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>Processes values as strings. This is the time-safe version of <code>first()</code>.</td>
+</tr>
+<tr>
+<td>earliest_time</td>
+<td><code>earliest_time(&lt;value&gt;)</code></td>
+<td>The UNIX time of the chronologically earliest seen occurrence.</td>
+<td>S, TS</td>
+<td>Usage line names <code>mstats</code>, <code>stats</code> and <code>tstats</code> only. Not available on <code>chart</code> or <code>timechart</code>.</td>
+</tr>
+<tr>
+<td>latest</td>
+<td><code>latest(&lt;value&gt;)</code></td>
+<td>The chronologically latest seen occurrence of a value in the field.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>The time-safe version of <code>last()</code>.</td>
+</tr>
+<tr>
+<td>latest_time</td>
+<td><code>latest_time(&lt;value&gt;)</code></td>
+<td>The UNIX time of the chronologically latest seen occurrence.</td>
+<td>S, TS</td>
+<td>Same restriction as <code>earliest_time()</code>.</td>
+</tr>
+<tr>
+<td>rate</td>
+<td><code>rate(&lt;value&gt;)</code></td>
+<td>Per-second rate of change, computed as <code>(latest(&lt;value&gt;) - earliest(&lt;value&gt;)) / (latest_time(&lt;value&gt;) - earliest_time(&lt;value&gt;))</code>.</td>
+<td>S, TS</td>
+<td>Requires the <code>earliest</code> and <code>latest</code> values to be numerical and the <code>earliest_time</code> and <code>latest_time</code> values to be different, and needs at least two data points. Handles the largest value reset if there is at least one reset, which is what makes it usable on counters.</td>
+</tr>
+<tr>
+<td>rate_avg</td>
+<td><code>rate_avg(&lt;value&gt;)</code></td>
+<td>Average of the per-series rates for accumulating counter metrics.</td>
+<td><code>mstats</code> only</td>
+<td>Does not support <code>prestats=true</code>. Can compute a rate where each timespan holds a single data point, by pulling data across timespans.</td>
+</tr>
+<tr>
+<td>rate_sum</td>
+<td><code>rate_sum(&lt;value&gt;)</code></td>
+<td>Aggregate of the per-series rates for accumulating counter metrics.</td>
+<td><code>mstats</code> only</td>
+<td>Same two notes as <code>rate_avg</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="multivalue-functions">Multivalue functions<a class="anchor" href="#multivalue-functions" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>What it returns</th>
+<th>Works with</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>list</td>
+<td><code>list(&lt;value&gt;)</code></td>
+<td>A multivalue entry built from the field's values, in the order of the events.</td>
+<td>S, C, T, ES, SS</td>
+<td>If more than 100 values are in a field, only the first 100 are returned. Duplicates are kept. Processes values as strings.</td>
+</tr>
+<tr>
+<td>values</td>
+<td><code>values(&lt;value&gt;)</code></td>
+<td>A multivalue entry of the distinct values of the field, in lexicographical order.</td>
+<td>S, C, T, TS, ES, SS</td>
+<td>No default limit; a cap can be set with <code>maxvalues</code> in the <code>[stats | sistats]</code> stanza of <code>limits.conf</code>. Lexicographical means numbers sort on their first digit, so 10 sorts before 9.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="time-functions-the-per-family">Time functions, the per_* family<a class="anchor" href="#time-functions-the-per-family" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Signature</th>
+<th>What it returns</th>
+<th>Works with</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>per_day</td>
+<td><code>per_day(&lt;value&gt;)</code></td>
+<td>The values of the field or eval expression expressed per day.</td>
+<td>T only</td>
+<td></td>
+</tr>
+<tr>
+<td>per_hour</td>
+<td><code>per_hour(&lt;value&gt;)</code></td>
+<td>The same, per hour.</td>
+<td>T only</td>
+<td></td>
+</tr>
+<tr>
+<td>per_minute</td>
+<td><code>per_minute(&lt;value&gt;)</code></td>
+<td>The same, per minute.</td>
+<td>T only</td>
+<td></td>
+</tr>
+<tr>
+<td>per_second</td>
+<td><code>per_second(&lt;value&gt;)</code></td>
+<td>The same, per second.</td>
+<td>T only</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>All four are aggregators that rescale a sum to a rate. They do not set the time span. If the span works out to 30 minutes, <code>per_hour()</code> returns <code>sum()*2</code>. To get hourly buckets you still write <code>span=1h</code>. That is trap T-01-16.</p>
+<h2 id="the-pairs-the-exam-confuses">The pairs the exam confuses<a class="anchor" href="#the-pairs-the-exam-confuses" aria-label="Link to this section">#</a></h2>
+<h3 id="first-and-last-against-earliest-and-latest">first and last against earliest and latest<a class="anchor" href="#first-and-last-against-earliest-and-latest" aria-label="Link to this section">#</a></h3>
+<p><code>first()</code> and <code>last()</code> are defined by processing order. <code>earliest()</code> and <code>latest()</code> are defined by the timestamp. Search results arrive in reverse chronological order by default, so <code>first()</code> usually returns the newest value and <code>last()</code> the oldest, which is the opposite of what the English words suggest. Anything upstream that reorders results (<code>sort</code>, <code>append</code>, <code>union</code>, a subsearch) breaks even that weak guarantee, while <code>earliest()</code> and <code>latest()</code> keep working.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">earliest</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">entry_action</span><span class="t-op">,</span> <span class="t-func">latest</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">exit_action</span><span class="t-op">,</span> <span class="t-func">first</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">first_seen</span><span class="t-op">,</span> <span class="t-func">last</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">last_seen</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<p>For a session whose events are <code>view</code> at 10:01, <code>addtocart</code> at 10:03 and <code>purchase</code> at 10:07, the row reads:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>JSESSIONID</th>
+<th>entry_action</th>
+<th>exit_action</th>
+<th>first_seen</th>
+<th>last_seen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SD1</td>
+<td>view</td>
+<td>purchase</td>
+<td>purchase</td>
+<td>view</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>entry_action</code> and <code>first_seen</code> disagree, and that disagreement is the whole question. Rule: if the word &quot;chronological&quot;, &quot;first event&quot; or &quot;last event&quot; appears in the stem, the answer is <code>earliest()</code> or <code>latest()</code>. This is trap T-03-12.</p>
+<h3 id="dc-against-estdc-against-count">dc against estdc against count<a class="anchor" href="#dc-against-estdc-against-count" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Counts</th>
+<th>Cost</th>
+<th>When it lies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>count(field)</code></td>
+<td>Events in which the field exists</td>
+<td>Cheapest</td>
+<td>Never, but it answers a different question: it is not a cardinality</td>
+</tr>
+<tr>
+<td><code>dc(field)</code></td>
+<td>Distinct values, exactly</td>
+<td>Expensive on high cardinality</td>
+<td>Never</td>
+</tr>
+<tr>
+<td><code>estdc(field)</code></td>
+<td>Distinct values, estimated</td>
+<td>Cheap on high cardinality</td>
+<td>Only above <code>approx_dc_threshold</code>, below which it returns the exact count anyway</td>
+</tr>
+</tbody>
+</table></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">events</span><span class="t-op">,</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">events_with_ip</span><span class="t-op">,</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">unique_ips</span><span class="t-op">,</span> <span class="t-func">estdc</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">approx_ips</span><span class="t-op">,</span> <span class="t-func">estdc_error</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">error_ratio</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>events</th>
+<th>events_with_ip</th>
+<th>unique_ips</th>
+<th>approx_ips</th>
+<th>error_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>41,568</td>
+<td>41,568</td>
+<td>8,742</td>
+<td>8,701</td>
+<td>0.004690</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>events</code> and <code>events_with_ip</code> match only because every event carries a <code>clientip</code>. Remove that assumption and they diverge immediately. <code>error_ratio</code> is a ratio, not a percentage, so 0.00469 is roughly half a percent.</p>
+<h3 id="values-against-list">values against list<a class="anchor" href="#values-against-list" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th><code>values()</code></th>
+<th><code>list()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duplicates</td>
+<td>Removed</td>
+<td>Kept</td>
+</tr>
+<tr>
+<td>Order</td>
+<td>Lexicographical</td>
+<td>Order of the events</td>
+</tr>
+<tr>
+<td>Documented limit</td>
+<td>None by default; <code>maxvalues</code> in the <code>[stats | sistats]</code> stanza of <code>limits.conf</code></td>
+<td>Only the first 100 values are returned</td>
+</tr>
+<tr>
+<td><code>tstats</code></td>
+<td>Supported</td>
+<td>Not in the usage line</td>
+</tr>
+</tbody>
+</table></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">actions_set</span><span class="t-op">,</span> <span class="t-func">list</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">actions_seq</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<p>For a session whose events are <code>view</code>, <code>addtocart</code>, <code>view</code>, <code>purchase</code> in that order:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>JSESSIONID</th>
+<th>actions_set</th>
+<th>actions_seq</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SD1</td>
+<td>addtocart, purchase, view</td>
+<td>view, addtocart, view, purchase</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>values()</code> sorted alphabetically and deduplicated, which destroys the sequence. <code>list()</code> preserved the sequence, and would silently stop at 100 values on a longer session. The 100 is the examinable number, and it is the answer to any question phrased as &quot;why is my result incomplete&quot;. This is trap T-03-13. The <code>transaction</code> parallel is <code>mvlist</code>, which defaults to <code>false</code> and gives the <code>values()</code> style rendering; <code>mvlist=true</code> gives the <code>list()</code> style (trap T-03-07).</p>
+<h3 id="range-as-the-stats-equivalent-of-duration">range as the stats equivalent of duration<a class="anchor" href="#range-as-the-stats-equivalent-of-duration" aria-label="Link to this section">#</a></h3>
+<p>A <code>transaction</code> result carries <code>duration</code>, the difference in seconds between the timestamps of the first and last member events. The <code>stats</code> expression that produces the same number is <code>range(_time)</code>, because <code>_time</code> is epoch seconds and <code>range()</code> is max minus min.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">duration</span>
+
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">range</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">duration</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">eventcount</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">duration</span></code></pre></div>
+<p>Both return the distribution of session lengths. The second is a transforming command that distributes across indexers and never holds an open-transaction pool in search head memory. The equivalence is only valid when the grouping field is genuinely unique per group; a recycled <code>JSESSIONID</code> merges unrelated sessions and inflates <code>duration</code> without warning. Full equivalence table in <code>topics/03-correlating-events</code>.</p>
+<h3 id="stdev-against-stdevp-var-against-varp">stdev against stdevp, var against varp<a class="anchor" href="#stdev-against-stdevp-var-against-varp" aria-label="Link to this section">#</a></h3>
+<p>The <code>p</code> suffix means population. Without it the function computes the sample statistic, dividing by n-1 rather than n. On log data the events in your time range are a sample of all the events the system will ever produce, so <code>stdev()</code> and <code>var()</code> are the defaults you want. <code>stdevp()</code> and <code>varp()</code> are correct only when the result set is the complete population, for example the 12 monthly totals of a finished year. On large result sets the two agree to several decimal places, which is exactly why an exam question uses a tiny dataset where they visibly differ.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">stdev</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">sample_sd</span><span class="t-op">,</span> <span class="t-func">stdevp</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">population_sd</span><span class="t-op">,</span> <span class="t-func">var</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">sample_var</span><span class="t-op">,</span> <span class="t-func">varp</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">population_var</span> <span class="t-kw">BY</span> <span class="t-field">category</span></code></pre></div>
+<p><code>sample_sd</code> is always the larger of the two, because the denominator is smaller.</p>
+<h2 id="by-against-over-against-split-by">by against over against split-by<a class="anchor" href="#by-against-over-against-split-by" aria-label="Link to this section">#</a></h2>
+<p>This is the single highest-yield idea in the file. Take ten events with three fields, two hosts, three status values and two hourly time bins.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>host</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:05</td>
+<td>web1</td>
+<td>200</td>
+</tr>
+<tr>
+<td>10:12</td>
+<td>web1</td>
+<td>200</td>
+</tr>
+<tr>
+<td>10:20</td>
+<td>web1</td>
+<td>404</td>
+</tr>
+<tr>
+<td>10:31</td>
+<td>web2</td>
+<td>200</td>
+</tr>
+<tr>
+<td>10:44</td>
+<td>web2</td>
+<td>503</td>
+</tr>
+<tr>
+<td>11:02</td>
+<td>web1</td>
+<td>200</td>
+</tr>
+<tr>
+<td>11:15</td>
+<td>web1</td>
+<td>503</td>
+</tr>
+<tr>
+<td>11:20</td>
+<td>web2</td>
+<td>200</td>
+</tr>
+<tr>
+<td>11:33</td>
+<td>web2</td>
+<td>404</td>
+</tr>
+<tr>
+<td>11:41</td>
+<td>web2</td>
+<td>404</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>stats count BY host, status</code> gives one row per observed combination, and both group-by field names survive as columns:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>host</th>
+<th>status</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web1</td>
+<td>200</td>
+<td>3</td>
+</tr>
+<tr>
+<td>web1</td>
+<td>404</td>
+<td>1</td>
+</tr>
+<tr>
+<td>web1</td>
+<td>503</td>
+<td>1</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>200</td>
+<td>2</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>404</td>
+<td>2</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>503</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>chart count OVER host BY status</code> gives the matrix of the same six numbers. The field name <code>status</code> disappears; its values became column headers:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>host</th>
+<th>200</th>
+<th>404</th>
+<th>503</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web1</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>timechart span=1h count BY status</code> gives the same matrix with the row axis replaced by time. The first column is always <code>_time</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>200</th>
+<th>404</th>
+<th>503</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:00</td>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>11:00</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Change the split field and the columns change but the geometry does not. <code>timechart span=1h count BY host</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>web1</th>
+<th>web2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10:00</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>11:00</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 799 313" width="799" height="313" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M399.75 75.0 C399.75 95.0 108.95 95.0 108.95 115.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M399.75 75.0 C399.75 95.0 374.725 95.0 374.725 115.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M399.75 75.0 C399.75 95.0 665.525 95.0 665.525 115.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M108.95 158.0 C108.95 182.25 159.00000000000003 182.25 159.00000000000003 206.5"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M374.725 158.0 C374.725 178.0 406.90000000000003 178.0 406.90000000000003 198.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M665.525 158.0 C665.525 178.0 647.6500000000001 178.0 647.6500000000001 198.0"/><rect class="dg-node" x="264.2" y="2.0" width="271.1" height="73" rx="5"/><text class="dg-text" x="399.75" y="22.5" text-anchor="middle" dominant-baseline="middle">10 events</text><text class="dg-text" x="399.75" y="39.5" text-anchor="middle" dominant-baseline="middle">fields _time, host, status</text><text class="dg-text" x="399.75" y="56.5" text-anchor="middle" dominant-baseline="middle">2 hosts, 3 statuses, 2 hourly bins</text><rect class="dg-node" x="2.0" y="119.0" width="213.9" height="39" rx="5"/><text class="dg-text" x="108.95" y="139.5" text-anchor="middle" dominant-baseline="middle">stats count BY host status</text><rect class="dg-node" x="249.9" y="119.0" width="249.65" height="39" rx="5"/><text class="dg-text" x="374.725" y="139.5" text-anchor="middle" dominant-baseline="middle">chart count OVER host BY status</text><rect class="dg-node" x="533.55" y="119.0" width="263.95000000000005" height="39" rx="5"/><text class="dg-text" x="665.525" y="139.5" text-anchor="middle" dominant-baseline="middle">timechart span=1h count BY status</text><rect class="dg-node" x="48.47500000000002" y="210.5" width="221.05" height="90" rx="5"/><text class="dg-text" x="159.00000000000003" y="231.0" text-anchor="middle" dominant-baseline="middle">6 rows, 3 columns</text><text class="dg-text" x="159.00000000000003" y="248.0" text-anchor="middle" dominant-baseline="middle">long form</text><text class="dg-text" x="159.00000000000003" y="265.0" text-anchor="middle" dominant-baseline="middle">one row per observed pair</text><text class="dg-text" x="159.00000000000003" y="282.0" text-anchor="middle" dominant-baseline="middle">both BY field names survive</text><rect class="dg-node" x="303.52500000000003" y="202.0" width="206.75" height="107" rx="5"/><text class="dg-text" x="406.90000000000003" y="222.5" text-anchor="middle" dominant-baseline="middle">2 rows, 4 columns</text><text class="dg-text" x="406.90000000000003" y="239.5" text-anchor="middle" dominant-baseline="middle">matrix form</text><text class="dg-text" x="406.90000000000003" y="256.5" text-anchor="middle" dominant-baseline="middle">rows are host values</text><text class="dg-text" x="406.90000000000003" y="273.5" text-anchor="middle" dominant-baseline="middle">columns are status values</text><text class="dg-text" x="406.90000000000003" y="290.5" text-anchor="middle" dominant-baseline="middle">the name &#x27;status&#x27; is gone</text><rect class="dg-node" x="544.2750000000001" y="202.0" width="206.75" height="107" rx="5"/><text class="dg-text" x="647.6500000000001" y="222.5" text-anchor="middle" dominant-baseline="middle">2 rows, 4 columns</text><text class="dg-text" x="647.6500000000001" y="239.5" text-anchor="middle" dominant-baseline="middle">time series form</text><text class="dg-text" x="647.6500000000001" y="256.5" text-anchor="middle" dominant-baseline="middle">rows are time bins</text><text class="dg-text" x="647.6500000000001" y="273.5" text-anchor="middle" dominant-baseline="middle">first column always _time</text><text class="dg-text" x="647.6500000000001" y="290.5" text-anchor="middle" dominant-baseline="middle">columns are status values</text></svg></figure>
+<p>Shape arithmetic, assuming defaults:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Rows</th>
+<th>Columns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stats &lt;agg&gt; BY A B</code></td>
+<td>One per observed combination of A and B, at most the product of their cardinalities</td>
+<td>One per BY field plus one per aggregation term</td>
+</tr>
+<tr>
+<td><code>chart &lt;agg&gt; OVER A BY B</code></td>
+<td>One per distinct value of A</td>
+<td>One for A, plus up to <code>limit</code> distinct values of B, plus OTHER, plus NULL</td>
+</tr>
+<tr>
+<td><code>timechart &lt;agg&gt; BY B</code></td>
+<td>One per time bin, set by <code>span</code> or <code>bins</code></td>
+<td>One for <code>_time</code>, plus up to <code>limit</code> distinct values of B, plus OTHER, plus NULL</td>
+</tr>
+</tbody>
+</table></div>
+<p>Four rules that fall out of this and answer most shape questions:</p>
+<p><code>chart count BY A B</code> and <code>chart count OVER A BY B</code> are identical. The field after <code>OVER</code>, or the first field after <code>BY</code>, is the row-split; the second is the column-split. Swapping them transposes the table (trap T-01-03).</p>
+<p><code>stats</code> takes any number of BY fields. <code>chart</code> takes exactly two slots, one row-split and one column-split. <code>timechart</code> takes one split-by field only, because <code>_time</code> has already claimed the row-split, so <code>timechart count BY host, status</code> is not valid (trap T-01-02).</p>
+<p>Only <code>chart</code> and <code>timechart</code> collapse a field's values into column headers, so only they can produce OTHER and NULL columns. <code>stats</code> never does; it just returns more rows.</p>
+<p>Convert between the shapes without re-running the search: <code>... | stats n BY x y | xyseries x y n</code> reproduces <code>... | chart n BY x y</code>, and <code>untable</code> runs it in the other direction. For the <code>timechart</code> equivalent, <code>x</code> is <code>_time</code>. Neither converter is transforming on its own (trap T-01-18).</p>
+<h2 id="aggregation-limits">Aggregation limits<a class="anchor" href="#aggregation-limits" aria-label="Link to this section">#</a></h2>
+<p>All defaults below are from the 10.4 <code>chart</code> and <code>timechart</code> reference pages, reproduced from <code>topics/01-transforming-commands</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit</code></td>
+<td><code>top 10</code> on <code>chart</code>, <code>top10</code> on <code>timechart</code></td>
+<td>Caps the number of data series, meaning columns, not rows. Valid on <code>chart</code> only when a column-split is specified.</td>
+</tr>
+<tr>
+<td><code>limit=0</code></td>
+<td>not the default</td>
+<td>Returns all results on <code>chart</code>; uses all distinct values with no series filtering on <code>timechart</code>. It never means zero (trap T-01-17).</td>
+</tr>
+<tr>
+<td><code>useother</code></td>
+<td><code>true</code></td>
+<td>Adds one pooled series for the values the limit or where-clause excluded. Note the contrast: <code>useother</code> defaults to <code>false</code> on <code>top</code> (trap T-01-07).</td>
+</tr>
+<tr>
+<td><code>otherstr</code></td>
+<td><code>OTHER</code></td>
+<td>Label for that pooled series. Applies only when <code>useother=true</code>.</td>
+</tr>
+<tr>
+<td><code>usenull</code></td>
+<td><code>true</code></td>
+<td>Adds one series for events that do not contain the split-by field.</td>
+</tr>
+<tr>
+<td><code>nullstr</code></td>
+<td><code>NULL</code></td>
+<td>Label for that series. Applies only when <code>usenull=true</code>.</td>
+</tr>
+<tr>
+<td>split-by count</td>
+<td>one on <code>timechart</code></td>
+<td><code>_time</code> already occupies the row-split, so <code>timechart</code> accepts a single BY field.</td>
+</tr>
+<tr>
+<td><code>&lt;where-clause&gt;</code></td>
+<td>behaves like <code>where sum in top10</code></td>
+<td>An explicit where-clause silently disables both <code>limit</code> and <code>agg</code> (trap T-01-19).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Series scoring with <code>limit</code> is by the sum of each series when there is a single aggregation, and by the frequency of the split value when there is more than one aggregation, with ties broken lexicographically. That is why <code>timechart avg(bytes) max(bytes) BY host</code> needs <code>limit=0</code> if you want every host kept.</p>
+<p><code>useother</code> and <code>usenull</code> are independent switches with separate labels, and mixing them up is trap T-01-04. Counting the columns in the resulting table is the most common form the question takes: one row-split column, plus up to <code>limit</code> value columns, plus one for OTHER if anything was excluded, plus one for NULL if any event lacked the field.</p>
+<h2 id="conditional-aggregation">Conditional aggregation<a class="anchor" href="#conditional-aggregation" aria-label="Link to this section">#</a></h2>
+<p>Any aggregate function can take an <code>eval</code> expression instead of a field name, which turns the aggregation into a filter that does not need a separate <code>search</code> clause. The documented form for counting is:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-opt">status</span><span class="t-op">=</span><span class="t-str">&quot;404&quot;</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">count_status</span> <span class="t-kw">BY</span> <span class="t-field">sourcetype</span></code></pre></div>
+<p>That counts, per sourcetype, only the events where the expression is true, while leaving every other event in the result set available to the other aggregations in the same <code>stats</code>. That is the point: one pass, several mutually exclusive counts.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">total</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-field">status</span><span class="t-op">&gt;=</span><span class="t-num">500</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">server_errors</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-field">status</span><span class="t-op">&gt;=</span><span class="t-num">400</span> <span class="t-kw">AND</span> <span class="t-field">status</span><span class="t-op">&lt;</span><span class="t-num">500</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">client_errors</span><span class="t-op">,</span>
+        <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-func">if</span><span class="t-op">(</span><span class="t-opt">action</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span><span class="t-op">,</span> <span class="t-field">bytes</span><span class="t-op">,</span> <span class="t-num">0</span><span class="t-op">)</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span><span class="t-op">,</span>
+        <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">/</span><span class="t-num">1024</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">kb_total</span>
+        <span class="t-kw">BY</span> <span class="t-field">host</span></code></pre></div>
+<div class="tw wide"><table>
+<thead>
+<tr>
+<th>host</th>
+<th>total</th>
+<th>server_errors</th>
+<th>client_errors</th>
+<th>revenue</th>
+<th>kb_total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web1</td>
+<td>20,183</td>
+<td>214</td>
+<td>1,902</td>
+<td>41,255.00</td>
+<td>92,410.7</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>21,385</td>
+<td>198</td>
+<td>2,041</td>
+<td>39,870.00</td>
+<td>96,332.1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Three things worth knowing. <code>count(eval(...))</code> counts events where the expression evaluates true, not events where it returns a value, so <code>count(eval(status))</code> is not a way to count events with a <code>status</code> field; use <code>count(status)</code> for that. <code>sum(eval(...))</code> evaluates the expression per event and then sums, which is how you build a conditional total without a preceding <code>eval</code> line. And <code>timechart</code> requires the split-by clause when the argument is a bare eval expression rather than a function wrapping one.</p>
+<p>The same construct works in <code>chart</code> and <code>timechart</code>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">ok</span><span class="t-op">,</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">eval</span><span class="t-op">(</span><span class="t-field">status</span><span class="t-op">!=</span><span class="t-num">200</span><span class="t-op">)</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">not_ok</span></code></pre></div>
+<p>Two named series with no split-by field at all, which sidesteps <code>limit</code>, <code>useother</code> and <code>usenull</code> entirely. That is often the cleaner answer when a question asks how to chart exactly two categories.</p>
+<h2 id="eventstats-and-streamstats">eventstats and streamstats<a class="anchor" href="#eventstats-and-streamstats" aria-label="Link to this section">#</a></h2>
+<p>Neither is named in the blueprint. Both appear in distractor lists, and both are the right answer to real problems that <code>stats</code> cannot solve, because they add aggregates to events instead of replacing them.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th><code>eventstats</code></th>
+<th><code>streamstats</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Syntax</td>
+<td><code>eventstats [allnum=&lt;bool&gt;] &lt;stats-agg-term&gt;... [BY &lt;field-list&gt;]</code></td>
+<td><code>streamstats [reset_on_change=&lt;bool&gt;] [reset_before=&quot;(&lt;eval&gt;)&quot;] [reset_after=&quot;(&lt;eval&gt;)&quot;] [current=&lt;bool&gt;] [window=&lt;int&gt;] [time_window=&lt;span&gt;] [global=&lt;bool&gt;] [allnum=&lt;bool&gt;] &lt;stats-agg-term&gt;... [BY &lt;field-list&gt;]</code></td>
+</tr>
+<tr>
+<td>Command type</td>
+<td>Dataset processing</td>
+<td>Centralized streaming</td>
+</tr>
+<tr>
+<td>What it does</td>
+<td>Computes the aggregate over the whole result set and writes it into a new field on every event</td>
+<td>Computes cumulative statistics for each event at the time that event is seen</td>
+</tr>
+<tr>
+<td>Key defaults</td>
+<td><code>allnum=false</code></td>
+<td><code>current=true</code>, <code>window=0</code> (all previous events), <code>global=true</code>, <code>allnum=false</code>, <code>reset_on_change=false</code></td>
+</tr>
+<tr>
+<td>Functions accepted</td>
+<td>Aggregate family, <code>earliest</code>, <code>first</code>, <code>last</code>, <code>latest</code>, <code>list</code>, <code>values</code></td>
+<td>Same families</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Governed by <code>max_mem_usage_mb</code> in <code>limits.conf</code></td>
+<td><code>time_window</code> is bounded by <code>max_stream_window</code> in <code>limits.conf</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The canonical uses are worth recognising on sight. <code>eventstats</code> for a comparison against a group aggregate, because the per-event detail has to survive:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span>
+<span class="t-pipe">|</span> <span class="t-cmd">eventstats</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_bytes</span><span class="t-op">,</span> <span class="t-func">stdev</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">sd_bytes</span> <span class="t-kw">BY</span> <span class="t-field">host</span>
+<span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">bytes</span> <span class="t-op">&gt;</span> <span class="t-field">avg_bytes</span> <span class="t-op">+</span> <span class="t-op">(</span><span class="t-num">3</span> <span class="t-op">*</span> <span class="t-field">sd_bytes</span><span class="t-op">)</span></code></pre></div>
+<p><code>streamstats</code> for a running total, or for numbering rows so that <code>xyseries</code> and <code>untable</code> do not drop duplicates:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">sales</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-field">_time</span>
+<span class="t-pipe">|</span> <span class="t-cmd">streamstats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">running_total</span> <span class="t-kw">BY</span> <span class="t-field">category</span></code></pre></div>
+<p>Both are dataset-shaped commands that keep events, so neither populates the Statistics tab on its own. That is the distractor: a question asking which command produces a table for a visualization never has <code>eventstats</code> as the answer.</p>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/statistical-and-charting-functions" target="_blank" rel="noopener">Statistical and charting functions (Search Reference 10.4)</a> - the four function categories, the sparkline restriction to <code>chart</code> and <code>stats</code>, and the related-commands note. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/aggregate-functions" target="_blank" rel="noopener">Aggregate functions</a> - read the usage line under every function, not just the description. That line is where the command support differences live. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/event-order-functions" target="_blank" rel="noopener">Event order functions</a> - two functions, and the sentence that processing order is not necessarily chronological. 3 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/time-functions" target="_blank" rel="noopener">Time functions</a> - <code>earliest</code>, <code>latest</code>, the <code>_time</code> variants, <code>rate</code> and the <code>per_*</code> family. Note that <code>earliest</code> and <code>latest</code> live here and not on the event order page. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/multivalue-stats-and-chart-functions" target="_blank" rel="noopener">Multivalue stats and chart functions</a> - <code>values()</code> against <code>list()</code> and the 100-value cap. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/stats" target="_blank" rel="noopener">stats</a> - the BY-clause behaviour and the <code>count(eval(...))</code> examples. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eventstats" target="_blank" rel="noopener">eventstats</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/streamstats" target="_blank" rel="noopener">streamstats</a> - the option defaults and the supported-function lists. 10 minutes for both.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="eval-functions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Eval functions</span></a><a href="time-modifiers.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Time modifiers</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#how-to-read-the-quotworks-withquot-column"><span>How to read the &amp;quot;Works with&amp;quot; column</span></a></li>
+<li><a class="lvl2" href="#aggregate-functions"><span>Aggregate functions</span><span class="min">4m</span></a></li>
+<li><a class="lvl2" href="#event-order-and-time-order-functions"><span>Event order and time order functions</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#multivalue-functions"><span>Multivalue functions</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#time-functions-the-per-family"><span>Time functions, the per_* family</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#the-pairs-the-exam-confuses"><span>The pairs the exam confuses</span><span class="min">4m</span></a></li>
+<li><a class="lvl3" href="#first-and-last-against-earliest-and-latest"><span>first and last against earliest and latest</span></a></li>
+<li><a class="lvl3" href="#dc-against-estdc-against-count"><span>dc against estdc against count</span></a></li>
+<li><a class="lvl3" href="#values-against-list"><span>values against list</span></a></li>
+<li><a class="lvl3" href="#range-as-the-stats-equivalent-of-duration"><span>range as the stats equivalent of duration</span></a></li>
+<li><a class="lvl3" href="#stdev-against-stdevp-var-against-varp"><span>stdev against stdevp, var against varp</span></a></li>
+<li><a class="lvl2" href="#by-against-over-against-split-by"><span>by against over against split-by</span><span class="min">4m</span></a></li>
+<li><a class="lvl2" href="#aggregation-limits"><span>Aggregation limits</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#conditional-aggregation"><span>Conditional aggregation</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#eventstats-and-streamstats"><span>eventstats and streamstats</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>23 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

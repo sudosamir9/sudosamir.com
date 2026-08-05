@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.0 Creating Field Aliases and Calculated Fields | SPLK-1002</title>
+<meta name="description" content="Aliases and calculated fields, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="topics/05-aliases-and-calculated-fields" data-section="5">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="05-aliases-and-calculated-fields.html" aria-current="page"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Aliases and calculated fields</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="05-aliases-and-calculated-fields.html">Study</a><a class="" href="../cram/05-aliases-and-calculated-fields.html">Cram</a></div>
+      </div>
+<h1 id="5.0-creating-field-aliases-and-calculated-fields-10">5.0 Creating Field Aliases and Calculated Fields</h1>
+<p>Two knowledge objects that add fields to events before the first pipe, and one ordering rule (extractions, aliases, calculated fields, lookups, event types, tags) that the exam mines for roughly half of this section's questions and reuses in sections 6.0, 9.0, and 10.0.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<ul>
+<li>Section: 5.0 Creating Field Aliases and Calculated Fields</li>
+<li>Weight: 10%</li>
+<li>5.1 Describe, create, and use field aliases</li>
+<li>5.2 Describe, create, and use calculated fields</li>
+</ul>
+<p>Exam context: 65 questions, 60 minutes total (which includes 3 minutes to review the exam agreement), entry-level. At 10%, expect roughly 6 or 7 scored items from this section.</p>
+<p>Take no answer key from secondary material without checking it against help.splunk.com.</p>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>A field alias is a second name for a field that already exists on the event. The Splexicon definition is precise about the mechanic: an alias does not replace a field in an event or remove it from an event, it is added to the event alongside the field. After aliasing <code>clientip</code> to <code>src_ip</code>, an event carries both <code>clientip</code> and <code>src_ip</code>, both with the same value, and either name can be used in a search, in a lookup match field, or in an eval expression downstream.</p>
+<p>A calculated field is an eval expression saved as a knowledge object and bound to a host, source, or source type. It is the knowledge object that represents the output of an eval expression, and nothing else fills that role: there is no &quot;eval field&quot; object and no &quot;calculated lookup&quot; object in Splunk. The documentation defines calculated fields as fields added to events at search time that perform calculations with the values of fields already present in those events, and frames them as a shortcut for repetitive, long, or complex transformations using the <code>eval</code> command. Once defined, the field is present on every matching event in every search, so it can be filtered on in the base search the same way an extracted field can.</p>
+<p>Do not harden that opening definition into a rule. It speaks of calculating with the values of two or more fields, but the same manual's example <code>EVAL-x = x * 2</code> uses one, and the props.conf topic states that the eval statement is as flexible as it is for the <code>eval</code> search command. One field is legal, a field alias in place of an extracted field is legal, and an expression naming no field at all, such as a constant or <code>now()</code>, is legal. The constraint is directional rather than arithmetic: whatever the expression names has to already exist by step 6.</p>
+<p>Neither object stores anything. Both are pure search-time schema. The indexed <code>_raw</code> is untouched, and turning either object off makes the field disappear from future searches with no reindexing involved.</p>
+<p>Where they sit is the whole game. Splunk applies a fixed nine-step sequence of search-time operations, and each step may reference fields produced by earlier steps but never by later ones.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 267 1062" width="267" height="1062" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 58.0 C133.97500000000002 78.0 133.97500000000002 78.0 133.97500000000002 98.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 158.0 C133.97500000000002 178.0 133.97500000000002 178.0 133.97500000000002 198.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 258.0 C133.97500000000002 278.0 133.97500000000002 278.0 133.97500000000002 298.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 358.0 C133.97500000000002 378.0 133.97500000000002 378.0 133.97500000000002 398.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 458.0 C133.97500000000002 478.0 133.97500000000002 478.0 133.97500000000002 498.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 558.0 C133.97500000000002 578.0 133.97500000000002 578.0 133.97500000000002 598.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 658.0 C133.97500000000002 678.0 133.97500000000002 678.0 133.97500000000002 698.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 758.0 C133.97500000000002 778.0 133.97500000000002 778.0 133.97500000000002 798.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 858.0 C133.97500000000002 878.0 133.97500000000002 878.0 133.97500000000002 898.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M133.97500000000002 958.0 C133.97500000000002 978.0 133.97500000000002 978.0 133.97500000000002 998.0"/><rect class="dg-node" x="9.150000000000034" y="2.0" width="249.65" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="22.5" text-anchor="middle" dominant-baseline="middle">Index-time operations</text><text class="dg-text" x="133.97500000000002" y="39.5" text-anchor="middle" dominant-baseline="middle">(default fields, indexed fields</text><rect class="dg-node" x="55.625000000000014" y="102.0" width="156.70000000000002" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="122.5" text-anchor="middle" dominant-baseline="middle">1. Field filters</text><text class="dg-text" x="133.97500000000002" y="139.5" text-anchor="middle" dominant-baseline="middle">field_filters.conf</text><rect class="dg-node" x="27.02500000000002" y="202.0" width="213.9" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="222.5" text-anchor="middle" dominant-baseline="middle">2. Inline field extraction</text><text class="dg-text" x="133.97500000000002" y="239.5" text-anchor="middle" dominant-baseline="middle">EXTRACT-class</text><rect class="dg-node" x="9.150000000000034" y="302.0" width="249.65" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="322.5" text-anchor="middle" dominant-baseline="middle">3. Extraction using a transform</text><text class="dg-text" x="133.97500000000002" y="339.5" text-anchor="middle" dominant-baseline="middle">REPORT-class</text><rect class="dg-node" x="2.0" y="402.0" width="263.95000000000005" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="422.5" text-anchor="middle" dominant-baseline="middle">4. Automatic key-value extraction</text><text class="dg-text" x="133.97500000000002" y="439.5" text-anchor="middle" dominant-baseline="middle">KV_MODE</text><rect class="dg-node" x="59.20000000000002" y="502.0" width="149.55" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="522.5" text-anchor="middle" dominant-baseline="middle">5. Field aliasing</text><text class="dg-text" x="133.97500000000002" y="539.5" text-anchor="middle" dominant-baseline="middle">FIELDALIAS-class</text><rect class="dg-node" x="48.47500000000002" y="602.0" width="171.0" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="622.5" text-anchor="middle" dominant-baseline="middle">6. Calculated fields</text><text class="dg-text" x="133.97500000000002" y="639.5" text-anchor="middle" dominant-baseline="middle">EVAL-fieldname</text><rect class="dg-node" x="77.07500000000002" y="702.0" width="113.80000000000001" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="722.5" text-anchor="middle" dominant-baseline="middle">7. Lookups</text><text class="dg-text" x="133.97500000000002" y="739.5" text-anchor="middle" dominant-baseline="middle">LOOKUP-class</text><rect class="dg-node" x="66.35000000000002" y="802.0" width="135.25" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="822.5" text-anchor="middle" dominant-baseline="middle">8. Event types</text><text class="dg-text" x="133.97500000000002" y="839.5" text-anchor="middle" dominant-baseline="middle">eventtypes.conf</text><rect class="dg-node" x="87.80000000000001" y="902.0" width="92.35000000000001" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="922.5" text-anchor="middle" dominant-baseline="middle">9. Tags</text><text class="dg-text" x="133.97500000000002" y="939.5" text-anchor="middle" dominant-baseline="middle">tags.conf</text><rect class="dg-node" x="34.17500000000001" y="1002.0" width="199.60000000000002" height="56" rx="5"/><text class="dg-text" x="133.97500000000002" y="1022.5" text-anchor="middle" dominant-baseline="middle">First pipe of the SPL</text><text class="dg-text" x="133.97500000000002" y="1039.5" text-anchor="middle" dominant-baseline="middle">search commands run here</text></svg></figure>
+<p>Three consequences follow directly and all three are testable. You can alias any field extracted at index time or search time, because extraction is steps 2 through 4 and aliasing is step 5. You can use an alias inside a calculated field expression and inside a lookup match field, because both are downstream. You cannot alias a calculated field, a lookup output field, an event type, or a tag, because all of those are downstream of step 5. The other direction is the more commonly tested half: every object after step 5 can consume an alias, meaning calculated fields, lookups, event types, and tags, all four. Field extractions cannot, because they run at steps 2 through 4 and the alias does not exist yet. Within step 5, Splunk &quot;processes field aliases belonging to a specific host, source, or source type in lexicographical order&quot;, which is the only route by which one alias can consume another: the class of the alias being read has to sort before the class of the alias reading it.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<h3 id="field-alias-splunk-web">Field alias, Splunk Web<a class="anchor" href="#field-alias-splunk-web" aria-label="Link to this section">#</a></h3>
+<p>Navigation: Settings, then Fields, then Field aliases, then the New Field Alias button. The documented step text is <code>Select Settings &gt; Fields &gt; Field aliases</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destination app</td>
+<td>Any app the user can write to</td>
+<td>none, the docs mark the app selection as required</td>
+<td>Sets which app's <code>local/props.conf</code> receives the stanza, and therefore the object's app scope</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>Characters <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, <code>_</code> only</td>
+<td>none</td>
+<td>The <code>&lt;class&gt;</code> in <code>FIELDALIAS-&lt;class&gt;</code>. Purely a label, but it decides lexicographical ordering against other alias configs on the same host, source, or source type</td>
+</tr>
+<tr>
+<td>Apply to</td>
+<td><code>sourcetype</code>, <code>source</code>, <code>host</code></td>
+<td>see the note below this table</td>
+<td>Chooses which props.conf stanza type the alias is written into</td>
+</tr>
+<tr>
+<td>named</td>
+<td>Free text, wildcards permitted</td>
+<td>none</td>
+<td>The literal host, source, or source type value the stanza matches</td>
+</tr>
+<tr>
+<td>Field aliases (left column)</td>
+<td>An existing field name</td>
+<td>none</td>
+<td>The original field. The docs are explicit that the existing field goes on the left side</td>
+</tr>
+<tr>
+<td>Field aliases (right column)</td>
+<td>The new name</td>
+<td>none</td>
+<td>The alias. The alias goes on the right side</td>
+</tr>
+<tr>
+<td>Overwrite field values</td>
+<td>Checkbox</td>
+<td>Not selected. The docs state this literally: &quot;Overwrite field values is not selected by default&quot;</td>
+<td>Selected writes <code>AS</code>, cleared writes <code>ASNEW</code>. See the behaviour table under Result contract</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two caveats on this table. The on-screen labels Destination app, Apply to, and named, plus the New Field Alias button caption, are not enumerated in the 10.4 topic, which gives the same steps in prose: &quot;Select an app to use the alias&quot;, &quot;Enter a name for the alias. Currently supported characters for alias names are a-z, A-Z, 0-9, or _&quot;, &quot;Select the host, source, or sourcetype to apply to a default field&quot;, and &quot;Enter the name for the existing field and the new alias. The existing field should be on the left side, and the new alias should be on the right side&quot;. Take the captions from the product and the semantics from those sentences. The Apply to dropdown's pre-selected value is a product default rather than a documented one, on both forms, so it carries the single marker on the calculated field table below.</p>
+<h3 id="field-alias-props.conf">Field alias, props.conf<a class="anchor" href="#field-alias-props.conf" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[&lt;sourcetype&gt;]
+FIELDALIAS-&lt;class&gt; = (&lt;orig_field_name&gt; AS|ASNEW &lt;new_field_name&gt;)+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FIELDALIAS-&lt;class&gt;</code></td>
+<td>Any class string</td>
+<td>No default</td>
+<td>Whole setting is absent unless you write it. Class governs lexicographical ordering</td>
+</tr>
+<tr>
+<td><code>&lt;orig_field_name&gt;</code></td>
+<td>An extracted field</td>
+<td>none</td>
+<td>The source field. The spec states plainly that it is not removed by this configuration</td>
+</tr>
+<tr>
+<td><code>AS</code></td>
+<td>Literal keyword</td>
+<td>none</td>
+<td>If the destination already exists, its value is replaced with the original's. If the original has no value or does not exist, the destination is removed</td>
+</tr>
+<tr>
+<td><code>ASNEW</code></td>
+<td>Literal keyword, added in 7.2.4</td>
+<td>none</td>
+<td>If the destination already exists, it is left alone. If the original has no value or does not exist, the destination is kept</td>
+</tr>
+<tr>
+<td><code>&lt;new_field_name&gt;</code></td>
+<td>The alias</td>
+<td>none</td>
+<td>Added alongside the original</td>
+</tr>
+</tbody>
+</table></div>
+<p>Multiple pairs are legal in one setting, separated by whitespace or continued with a trailing backslash:</p>
+<pre class="plain lang-ini"><code>[access_combined]
+FIELDALIAS-vendor = vendor_identifier AS vendor_id \
+                    vendor_identifier AS vendor_name
+FIELDALIAS-foo = user AS myuser id AS myid</code></pre>
+<p>The reverse is not legal. Mapping two different original fields onto one alias name is documented as an invalid configuration in which only one of the aliases takes effect:</p>
+<pre class="plain lang-ini"><code>FIELDALIAS-foo = userID AS user loginID AS user</code></pre>
+<p>The documented fix is a calculated field with <code>coalesce</code>, which also makes the precedence of the inputs explicit: <code>EVAL-ip = coalesce(clientip,ipaddress)</code>.</p>
+<h3 id="calculated-field-splunk-web">Calculated field, Splunk Web<a class="anchor" href="#calculated-field-splunk-web" aria-label="Link to this section">#</a></h3>
+<p>Navigation: Settings, then Fields, then the Calculated Fields row, then Add new. The docs give both forms of the path, <code>Settings &gt; Fields</code> followed by &quot;On the row for Calculated Fields, click Add new&quot;, and <code>Settings &gt; Fields &gt; Calculated fields</code>.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destination app</td>
+<td>Any writable app</td>
+<td>none, you must select one</td>
+<td>App scope of the resulting <code>EVAL-</code> stanza</td>
+</tr>
+<tr>
+<td>Apply to</td>
+<td><code>sourcetype</code>, <code>source</code>, <code>host</code></td>
+<td>The docs state no default and treat the choice as required on both forms; <code>sourcetype</code> is pre-selected in the product [verify]</td>
+<td>Stanza type. A wildcard is accepted here to apply the field to all hosts, sources, or source types</td>
+</tr>
+<tr>
+<td>named</td>
+<td>Free text, wildcards permitted</td>
+<td>none</td>
+<td>The stanza value</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>A field name, case sensitive</td>
+<td>none</td>
+<td>The <code>&lt;fieldname&gt;</code> in <code>EVAL-&lt;fieldname&gt;</code>. This is the field name, so it is not written inside the expression</td>
+</tr>
+<tr>
+<td>Eval expression</td>
+<td>Any valid eval expression</td>
+<td>none</td>
+<td>The right-hand side only. No leading <code>eval</code> keyword, no <code>fieldname =</code> assignment</td>
+</tr>
+</tbody>
+</table></div>
+<p>The two omissions in the last row are the single most common data-entry error and a reliable distractor. In a search you write <code>| eval kb = round(bytes/1024, 2)</code>. In the form, Name is <code>kb</code> and Eval expression is <code>round(bytes/1024, 2)</code>. Nothing else.</p>
+<h3 id="calculated-field-props.conf">Calculated field, props.conf<a class="anchor" href="#calculated-field-props.conf" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+EVAL-kb = round(bytes/1024, 2)</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EVAL-</code> prefix</td>
+<td>Literal, hyphen required</td>
+<td>No default</td>
+<td>The docs state the key must start with <code>EVAL-</code> including the hyphen, and that <code>EVAL</code> itself is not case-sensitive, so <code>eVaL-kb</code> is accepted</td>
+</tr>
+<tr>
+<td><code>&lt;fieldname&gt;</code></td>
+<td>Field name</td>
+<td>none</td>
+<td>Case sensitive, consistent with all other field names in Splunk</td>
+</tr>
+<tr>
+<td><code>&lt;eval statement&gt;</code></td>
+<td>Any eval expression</td>
+<td>none</td>
+<td>Documented as being as flexible as it is for the <code>eval</code> search command, and able to evaluate to any value type including multivalue, boolean, or null</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="scope-and-how-many-objects-you-need">Scope, and how many objects you need<a class="anchor" href="#scope-and-how-many-objects-you-need" aria-label="Link to this section">#</a></h3>
+<p>The docs use the same sentence for both objects: each configuration is specific to events belonging to a particular host, source, or source type. One definition, one selector. A field appearing in two source types that needs the same alias in both therefore needs two alias definitions, one per source type, and the same arithmetic applies to calculated fields. The count does not depend on the original field carrying the same name in both places, and it does not depend on the two source types sharing an index, because an index is not a scope for either object.</p>
+<p>Wildcards rescue this less often than people assume. The props.conf spec documents its pattern matching syntax for the <code>[source::&lt;source&gt;]</code> and <code>[host::&lt;host&gt;]</code> stanza forms, while a bare <code>[&lt;sourcetype&gt;]</code> stanza names one literal source type.</p>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p>Both objects are applied per event, before the first pipe, and neither changes the number of events returned. There is no streaming versus transforming distinction here, because neither is a search command: both run during search-time schema construction, upstream of every SPL command in the pipeline.</p>
+<p>Field alias output shape, with <code>FIELDALIAS-cim = clientip AS src_ip</code> on <code>access_combined</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>clientip</th>
+<th>src_ip</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-19 10:04:11</td>
+<td>87.194.216.51</td>
+<td>87.194.216.51</td>
+<td>200</td>
+</tr>
+<tr>
+<td>2026-07-19 10:04:12</td>
+<td>182.236.164.11</td>
+<td>182.236.164.11</td>
+<td>404</td>
+</tr>
+</tbody>
+</table></div>
+<p>Both columns are present, both hold the same value, and both appear in the fields sidebar. <code>clientip=87.194.216.51</code> and <code>src_ip=87.194.216.51</code> return identical result sets. Neither name has to appear in the search string for both to be on the event.</p>
+<p>The two sidebar lists follow different rules. Interesting Fields lists fields that appear in at least 20% of the events, so a sparse field and its alias can both be missing from it. All Fields opens the Select Fields dialog, which lists every field found in the events with no frequency threshold. The 20% figure belongs to Interesting Fields only.</p>
+<p>An alias name is a field name, so it is case sensitive: <code>SRC_IP=87.194.216.51</code> finds nothing. Field names are case sensitive, field values are not.</p>
+<p>The Overwrite field values behaviour, using the documentation's own example of a field alias where original field <code>src</code> has been given <code>dst</code> as an alias:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Overwrite field values</th>
+<th>Events contain both <code>src</code> and <code>dst</code></th>
+<th>Events contain only <code>dst</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not selected (default, writes <code>ASNEW</code>)</td>
+<td>The value of the field alias <code>dst</code> is unchanged</td>
+<td>The field alias <code>dst</code> remains as-is</td>
+</tr>
+<tr>
+<td>Selected (writes <code>AS</code>)</td>
+<td>The search head replaces the value of <code>dst</code> with the value of <code>src</code></td>
+<td>The search head removes <code>dst</code> from the event</td>
+</tr>
+</tbody>
+</table></div>
+<p>Calculated field output shape, with <code>EVAL-kb = round(bytes/1024, 2)</code>:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>bytes</th>
+<th>kb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-07-19 10:04:11</td>
+<td>3423</td>
+<td>3.34</td>
+</tr>
+<tr>
+<td>2026-07-19 10:04:12</td>
+<td>1015</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table></div>
+<p>If the calculated field name collides with an extracted field name, the calculated field wins. The docs are unambiguous: the calculated field overrides the extracted field even if the eval statement evaluates to null. The two documented escapes are <code>EVAL-field = coalesce(field, &lt;eval expression&gt;)</code> to keep the extracted value when the expression returns a value, and <code>EVAL-field = coalesce(&lt;eval expression&gt;, field)</code> to keep the extracted value only when the expression returns null.</p>
+<p>Because both objects run before the pipeline, both names are usable as base-search filters. <code>index=web sourcetype=access_combined src_ip=87.194.216.51 kb&gt;50</code> is a valid base search. The docs demonstrate exactly this for calculated fields with <code>source=eqs7day-M1.csv Description=Deep</code>.</p>
+<p>The ordered-pair consequences table. &quot;Silent&quot; means no error message, the field is simply absent or the expression yields null.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Configuration you are writing</th>
+<th>Field it references</th>
+<th>Result</th>
+<th>Failure mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Field alias (5)</td>
+<td>Index-time or search-time extracted field (2 to 4)</td>
+<td>Works</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Field alias (5)</td>
+<td>Another field alias (5)</td>
+<td>Order dependent. Aliases on one host, source, or source type are processed in lexicographical order by <code>&lt;class&gt;</code>, so an alias can only consume one whose class sorts earlier</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Field alias (5)</td>
+<td>Calculated field (6)</td>
+<td>Fails. The props.conf spec says outright: you cannot alias a calculated field</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Field alias (5)</td>
+<td>Lookup output field (7)</td>
+<td>Fails</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Field alias (5)</td>
+<td>Event type (8) or tag (9)</td>
+<td>Fails</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Calculated field (6)</td>
+<td>Extracted field (2 to 4)</td>
+<td>Works</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Calculated field (6)</td>
+<td>Field alias (5)</td>
+<td>Works. The spec states you can use a field alias in the eval statement for a calculated field</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Calculated field (6)</td>
+<td>Another calculated field in the same stanza</td>
+<td>Fails to chain. Both expressions see the pre-calculation value</td>
+<td>Silent, wrong number</td>
+</tr>
+<tr>
+<td>Calculated field (6)</td>
+<td>Lookup output field (7)</td>
+<td>Fails. The docs promise an error message here</td>
+<td>Error message</td>
+</tr>
+<tr>
+<td>Calculated field (6)</td>
+<td>Event type (8) or tag (9)</td>
+<td>Fails</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Lookup (7)</td>
+<td>Extracted, aliased, or calculated field</td>
+<td>Works</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Lookup (7)</td>
+<td>Event type (8) or tag (9)</td>
+<td>Fails</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Event type (8)</td>
+<td>Extracted, aliased, calculated, or lookup field</td>
+<td>Works</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Event type (8)</td>
+<td>Tag (9)</td>
+<td>Fails. Search strings that define event types cannot reference tags</td>
+<td>Silent</td>
+</tr>
+<tr>
+<td>Tag (9)</td>
+<td>Any field-value pair, including ones added by an event type, lookup, or calculated field</td>
+<td>Works</td>
+<td>none</td>
+</tr>
+</tbody>
+</table></div>
+<p>The calculated field row that reads &quot;fails to chain&quot; deserves its own contract, because it is the one place the failure is a wrong answer rather than a missing field. All <code>EVAL-&lt;fieldname&gt;</code> configurations within a single props.conf stanza are processed in parallel instead of sequentially. The documentation's example:</p>
+<pre class="plain lang-ini"><code>[foo]
+EVAL-x = x * 2
+EVAL-y = x * 2</code></pre>
+<p>For an event where <code>x=4</code>, the result is <code>x=8</code> and <code>y=8</code>, because both expressions read the original <code>x</code>. The second documented example is the one to memorise, because the wrong answer looks reasonable:</p>
+<pre class="plain lang-ini"><code>[access_common]
+EVAL-response_time = response_time/1000
+EVAL-bitrate = bytes*1000/response_time</code></pre>
+<p><code>response_time</code> is extracted in milliseconds. The first line converts it to seconds. The second line still divides by the millisecond value, because both <code>EVAL-</code> statements are calculated independently of the other.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>These assume the practice dataset from <a href="../lab-setup.html">lab setup</a> is loaded, with source types <code>access_combined</code>, <code>linux_secure</code> and <code>cisco:wsa:squid</code>.</p>
+<h3 id="1.-alias-a-field-then-prove-the-original-survives">1. Alias a field, then prove the original survives<a class="anchor" href="#1.-alias-a-field-then-prove-the-original-survives" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+FIELDALIAS-cim_src = clientip AS src_ip</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">_time</span><span class="t-op">,</span> <span class="t-field">clientip</span><span class="t-op">,</span> <span class="t-field">src_ip</span><span class="t-op">,</span> <span class="t-field">status</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<p>Five rows, four columns, <code>clientip</code> and <code>src_ip</code> identical on every row. This is the single fact 5.1 tests hardest: aliasing added a name, it did not consume one. Compare against <code>| rename clientip AS src_ip</code>, which returns a <code>src_ip</code> column and no <code>clientip</code> column at all.</p>
+<h3 id="2.-one-field-two-aliases">2. One field, two aliases<a class="anchor" href="#2.-one-field-two-aliases" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+FIELDALIAS-vendor = clientip AS vendor_id \
+                    clientip AS vendor_identifier</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">orig</span><span class="t-op">,</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">vendor_id</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">a1</span><span class="t-op">,</span> <span class="t-func">dc</span><span class="t-op">(</span><span class="t-field">vendor_identifier</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">a2</span></code></pre></div>
+<p>One row, three columns, all three counts equal. A field can have multiple aliases. The inverse is blocked: a single alias can only apply to one field, so <code>JSESSIONID AS vendor_id</code> alongside <code>clientip AS vendor_id</code> is an invalid configuration in which only one of the two takes effect.</p>
+<h3 id="3.-a-calculated-field-that-consumes-an-alias">3. A calculated field that consumes an alias<a class="anchor" href="#3.-a-calculated-field-that-consumes-an-alias" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+FIELDALIAS-cim_src = clientip AS src_ip
+EVAL-src_first_octet = mvindex(split(src_ip,&quot;.&quot;),0)
+EVAL-kb = round(bytes/1024, 2)</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-field">kb</span><span class="t-op">&gt;</span><span class="t-num">50</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">src_first_octet</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p>Two things are proven at once. The eval expression reads <code>src_ip</code>, an alias, which is legal because aliasing (5) precedes calculated fields (6). And <code>kb&gt;50</code> sits in the base search before any pipe, because the calculated field is materialised during schema construction rather than by a command.</p>
+<h3 id="4.-the-parallel-evaluation-trap-made-visible">4. The parallel-evaluation trap, made visible<a class="anchor" href="#4.-the-parallel-evaluation-trap-made-visible" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+EVAL-bytes = bytes * 2
+EVAL-bytes_doubled = bytes * 2</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">bytes</span><span class="t-op">,</span> <span class="t-field">bytes_doubled</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<p>Both columns hold the same number. The intuitive reading, that <code>bytes_doubled</code> is four times the raw value because <code>bytes</code> was already doubled, is wrong. Both statements read the original extracted <code>bytes</code>. Delete these two before continuing.</p>
+<h3 id="5.-the-coalesce-pattern-both-directions">5. The coalesce pattern, both directions<a class="anchor" href="#5.-the-coalesce-pattern-both-directions" aria-label="Link to this section">#</a></h3>
+<p>Mapping two source fields onto one normalised name cannot be done with an alias. It is done with a calculated field:</p>
+<pre class="plain lang-ini"><code>[access_combined]
+EVAL-ip = coalesce(clientip, ipaddress)</code></pre>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">clientip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">from_clientip</span><span class="t-op">,</span> <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">ip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">normalised</span></code></pre></div>
+<p>And to stop a calculated field from clobbering an extraction of the same name:</p>
+<pre class="plain lang-ini"><code>[secure]
+EVAL-user = coalesce(user, &quot;unknown&quot;)</code></pre>
+<p>Here the extracted <code>user</code> wins whenever it has a value, and the literal fills in only where it is null. Reversing the arguments to <code>coalesce(&quot;unknown&quot;, user)</code> would make the calculated field win on every event.</p>
+<h3 id="6.-what-a-lookup-can-and-cannot-see">6. What a lookup can and cannot see<a class="anchor" href="#6.-what-a-lookup-can-and-cannot-see" aria-label="Link to this section">#</a></h3>
+<pre class="plain lang-ini"><code>[access_combined]
+FIELDALIAS-vendorlookup = clientip AS vendor_key
+LOOKUP-vendors = vendors_lookup vendor_key OUTPUT VendorCountry
+EVAL-country_upper = upper(VendorCountry)</code></pre>
+<p>The <code>LOOKUP-</code> line works, because a lookup may match on an alias. The <code>EVAL-country_upper</code> line does not, because <code>VendorCountry</code> arrives from a lookup at step 7 and the calculated field runs at step 6. This is the one ordering violation the docs say produces a visible error message rather than silence.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>You need to</th>
+<th>Use</th>
+<th>Because</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Give an existing field a second name for every search, permanently, keeping the original</td>
+<td>Field alias</td>
+<td>Aliases add a name alongside the field and persist as a knowledge object</td>
+</tr>
+<tr>
+<td>Map a differently named source field onto the name a CIM data model expects</td>
+<td>Field alias</td>
+<td>The CIM documentation names field aliases as the mechanism to capture differently-named fields in your original data and map them to the field name that the CIM expects</td>
+</tr>
+<tr>
+<td>Give the same field the same alias in two different source types</td>
+<td>Two field aliases, one per source type</td>
+<td>Each field alias configuration is specific to one host, source, or source type, and a bare source type stanza names a single literal source type</td>
+</tr>
+<tr>
+<td>Map two or more different source fields onto one normalised name</td>
+<td>Calculated field with <code>coalesce</code></td>
+<td>A single alias can only apply to one field. Two originals onto one alias name is an invalid configuration where only one takes effect</td>
+</tr>
+<tr>
+<td>Derive a value from one or more existing fields, for every search, permanently</td>
+<td>Calculated field</td>
+<td>The eval expression is saved and applied at search time to every matching event</td>
+</tr>
+<tr>
+<td>Change a field name for the duration of one search only, after the pipeline has started</td>
+<td><code>rename</code> command</td>
+<td><code>rename</code> acts on the result set downstream of all nine search-time operations, and it replaces the name rather than adding one</td>
+</tr>
+<tr>
+<td>Compute a value for the duration of one search only</td>
+<td><code>eval</code> command</td>
+<td>No knowledge object, no permissions, no app scope, no effect on other users</td>
+</tr>
+<tr>
+<td>Reference a lookup output field in a derived value</td>
+<td><code>eval</code> in the SPL, after the lookup</td>
+<td>Lookups are step 7 and calculated fields are step 6, so the knowledge object cannot see the lookup</td>
+</tr>
+<tr>
+<td>Chain a derived value off another derived value</td>
+<td>Two <code>eval</code> expressions in the SPL, or one calculated field with the full expression inlined</td>
+<td><code>EVAL-</code> statements in a stanza run in parallel and cannot be chained</td>
+</tr>
+<tr>
+<td>Preserve a destination field that some events already carry</td>
+<td>Field alias with Overwrite field values cleared, which writes <code>ASNEW</code></td>
+<td><code>ASNEW</code> leaves an existing destination alone and keeps it when the original is missing</td>
+</tr>
+<tr>
+<td>Force the destination field to always mirror the original, including deleting it when the original is absent</td>
+<td>Field alias with Overwrite field values selected, which writes <code>AS</code></td>
+<td><code>AS</code> replaces the destination value and removes the destination when the original has no value</td>
+</tr>
+</tbody>
+</table></div>
+<p>Scope rule for both objects: the target is always a host, a source, or a source type. There is no fourth choice, and &quot;event&quot;, &quot;index&quot;, and &quot;app&quot; are not scopes.</p>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-05-01"><span class="tid">T-05-01</span> The alias renames the field. <span class="wrong">Wrong belief</span>: after aliasing <code>clientip</code> to <code>src_ip</code>, searching <code>clientip=*</code> returns nothing. <span class="right">Correct fact</span>: an alias does not replace a field in an event or remove it from an event, it is added to the event alongside the field. Both names work. The command that actually replaces a name is <code>rename</code>, and it only affects the current result set.</p>
+<p class="trap" id="T-05-02"><span class="tid">T-05-02</span> Aliases and <code>rename</code> are interchangeable. <span class="wrong">Wrong belief</span>: <code>| rename clientip AS src_ip</code> is the same thing as a field alias. <span class="right">Correct fact</span>: <code>rename</code> is a search command that operates on the result set downstream of all nine search-time operations, drops the old name, and lasts one search. An alias is a knowledge object that runs at step 5, keeps the old name, applies to every search against the scoped host, source, or source type, and is subject to app scope and permissions.</p>
+<p class="trap" id="T-05-03"><span class="tid">T-05-03</span> One alias name can collect several source fields. <span class="wrong">Wrong belief</span>: <code>FIELDALIAS-x = userID AS user loginID AS user</code> merges both into <code>user</code>. <span class="right">Correct fact</span>: a field can have multiple aliases, but a single alias can only apply to one field. That configuration is documented as invalid, and only one of the two aliases takes effect. The documented answer is <code>EVAL-user = coalesce(userID, loginID)</code>.</p>
+<p class="trap" id="T-05-04"><span class="tid">T-05-04</span> The Overwrite field values checkbox is on by default. <span class="wrong">Wrong belief</span>: it defaults to selected, or it controls whether the original field survives. <span class="right">Correct fact</span>: the docs state that Overwrite field values is not selected by default, and it never touches the original field. It controls the destination field only: selected replaces an existing destination and deletes it when the original is missing, cleared leaves an existing destination alone and keeps it when the original is missing.</p>
+<p class="trap" id="T-05-05"><span class="tid">T-05-05</span> A calculated field can reference a lookup output field. <span class="wrong">Wrong belief</span>: since lookups add fields to events, an eval expression can use them. <span class="right">Correct fact</span>: calculated fields are step 6 and lookups are step 7. Calculated fields can reference all types of field extractions, and they cannot reference lookups, event types, or tags. The docs promise an error message for this specific violation.</p>
+<p class="trap" id="T-05-06"><span class="tid">T-05-06</span> You can alias a calculated field to give it a CIM name. <span class="wrong">Wrong belief</span>: define <code>EVAL-duration_ms</code>, then alias it to <code>duration</code>. <span class="right">Correct fact</span>: aliasing is step 5 and calculated fields are step 6. The props.conf spec states directly that you cannot alias a calculated field. Give the calculated field the CIM name in the first place, or use a second calculated field.</p>
+<p class="trap" id="T-05-07"><span class="tid">T-05-07</span> Calculated fields in one stanza run top to bottom and chain. <span class="wrong">Wrong belief</span>: <code>EVAL-response_time = response_time/1000</code> followed by <code>EVAL-bitrate = bytes*1000/response_time</code> uses the converted seconds value. <span class="right">Correct fact</span>: all <code>EVAL-&lt;fieldname&gt;</code> configurations within a single props.conf stanza are processed in parallel instead of sequentially, so <code>bitrate</code> still divides by the original millisecond value. This trap produces a plausible wrong number, not a missing field.</p>
+<p class="trap" id="T-05-08"><span class="tid">T-05-08</span> The Eval expression form field takes a full eval statement. <span class="wrong">Wrong belief</span>: the box should contain <code>eval kb = round(bytes/1024, 2)</code>, or at least <code>kb = round(bytes/1024, 2)</code>. <span class="right">Correct fact</span>: the field name is a separate form field (Name in the UI, <code>&lt;fieldname&gt;</code> in <code>EVAL-&lt;fieldname&gt;</code>), and the Eval expression box holds the right-hand side only. There is no leading <code>eval</code> keyword and no assignment.</p>
+<p class="trap" id="T-05-09"><span class="tid">T-05-09</span> A calculated field defers to an existing extracted field of the same name. <span class="wrong">Wrong belief</span>: if <code>status</code> is already extracted, <code>EVAL-status</code> only fills in the gaps. <span class="right">Correct fact</span>: the calculated field overrides the extracted field, even if the eval statement evaluates to null. Preserving the extraction requires <code>EVAL-field = coalesce(field, &lt;eval expression&gt;)</code>, or <code>EVAL-field = coalesce(&lt;eval expression&gt;, field)</code> if you only want the extraction to win when the expression returns null.</p>
+<p class="trap" id="T-05-10"><span class="tid">T-05-10</span> Aliases and calculated fields can only be used after a pipe. <span class="wrong">Wrong belief</span>: you must write <code>sourcetype=x | search src_ip=1.2.3.4</code> because the alias is not real until the pipeline runs. <span class="right">Correct fact</span>: both objects are applied during search-time schema construction, before the first pipe, so both are valid base-search terms. The docs demonstrate <code>source=eqs7day-M1.csv Description=Deep</code> against a calculated field.</p>
+<p class="trap" id="T-05-11"><span class="tid">T-05-11</span> The scope choices are host, source, and event, or host, source, and index. <span class="wrong">Wrong belief</span>, and an answer key error found in circulating material for question E encodes exactly this error with &quot;Host, Source, Events&quot;. <span class="right">Correct fact</span>: both the alias form and the calculated field form scope to a host, a source, or a source type. Nothing else. This is the same triple that every props.conf stanza type maps to.</p>
+<p class="trap" id="T-05-12"><span class="tid">T-05-12</span> A calculated field can be scoped to an aliased source type. <span class="wrong">Wrong belief</span>: alias a source type value, then point the <code>EVAL-</code> stanza at the alias. <span class="right">Correct fact</span>: creation of a calculated field on an aliased source is not supported, and you cannot create a calculated field that is scoped to an aliased host, source, or source type. The documented workaround is to filter inside the expression instead, for example <code>if(response_code=200,len(app),null)</code>.</p>
+<p class="trap" id="T-05-13"><span class="tid">T-05-13</span> The conf-file settings are <code>ALIAS-</code> and <code>CALC-</code>. <span class="wrong">Wrong belief</span>, built from plausible-sounding names. <span class="right">Correct fact</span>: <code>FIELDALIAS-&lt;class&gt;</code> and <code>EVAL-&lt;fieldname&gt;</code>, both in props.conf, both with no default. The <code>EVAL</code> portion is not case-sensitive but the hyphen is required and the <code>&lt;fieldname&gt;</code> portion is case sensitive. Field aliases live in props.conf, not in fields.conf, transforms.conf, or aliases.conf.</p>
+<p class="trap" id="T-05-14"><span class="tid">T-05-14</span> A newly created alias or calculated field is immediately visible to the whole team. <span class="wrong">Wrong belief</span>. <span class="right">Correct fact</span>: the knowledge object is private to you when you first create it, meaning that other users cannot see it or use it. Sharing to an app or globally is a separate step under Settings, Fields, then the object's Permissions link. By default only admin and power roles can share and promote knowledge objects, and a power user can only change permissions for objects they own.</p>
+<p class="trap" id="T-05-15"><span class="tid">T-05-15</span> Naming an alias after an internal field is a neat way to override the timestamp. <span class="wrong">Wrong belief</span>: alias <code>eventStartTime</code> to <code>_time</code> to re-timestamp events at search time. <span class="right">Correct fact</span>: the docs warn not to create a field alias for a field with the same name as an internal field such as <code>_time</code>, because it produces unpredictable search results.</p>
+<p class="trap" id="T-05-16"><span class="tid">T-05-16</span> One alias definition covers the field wherever it appears. <span class="wrong">Wrong belief</span>: a field present in two source types needs one alias, or the number needed depends on the index or on the original field names matching. <span class="right">Correct fact</span>: each field alias configuration is specific to events belonging to a particular host, source, or source type, so two source types need two alias definitions. Index is not a scope, and the pattern matching syntax is documented for the <code>host::</code> and <code>source::</code> stanza forms, not for a bare source type stanza.</p>
+<p class="trap" id="T-05-17"><span class="tid">T-05-17</span> A calculated field has to be based on an extracted field, or has to combine two or more fields. <span class="wrong">Wrong belief</span>, usually picked up from the opening line of the docs. <span class="right">Correct fact</span>: the eval statement is as flexible as it is for the <code>eval</code> search command, so it may read one field, several fields, a field alias, or no field at all. The real rule is directional: calculated fields can reference all types of field extractions and field aliases, and cannot reference lookups, event types, or tags.</p>
+<p class="trap" id="T-05-18"><span class="tid">T-05-18</span> Alias names are not case sensitive in a search. <span class="wrong">Wrong belief</span>: since <code>src_ip=DEEP</code> and <code>src_ip=deep</code> match the same events, <code>SRC_IP=deep</code> must work too. <span class="right">Correct fact</span>: an alias name is a field name, and field names are case sensitive while field values are not.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded. Work in the Search &amp; Reporting app throughout.</p>
+<h3 id="part-1-create-the-alias-4-minutes">Part 1: create the alias (4 minutes)<a class="anchor" href="#part-1-create-the-alias-4-minutes" aria-label="Link to this section">#</a></h3>
+<ol>
+<li>Settings, then Fields, then Field aliases, then New Field Alias.</li>
+<li>Destination app: <code>search</code>.</li>
+<li>Name: <code>cim_src</code>.</li>
+<li>Apply to: <code>sourcetype</code>, named: <code>access_combined</code>.</li>
+<li>Field aliases: left box <code>clientip</code>, right box <code>src_ip</code>.</li>
+<li>Leave Overwrite field values cleared.</li>
+<li>Save.</li>
+</ol>
+<p>Verification:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">_time</span><span class="t-op">,</span> <span class="t-field">clientip</span><span class="t-op">,</span> <span class="t-field">src_ip</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<p>Both columns are populated and identical. Now confirm the alias is a real search term rather than a display artefact:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">src_ip</span><span class="t-op">=</span><span class="t-op">*</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">via_alias</span>
+<span class="t-pipe">|</span> <span class="t-cmd">appendcols</span> <span class="t-op">[</span> <span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">clientip</span><span class="t-op">=</span><span class="t-op">*</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">via_original</span> <span class="t-op">]</span></code></pre></div>
+<p>Both counts match.</p>
+<h3 id="part-2-create-the-calculated-field-4-minutes">Part 2: create the calculated field (4 minutes)<a class="anchor" href="#part-2-create-the-calculated-field-4-minutes" aria-label="Link to this section">#</a></h3>
+<ol>
+<li>Settings, then Fields, then the Calculated Fields row, then Add new.</li>
+<li>Destination app: <code>search</code>.</li>
+<li>Apply to: <code>sourcetype</code>, named: <code>access_combined</code>.</li>
+<li>Name: <code>kb</code>.</li>
+<li>Eval expression: <code>round(bytes/1024, 2)</code>. No <code>eval</code>, no <code>kb =</code>.</li>
+<li>Save.</li>
+</ol>
+<p>Verification, including a base-search filter to prove it exists before the first pipe:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-field">kb</span><span class="t-op">&gt;</span><span class="t-num">50</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span><span class="t-op">,</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">kb</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_kb</span><span class="t-op">,</span> <span class="t-func">max</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">max_bytes</span></code></pre></div>
+<h3 id="part-3-prove-the-ordering-rule-in-both-directions-5-minutes">Part 3: prove the ordering rule in both directions (5 minutes)<a class="anchor" href="#part-3-prove-the-ordering-rule-in-both-directions-5-minutes" aria-label="Link to this section">#</a></h3>
+<p>Add a second calculated field that consumes the alias. Same path, Name <code>src_first_octet</code>, Eval expression <code>mvindex(split(src_ip,&quot;.&quot;),0)</code>. Save.</p>
+<p>Now attempt the illegal direction. Settings, then Fields, then Field aliases, then New Field Alias. Name <code>bad_alias</code>, Apply to <code>sourcetype</code> named <code>access_combined</code>, left box <code>kb</code>, right box <code>kilobytes</code>. Save.</p>
+<p>Single verification search that shows the legal reference working and the illegal one producing nothing:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">events</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">src_ip</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">alias_ok</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">src_first_octet</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">calc_reads_alias_ok</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">kb</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">calc_ok</span><span class="t-op">,</span>
+        <span class="t-func">count</span><span class="t-op">(</span><span class="t-field">kilobytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">alias_of_calc_FAILS</span></code></pre></div>
+<p><code>alias_ok</code>, <code>calc_reads_alias_ok</code>, and <code>calc_ok</code> all equal <code>events</code>. <code>alias_of_calc_FAILS</code> is zero, with no error anywhere in the UI. That silence is the point of trap T-05-06.</p>
+<h3 id="part-4-cleanup-2-minutes">Part 4: cleanup (2 minutes)<a class="anchor" href="#part-4-cleanup-2-minutes" aria-label="Link to this section">#</a></h3>
+<p>Delete <code>bad_alias</code> from Settings, then Fields, then Field aliases. Keep <code>cim_src</code>, <code>kb</code>, and <code>src_first_octet</code> if you want them for the section 10.0 CIM lab, or delete all four to leave the instance clean.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>Q1.</strong> A field alias is created on source type <code>access_combined</code> mapping <code>clientip</code> to <code>src_ip</code>. Which statement is true after the alias is saved and shared?</p>
+<p>A. Searching <code>clientip=10.1.1.1</code> returns no events, because the field has been renamed.
+B. Both <code>clientip</code> and <code>src_ip</code> are present on the event and either can be searched.
+C. <code>src_ip</code> is only available after a <code>| rename</code> in the search.
+D. The alias is written to the indexed data, so previously indexed events are unaffected.</p>
+<p><strong>Q2.</strong> Which configuration is invalid?</p>
+<p>A. <code>FIELDALIAS-a = clientip AS vendor_id clientip AS vendor_name</code>
+B. <code>FIELDALIAS-b = userID AS user loginID AS user</code>
+C. <code>EVAL-user = coalesce(userID, loginID)</code>
+D. <code>FIELDALIAS-c = ip AS ipaddress</code></p>
+<p><strong>Q3.</strong> A props.conf stanza contains both lines below. The extracted <code>response_time</code> is in milliseconds and <code>bytes</code> is extracted normally. What does <code>bitrate</code> divide by?</p>
+<pre class="plain lang-ini"><code>EVAL-response_time = response_time/1000
+EVAL-bitrate = bytes*1000/response_time</code></pre>
+<p>A. The value of <code>response_time</code> in seconds, because the first line runs first.
+B. The original value of <code>response_time</code> in milliseconds.
+C. Null, because a calculated field cannot reference another calculated field at all.
+D. The value of <code>bytes</code>, because the expression is evaluated left to right.</p>
+<p><strong>Q4.</strong> In the New Calculated Field form, a Power User wants the field <code>kb</code> to hold kilobytes. What goes in the Eval expression box?</p>
+<p>A. <code>eval kb = round(bytes/1024, 2)</code>
+B. <code>kb = round(bytes/1024, 2)</code>
+C. <code>round(bytes/1024, 2)</code>
+D. <code>| eval kb = round(bytes/1024, 2)</code></p>
+<p><strong>Q5.</strong> Which of these can a calculated field's eval expression reference?</p>
+<p>A. A field added to the event by an automatic lookup.
+B. A tag applied to a field-value pair.
+C. A field alias defined on the same source type.
+D. An event type that matches the event.</p>
+<p><strong>Q6.</strong> Which pair correctly names the props.conf settings for field aliases and calculated fields?</p>
+<p>A. <code>ALIAS-&lt;class&gt;</code> and <code>CALC-&lt;fieldname&gt;</code>
+B. <code>FIELDALIAS-&lt;class&gt;</code> and <code>EVAL-&lt;fieldname&gt;</code>
+C. <code>FIELDALIAS-&lt;class&gt;</code> in fields.conf and <code>EVAL-&lt;fieldname&gt;</code> in props.conf
+D. <code>RENAME-&lt;class&gt;</code> and <code>EVAL-&lt;fieldname&gt;</code></p>
+<p><strong>Q7.</strong> An alias maps <code>src</code> to <code>dst</code>. Some events already have their own <code>dst</code> field. Overwrite field values is left at its default. What happens to those events?</p>
+<p>A. <code>dst</code> is replaced with the value of <code>src</code>.
+B. <code>dst</code> is removed from the event.
+C. The value of <code>dst</code> is unchanged.
+D. The alias is rejected at save time because of the collision.</p>
+<p><strong>Q8.</strong> A calculated field named <code>status</code> is created on a source type where <code>status</code> is already extracted, and the eval expression returns null for a given event. What is the value of <code>status</code> on that event?</p>
+<p>A. The originally extracted value, because a null expression is ignored.
+B. Null, because the calculated field overrides the extracted field even when the expression evaluates to null.
+C. Both values, as a multivalue field.
+D. The search fails with a field collision error.</p>
+<p><strong>Q9.</strong> The field <code>cs_username</code> is extracted from both <code>iis_web</code> and <code>proxy_json</code> events. Only this stanza exists:</p>
+<pre class="plain lang-ini"><code>[iis_web]
+FIELDALIAS-user = cs_username AS user</code></pre>
+<p>What does <code>(sourcetype=iis_web OR sourcetype=proxy_json) user=*</code> return?</p>
+<p>A. Events from both source types, because the alias applies wherever the original field is found.
+B. Events from <code>iis_web</code> only, because an alias configuration is specific to one host, source, or source type.
+C. Events from both source types, but only if they are written to the same index.
+D. No events, because <code>user</code> cannot be used in the base search.</p>
+<p><strong>Q10.</strong> A calculated field is defined on <code>access_combined</code>, where <code>src_ip</code> is a field alias of <code>clientip</code>:</p>
+<pre class="plain lang-ini"><code>EVAL-src_label = &quot;ip: &quot; . src_ip</code></pre>
+<p>What happens?</p>
+<p>A. It fails, because a calculated field expression must reference at least one extracted field.
+B. It fails, because a calculated field cannot reference a field alias.
+C. It works, producing <code>src_label</code> on every event that has <code>src_ip</code>.
+D. It works only if the alias class sorts before <code>src_label</code> lexicographically.</p>
+<details><summary>Answers</summary>
+<p><strong>Q1: B.</strong> An alias does not replace a field in an event or remove it from an event, it is added to the event alongside the field. A is the <code>rename</code> behaviour, which drops the old name from the result set, and describes trap T-05-01. C is wrong because aliases are applied at step 5 of the search-time sequence, before the first pipe, so no command is needed to surface the field. D confuses search-time and index-time: aliases are pure search-time schema, they touch no indexed data, and they apply to already-indexed events immediately.</p>
+<p><strong>Q2: B.</strong> A single alias can only apply to one field, so mapping two originals onto the same <code>user</code> name is documented as an invalid configuration in which only one of the aliases takes effect. A is valid and is the documented example of the legal inverse, one field with two aliases. C is the documented fix for B, a calculated field using <code>coalesce</code>, which also makes the input ordering explicit. D is the documented example from the props.conf alias topic.</p>
+<p><strong>Q3: B.</strong> All <code>EVAL-&lt;fieldname&gt;</code> configurations within a single props.conf stanza are processed in parallel instead of sequentially, so both expressions read the originally extracted millisecond value. A is the intuitive but wrong reading and the whole point of trap T-05-07. C overstates the rule: the expressions do not chain, but they still evaluate successfully against extracted fields, so nothing is null. D is nonsense arithmetic dressed up as an ordering rule.</p>
+<p><strong>Q4: C.</strong> The field name is a separate form field, and the Eval expression box holds the right-hand side only. A includes the <code>eval</code> keyword, which belongs in a search pipeline. B includes the assignment, which duplicates the Name form field. D adds a leading pipe, which belongs to SPL syntax and never appears in a knowledge object definition.</p>
+<p><strong>Q5: C.</strong> Field aliasing is step 5 and calculated fields are step 6, so an alias is available to the eval expression, and the props.conf spec says so explicitly. A is wrong because lookups are step 7 and the docs promise an error message for this exact violation. B and D are wrong because event types are step 8 and tags are step 9, both downstream, and the calculated fields topic lists lookups, event types, and tags together as things calculated fields cannot reference.</p>
+<p><strong>Q6: B.</strong> Both settings live in props.conf. A invents plausible names that do not exist. C is right about <code>EVAL-</code> but puts the alias in fields.conf, which handles field extraction properties rather than aliases. D borrows the name of the <code>rename</code> search command, which is not a props.conf setting at all.</p>
+<p><strong>Q7: C.</strong> Overwrite field values is not selected by default, which writes <code>ASNEW</code>, and <code>ASNEW</code> leaves an existing destination field alone. A is the behaviour when the box is selected, which writes <code>AS</code>. B is also <code>AS</code> behaviour, but only in the case where the original field has no value or does not exist, which is not the scenario described. D is invented: the collision is a documented and supported situation, which is precisely why the checkbox exists.</p>
+<p><strong>Q8: B.</strong> The calculated field overrides the extracted field, even if the eval statement evaluates to null. A describes the behaviour you get only by writing <code>EVAL-status = coalesce(status, &lt;expression&gt;)</code>. C is wrong because the calculated field replaces the value rather than appending to it, even though eval expressions can legitimately produce multivalue results in other situations. D invents an error: the override is silent, which is why the <code>coalesce</code> guidance exists in the docs.</p>
+<p><strong>Q9: B.</strong> Each field alias configuration is specific to one host, source, or source type, and this stanza names only <code>iis_web</code>, so <code>proxy_json</code> events never gain <code>user</code> and the <code>user=*</code> term filters them out. Covering both takes a second alias in a <code>[proxy_json]</code> stanza. A is trap T-05-16: the alias follows the stanza, not the field name. C invents an index dependency, and an index is not a scope for any props.conf object. D contradicts step 5 running before the first pipe, which makes <code>user</code> a legal base-search term for the events that carry it.</p>
+<p><strong>Q10: C.</strong> Aliasing is step 5 and calculated fields are step 6, so <code>src_ip</code> exists by the time the expression runs, and the eval statement is as flexible as it is for the <code>eval</code> search command, string concatenation included. A is trap T-05-17: there is no requirement to reference an extracted field, or any field. B inverts the sequence, and the props.conf spec explicitly permits a field alias inside a calculated field expression. D borrows a real rule out of context: lexicographical order governs alias classes competing inside step 5, not the relationship between an alias and a calculated field, which the step order settles on its own.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<p>Read in this order.</p>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations</a> - the nine-step table with each step's props.conf setting, plus the per-step Restrictions sections. Memorise the table. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/about-tags-and-aliases" target="_blank" rel="noopener">About tags and aliases</a> - the one-paragraph definition of an alias and the <code>http_referrer</code> normalisation example. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/field-aliases/create-field-aliases-in-splunk-web" target="_blank" rel="noopener">Create field aliases in Splunk Web</a> - the eight numbered steps, the Overwrite field values table, and the closing section on mapping one alias name to multiple original fields. 12 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/field-aliases/configure-field-aliases-with-props.conf" target="_blank" rel="noopener">Configure field aliases with props.conf</a> - the <code>FIELDALIAS-&lt;class&gt;</code> syntax and the <code>accesslog</code> example that feeds a lookup. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/about-calculated-fields" target="_blank" rel="noopener">About calculated fields</a> - Restrictions, Preventing overrides of existing fields, and Calculated fields independence. The two independence examples are directly examinable. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/create-calculated-fields-with-splunk-web" target="_blank" rel="noopener">Create calculated fields with Splunk Web</a> - the six steps and the private-by-default note. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/configure-calculated-fields-with-props.conf" target="_blank" rel="noopener">Configure calculated fields with props.conf</a> - the <code>EVAL-</code> prefix rules, field name case sensitivity, and the earthquake <code>case()</code> example. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/props.conf" target="_blank" rel="noopener">props.conf spec, 10.4</a> - read only the <code>FIELDALIAS-&lt;class&gt;</code>, <code>EVAL-&lt;fieldname&gt;</code>, and <code>LOOKUP-&lt;class&gt;</code> entries. This is the only place <code>AS</code> versus <code>ASNEW</code> is specified precisely. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/release-notes-and-updates/release-notes/10.4/known-issues-for-this-release/field-alias-behavior-change" target="_blank" rel="noopener">Field alias behavior change</a> - the 7.2.4 change and the lexicographical collision rule between competing <code>AS</code> configurations. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions" target="_blank" rel="noopener">Manage knowledge object permissions</a> - private by default, and which roles can promote. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/understand-and-use-the-common-information-model-add-on" target="_blank" rel="noopener">Understand and use the Common Information Model Add-on</a> - read now for the normalisation framing, then again for section 10.0. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval" target="_blank" rel="noopener">eval command reference, 10.4</a> - the function catalogue behind every calculated field expression. Skim now, return to it for section 2.0. 15 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="04-field-extractions.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">4.0</span><span class="pn-label">Field extractions</span></a><a href="06-tags-and-event-types.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">6.0</span><span class="pn-label">Tags and event types</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#blueprint-mapping"><span>Blueprint mapping</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#what-it-is"><span>What it is</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#syntax-and-options"><span>Syntax and options</span><span class="min">6m</span></a></li>
+<li><a class="lvl3" href="#field-alias-splunk-web"><span>Field alias, Splunk Web</span></a></li>
+<li><a class="lvl3" href="#field-alias-props.conf"><span>Field alias, props.conf</span></a></li>
+<li><a class="lvl3" href="#calculated-field-splunk-web"><span>Calculated field, Splunk Web</span></a></li>
+<li><a class="lvl3" href="#calculated-field-props.conf"><span>Calculated field, props.conf</span></a></li>
+<li><a class="lvl3" href="#scope-and-how-many-objects-you-need"><span>Scope, and how many objects you need</span></a></li>
+<li><a class="lvl2" href="#result-contract"><span>Result contract</span><span class="min">5m</span></a></li>
+<li><a class="lvl2" href="#worked-examples"><span>Worked examples</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#1.-alias-a-field-then-prove-the-original-survives"><span>1. Alias a field, then prove the original survives</span></a></li>
+<li><a class="lvl3" href="#2.-one-field-two-aliases"><span>2. One field, two aliases</span></a></li>
+<li><a class="lvl3" href="#3.-a-calculated-field-that-consumes-an-alias"><span>3. A calculated field that consumes an alias</span></a></li>
+<li><a class="lvl3" href="#4.-the-parallel-evaluation-trap-made-visible"><span>4. The parallel-evaluation trap, made visible</span></a></li>
+<li><a class="lvl3" href="#5.-the-coalesce-pattern-both-directions"><span>5. The coalesce pattern, both directions</span></a></li>
+<li><a class="lvl3" href="#6.-what-a-lookup-can-and-cannot-see"><span>6. What a lookup can and cannot see</span></a></li>
+<li><a class="lvl2" href="#decision-rules"><span>Decision rules</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#lab"><span>Lab</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#part-1-create-the-alias-4-minutes"><span>Part 1: create the alias (4 minutes)</span></a></li>
+<li><a class="lvl3" href="#part-2-create-the-calculated-field-4-minutes"><span>Part 2: create the calculated field (4 minutes)</span></a></li>
+<li><a class="lvl3" href="#part-3-prove-the-ordering-rule-in-both-directions-5-minutes"><span>Part 3: prove the ordering rule in both directions (5 minutes)</span></a></li>
+<li><a class="lvl3" href="#part-4-cleanup-2-minutes"><span>Part 4: cleanup (2 minutes)</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">8m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>39 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

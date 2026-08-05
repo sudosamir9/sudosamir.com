@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentation reading list, in blueprint order | SPLK-1002</title>
+<meta name="description" content="Docs by blueprint, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/docs-by-blueprint" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html" aria-current="page"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>Docs by blueprint</span>
+        
+      </div>
+<h1 id="documentation-reading-list-in-blueprint-order">Documentation reading list, in blueprint order</h1>
+<p>Every Splunk documentation page used anywhere in this guide, 154 of them, numbered and ordered to follow the official test blueprint from start to finish. Read top to bottom and you have covered the exam.</p>
+<p>This is the blueprint-ordered companion to <a href="doc-links.html"><code>doc-links</code></a>, which lists the same material grouped by Splunk manual with <code>DL-nnn</code> ids. Use that one to look a page up, this one to read in order.</p>
+<p>Every URL was fetched and confirmed to return HTTP 200. <code>help.splunk.com</code> is the current home of Splunk documentation: the old <code>docs.splunk.com</code> addresses redirect here, and <code>latest</code> resolves to Splunk Enterprise 10.4. CIM pages are versioned separately and sit at 8.6.</p>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<h2 id="stage-0-foundations-read-before-section-1.0">Stage 0: Foundations, read before section 1.0<a class="anchor" href="#stage-0-foundations-read-before-section-1.0" aria-label="Link to this section">#</a></h2>
+<p>Off blueprint by design. SPLK-1002 has no prerequisite exam but assumes Splunk Core Certified User knowledge, and later sections lean on several of these. Covered by <a href="../topics/00-foundations-refresher.html"><code>topics/00-foundations-refresher</code></a>.</p>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations (Knowledge Manager Manual 10.4)</a><br />
+&quot;Each operation can have configurations that reference fields derived by operations that precede them in the sequence. However, those same configurations cannot contain fields that are derived by operations that follow them.&quot; Lookup section adds that lookups can reference extractions, aliases and calculated fields.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/search-overview/types-of-commands" target="_blank" rel="noopener">Types of commands</a><br />
+the same taxonomy from the search manual side, with the streaming versus non-streaming reasoning. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/use-the-search-app/search-modes" target="_blank" rel="noopener">Search modes</a><br />
+what Fast mode still returns with field discovery off, and the Smart mode rule about event versus transforming searches. Shared with section 1. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/quick-reference/command-types" target="_blank" rel="noopener">Command types (SPL Search Reference 10.4)</a><br />
+Streaming commands table: eval = Distributable streaming; transaction = Centralized streaming; cluster = Streaming in some modes. Intro names the six command types.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/time-format-variables-and-modifiers/time-modifiers" target="_blank" rel="noopener">Time modifiers</a><br />
+the unit alias table, snap-to, <code>@w0</code> to <code>@w7</code>, and every example. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/specify-time-ranges/specify-time-modifiers-in-your-search" target="_blank" rel="noopener">Specify time modifiers in your search</a><br />
+precedence over the Time Range Picker and the subsearch boundary rule. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-knowledge-object-permissions" target="_blank" rel="noopener">Manage knowledge object permissions (Knowledge Manager Manual 10.4)</a><br />
+&quot;When a Splunk user first creates a new report, event type, transaction, or similar knowledge object, it is only available to that user.&quot; Read means see and use; no permission means the role cannot see or use the object.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/specify-time-ranges/about-searching-with-time" target="_blank" rel="noopener">About searching with time</a><br />
+<code>_time</code> as UNIX epoch and why calendar-boundary ranges differ per time zone. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/about-subsearches" target="_blank" rel="noopener">About subsearches</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/use-subsearch-to-correlate-events" target="_blank" rel="noopener">Use subsearch to correlate events</a> - background for the correlation approaches the blueprint touches indire.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/format" target="_blank" rel="noopener">format</a><br />
+the default delimiters and the single <code>search</code> field it produces. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-tutorial/10.4/part-4-searching-the-tutorial-data/use-fields-to-search" target="_blank" rel="noopener">Use fields to search (Search Tutorial 10.4)</a><br />
+&quot;When you first run a search the Selected Fields list contains the default fields host, source, and sourcetype. These default fields appear in every event. Interesting Fields are fields that appear in at least 20% of the events.&quot; Also names index as a default field created at index time.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/manage-jobs/view-search-job-properties" target="_blank" rel="noopener">View search job properties, Search Job Inspector (Search Manual 10.4)</a><br />
+Confirms the troubleshooting and knowledge-object purpose, the not-expired access rule, and that the key sections are Execution costs and Search job properties. Also documents the Job Details dashboard sections.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/manage-jobs/about-jobs-and-job-management" target="_blank" rel="noopener">About jobs and job management (Search Manual 10.4)</a><br />
+Defines a job as the process created by any search, pivot, report or dashboard panel, tracking owner, app, event count and runtime, and creating a search artifact. Also lists srchJobsQuota and srchDiskQuota, which is why option B is not clearly false.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/manage-orphaned-knowledge-objects" target="_blank" rel="noopener">Manage orphaned knowledge objects</a><br />
+how they arise and the Reassign page limitation. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-lookups-in-splunk-web/about-lookups" target="_blank" rel="noopener">About lookups</a><br />
+off blueprint. Skim the four types and the file versus definition versus automatic distinction only. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/alert-and-respond/alerting-manual/10.4/choose-an-alert-type/alert-type-and-triggering-scenarios" target="_blank" rel="noopener">Alert type and triggering scenarios</a><br />
+off blueprint. Skim scheduled versus real-time and the two real-time triggering shapes. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-data-summaries-to-accelerate-searches/overview-of-summary-based-search-acceleration" target="_blank" rel="noopener">Overview of summary-based search acceleration</a><br />
+off blueprint. Read only the comparison of the three mechanisms. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/dashboard-studio/10.4/introduction-to-splunk-dashboard-studio/what-is-splunk-dashboard-studio" target="_blank" rel="noopener">What is Splunk Dashboard Studio?</a><br />
+off blueprint. Skim for the Studio versus Simple XML differences only. 5 minutes.</li>
+</ol>
+<h2 id="1.0-using-transforming-commands-for-visualizations-5">1.0 Using Transforming Commands for Visualizations (5%)<a class="anchor" href="#1.0-using-transforming-commands-for-visualizations-5" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/01-transforming-commands.html"><code>topics/01-transforming-commands</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below" aria-label="Link to this section">#</a></h3>
+<ol start="19">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/create-statistical-tables-and-chart-visualizations/about-transforming-commands-and-searches" target="_blank" rel="noopener">About transforming commands and searches (Search Manual 10.4)</a><br />
+the five primary transforming commands and why visualizations need statistical tables. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/top" target="_blank" rel="noopener">top (Search Reference 10.4)</a><br />
+the seven options and their defaults, especially <code>useother=false</code>. 10 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/rare" target="_blank" rel="noopener">rare (Search Reference 10.4)</a><br />
+confirm which options are documented. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/get-started-with-visualizations/data-structure-requirements-for-visualizations" target="_blank" rel="noopener">Data structure requirements for visualizations (Simple XML Dashboards 10.4)</a><br />
+visualization type to required table shape. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/pie-chart" target="_blank" rel="noopener">Pie chart (Simple XML Dashboards 10.4)</a><br />
+the two-column rule and the extra-columns-are-ignored rule. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/column-and-bar-charts" target="_blank" rel="noopener">Column and bar charts (Simple XML Dashboards 10.4)</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/line-and-area-charts" target="_blank" rel="noopener">Line and area charts</a> - which axis the first Statistics column feeds, single versus multiple s.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/scatter-chart" target="_blank" rel="noopener">Scatter chart (Simple XML Dashboards 10.4)</a><br />
+the marker, X, Y ordering. Then skim <a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/bubble-chart" target="_blank" rel="noopener">Bubble chart</a> for the four-column, three-dimension contrast. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/single-value/generate-a-single-value" target="_blank" rel="noopener">Generate a single value (Simple XML Dashboards 10.4)</a><br />
+why sparkline and trend indicator need <code>timechart</code>. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/trellis-layout-for-visualizations/use-trellis-layout-to-split-visualizations" target="_blank" rel="noopener">Use trellis layout to split visualizations (Simple XML Dashboards 10.4)</a><br />
+the requirement that the last command be transforming. 5 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/untable" target="_blank" rel="noopener">untable (Search Reference 10.4)</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/xyseries" target="_blank" rel="noopener">xyseries (Search Reference 10.4)</a> - the two shape converters and their command types. 10 min.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/create-statistical-tables-and-chart-visualizations/build-a-chart-of-multiple-data-series" target="_blank" rel="noopener">Build a chart of multiple data series (Search Manual 10.4)</a><br />
+the <code>stats</code> plus <code>xyseries</code> pattern and the <code>chart n by x,y</code> equivalence. 10 min.</li>
+</ol>
+<h3 id="1.1-use-the-chart-command">1.1 Use the chart command<a class="anchor" href="#1.1-use-the-chart-command" aria-label="Link to this section">#</a></h3>
+<ol start="30">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/chart" target="_blank" rel="noopener">chart command (Search Reference 10.4)</a><br />
+Syntax block, plus row-split and column-split argument definitions: row-split becomes the first column and the X-axis label, column-split becomes the data series columns. Basic example 2 is <code>... | chart max(delay) OVER site BY org</code>.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/stats" target="_blank" rel="noopener">stats command (Search Reference 10.4)</a><br />
+Description and by-clause: one row per distinct BY value, one row total when BY is omitted. AS renames the aggregate column.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/statistical-and-charting-functions" target="_blank" rel="noopener">Statistical and charting functions (Search Reference 10.4)</a><br />
+Opening sentence names chart, stats and timechart as the three commands that take these functions; the related-commands table extends them to sichart, eventstats, streamstats, geostats, sistats and sitimechart. Sparkline is called out as chart and stats only.</li>
+</ol>
+<h3 id="1.2-use-the-timechart-command">1.2 Use the timechart command<a class="anchor" href="#1.2-use-the-timechart-command" aria-label="Link to this section">#</a></h3>
+<ol start="33">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/timechart" target="_blank" rel="noopener">timechart command (Search Reference 10.4)</a><br />
+Bin options: span sets the size of each bin, bins defaults to 100. Usage, &quot;bins and span arguments&quot; and &quot;Default time spans&quot; tables confirm span wins over bins and list the picker defaults.</li>
+</ol>
+<h2 id="2.0-filtering-and-formatting-results-10">2.0 Filtering and Formatting Results (10%)<a class="anchor" href="#2.0-filtering-and-formatting-results-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/02-filtering-and-formatting.html"><code>topics/02-filtering-and-formatting</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-2">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-2" aria-label="Link to this section">#</a></h3>
+<ol start="34">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/search" target="_blank" rel="noopener">search</a><br />
+Usage: the implied search command, using search later in the pipeline, Boolean expressions, Comparing two fields, the IN operator, and example 6 on <code>NOT</code> versus <code>!=</code>. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/expressions-and-predicates/difference-between-and-not" target="_blank" rel="noopener">Difference between != and NOT</a><br />
+the Ponies.csv example, framed exactly as the exam frames it. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/expressions-and-predicates/boolean-expressions-with-logical-operators" target="_blank" rel="noopener">Boolean expressions with logical operators</a><br />
+the precedence table and the two AND/OR examples. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/filldown" target="_blank" rel="noopener">filldown</a><br />
+one short page, read purely to fix the contrast. 3 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/fieldformat" target="_blank" rel="noopener">fieldformat</a><br />
+the Description paragraphs on export and pipeline position, plus the supported-function table. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/text-functions" target="_blank" rel="noopener">Text functions</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/multivalue-eval-functions" target="_blank" rel="noopener">Multivalue eval functions</a> - signatures and index bases; note that <code>split</code> lives on the multivalue.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/informational-functions" target="_blank" rel="noopener">Informational functions</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/date-and-time-functions" target="_blank" rel="noopener">Date and Time functions</a> - skim signatures, read the <code>now()</code> versus <code>time()</code> distinction properly. 12.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/mathematical-functions" target="_blank" rel="noopener">Mathematical functions</a><br />
+skim signatures plus the two defaults worth knowing, <code>log</code> base 10 and <code>round</code> to integer. 6 minutes.</li>
+</ol>
+<h3 id="2.1-the-eval-command">2.1 The eval command<a class="anchor" href="#2.1-the-eval-command" aria-label="Link to this section">#</a></h3>
+<ol start="42">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval" target="_blank" rel="noopener">eval command (SPL Search Reference 10.4)</a><br />
+Description: &quot;If the field name that you specify does not match a field in the output, a new field is added&quot;; if it matches, &quot;the results of the eval expression overwrite the values in that field.&quot; Usage adds that booleans cannot be assigned to fields.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/comparison-and-conditional-functions" target="_blank" rel="noopener">Comparison and Conditional functions, case (SPL Search Reference 10.4)</a><br />
+case(<condition>,<value>,...): conditions evaluated first to last, &quot;defaults to NULL if none of the <condition> arguments are true&quot;. Its example is this exact 200/404/500 search, with blank descriptions for 408 and 406. The true() entry shows the default-value idiom.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/conversion-functions" target="_blank" rel="noopener">Conversion functions, tostring (SPL Search Reference 10.4)</a><br />
+Usage: tostring values under eval &quot;might not sort as expected because they are converted to ASCII. Use the fieldformat command with the tostring function to format the displayed values.&quot;.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/sort" target="_blank" rel="noopener">sort command (SPL Search Reference 10.4)</a><br />
+Usage: sort auto-detects numeric, IP or lexicographical collation, and the Lexicographical order section gives 10, 9, 70, 100 sorting as 10, 100, 70, 9.</li>
+</ol>
+<h3 id="2.2-use-the-search-and-where-commands-to-filter-results">2.2 Use the search and where commands to filter results<a class="anchor" href="#2.2-use-the-search-and-where-commands-to-filter-results" aria-label="Link to this section">#</a></h3>
+<ol start="46">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/where" target="_blank" rel="noopener">where command (SPL Search Reference 10.4)</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval" target="_blank" rel="noopener">eval</a> - one sentence each, and both are the sentence behind T-04-05: the expression is case-sensitive. 2 minutes.</li>
+</ol>
+<h3 id="2.3-the-fillnull-command">2.3 The fillnull command<a class="anchor" href="#2.3-the-fillnull-command" aria-label="Link to this section">#</a></h3>
+<ol start="47">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/fillnull" target="_blank" rel="noopener">fillnull command (SPL Search Reference 10.4)</a><br />
+value argument: &quot;Specify a string value to replace null values. If you do not specify a value, the default value is applied&quot;, Default: 0. Usage covers the field-list versus no-field-list command type split.</li>
+</ol>
+<h2 id="3.0-correlating-events-15">3.0 Correlating Events (15%)<a class="anchor" href="#3.0-correlating-events-15" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/03-correlating-events.html"><code>topics/03-correlating-events</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-3">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-3" aria-label="Link to this section">#</a></h3>
+<ol start="48">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/event-order-functions" target="_blank" rel="noopener">Event order functions</a><br />
+and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/time-functions" target="_blank" rel="noopener">Time functions</a> - the <code>first</code>/<code>last</code> versus <code>earliest</code>/<code>latest</code> table. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/multivalue-stats-and-chart-functions" target="_blank" rel="noopener">Multivalue stats and chart functions</a><br />
+<code>values()</code> versus <code>list()</code> and the 100-value cap on <code>list()</code>. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/join" target="_blank" rel="noopener">join command reference</a><br />
+the &quot;Alternative commands&quot; table, the clearest published statement of when to pick <code>transaction</code> over <code>stats</code>. 10 minutes.</li>
+</ol>
+<h3 id="3.1-identify-transactions">3.1 Identify transactions<a class="anchor" href="#3.1-identify-transactions" aria-label="Link to this section">#</a></h3>
+<ol start="51">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/transaction" target="_blank" rel="noopener">transaction command (Search Reference 10.4)</a><br />
+maxspan and maxpause definitions and defaults; Extended example 2 runs <code>index=web sourcetype=access_combined | transaction clientip host maxspan=30s maxpause=5s</code> and describes the result as a distinct combination of clientip and host values. The Specifying multiple fields section carries the not-necessarily-a-conjunction caveat.</li>
+</ol>
+<h3 id="3.2-group-events-using-fields">3.2 Group events using fields<a class="anchor" href="#3.2-group-events-using-fields" aria-label="Link to this section">#</a></h3>
+<ol start="52">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/about-transactions" target="_blank" rel="noopener">About transactions (Search Manual 10.4)</a><br />
+Using stats instead of transaction names the two cases where transaction is most useful: when a unique id alone cannot separate two transactions (so time spans, pauses or begin/end messages are needed), and when you want the combined raw text. Otherwise stats &quot;performs more efficiently, especially in a distributed environment&quot;.</li>
+</ol>
+<h3 id="3.3-group-events-using-fields-and-time">3.3 Group events using fields and time<a class="anchor" href="#3.3-group-events-using-fields-and-time" aria-label="Link to this section">#</a></h3>
+<ol start="53">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/identify-and-group-events-into-transactions" target="_blank" rel="noopener">Identify and group events into transactions (Search Manual 10.4)</a><br />
+[field-list]: &quot;each event must have the same field(s) to be considered part of the same transaction. Events with common field names and different values will not be grouped.&quot; Also the list of what transactions can include across hosts, sources and sourcetypes, which is the source of the course's own explanation text.</li>
+</ol>
+<h3 id="3.4-search-with-transactions">3.4 Search with transactions<a class="anchor" href="#3.4-search-with-transactions" aria-label="Link to this section">#</a></h3>
+<ol start="54">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/transactions/search-for-transactions" target="_blank" rel="noopener">Search for transactions</a><br />
+<code>transactiontype</code>, <code>match=closest</code>, and the macro combination. 8 minutes.</li>
+</ol>
+<h3 id="3.5-report-on-transactions">3.5 Report on transactions<a class="anchor" href="#3.5-report-on-transactions" aria-label="Link to this section">#</a></h3>
+<ol start="55">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/transactions/configure-transaction-types" target="_blank" rel="noopener">Configure transaction types</a><br />
+<code>transactiontypes.conf</code> attributes and defaults, needed for <code>name=</code>. 10 minutes.</li>
+</ol>
+<h3 id="3.6-determine-when-to-use-transactions-vs.-stats">3.6 Determine when to use transactions vs. stats<a class="anchor" href="#3.6-determine-when-to-use-transactions-vs.-stats" aria-label="Link to this section">#</a></h3>
+<ol start="56">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/group-and-correlate-events/about-event-grouping-and-correlation" target="_blank" rel="noopener">About event grouping and correlation (Search Manual 10.4)</a><br />
+&quot;In most cases, you can accomplish more with the stats command or the transaction command; and these are recommended over using the join and append commands.&quot;.</li>
+<li><a href="https://help.splunk.com/en/data-management/splunk-enterprise-admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/limits.conf" target="_blank" rel="noopener">limits.conf (Admin Manual 10.4)</a><br />
+[transactions] stanza contains only maxopentxn (Default: 5000) and maxopenevents (Default: 100000). max_events_per_bucket is in the [search] stanza and applies to timeline buckets when status_buckets&gt;0.</li>
+</ol>
+<h2 id="4.0-creating-and-managing-fields-10">4.0 Creating and Managing Fields (10%)<a class="anchor" href="#4.0-creating-and-managing-fields-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/04-field-extractions.html"><code>topics/04-field-extractions</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-4">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-4" aria-label="Link to this section">#</a></h3>
+<ol start="58">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/about-fields" target="_blank" rel="noopener">About fields</a><br />
+what a field is, every mechanism for creating one, and the rule that custom extractions belong at search time. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/use-default-fields" target="_blank" rel="noopener">Use default fields</a><br />
+the three groups (internal, default, default datetime) and what is not on the list. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/when-splunk-software-extracts-fields" target="_blank" rel="noopener">When Splunk software extracts fields</a><br />
+index time versus search time, and the first-100-fields rule. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-sample-step" target="_blank" rel="noopener">Field Extractor: Select Sample step</a><br />
+the twenty-line sample limit and the overlapping-extraction warning. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-validate-step" target="_blank" rel="noopener">Field Extractor: Validate step</a><br />
+counterexamples, the grey X and the blue X. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/rex" target="_blank" rel="noopener">rex</a><br />
+syntax, <code>field</code> default <code>_raw</code>, <code>max_match</code> default 1, <code>offset_field</code>, and sed mode. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/erex" target="_blank" rel="noopener">erex</a><br />
+<code>examples</code>, <code>counterexamples</code>, <code>fromfield</code> default <code>_raw</code>, <code>maxtrainers</code> default 100 with range 1 to 1000. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/extract" target="_blank" rel="noopener">extract</a><br />
+<code>pairdelim</code>, <code>kvdelim</code>, <code>limit=50</code>, <code>maxchars=10240</code>, and the <code>_raw</code>-only restriction. 7 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-settings-pages-for-field-extractions-in-splunk-web/use-the-field-extractions-page" target="_blank" rel="noopener">Use the Field extractions page</a><br />
+Inline versus Uses transform, the statement that IFX creates <code>EXTRACT-&lt;class&gt;</code> entries, and the manual New Field Extraction form that is not the wizard. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-configuration-files-to-configure-field-extractions/configure-advanced-extractions-with-field-transforms" target="_blank" rel="noopener">Configure advanced extractions with field transforms</a><br />
+<code>DELIMS</code>, <code>FIELDS</code>, <code>REGEX</code>, <code>FORMAT</code>, <code>MV_ADD</code>, <code>CLEAN_KEYS</code>, and <code>REPORT-&lt;class&gt;</code>. Read for recognition. 10 minutes.</li>
+</ol>
+<h3 id="4.1-perform-regex-field-extractions-using-the-field-extractor-fx">4.1 Perform regex field extractions using the Field Extractor (FX)<a class="anchor" href="#4.1-perform-regex-field-extractions-using-the-field-extractor-fx" aria-label="Link to this section">#</a></h3>
+<ol start="68">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/build-field-extractions-with-the-field-extractor" target="_blank" rel="noopener">Build field extractions with the field extractor (Knowledge Manager 10.4)</a><br />
+&quot;Access the field extractor from a specific event&quot;: Event Actions &gt; Extract Fields. &quot;The field extractor starts you at the Select Method step, in a new browser tab. You have already defined the source type and sample event.&quot; All other entry points start at Select Sample.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-fields-step" target="_blank" rel="noopener">Field Extractor: Select Fields step (Knowledge Manager 10.4)</a><br />
+&quot;Identify required text to create extractions that match specific event patterns&quot;: required text behaves like a search filter and must be present for the extraction to match; highlight the text, select Require, then Add Required Text. Lists the one-string-per-extraction and no-overlap limits.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-save-step" target="_blank" rel="noopener">Field Extractor: Save step (Knowledge Manager 10.4)</a><br />
+&quot;In the Save step of the field extractor you define the name of the new field extraction definition, set its permissions, and save the extraction.&quot; Saved extractions are listed on the Field Extractions page in Settings, and default to Owner.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/about-splunk-regular-expressions" target="_blank" rel="noopener">About Splunk regular expressions (Knowledge Manager 10.4)</a><br />
+the PCRE statement and the two named-capture spellings, <code>(?P&lt;var&gt; ...)</code> in the metacharacter table and <code>(?&lt;field_name&gt;capture pattern)</code> in the Capture groups section. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/manage-users-and-security/10.4/manage-splunk-platform-users-and-roles/create-and-manage-roles-with-splunk-web" target="_blank" rel="noopener">Create and manage roles with Splunk Web (Securing 10.4)</a><br />
+&quot;Use the Indexes tab to choose the indexes that the role can search, and which ones it should search by default.&quot; Backs option D.</li>
+</ol>
+<h3 id="4.2-perform-delimiter-field-extractions-using-the-fx">4.2 Perform delimiter field extractions using the FX<a class="anchor" href="#4.2-perform-delimiter-field-extractions-using-the-fx" aria-label="Link to this section">#</a></h3>
+<ol start="73">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-method-step" target="_blank" rel="noopener">Field Extractor: Select Method step (Knowledge Manager 10.4)</a><br />
+&quot;This is commonly the case with structured, table-based data such as .csv files or events indexed from a database&quot;, with a comma-delimited USGS earthquake .csv event as the example. Regular Expression is for unstructured data such as a system log.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-rename-fields-step" target="_blank" rel="noopener">Field Extractor: Rename Fields step (Knowledge Manager 10.4)</a><br />
+&quot;If you select Space, Comma, Tab, or Pipe, the field extractor breaks the event up into fields based on that delimiter... If the delimiter is not one of those four options, select Other, and enter the delimiter character or characters in the provided field.&quot;.</li>
+</ol>
+<h2 id="5.0-creating-field-aliases-and-calculated-fields-10">5.0 Creating Field Aliases and Calculated Fields (10%)<a class="anchor" href="#5.0-creating-field-aliases-and-calculated-fields-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/05-aliases-and-calculated-fields.html"><code>topics/05-aliases-and-calculated-fields</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-5">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-5" aria-label="Link to this section">#</a></h3>
+<ol start="75">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/about-tags-and-aliases" target="_blank" rel="noopener">About tags and aliases (Knowledge Manager 10.4)</a><br />
+&quot;Tags come last in the sequence of search-time operations&quot; settles option B; the Tags section (track abstract field values, group values under one name) settles option C. No case-sensitivity statement on the page.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/understand-and-use-the-common-information-model-add-on" target="_blank" rel="noopener">Understand and use the Common Information Model Add-on (Knowledge Manager Manual 10.4)</a><br />
+Source of the two-components framing quoted in the explanation: fields plus event category tags, with which &quot;a knowledge manager can normalize log files at search time so that they follow a similar schema&quot;.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/create-calculated-fields-with-splunk-web" target="_blank" rel="noopener">Create calculated fields with Splunk Web</a><br />
+the six steps and the private-by-default note. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/release-notes-and-updates/release-notes/10.4/known-issues-for-this-release/field-alias-behavior-change" target="_blank" rel="noopener">Field alias behavior change</a><br />
+the 7.2.4 change and the lexicographical collision rule between competing <code>AS</code> configurations. 6 minutes.</li>
+</ol>
+<h3 id="5.1-describe-create-and-use-field-aliases">5.1 Describe, create, and use field aliases<a class="anchor" href="#5.1-describe-create-and-use-field-aliases" aria-label="Link to this section">#</a></h3>
+<ol start="79">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/field-aliases/create-field-aliases-in-splunk-web" target="_blank" rel="noopener">Create field aliases in Splunk Web (Knowledge Manager Manual 10.4)</a><br />
+&quot;Where field aliases fit in the search-time sequence of operations&quot;: aliases are applied after key-value extraction but before calculated fields, lookups, event types and tags, and later operations can reference them.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/field-aliases/configure-field-aliases-with-props.conf" target="_blank" rel="noopener">Configure field aliases with props.conf (Knowledge Manager Manual 10.4)</a><br />
+&quot;Perform field aliasing after key-value extraction but before field lookups so that you can specify a lookup table based on a field alias.&quot; Also &quot;A field can have multiple aliases, but a single alias can only apply to one field.&quot;.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/props.conf" target="_blank" rel="noopener">props.conf (Configuration File Reference 10.4)</a><br />
+[<spec>] stanza section: spec is <sourcetype>, host::<host> or source::<source>, and the wildcard pattern match language is documented for the source:: and host:: forms, not for a bare source type stanza.</li>
+</ol>
+<h3 id="5.2-describe-create-and-use-calculated-fields">5.2 Describe, create, and use calculated fields<a class="anchor" href="#5.2-describe-create-and-use-calculated-fields" aria-label="Link to this section">#</a></h3>
+<ol start="82">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/about-calculated-fields" target="_blank" rel="noopener">About calculated fields (Knowledge Manager Manual 10.4)</a><br />
+&quot;Preventing overrides of existing fields&quot;: &quot;If a calculated field has the same name as a field that has been extracted by normal means, the calculated field will override the extracted field, even if the eval statement evaluates to null.&quot; Both coalesce forms follow.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/calculated-fields/configure-calculated-fields-with-props.conf" target="_blank" rel="noopener">Configure calculated fields with props.conf (Knowledge Manager Manual 10.4)</a><br />
+EVAL-&lt;field_name&gt; = <eval statement>; &quot;&lt;eval_statement&gt; is as flexible as it is for the eval search command. It can be evaluated to any value type, including multivals, boolean, or null.&quot;.</li>
+</ol>
+<h2 id="6.0-creating-tags-and-event-types-10">6.0 Creating Tags and Event Types (10%)<a class="anchor" href="#6.0-creating-tags-and-event-types-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/06-tags-and-event-types.html"><code>topics/06-tags-and-event-types</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-6">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-6" aria-label="Link to this section">#</a></h3>
+<ol start="84">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/define-and-manage-tags-in-settings" target="_blank" rel="noopener">Define and manage tags in Settings</a><br />
+the three views and the cross-app disable warning. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-the-host-field" target="_blank" rel="noopener">Tag the host field</a><br />
+tagging does not change the field value. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-event-types" target="_blank" rel="noopener">Tag event types</a><br />
+the tag layer on top of the event type layer. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time" target="_blank" rel="noopener">Use the CIM to normalize data at search time</a><br />
+why event types get tagged, with the <code>[eventtype=nessus]</code> example. Context only, not directly examined. 6 minutes.</li>
+</ol>
+<h3 id="6.1-create-and-use-tags">6.1 Create and use tags<a class="anchor" href="#6.1-create-and-use-tags" aria-label="Link to this section">#</a></h3>
+<ol start="88">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/tag-field-value-pairs-in-search" target="_blank" rel="noopener">Tag field-value pairs in Search (Knowledge Manager 10.4)</a><br />
+Search for tagged field values: exactly two forms, <code>tag=&lt;tagname&gt;</code> for any field and <code>tag::&lt;field&gt;=&lt;tagname&gt;</code> for a specific field. Wildcard examples <code>tag::eventtype=IP-*</code>, <code>tag::host=*local*</code>, <code>NOT tag::eventtype=*</code>.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-types" target="_blank" rel="noopener">About event types (Knowledge Manager 10.4)</a><br />
+How event types work: eventtype=<name> is added at search time &quot;even if you are searching for something completely different&quot;, and is then usable as a search term. A single event can match several event types, so eventtype acts as a multivalue field.</li>
+</ol>
+<h3 id="6.2-describe-event-types-and-their-uses">6.2 Describe event types and their uses<a class="anchor" href="#6.2-describe-event-types-and-their-uses" aria-label="Link to this section">#</a></h3>
+<ol start="90">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/define-event-types-in-splunk-web" target="_blank" rel="noopener">Define event types in Splunk Web (Knowledge Manager 10.4)</a><br />
+Add an event type in Settings: &quot;Priority determines the order of the event type listing in the expanded event. It also determines which color displays for the event type if two or more of the event types matching the event have a defined Color value.&quot;.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/about-event-type-priorities" target="_blank" rel="noopener">About event type priorities (Knowledge Manager 10.4)</a><br />
+&quot;When an event matches multiple event types, the Color for the event type with the best Priority value is displayed&quot;, and event types with a Priority are listed above those without.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/configure-event-types-in-eventtypes.conf" target="_blank" rel="noopener">Configure event types in eventtypes.conf (Knowledge Manager 10.4)</a><br />
+Settles option B: event type definitions are stanzas in eventtypes.conf, never props.conf, and the stanza header is the event type name.</li>
+</ol>
+<h3 id="6.3-create-an-event-type">6.3 Create an event type<a class="anchor" href="#6.3-create-an-event-type" aria-label="Link to this section">#</a></h3>
+<ol start="93">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/event-types/automatically-find-and-build-event-types" target="_blank" rel="noopener">Automatically find and build event types (Knowledge Manager 10.4)</a><br />
+Build Event Type utility: expand an event in the results, &quot;Click Event Actions and select Build Event Type&quot;. Same page shows the finder command is <code>findtypes</code> (default top 10, max argument, analyses up to 5000 events), not searchtypes.</li>
+</ol>
+<h2 id="7.0-creating-and-using-macros-10">7.0 Creating and Using Macros (10%)<a class="anchor" href="#7.0-creating-and-using-macros-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/07-macros.html"><code>topics/07-macros</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-7">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-7" aria-label="Link to this section">#</a></h3>
+<ol start="94">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/administer-splunk-enterprise-with-configuration-files/when-to-restart-splunk-enterprise-after-a-configuration-file-change" target="_blank" rel="noopener">When to restart Splunk Enterprise after a configuration file change</a><br />
+confirm macros.conf is on the no-restart list, note the debug refresh URL. Three minutes.</li>
+</ol>
+<h3 id="7.1-describe-macros">7.1 Describe macros<a class="anchor" href="#7.1-describe-macros" aria-label="Link to this section">#</a></h3>
+<ol start="95">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros" target="_blank" rel="noopener">Use search macros in searches (Knowledge Manager Manual 10.4)</a><br />
+Insert search macros into search strings: backticks around the macro name, example index=web sourcetype=access_combined | <code>mymacro</code>. Also: macros inside quoted values are not expanded, and a macro that expands to a generating command needs a pipe BEFORE the backtick.</li>
+</ol>
+<h3 id="7.2-create-and-use-a-basic-macro">7.2 Create and use a basic macro<a class="anchor" href="#7.2-create-and-use-a-basic-macro" aria-label="Link to this section">#</a></h3>
+<ol start="96">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/define-search-macros-in-settings" target="_blank" rel="noopener">Define search macros in Settings (Knowledge Manager Manual 10.4)</a><br />
+Arguments are entered at creation time as a comma-delimited string of argument names; the definition references them as tokens with dollar signs, for example $arg1$. Validation checks 'the argument values used to invoke the search macro', which are supplied at invocation.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/macros.conf" target="_blank" rel="noopener">macros.conf (Configuration File Reference 10.4)</a><br />
+Stanza notes: 'Macros can be used in the search language by enclosing the macro name and any argument list in backtick marks' and 'The Splunk platform does not expand macros when they are inside quoted values'.</li>
+</ol>
+<h3 id="7.3-define-arguments-and-variables-for-a-macro">7.3 Define arguments and variables for a macro<a class="anchor" href="#7.3-define-arguments-and-variables-for-a-macro" aria-label="Link to this section">#</a></h3>
+<ol start="98">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/search-macro-examples" target="_blank" rel="noopener">Search macro examples</a><br />
+iis_search(1), the expansion preview, makesessions plus pageviews_per_session(1), newrate(2). Ten minutes; rebuild one on your own instance.</li>
+</ol>
+<h3 id="7.4-add-and-use-arguments-with-a-macro">7.4 Add and use arguments with a macro<a class="anchor" href="#7.4-add-and-use-arguments-with-a-macro" aria-label="Link to this section">#</a></h3>
+<ol start="99">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/search-macros/use-search-macros-in-searches" target="_blank" rel="noopener">Use search macros in searches</a></li>
+</ol>
+<h2 id="8.0-creating-and-using-workflow-actions-10">8.0 Creating and Using Workflow Actions (10%)<a class="anchor" href="#8.0-creating-and-using-workflow-actions-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/08-workflow-actions.html"><code>topics/08-workflow-actions</code></a>.</p>
+<h3 id="8.1-describe-the-function-of-get-post-and-search-workflow-actions">8.1 Describe the function of GET, POST, and Search workflow actions<a class="anchor" href="#8.1-describe-the-function-of-get-post-and-search-workflow-actions" aria-label="Link to this section">#</a></h3>
+<ol start="100">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/workflow-actions/about-workflow-actions-in-splunk-web" target="_blank" rel="noopener">About workflow actions in Splunk Web (Knowledge Manager Manual 10.4)</a><br />
+the definition, the four canonical use cases, the one-paragraph description of each of the three kinds, the Settings navigation, and the &quot;Apply only to the following fields / event types&quot; scoping rules including the `*.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/workflow_actions.conf" target="_blank" rel="noopener">workflow_actions.conf (Admin Manual 10.4)</a><br />
+the only page that states the defaults, and the only page documenting <code>$@field_name$</code>, <code>$@field_value$</code>, <code>$@sid$</code>, <code>$@offset$</code>, <code>$@namespace$</code> and <code>$@latest_time$</code>. Read the settings list, then map each example stanza back to its.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/workflow-actions/control-workflow-action-appearance-in-field-and-event-menus" target="_blank" rel="noopener">Control workflow action appearance in field and event menus (Knowledge Manager Manual 10.4)</a><br />
+event-level versus field-level placement, and screenshots of where the entries land. Read it for the mental picture of Event Actions versus a field's Actions menu. 5 minutes.</li>
+</ol>
+<h3 id="8.2-create-a-get-workflow-action">8.2 Create a GET workflow action<a class="anchor" href="#8.2-create-a-get-workflow-action" aria-label="Link to this section">#</a></h3>
+<ol start="103">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/workflow-actions/set-up-a-get-workflow-action" target="_blank" rel="noopener">Set up a GET workflow action (Knowledge Manager Manual 10.4)</a><br />
+&quot;GET link workflow actions drop one or more values into an HTML link&quot;, with WHOIS lookups and search engines as the canonical examples; values in the URI are URL encoded automatically.</li>
+</ol>
+<h3 id="8.3-create-a-post-workflow-action">8.3 Create a POST workflow action<a class="anchor" href="#8.3-create-a-post-workflow-action" aria-label="Link to this section">#</a></h3>
+<ol start="104">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/workflow-actions/set-up-a-post-workflow-action" target="_blank" rel="noopener">Set up a POST workflow action (Knowledge Manager Manual 10.4)</a><br />
+Procedure step &quot;Under Open link in, determine whether the workflow action displays in the current window or if it opens the link in a new window&quot;, plus the note that POST URI variables are URL encoded.</li>
+</ol>
+<h3 id="8.4-create-a-search-workflow-action">8.4 Create a Search workflow action<a class="anchor" href="#8.4-create-a-search-workflow-action" aria-label="Link to this section">#</a></h3>
+<ol start="105">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/workflow-actions/set-up-a-search-workflow-action" target="_blank" rel="noopener">Set up a search workflow action (Knowledge Manager Manual 10.4)</a><br />
+&quot;Identify the app that the search runs in. If you want it to run in a view other than the current one, select that view.&quot; No character limit or macro restriction is stated anywhere on the page.</li>
+</ol>
+<h2 id="9.0-creating-data-models-10">9.0 Creating Data Models (10%)<a class="anchor" href="#9.0-creating-data-models-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/09-data-models-and-pivot.html"><code>topics/09-data-models-and-pivot</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-8">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-8" aria-label="Link to this section">#</a></h3>
+<ol start="106">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/define-data-model-dataset-fields/add-an-auto-extracted-field" target="_blank" rel="noopener">Add an auto-extracted field</a><br />
+the root-dataset-only rule and the four-value status picker. 5 minutes. Skim the eval expression, lookup, regular expression and Geo IP siblings from the same chapter, 5 minutes each.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/pivot-manual/10.4/building-pivots/design-pivot-tables-with-the-pivot-editor" target="_blank" rel="noopener">Design pivot tables with the Pivot Editor</a><br />
+the four pivot element categories and the per-type filter, split and aggregation options. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/create-statistical-tables-and-chart-visualizations/open-a-non-transforming-search-in-pivot-to-create-tables-and-charts" target="_blank" rel="noopener">Open a non-transforming search in Pivot to create tables and charts</a><br />
+Instant Pivot, the fieldset choices, and the private data model it creates on save. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/tstats" target="_blank" rel="noopener">tstats</a><br />
+the FROM datamodel syntax, <code>summariesonly</code>, <code>allow_old_summaries</code>, and the indexed-fields-only restriction. 15 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/spl-search-reference/10.4/search-commands/from" target="_blank" rel="noopener">from</a><br />
+the <code>datamodel:</code> colon syntax and dotted dataset path. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/spl-search-reference/10.4/search-commands/pivot" target="_blank" rel="noopener">pivot</a><br />
+the SPL equivalent of the Pivot Editor, useful for reading a saved pivot. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/datamodels.conf" target="_blank" rel="noopener">datamodels.conf</a><br />
+every acceleration default in one place, plus <code>strict_fields</code> and <code>tags_whitelist</code>. Read last as a defaults reference, 10 minutes.</li>
+</ol>
+<h3 id="9.1-describe-the-relationship-between-data-models-and-pivot">9.1 Describe the relationship between data models and pivot<a class="anchor" href="#9.1-describe-the-relationship-between-data-models-and-pivot" aria-label="Link to this section">#</a></h3>
+<ol start="113">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/about-data-models" target="_blank" rel="noopener">About data models (Knowledge Manager Manual 10.4)</a><br />
+Datasets section: &quot;Datasets break down into four types. These types are: Event datasets, search datasets, transaction datasets, and child datasets.&quot; Root datasets section names event, search and transaction as the top-level types.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/pivot-manual/10.4/pivot-overview/introduction-to-pivot" target="_blank" rel="noopener">Introduction to Pivot (Pivot Manual 10.4)</a><br />
+&quot;About datasets, briefly&quot; independently states &quot;There are four dataset types&quot; and lists event, transaction, search, and child datasets.</li>
+</ol>
+<h3 id="9.2-identify-data-model-attributes">9.2 Identify data model attributes<a class="anchor" href="#9.2-identify-data-model-attributes" aria-label="Link to this section">#</a></h3>
+<ol start="115">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/design-data-models" target="_blank" rel="noopener">Design data models (Knowledge Manager Manual 10.4)</a><br />
+the exact Add Dataset flow for each dataset type, Dataset Name and Dataset ID rules, transaction Group Dataset requirements, and the macro restriction on child constraints. 20 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/define-data-model-dataset-fields/define-dataset-fields" target="_blank" rel="noopener">Define dataset fields (Knowledge Manager Manual 10.4)</a><br />
+&quot;Marking fields as hidden or required&quot; and &quot;Enter or update field names and types&quot; cover hiding, renaming, and the Boolean/IPv4/Number/String type list; the Auto-extracted entry gives the root-dataset-only rule.</li>
+</ol>
+<h3 id="9.3-create-a-data-model">9.3 Create a data model<a class="anchor" href="#9.3-create-a-data-model" aria-label="Link to this section">#</a></h3>
+<ol start="117">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/build-a-data-model/manage-data-models" target="_blank" rel="noopener">Manage data models (Knowledge Manager Manual 10.4)</a><br />
+&quot;Enable data model acceleration&quot; caveats: an accelerated model cannot be edited, acceleration applies only to root event and streaming root search datasets and their children, and the prerequisite is the accelerate_datamodel capability.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-data-summaries-to-accelerate-searches/accelerate-data-models" target="_blank" rel="noopener">Accelerate data models (Knowledge Manager Manual 10.4)</a><br />
+&quot;When the data model definition changes and your summaries have not been updated to match it&quot; describes editing an existing accelerated model's definition and the allow_old_summaries setting, which presupposes that the model can be changed rather than replaced.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/datamodel" target="_blank" rel="noopener">datamodel command (Search Reference 10.4)</a><br />
+Syntax and &quot;Data model search mode options&quot;: positional order is data model name, dataset name, search mode; modes are search, flat, acceleration_search and their _string variants. Usage confirms it is a generating command that must lead with a pipe.</li>
+</ol>
+<h2 id="10.0-using-the-common-information-model-cim-add-on-10">10.0 Using the Common Information Model (CIM) Add-On (10%)<a class="anchor" href="#10.0-using-the-common-information-model-cim-add-on-10" aria-label="Link to this section">#</a></h2>
+<p>Covered by <a href="../topics/10-cim.html"><code>topics/10-cim</code></a>.</p>
+<h3 id="section-wide-covers-every-objective-below-9">Section-wide, covers every objective below<a class="anchor" href="#section-wide-covers-every-objective-below-9" aria-label="Link to this section">#</a></h3>
+<ol start="120">
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/match-ta-event-types-with-cim-data-models-to-accelerate-searches" target="_blank" rel="noopener">Match TA event types with CIM data models to accelerate searches</a><br />
+how a TA's <code>eventtypes.conf</code> plus <code>tags.conf</code> produces model membership. 10 minutes.</li>
+</ol>
+<h3 id="10.1-describe-the-splunk-cim">10.1 Describe the Splunk CIM<a class="anchor" href="#10.1-describe-the-splunk-cim" aria-label="Link to this section">#</a></h3>
+<ol start="121">
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/overview-of-the-splunk-common-information-model" target="_blank" rel="noopener">Overview of the Splunk Common Information Model (CIM 8.6)</a><br />
+&quot;The CIM add-on contains a collection of pre-configured data models ... Each data model in the CIM consists of a set of field names and tags that define the least common denominator of a domain of interest.&quot; Also lists the extra tools shipped with the add-on.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/install-the-splunk-common-information-model-add-on" target="_blank" rel="noopener">Install the Splunk Common Information Model Add-on (CIM 8.6)</a><br />
+Settles option D: &quot;Install the Splunk Common Information Model Add-on to your search heads only.&quot; Also Splunkbase app 1621 and the cim_modactions index.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/approaches-to-using-the-cim" target="_blank" rel="noopener">Approaches to using the CIM (CIM 8.6)</a><br />
+Lists the documented uses (normalize, validate, generate reports and dashboards via Pivot, common action model), which is what makes option B a near-miss rather than nonsense.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/introduction/set-up-the-splunk-common-information-model-add-on" target="_blank" rel="noopener">Set up the Splunk Common Information Model Add-on (CIM 8.6)</a><br />
+Accelerating CIM data models section repeats it: &quot;All data models included in the CIM add-on have data model acceleration turned off by default.&quot; Also documents the CIM Setup page where you enable it.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/accelerate-cim-data-models" target="_blank" rel="noopener">Accelerate CIM data models (Common Information Model 8.6)</a><br />
+Enable data model acceleration section: &quot;By default, the data model acceleration for all models included in the Splunk Common Information Model Add-on are disabled.&quot;.</li>
+</ol>
+<h3 id="10.2-list-the-knowledge-objects-included-with-the-splunk-cim-add-on">10.2 List the knowledge objects included with the Splunk CIM Add-On<a class="anchor" href="#10.2-list-the-knowledge-objects-included-with-the-splunk-cim-add-on" aria-label="Link to this section">#</a></h3>
+<ol start="126">
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/data-models" target="_blank" rel="noopener">Data Models chapter index (CIM 8.6)</a><br />
+The authoritative 8.6 model catalogue. Confirms Alerts, Email and Databases have reference pages, that there is no User permissions model, and that Application State and Change Analysis are flagged deprecated.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-validate-your-data" target="_blank" rel="noopener">Use the CIM to validate your data (CIM 8.6)</a><br />
+&quot;Use the CIM Validation (S.o.S.) datamodel&quot; section: CIM 4.2.0 moved the validation datasets into their own data model, so CIM Validation (S.o.S.) genuinely is a shipped model even though it has no reference-table page.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-filters-to-exclude-data" target="_blank" rel="noopener">Use the CIM Filters to exclude data (CIM 8.6)</a><br />
+Proof that the add-on does ship search macros: the CIM Filter macros &quot;are available by default and located in the CIM Filters section of the $SPLUNK_HOME/etc/apps/Splunk_SA_CIM/default/macros.conf file&quot;. They exclude data, they do not normalize it, which is why option A is keyed false here.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/data-models/cim-fields-per-associated-data-model" target="_blank" rel="noopener">CIM fields per associated data model (CIM 8.6)</a><br />
+Single-page field-to-model map; the model column shows the current names in use (Change, Data Access, Data Loss Prevention, Endpoint) with no Application State or Change Analysis.</li>
+</ol>
+<h3 id="10.3-use-the-cim-add-on-to-normalize-data">10.3 Use the CIM Add-On to normalize data<a class="anchor" href="#10.3-use-the-cim-add-on-to-normalize-data" aria-label="Link to this section">#</a></h3>
+<ol start="130">
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/using-the-common-information-model/use-the-cim-to-normalize-data-at-search-time" target="_blank" rel="noopener">Use the CIM to normalize data at search time (CIM 8.6)</a><br />
+Step 5: &quot;Normalize your data for each of these fields using a combination of field aliases, field extractions, and lookups.&quot; Sub-steps b/c/d give the alias, extraction, lookup order; step 3 covers the CIM-compliant event tags the stem already grants.</li>
+<li><a href="https://help.splunk.com/en/data-management/common-information-model/8.6/data-models/how-to-use-the-cim-data-model-reference-tables" target="_blank" rel="noopener">How to use the CIM data model reference tables (CIM 8.6)</a><br />
+Describes the tags tables (constraints per dataset, including inherited tags from parent datasets) and the fields tables (extracted and calculated fields, descriptions, expected values), and notes that &quot;object&quot; is the pre-6.5.0 term for &quot;dataset&quot;.</li>
+</ol>
+<h2 id="cross-cutting-reference-pages">Cross-cutting reference pages<a class="anchor" href="#cross-cutting-reference-pages" aria-label="Link to this section">#</a></h2>
+<p>Cited by the reference files rather than by one blueprint objective: command-type classification, conf-file specs, function catalogues. Read them when a topic file sends you here, not in sequence.</p>
+<ol start="132">
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/administer-splunk-enterprise-with-configuration-files/configuration-file-precedence" target="_blank" rel="noopener">Configuration file precedence</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/admin-manual/10.4/configuration-file-reference/10.4.0-configuration-file-reference/transforms.conf" target="_blank" rel="noopener">Transforms.conf</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/administer/manage-indexers-and-indexer-clusters/10.4/indexing-overview/index-time-versus-search-time" target="_blank" rel="noopener">Index time versus search time</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/bubble-chart" target="_blank" rel="noopener">Bubble chart (Simple XML Dashboards 10.4)</a><br />
+Definition of the three dimensions, the <code>&lt;stats_command&gt; &lt;y-axis_field&gt; &lt;x-axis_field&gt; &lt;bubble_size_field&gt;</code> data shape, and the four-column Statistics tab requirement.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/chart-overview" target="_blank" rel="noopener">Chart overview (Simple XML Dashboards 10.4)</a><br />
+Chart selection table: pie shows a single dimension, column/bar/line/area plot on two axes, scatter and bubble represent multiple dimensions.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/create-dashboards-and-reports/simple-xml-dashboards/10.4/charts/line-and-area-charts" target="_blank" rel="noopener">Line and area charts</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/get-started/get-data-in/10.4/configure-source-types/rename-source-types-at-search-time" target="_blank" rel="noopener">Rename source types at search time</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/about-regular-expressions-with-field-extractions" target="_blank" rel="noopener">About regular expressions with field extractions</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/tags/use-macros-with-event-types-and-tags" target="_blank" rel="noopener">Use macros with event types and tags</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-configuration-files-to-configure-lookups/make-your-lookup-automatic" target="_blank" rel="noopener">Make your lookup automatic</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/welcome-to-knowledge-management/what-is-splunk-knowledge" target="_blank" rel="noopener">What is splunk knowledge</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/release-notes-and-updates/release-notes/10.2/known-issues-for-this-release/field-alias-behavior-change" target="_blank" rel="noopener">Field alias behavior change</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/manage-jobs/manage-splunk-enterprise-jobs-from-the-os" target="_blank" rel="noopener">Manage Splunk Enterprise jobs from the OS (Search Manual 10.4)</a><br />
+&quot;When a search job runs, it will manifest itself as a process in the OS called splunkd search&quot;, with the ps output showing the child processes under the splunkd pid. Settles option D.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/subsearches/use-subsearch-to-correlate-events" target="_blank" rel="noopener">Use subsearch to correlate events</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/date-and-time-functions" target="_blank" rel="noopener">Date and time functions</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/evaluation-functions" target="_blank" rel="noopener">Evaluation functions</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/evaluation-functions/multivalue-eval-functions" target="_blank" rel="noopener">Multivalue eval functions</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eventstats" target="_blank" rel="noopener">Eventstats</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/regex" target="_blank" rel="noopener">Regex</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/streamstats" target="_blank" rel="noopener">Streamstats</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/xyseries" target="_blank" rel="noopener">Xyseries</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/aggregate-functions" target="_blank" rel="noopener">Aggregate functions</a></li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/statistical-and-charting-functions/time-functions" target="_blank" rel="noopener">Time functions</a></li>
+</ol>
+<h2 id="how-to-use-this-list">How to use this list<a class="anchor" href="#how-to-use-this-list" aria-label="Link to this section">#</a></h2>
+<p>Read the topic file for a section first, then its pages here. The topic file tells you which paragraph on the page matters, which turns a 25-minute reference page into a 5-minute read. Doing it the other way round costs hours.</p>
+<p>If you only have time for a handful, read these six: the search-time operation sequence (it underpins sections 4, 5, 6, 9 and 10, half the exam by weight), the <code>transaction</code> command reference and About transactions (section 3.0 is the heaviest at 15%), <code>workflow_actions.conf</code> (the only page stating those defaults), Use search macros in searches, and the CIM overview (10% of the exam with no Splunk course behind it).</p>
+
+<nav class="pn" aria-label="Section"><a href="exam-traps.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Trap inventory</span></a><a href="doc-links.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Doc links by manual</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#stage-0-foundations-read-before-section-1.0"><span>Stage 0: Foundations, read before section 1.0</span><span class="min">4m</span></a></li>
+<li><a class="lvl2" href="#1.0-using-transforming-commands-for-visualizations-5"><span>1.0 Using Transforming Commands for Visualizations (5%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#1.1-use-the-chart-command"><span>1.1 Use the chart command</span></a></li>
+<li><a class="lvl3" href="#1.2-use-the-timechart-command"><span>1.2 Use the timechart command</span></a></li>
+<li><a class="lvl2" href="#2.0-filtering-and-formatting-results-10"><span>2.0 Filtering and Formatting Results (10%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-2"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#2.1-the-eval-command"><span>2.1 The eval command</span></a></li>
+<li><a class="lvl3" href="#2.2-use-the-search-and-where-commands-to-filter-results"><span>2.2 Use the search and where commands to filter results</span></a></li>
+<li><a class="lvl3" href="#2.3-the-fillnull-command"><span>2.3 The fillnull command</span></a></li>
+<li><a class="lvl2" href="#3.0-correlating-events-15"><span>3.0 Correlating Events (15%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-3"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#3.1-identify-transactions"><span>3.1 Identify transactions</span></a></li>
+<li><a class="lvl3" href="#3.2-group-events-using-fields"><span>3.2 Group events using fields</span></a></li>
+<li><a class="lvl3" href="#3.3-group-events-using-fields-and-time"><span>3.3 Group events using fields and time</span></a></li>
+<li><a class="lvl3" href="#3.4-search-with-transactions"><span>3.4 Search with transactions</span></a></li>
+<li><a class="lvl3" href="#3.5-report-on-transactions"><span>3.5 Report on transactions</span></a></li>
+<li><a class="lvl3" href="#3.6-determine-when-to-use-transactions-vs.-stats"><span>3.6 Determine when to use transactions vs. stats</span></a></li>
+<li><a class="lvl2" href="#4.0-creating-and-managing-fields-10"><span>4.0 Creating and Managing Fields (10%)</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-4"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#4.1-perform-regex-field-extractions-using-the-field-extractor-fx"><span>4.1 Perform regex field extractions using the Field Extractor (FX)</span></a></li>
+<li><a class="lvl3" href="#4.2-perform-delimiter-field-extractions-using-the-fx"><span>4.2 Perform delimiter field extractions using the FX</span></a></li>
+<li><a class="lvl2" href="#5.0-creating-field-aliases-and-calculated-fields-10"><span>5.0 Creating Field Aliases and Calculated Fields (10%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-5"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#5.1-describe-create-and-use-field-aliases"><span>5.1 Describe, create, and use field aliases</span></a></li>
+<li><a class="lvl3" href="#5.2-describe-create-and-use-calculated-fields"><span>5.2 Describe, create, and use calculated fields</span></a></li>
+<li><a class="lvl2" href="#6.0-creating-tags-and-event-types-10"><span>6.0 Creating Tags and Event Types (10%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-6"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#6.1-create-and-use-tags"><span>6.1 Create and use tags</span></a></li>
+<li><a class="lvl3" href="#6.2-describe-event-types-and-their-uses"><span>6.2 Describe event types and their uses</span></a></li>
+<li><a class="lvl3" href="#6.3-create-an-event-type"><span>6.3 Create an event type</span></a></li>
+<li><a class="lvl2" href="#7.0-creating-and-using-macros-10"><span>7.0 Creating and Using Macros (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-7"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#7.1-describe-macros"><span>7.1 Describe macros</span></a></li>
+<li><a class="lvl3" href="#7.2-create-and-use-a-basic-macro"><span>7.2 Create and use a basic macro</span></a></li>
+<li><a class="lvl3" href="#7.3-define-arguments-and-variables-for-a-macro"><span>7.3 Define arguments and variables for a macro</span></a></li>
+<li><a class="lvl3" href="#7.4-add-and-use-arguments-with-a-macro"><span>7.4 Add and use arguments with a macro</span></a></li>
+<li><a class="lvl2" href="#8.0-creating-and-using-workflow-actions-10"><span>8.0 Creating and Using Workflow Actions (10%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#8.1-describe-the-function-of-get-post-and-search-workflow-actions"><span>8.1 Describe the function of GET, POST, and Search workflow actions</span></a></li>
+<li><a class="lvl3" href="#8.2-create-a-get-workflow-action"><span>8.2 Create a GET workflow action</span></a></li>
+<li><a class="lvl3" href="#8.3-create-a-post-workflow-action"><span>8.3 Create a POST workflow action</span></a></li>
+<li><a class="lvl3" href="#8.4-create-a-search-workflow-action"><span>8.4 Create a Search workflow action</span></a></li>
+<li><a class="lvl2" href="#9.0-creating-data-models-10"><span>9.0 Creating Data Models (10%)</span><span class="min">2m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-8"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#9.1-describe-the-relationship-between-data-models-and-pivot"><span>9.1 Describe the relationship between data models and pivot</span></a></li>
+<li><a class="lvl3" href="#9.2-identify-data-model-attributes"><span>9.2 Identify data model attributes</span></a></li>
+<li><a class="lvl3" href="#9.3-create-a-data-model"><span>9.3 Create a data model</span></a></li>
+<li><a class="lvl2" href="#10.0-using-the-common-information-model-cim-add-on-10"><span>10.0 Using the Common Information Model (CIM) Add-On (10%)</span><span class="min">3m</span></a></li>
+<li><a class="lvl3" href="#section-wide-covers-every-objective-below-9"><span>Section-wide, covers every objective below</span></a></li>
+<li><a class="lvl3" href="#10.1-describe-the-splunk-cim"><span>10.1 Describe the Splunk CIM</span></a></li>
+<li><a class="lvl3" href="#10.2-list-the-knowledge-objects-included-with-the-splunk-cim-add-on"><span>10.2 List the knowledge objects included with the Splunk CIM Add-On</span></a></li>
+<li><a class="lvl3" href="#10.3-use-the-cim-add-on-to-normalize-data"><span>10.3 Use the CIM Add-On to normalize data</span></a></li>
+<li><a class="lvl2" href="#cross-cutting-reference-pages"><span>Cross-cutting reference pages</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#how-to-use-this-list"><span>How to use this list</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>27 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

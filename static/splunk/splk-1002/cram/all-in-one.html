@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPLK-1002 All-in-One Final Review | SPLK-1002</title>
+<meta name="description" content="Final review sheet, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="cram/all-in-one" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="all-in-one.html" aria-current="page"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Start here</span><span class="sep">/</span>
+        <span>Final review sheet</span>
+        
+      </div>
+<h1 id="splk-1002-all-in-one-final-review">SPLK-1002 All-in-One Final Review</h1>
+<h2 id="exam-facts">Exam facts<a class="anchor" href="#exam-facts" aria-label="Link to this section">#</a></h2>
+<p>65 multiple-choice questions.</p>
+<p>60 minutes of seat time, which includes 3 minutes to review the exam agreement.</p>
+<p>No passing score is published by Splunk.</p>
+<p>No prerequisite exam. SPLK-1001 is recommended, not required.</p>
+<h2 id="weights">Weights<a class="anchor" href="#weights" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Weight</th>
+<th>Approx. questions of 65</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0 Transforming commands for visualizations</td>
+<td>5%</td>
+<td>3</td>
+<td>Lightest section</td>
+</tr>
+<tr>
+<td>2.0 Filtering and formatting results</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>3.0 Correlating events</td>
+<td>15%</td>
+<td>10</td>
+<td><strong>Heaviest</strong></td>
+</tr>
+<tr>
+<td>4.0 Creating and managing fields</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>5.0 Field aliases and calculated fields</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>6.0 Tags and event types</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>7.0 Macros</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>8.0 Workflow actions</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>9.0 Data models</td>
+<td>10%</td>
+<td>6-7</td>
+<td></td>
+</tr>
+<tr>
+<td>10.0 Common Information Model</td>
+<td>10%</td>
+<td>6-7</td>
+<td><strong>No official course covers it</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Lookups, dashboards, reports and alerts are off blueprint.</p>
+<h2 id="the-search-time-precedence-chain">The search-time precedence chain<a class="anchor" href="#the-search-time-precedence-chain" aria-label="Link to this section">#</a></h2>
+<p>Field filters, inline field extraction, field extraction using a transform, automatic key-value extraction, field aliases, calculated fields, lookups, event types, tags. Each step can reference fields produced by earlier steps and can never reference fields produced by later steps.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 780 112" width="780" height="112" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="135.25" height="39" rx="5"/><text class="dg-text" x="69.625" y="22.5" text-anchor="middle" dominant-baseline="middle">1 field filters</text><rect class="dg-node" x="171.25" y="2" width="142.4" height="39" rx="5"/><text class="dg-text" x="242.45" y="22.5" text-anchor="middle" dominant-baseline="middle">2 inline EXTRACT</text><rect class="dg-node" x="347.65" y="2" width="156.70000000000002" height="39" rx="5"/><text class="dg-text" x="426.0" y="22.5" text-anchor="middle" dominant-baseline="middle">3 REPORT transform</text><rect class="dg-node" x="538.35" y="2" width="92.35000000000001" height="39" rx="5"/><text class="dg-text" x="584.525" y="22.5" text-anchor="middle" dominant-baseline="middle">4 auto KV</text><rect class="dg-node" x="664.7" y="2" width="113.80000000000001" height="39" rx="5"/><text class="dg-text" x="721.6" y="22.5" text-anchor="middle" dominant-baseline="middle">5 FIELDALIAS</text><rect class="dg-node" x="2" y="71" width="149.55" height="39" rx="5"/><text class="dg-text" x="76.775" y="91.5" text-anchor="middle" dominant-baseline="middle">6 EVAL calc field</text><rect class="dg-node" x="185.55" y="71" width="85.2" height="39" rx="5"/><text class="dg-text" x="228.15" y="91.5" text-anchor="middle" dominant-baseline="middle">7 LOOKUP</text><rect class="dg-node" x="304.75" y="71" width="120.95" height="39" rx="5"/><text class="dg-text" x="365.225" y="91.5" text-anchor="middle" dominant-baseline="middle">8 event types</text><rect class="dg-node" x="459.7" y="71" width="70.9" height="39" rx="5"/><text class="dg-text" x="495.15" y="91.5" text-anchor="middle" dominant-baseline="middle">9 tags</text><path class="dg-edge" marker-end="url(#ah)" d="M137.25 21.5 L167.25 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M313.65 21.5 L343.65 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M504.35 21.5 L534.35 21.5"/><path class="dg-edge" marker-end="url(#ah)" d="M630.7 21.5 L660.7 21.5"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M721.6 41 L721.6 56.0 L76.775 56.0 L76.775 67"/><path class="dg-edge" marker-end="url(#ah)" d="M151.55 90.5 L181.55 90.5"/><path class="dg-edge" marker-end="url(#ah)" d="M270.75 90.5 L300.75 90.5"/><path class="dg-edge" marker-end="url(#ah)" d="M425.7 90.5 L455.7 90.5"/></svg></figure>
+<p>Macros are absent from this chain: expansion is textual and happens before parsing.</p>
+<h2 id="1.0-transforming-commands-5">1.0 Transforming commands (5%)<a class="anchor" href="#1.0-transforming-commands-5" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">chart</span> <span class="t-op">&lt;</span><span class="t-field">agg</span><span class="t-op">&gt;</span> <span class="t-kw">OVER</span> <span class="t-op">&lt;</span><span class="t-field">row-split</span><span class="t-op">&gt;</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">column-split</span><span class="t-op">&gt;</span>
+<span class="t-field">timechart</span> <span class="t-op">[</span><span class="t-opt">span</span><span class="t-op">=&lt;</span><span class="t-field">t</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">agg</span><span class="t-op">&gt;</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">one-field</span><span class="t-op">&gt;</span>
+<span class="t-field">top</span><span class="t-pipe">|</span><span class="t-cmd">rare</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">N</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">xyseries</span> <span class="t-op">&lt;</span><span class="t-field">x</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-name</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-data</span><span class="t-op">&gt;</span>   <span class="t-pipe">|</span>   <span class="t-cmd">untable</span> <span class="t-op">&lt;</span><span class="t-field">x</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-name</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">y-data</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Defaults: <code>chart</code> <code>limit=top 10</code>, <code>bins=300</code>; <code>timechart</code> <code>limit=top10</code>, <code>bins=100</code>; both <code>useother=true</code>, <code>usenull=true</code>, <code>otherstr=OTHER</code>, <code>nullstr=NULL</code>, <code>cont=true</code>. <code>top</code>/<code>rare</code> <code>limit=10</code>, and <code>top</code> has <code>useother=false</code>.</p>
+<p>Decide: X-axis is time, use <code>timechart</code>; X-axis is any other field, use <code>chart</code>; one row per field combination, use <code>stats</code>.</p>
+<ul>
+<li><code>limit</code> caps columns (series), not rows; <code>limit=0</code> means all.</li>
+<li><code>timechart</code> accepts exactly one BY field, <code>chart</code> accepts two, <code>stats</code> accepts many. <code>partial</code> and <code>fixedrange</code> exist only on <code>timechart</code>.</li>
+<li><code>bins</code> is a maximum, not a target; if both <code>bins</code> and <code>span</code> are given, <code>span</code> wins. <code>sparkline()</code> works with <code>chart</code> and <code>stats</code>, never <code>timechart</code>.</li>
+</ul>
+<h2 id="2.0-filtering-and-formatting-10">2.0 Filtering and formatting (10%)<a class="anchor" href="#2.0-filtering-and-formatting-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expr</span><span class="t-op">&gt;</span><span class="t-op">[</span><span class="t-op">,</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expr</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">fillnull</span> <span class="t-op">[</span><span class="t-opt">value</span><span class="t-op">=&lt;</span><span class="t-field">s</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-pipe">|</span> <span class="t-cmd">filldown</span> <span class="t-op">&lt;</span><span class="t-field">wc-field-list</span><span class="t-op">&gt;</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">fieldformat</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Defaults: <code>fillnull value=0</code> and, with no field list, fills every field; <code>filldown</code> accepts wildcards, <code>fillnull</code> does not; <code>fieldformat</code> takes exactly one expression; <code>substr</code> indexes from 1, <code>mvindex</code> from 0.</p>
+<p>Decide: field against a literal, <code>search</code> or <code>where</code>; field against a field, arithmetic, or an eval function, <code>where</code> only.</p>
+<ul>
+<li><code>search</code> reads a bare right-hand word as a literal string, so it cannot compare two fields.</li>
+<li><code>search</code> evaluates OR before AND; <code>eval</code> and <code>where</code> evaluate AND before OR. <code>search</code> has no <code>XOR</code>.</li>
+<li><code>NOT field=&quot;v&quot;</code> keeps events with no such field, <code>field!=&quot;v&quot;</code> drops them. <code>coalesce</code> returns the first non-null argument, <code>case</code> with no <code>true()</code> default returns NULL.</li>
+</ul>
+<h2 id="3.0-correlating-events-15-heaviest">3.0 Correlating events (15%, heaviest)<a class="anchor" href="#3.0-correlating-events-15-heaviest" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-op">]</span><span class="t-op">[</span><span class="t-opt">maxpause</span><span class="t-op">=</span><span class="t-op">]</span><span class="t-op">[</span><span class="t-opt">maxevents</span><span class="t-op">=</span><span class="t-op">]</span><span class="t-op">[</span><span class="t-opt">startswith</span><span class="t-op">=</span><span class="t-op">]</span><span class="t-op">[</span><span class="t-opt">endswith</span><span class="t-op">=</span><span class="t-op">]</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">range</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">duration</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">eventcount</span><span class="t-op">,</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">x</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">id</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Defaults: <code>maxspan=-1</code>, <code>maxpause=-1</code> (both no limit), <code>maxevents=1000</code>, <code>connected=true</code>, <code>unifyends=true</code>, <code>keeporphans=false</code>, <code>keepevicted=false</code>, <code>mvlist=false</code>, <code>delim=&quot; &quot;</code>, <code>nullstr=NULL</code>. Negative values deactivate the constraint.</p>
+<p>Decide: raw event text must survive the grouping, use <code>transaction</code>; a unique ID plus aggregates on large or distributed data, use <code>stats</code>; after an <code>append</code>, always <code>stats</code>.</p>
+<ul>
+<li><code>transaction</code> creates <code>duration</code> (seconds, <code>0</code> for a single-event transaction), <code>eventcount</code> (not <code>count</code>), and <code>closed_txn</code>.</li>
+<li><code>closed_txn=1</code> only when <code>maxevents</code>, <code>maxspan</code>, <code>maxpause</code>, or <code>startswith</code> is specified. <code>endswith</code> alone leaves it <code>0</code>.</li>
+<li><code>_time</code> of the result is the earliest member's timestamp, <code>_raw</code> is every member's raw text. Input must be in descending time order.</li>
+</ul>
+<h2 id="4.0-creating-and-managing-fields-10">4.0 Creating and managing fields (10%)<a class="anchor" href="#4.0-creating-and-managing-fields-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-op">[</span><span class="t-opt">field</span><span class="t-op">=&lt;</span><span class="t-field">f</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-str">&quot;&lt;regex&gt;&quot;</span> <span class="t-op">[</span><span class="t-opt">max_match</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span>   <span class="t-pipe">|</span>   <span class="t-cmd">rex</span> <span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-str">&quot;s/x/y/g&quot;</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">erex</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span> <span class="t-opt">examples</span><span class="t-op">=</span><span class="t-str">&quot;a,b&quot;</span> <span class="t-op">[</span><span class="t-opt">fromfield</span><span class="t-op">=&lt;</span><span class="t-field">f</span><span class="t-op">&gt;</span><span class="t-op">]</span>   <span class="t-pipe">|</span>   <span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">extract</span> <span class="t-opt">pairdelim</span><span class="t-op">=</span><span class="t-str">&quot;&quot;</span> <span class="t-opt">kvdelim</span><span class="t-op">=</span><span class="t-str">&quot;&quot;</span></code></pre></div>
+<p>Defaults: <code>rex field=_raw</code>, <code>max_match=1</code>; <code>erex fromfield=_raw</code>, <code>maxtrainers=100</code>; <code>extract limit=50</code> pairs, <code>maxchars=10240</code>, <code>_raw</code> only; Field Extractor save permission defaults to <strong>Owner</strong>; auto KV extracts the first 100 obvious <code>key=value</code> pairs.</p>
+<p>Decide: consistent single separator, Field Extractor delimiter path; unstructured text with recognisable surrounding literals, regex path; one-off need, <code>rex</code>.</p>
+<ul>
+<li>The Field Extractor creates search-time extractions only: retroactive to all indexed events, no reindex, no restart.</li>
+<li>Regex path writes <code>EXTRACT-&lt;class&gt;</code> in props.conf and offers Validate and counterexamples; delimiter path writes <code>REPORT-&lt;class&gt;</code> plus a <code>DELIMS</code>/<code>FIELDS</code> stanza in transforms.conf and offers Rename Fields.</li>
+<li><code>rex</code> emits every input event whether or not it matched; <code>regex</code> filters. Field names are case sensitive, field values in search terms are not.</li>
+</ul>
+<h2 id="5.0-field-aliases-and-calculated-fields-10">5.0 Field aliases and calculated fields (10%)<a class="anchor" href="#5.0-field-aliases-and-calculated-fields-10" aria-label="Link to this section">#</a></h2>
+<pre class="plain lang-ini"><code>[&lt;sourcetype&gt;|source::&lt;source&gt;|host::&lt;host&gt;]
+FIELDALIAS-&lt;class&gt; = &lt;orig&gt; AS|ASNEW &lt;new&gt;
+EVAL-&lt;fieldname&gt;   = &lt;eval expression&gt;</code></pre>
+<p>Defaults: Overwrite field values is unchecked, which writes <code>ASNEW</code>; checked writes <code>AS</code>. Scope is host, source, or source type only. Objects are private to the creator on creation.</p>
+<p>Decide: the value already exists under another name, alias it; the value must be derived or two fields must collapse into one name, use a calculated field with <code>coalesce</code>.</p>
+<ul>
+<li>The original field survives aliasing. Both names return the same events. <code>rename</code> replaces, alias adds.</li>
+<li>Multiple <code>EVAL-</code> statements in one stanza run in parallel and never chain.</li>
+<li>The Eval expression box takes the right-hand side only: <code>round(bytes/1024, 2)</code>, never <code>eval kb = ...</code>. You cannot alias a calculated field, lookup output, event type, or tag.</li>
+</ul>
+<h2 id="6.0-tags-and-event-types-10">6.0 Tags and event types (10%)<a class="anchor" href="#6.0-tags-and-event-types-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">tag</span><span class="t-op">=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span>   <span class="t-field">tag::</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">tagname</span><span class="t-op">&gt;</span>   <span class="t-field">tag::eventtype</span><span class="t-op">=</span><span class="t-field">IP-</span><span class="t-op">*</span>   <span class="t-opt">eventtype</span><span class="t-op">=&lt;</span><span class="t-field">name</span><span class="t-op">&gt;</span></code></pre></div>
+<pre class="plain lang-ini"><code>[&lt;fieldname&gt;=&lt;value&gt;]
+&lt;tag&gt; = enabled</code></pre>
+<p>Defaults: <code>priority</code> is an integer 1 to 10 where <strong>1 is highest and 10 is lowest</strong>, and the attribute is omitted by default. <code>color</code> values are <code>none</code> plus <code>et_blue</code>, <code>et_green</code>, <code>et_magenta</code>, <code>et_orange</code>, <code>et_purple</code>, <code>et_red</code>, <code>et_sky</code>, <code>et_teal</code>, <code>et_yellow</code>. Sharing is Private on creation.</p>
+<p>Decide: naming a set of values of one field, tag; naming a whole event category, event type; anything needing a pipe, <code>stats</code>, or a subsearch, a report or macro instead.</p>
+<ul>
+<li>A tag attaches to a field-value pair, not to an event and not to a field.</li>
+<li>An event type search cannot contain a pipe after the simple search, a subsearch, or <code>savedsearch</code>.</li>
+<li><code>eventtype</code> is set at search time and becomes multivalue when an event matches two or more event types; priority decides display order and which single colour renders.</li>
+</ul>
+<h2 id="7.0-macros-10">7.0 Macros (10%)<a class="anchor" href="#7.0-macros-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-macro">`mymacro`</span>     <span class="t-macro">`argmacro(120,300)`</span>     <span class="t-macro">`argmacro(hi=300,lo=120)`</span>     <span class="t-pipe">|</span> <span class="t-macro">`generatingmacro`</span></code></pre></div>
+<pre class="plain lang-ini"><code>[bc_status_band(2)]
+args = lo, hi
+definition = index=web status&gt;=$lo$ status&lt;$hi$
+validation = isnum($lo$) AND isnum($hi$)</code></pre>
+<p>Defaults: <code>iseval=false</code>, <code>args</code> none, <code>definition</code> required, <code>errormsg</code> used only by the Boolean form of <code>validation</code>, <code>limits.conf [search] max_macro_depth = 100</code>. Destination app defaults to the current app context. No restart is needed for macros.conf.</p>
+<p>Decide: the chunk varies by a value, add arguments and put the count in the stanza name; the expansion text itself is chosen conditionally, set <code>iseval=true</code> and return a string.</p>
+<ul>
+<li>Backticks invoke a macro; single and double quotation marks do not.</li>
+<li><code>mymacro(2)</code> is the stored name because it takes two arguments; it is invoked as <code>`mymacro(foo,bar)`</code>.</li>
+<li>The Arguments field holds bare names with no dollar signs; the Definition holds <code>$name$</code> tokens. Validation failure is an error before dispatch, not zero results. Preview with Control-Shift-E.</li>
+</ul>
+<h2 id="8.0-workflow-actions-10">8.0 Workflow actions (10%)<a class="anchor" href="#8.0-workflow-actions-10" aria-label="Link to this section">#</a></h2>
+<pre class="plain lang-ini"><code>[&lt;name&gt;]
+type = link|search
+label = &lt;text with $field$&gt;
+fields = &lt;comma list&gt;            # ALL listed fields must be present
+display_location = field_menu|event_menu|both
+link.uri = http://x/?q=$field$   link.target = blank|self   link.method = get|post
+search.search_string = ...       search.preserve_timerange = &lt;bool&gt;</code></pre>
+<p>Defaults: <code>fields=*</code>, <code>eventtypes</code> unset, <code>display_location=both</code>, <code>link.target=blank</code> (new window), <code>link.method=get</code>, <code>search.preserve_timerange=false</code>, <code>disabled=False</code>. <code>search.app</code> and <code>search.view</code> default to the current app and view. Path: Settings, Fields, Workflow actions.</p>
+<p>Decide: leaving Splunk with values that fit a query string, GET link; needing a body, <code>$_raw$</code>, or record creation, POST link; staying in Splunk to run more SPL, search action.</p>
+<ul>
+<li><code>type</code> has exactly two values, <code>link</code> and <code>search</code>. GET versus POST is <code>link.method</code>, not <code>type</code>.</li>
+<li>POST arguments travel in the request body, HTTP-form encoded, never in the query string.</li>
+<li><code>link.uri</code> tokens are automatically URI-encoded, <code>search.search_string</code> tokens are not, so quote them yourself. <code>preserve_timerange</code> is ignored if <code>search.earliest</code> or <code>search.latest</code> is set.</li>
+</ul>
+<h2 id="9.0-data-models-10">9.0 Data models (10%)<a class="anchor" href="#9.0-data-models-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-op">&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span> <span class="t-field">search</span><span class="t-pipe">|</span><span class="t-field">flat</span> <span class="t-op">[</span><span class="t-opt">strict_fields</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-op">[</span><span class="t-opt">summariesonly</span><span class="t-op">=&lt;</span><span class="t-field">b</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">agg</span><span class="t-op">&gt;</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">root</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-cmd">WHERE</span> <span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">f</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">span</span><span class="t-op">=&lt;</span><span class="t-field">t</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:</span><span class="t-op">&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">pivot</span> <span class="t-op">&lt;</span><span class="t-field">model</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">dataset</span><span class="t-op">&gt;</span> <span class="t-op">&lt;</span><span class="t-field">cell-value</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-field">SPLITROW</span> <span class="t-op">&lt;</span><span class="t-field">f</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-field">SPLITCOL</span> <span class="t-op">&lt;</span><span class="t-field">f</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p>Defaults: <code>acceleration=false</code> on every model; Summarization Period <code>*/5 * * * *</code>; <code>acceleration.max_time=3600</code>; <code>acceleration.max_concurrent=3</code>; <code>datamodel strict_fields=true</code>; <code>tstats summariesonly=false</code>; field Type defaults to String, visibility to Shown, requirement to Optional. Root datasets inherit <code>_time</code>, <code>host</code>, <code>source</code>, <code>sourcetype</code>.</p>
+<p>Decide: simple constraint with no pipes and acceleration wanted, Root Event; needs pipes, Root Search; groups events across time, Root Transaction (never accelerable); narrower slice of an existing dataset, Child.</p>
+<ul>
+<li>A child dataset inherits every constraint and field from every ancestor and adds its own. Inheritance is cumulative and narrowing.</li>
+<li>Only root event hierarchies and streaming-only root search hierarchies accelerate persistently.</li>
+<li>Required is a real filter that removes events lacking the field; Hidden only removes the field from the Pivot pickers. <code>tstats</code> uses <code>datamodel=</code>, <code>from</code> uses <code>datamodel:</code>.</li>
+</ul>
+<h2 id="10.0-common-information-model-10">10.0 Common Information Model (10%)<a class="anchor" href="#10.0-common-information-model-10" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Authentication</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Authentication</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Authentication.Failed_Authentication</span> <span class="t-kw">BY</span> <span class="t-field">Authentication.src</span></code></pre></div>
+<pre class="plain lang-ini"><code>[web_activity]
+search = index=web sourcetype=access_combined
+[eventtype=web_activity]
+web = enabled</code></pre>
+<p>Defaults: CIM acceleration disabled on every model; Setup indexes allowlist is all indexes; <code>summariesonly=false</code>; <code>strict_fields=true</code>. Splunkbase app ID 1621, folder <code>Splunk_SA_CIM</code>, installed on search heads only. CIM 8.6 documents 26 models, two of them deprecated (Application State, Change Analysis).</p>
+<p>Decide: correct fields but no rows means a missing tag; rows but empty columns means a missing field mapping. Rename only, alias; derive or normalize, calculated field; value absent or coded, lookup.</p>
+<ul>
+<li>The CIM is search-time only. Nothing is reindexed and raw data is untouched.</li>
+<li>Tags are the entry condition into a model. Compliance means correct tags <strong>and</strong> populated required fields.</li>
+<li>Acceleration is off by default, so <code>summariesonly=true</code> returns zero rows on a stock CIM model. Child datasets inherit parent tags.</li>
+</ul>
+<h2 id="defaults-table">Defaults table<a class="anchor" href="#defaults-table" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transaction maxevents</code></td>
+<td>1000</td>
+</tr>
+<tr>
+<td><code>transaction maxspan</code> / <code>maxpause</code></td>
+<td>-1 (no limit)</td>
+</tr>
+<tr>
+<td><code>transaction maxopentxn</code> / <code>maxopenevents</code></td>
+<td>5000 / 100000</td>
+</tr>
+<tr>
+<td>Events shown per rendered transaction</td>
+<td>first 5, rest collapsed</td>
+</tr>
+<tr>
+<td><code>chart limit</code> / <code>bins</code></td>
+<td>top 10 / 300</td>
+</tr>
+<tr>
+<td><code>timechart limit</code> / <code>bins</code></td>
+<td>top10 / 100</td>
+</tr>
+<tr>
+<td><code>top</code> / <code>rare</code> <code>limit</code> and positional N</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>top useother</code></td>
+<td>false (true on <code>chart</code> and <code>timechart</code>)</td>
+</tr>
+<tr>
+<td><code>top</code> / <code>rare</code> max results</td>
+<td>50,000 (<code>maxresultrows</code>)</td>
+</tr>
+<tr>
+<td>Interesting Fields threshold</td>
+<td>field in at least 20% of events returned</td>
+</tr>
+<tr>
+<td>Macro name argument count</td>
+<td><code>mymacro(2)</code> for two arguments</td>
+</tr>
+<tr>
+<td><code>max_macro_depth</code></td>
+<td>100 (minimum 1)</td>
+</tr>
+<tr>
+<td>Event type <code>priority</code></td>
+<td>1 to 10, <strong>1 is highest</strong></td>
+</tr>
+<tr>
+<td><code>rex max_match</code></td>
+<td>1 (<code>0</code> is unlimited)</td>
+</tr>
+<tr>
+<td><code>erex maxtrainers</code></td>
+<td>100 (range 1 to 1000)</td>
+</tr>
+<tr>
+<td><code>extract limit</code> / <code>maxchars</code></td>
+<td>50 pairs / 10240</td>
+</tr>
+<tr>
+<td>Automatic key-value pairs at search time</td>
+<td>first 100</td>
+</tr>
+<tr>
+<td><code>fillnull value</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>Field Extractor sample event limit</td>
+<td>20 lines</td>
+</tr>
+<tr>
+<td><code>substr</code> first index / <code>mvindex</code> first index</td>
+<td>1 / 0</td>
+</tr>
+<tr>
+<td>Subsearch <code>maxout</code> / <code>maxtime</code></td>
+<td>10,000 results / 60 seconds, silent truncation</td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td><code>type=inner</code>, <code>max=1</code>, 50,000 rows / 60 seconds</td>
+</tr>
+<tr>
+<td><code>append</code> / <code>appendcols</code> / <code>union</code></td>
+<td><code>maxout=50000</code>, <code>maxtime=60</code></td>
+</tr>
+<tr>
+<td>Data model Summarization Period</td>
+<td><code>*/5 * * * *</code></td>
+</tr>
+<tr>
+<td><code>acceleration.max_time</code> / <code>max_concurrent</code></td>
+<td>3600 seconds / 3</td>
+</tr>
+<tr>
+<td><code>tstats summariesonly</code> / <code>datamodel strict_fields</code></td>
+<td>false / true</td>
+</tr>
+<tr>
+<td><code>link.target</code> and <code>search.target</code></td>
+<td><code>blank</code> (new window)</td>
+</tr>
+<tr>
+<td><code>link.method</code> / <code>display_location</code> / <code>fields</code></td>
+<td><code>get</code> / <code>both</code> / <code>*</code></td>
+</tr>
+<tr>
+<td>Default ad hoc search time range</td>
+<td>Last 24 hours</td>
+</tr>
+<tr>
+<td>Documented CIM models in 8.6</td>
+<td>26, two deprecated</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="twenty-confusable-pairs">Twenty confusable pairs<a class="anchor" href="#twenty-confusable-pairs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>maxevents</code> defaults to 1000, <code>maxspan</code> and <code>maxpause</code> default to -1.</li>
+<li><code>NULL</code> comes from <code>usenull</code> (event lacks the split field), <code>OTHER</code> comes from <code>useother</code> (value cut by <code>limit</code>).</li>
+<li><code>transaction</code> emits <code>eventcount</code>, <code>stats count</code> emits <code>count</code>.</li>
+<li><code>NOT field=&quot;v&quot;</code> keeps events lacking the field, <code>field!=&quot;v&quot;</code> drops them.</li>
+<li><code>search</code> compares a field to a literal, <code>where</code> compares a field to a field.</li>
+<li><code>search</code> evaluates OR before AND, <code>eval</code> and <code>where</code> evaluate AND before OR.</li>
+<li><code>fillnull</code> writes a constant, <code>filldown</code> writes the previous row's value.</li>
+<li><code>fieldformat</code> changes display only, <code>eval</code> changes the stored value and the export.</li>
+<li><code>substr</code> indexes from 1, <code>mvindex</code> indexes from 0.</li>
+<li><code>rex</code> returns every input event, <code>regex</code> filters events out.</li>
+<li>The regex extraction path writes <code>EXTRACT-</code>, the delimiter path writes <code>REPORT-</code> plus a transforms.conf stanza.</li>
+<li><code>AS</code> overwrites an existing destination field, <code>ASNEW</code> leaves an existing destination untouched.</li>
+<li>A field alias can read extractions only, a calculated field can read extractions and aliases.</li>
+<li>A tag names a field-value pair, an event type names a whole event category.</li>
+<li>Event type priority 1 is best, priority 10 is worst.</li>
+<li>The macro stanza <code>mymacro(2)</code> declares the argument count, the invocation <code>`mymacro(foo,bar)`</code> supplies the values.</li>
+<li>The macro Arguments field takes bare names, the Definition takes <code>$name$</code> tokens.</li>
+<li>Workflow <code>type</code> is <code>link</code> or <code>search</code>, GET versus POST is <code>link.method</code>.</li>
+<li><code>link.uri</code> tokens are URI-encoded automatically, <code>search.search_string</code> tokens are not.</li>
+<li><code>tstats</code> uses <code>FROM datamodel=&lt;model&gt;.&lt;root&gt;</code>, <code>from</code> uses <code>datamodel:&lt;model&gt;.&lt;dataset&gt;</code>.</li>
+</ol>
+<h2 id="last-five-minutes">Last five minutes<a class="anchor" href="#last-five-minutes" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Sequence: filters, EXTRACT, REPORT, auto KV, alias, calculated field, lookup, event type, tag.</li>
+<li><code>maxspan=-1</code>, <code>maxpause=-1</code>, <code>maxevents=1000</code>. <code>endswith</code> never sets <code>closed_txn=1</code>.</li>
+<li><code>transaction</code> gives <code>duration</code> in seconds and <code>eventcount</code>; <code>_time</code> is the earliest member.</li>
+<li><code>timechart</code> takes one BY field, <code>chart</code> takes two, <code>stats</code> takes many.</li>
+<li><code>limit</code> caps columns, not rows. <code>bins</code> is 300 on <code>chart</code> and 100 on <code>timechart</code>, and <code>span</code> beats <code>bins</code>.</li>
+<li><code>fillnull</code> defaults to <code>0</code>. <code>search</code> cannot compare two fields; <code>where</code> can.</li>
+<li>Event type priority 1 is highest of 1 to 10. <code>eventtype</code> can be multivalue.</li>
+<li>Macro name carries the argument count; backticks invoke; Arguments have no dollar signs.</li>
+<li>Workflow <code>type</code> is only <code>link</code> or <code>search</code>; targets default to <code>blank</code>; <code>fields</code> defaults to <code>*</code>.</li>
+<li>CIM and data model acceleration are off by default; tags are what admit data to a CIM model.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="../lab-setup.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Lab setup</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#exam-facts"><span>Exam facts</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#weights"><span>Weights</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#the-search-time-precedence-chain"><span>The search-time precedence chain</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#1.0-transforming-commands-5"><span>1.0 Transforming commands (5%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#2.0-filtering-and-formatting-10"><span>2.0 Filtering and formatting (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#3.0-correlating-events-15-heaviest"><span>3.0 Correlating events (15%, heaviest)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#4.0-creating-and-managing-fields-10"><span>4.0 Creating and managing fields (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#5.0-field-aliases-and-calculated-fields-10"><span>5.0 Field aliases and calculated fields (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#6.0-tags-and-event-types-10"><span>6.0 Tags and event types (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#7.0-macros-10"><span>7.0 Macros (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#8.0-workflow-actions-10"><span>8.0 Workflow actions (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#9.0-data-models-10"><span>9.0 Data models (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#10.0-common-information-model-10"><span>10.0 Common Information Model (10%)</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#defaults-table"><span>Defaults table</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#twenty-confusable-pairs"><span>Twenty confusable pairs</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#last-five-minutes"><span>Last five minutes</span><span class="min">1m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>17 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

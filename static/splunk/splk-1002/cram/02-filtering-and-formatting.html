@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.0 Filtering and Formatting Results (10%) - cram | SPLK-1002</title>
+<meta name="description" content="Filtering and formatting, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="cram/02-filtering-and-formatting" data-section="2">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html" aria-current="page"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Filtering and formatting</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/02-filtering-and-formatting.html">Study</a><a class="on" href="02-filtering-and-formatting.html">Cram</a></div>
+      </div>
+<h1 id="2.0-filtering-and-formatting-results-10---cram">2.0 Filtering and Formatting Results- cram</h1>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">eval</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">[</span><span class="t-str">&quot;,&quot;</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">expression</span><span class="t-op">&gt;</span><span class="t-op">]</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span>
+<span class="t-kw">where</span> <span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span>
+<span class="t-field">search</span> <span class="t-op">&lt;</span><span class="t-field">logical-expression</span><span class="t-op">&gt;</span>
+<span class="t-field">fillnull</span> <span class="t-op">[</span><span class="t-opt">value</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">filldown</span> <span class="t-op">&lt;</span><span class="t-field">wc-field-list</span><span class="t-op">&gt;</span>
+<span class="t-field">fieldformat</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Signatures: <code>case(&lt;condition&gt;,&lt;value&gt;,...)</code>, <code>if(&lt;predicate&gt;,&lt;true&gt;,&lt;false&gt;)</code>, <code>coalesce(&lt;values&gt;)</code>, <code>nullif(&lt;f1&gt;,&lt;f2&gt;)</code>, <code>null()</code>, <code>true()</code>, <code>validate(&lt;condition&gt;,&lt;value&gt;,...)</code>, <code>in(&lt;field&gt;,&lt;list&gt;)</code>, <code>like(&lt;str&gt;,&lt;pattern&gt;)</code>, <code>match(&lt;str&gt;,&lt;regex&gt;)</code>, <code>cidrmatch(&lt;cidr&gt;,&lt;ip&gt;)</code>, <code>tostring(&lt;value&gt;,&lt;format&gt;)</code>, <code>tonumber(&lt;str&gt;,&lt;base&gt;)</code>, <code>mvindex(&lt;mv&gt;,&lt;start&gt;,&lt;end&gt;)</code>, <code>substr(&lt;str&gt;,&lt;start&gt;,&lt;length&gt;)</code>, <code>split(&lt;str&gt;,&lt;delim&gt;)</code>, <code>strftime(&lt;time&gt;,&lt;format&gt;)</code>, <code>strptime(&lt;str&gt;,&lt;format&gt;)</code>, <code>typeof(&lt;value&gt;)</code>.</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Default / limit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fillnull value=</code></td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>fillnull</code> field list</td>
+<td>all fields; no wildcards; a named missing field is created</td>
+</tr>
+<tr>
+<td><code>fillnull</code> command type</td>
+<td>distributable streaming with a field list, dataset processing without</td>
+</tr>
+<tr>
+<td><code>filldown</code> field list</td>
+<td>all fields; <code>*</code> wildcards allowed; no previous value leaves NULL</td>
+</tr>
+<tr>
+<td><code>fieldformat</code> expressions per command</td>
+<td>exactly 1</td>
+</tr>
+<tr>
+<td><code>eval</code> / <code>where</code> / <code>fieldformat</code> / <code>search</code> after a pipe</td>
+<td>distributable streaming</td>
+</tr>
+<tr>
+<td><code>search</code> as first command</td>
+<td>event-generating</td>
+</tr>
+<tr>
+<td><code>search timeformat</code></td>
+<td><code>%m/%d/%Y:%H:%M:%S</code></td>
+</tr>
+<tr>
+<td><code>case</code> / <code>validate</code> with no match</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td><code>tostring</code> formats</td>
+<td><code>binary</code>, <code>hex</code>, <code>commas</code> (2 decimals), <code>duration</code> (<code>HH:MM:SS</code>)</td>
+</tr>
+<tr>
+<td><code>tonumber</code> / <code>toint</code> / <code>todouble</code> base</td>
+<td>10, range 2 to 36</td>
+</tr>
+<tr>
+<td><code>printf</code> precision for <code>%f</code>, <code>%e</code>, <code>%a</code></td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>ltrim</code> / <code>rtrim</code> / <code>trim</code> chars</td>
+<td>spaces and tabs</td>
+</tr>
+<tr>
+<td><code>substr</code> length</td>
+<td>rest of string; index starts at <strong>1</strong></td>
+</tr>
+<tr>
+<td><code>mvindex</code> end</td>
+<td>none; index starts at <strong>0</strong>, <code>-1</code> is last, out of range is NULL</td>
+</tr>
+<tr>
+<td><code>mvzip</code> delimiter</td>
+<td><code>,</code></td>
+</tr>
+<tr>
+<td><code>mvrange</code> end value</td>
+<td>excluded</td>
+</tr>
+<tr>
+<td><code>mv_to_json_array</code> infer_types</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>log</code> base</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>round</code> precision</td>
+<td>integer; negative precision rejected</td>
+</tr>
+<tr>
+<td>eval numeric precision</td>
+<td>17 significant digits, -2^53+1 to 2^53-1; division by zero gives null</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filter on indexed terms or field-value pairs</td>
+<td>base search, before first pipe</td>
+</tr>
+<tr>
+<td>Field vs literal, mid-pipeline</td>
+<td><code>search</code> or <code>where</code></td>
+</tr>
+<tr>
+<td>Field vs field</td>
+<td><code>where</code> only</td>
+</tr>
+<tr>
+<td>Evaluation function or arithmetic in the predicate</td>
+<td><code>where</code> only</td>
+</tr>
+<tr>
+<td>Wildcard</td>
+<td><code>search</code> uses <code>*</code>; <code>where</code> uses <code>like()</code> with <code>%</code> and <code>_</code></td>
+</tr>
+<tr>
+<td>Case-sensitive match</td>
+<td><code>where</code>, or <code>search</code> with <code>CASE()</code></td>
+</tr>
+<tr>
+<td>Keep events missing the field</td>
+<td><code>NOT field=&quot;v&quot;</code></td>
+</tr>
+<tr>
+<td>Drop events missing the field</td>
+<td><code>field!=&quot;v&quot;</code></td>
+</tr>
+<tr>
+<td>Constant in empty cells</td>
+<td><code>fillnull</code></td>
+</tr>
+<tr>
+<td>Previous row's value in empty cells</td>
+<td><code>filldown</code></td>
+</tr>
+<tr>
+<td>Display only, value unchanged for sort and export</td>
+<td><code>fieldformat</code></td>
+</tr>
+<tr>
+<td>Value actually changed, including export</td>
+<td><code>eval</code></td>
+</tr>
+<tr>
+<td>Boolean result into a field</td>
+<td>wrap in <code>if</code>, <code>case</code>, <code>validate</code>, or <code>tostring</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>fillnull</code> default value is <code>0</code>, not blank and not <code>NULL</code>; bare <code>| fillnull</code> fills every field.</li>
+<li><code>search</code> cannot compare two fields; it reads the right-hand bare word as a literal string. <code>where</code> can.</li>
+<li>Boolean precedence: <code>search</code> does OR before AND; <code>eval</code> and <code>where</code> do AND before OR. <code>search</code> has no <code>XOR</code>.</li>
+<li><code>NOT field=&quot;v&quot;</code> keeps events with no <code>v</code> field; <code>field!=&quot;v&quot;</code> drops them. <code>NOT field=*</code> returns null-field events; <code>field!=*</code> returns nothing.</li>
+<li><code>eval</code> cannot assign a Boolean; <code>coalesce</code> returns the first non-NULL argument; <code>nullif</code> returns NULL when two fields match; <code>case</code> returns NULL with no default.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-02-01 two-field compare in <code>search</code>; T-02-02 Boolean precedence by command; T-02-03 <code>NOT</code> vs <code>!=</code>; T-02-04 case sensitivity split (field names yes, <code>search</code> values no, <code>where</code> yes); T-02-05 <code>coalesce</code> is not <code>if</code>; T-02-06 <code>null()</code> is not <code>nullif()</code>; T-02-07 <code>case</code> defaults to NULL; T-02-08 <code>eval</code> cannot store a Boolean; T-02-09 no <code>*</code> wildcard in <code>where</code>; T-02-10 <code>IN</code> operator vs <code>in()</code> function; T-02-11 <code>fillnull</code> default <code>0</code>; T-02-12 no wildcards in <code>fillnull</code> field list; T-02-13 <code>fillnull</code> vs <code>filldown</code>; T-02-14 all-null field is invisible to <code>fillnull</code>; T-02-15 <code>fieldformat</code> does not change the value or exports; T-02-16 <code>mvindex</code> from 0, <code>substr</code> from 1; T-02-17 <code>eval</code> command vs calculated field; T-02-18 no <code>_raw</code> after a transforming command; T-02-19 <code>tostring</code> format keywords.</p>
+
+<nav class="pn" aria-label="Section"><a href="01-transforming-commands.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">1.0</span><span class="pn-label">Transforming commands</span></a><a href="03-correlating-events.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">3.0</span><span class="pn-label">Correlating events</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#syntax"><span>Syntax</span></a></li>
+<li><a class="lvl2" href="#defaults-and-limits"><span>Defaults and limits</span></a></li>
+<li><a class="lvl2" href="#decision-rule"><span>Decision rule</span></a></li>
+<li><a class="lvl2" href="#five-facts-they-test"><span>Five facts they test</span></a></li>
+<li><a class="lvl2" href="#trap-ids"><span>Trap IDs</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>4 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

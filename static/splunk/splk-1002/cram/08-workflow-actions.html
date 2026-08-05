@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8.0 Workflow Actions - Cram | SPLK-1002</title>
+<meta name="description" content="Workflow actions, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="cram/08-workflow-actions" data-section="8">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html" aria-current="page"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Workflow actions</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="" href="../topics/08-workflow-actions.html">Study</a><a class="on" href="08-workflow-actions.html">Cram</a></div>
+      </div>
+<h1 id="8.0-workflow-actions---cram">8.0 Workflow Actions - Cram</h1>
+<p>Path: Settings, Fields, Workflow actions, Add new. Config: <code>workflow_actions.conf</code>.</p>
+<h2 id="syntax">Syntax<a class="anchor" href="#syntax" aria-label="Link to this section">#</a></h2>
+<pre class="plain lang-ini"><code>[&lt;name&gt;]                          # Name = internal, stanza header
+type = &lt;link|search&gt;              # ONLY two values
+label = &lt;text with $field$&gt;       # what the user sees
+fields = &lt;comma list&gt;             # ALL must be present (AND)
+eventtypes = &lt;comma list&gt;
+display_location = &lt;field_menu|event_menu|both&gt;
+
+link.uri = http://x/?q=$field$    # values auto URI-encoded
+link.target = &lt;blank|self&gt;
+link.method = &lt;get|post&gt;
+link.postargs.1.key = title       # post only, sent in BODY
+link.postargs.1.value = err $status$
+
+search.search_string = index=web user=&quot;$User$&quot; | stats count
+search.app = &lt;app&gt;
+search.view = &lt;view&gt;
+search.target = &lt;blank|self&gt;
+search.earliest = -24h
+search.latest = now
+search.preserve_timerange = &lt;bool&gt;</code></pre>
+<p>Tokens: <code>$field$</code>, <code>$_raw$</code>, <code>$!field$</code> (no escaping), <code>$@field_name$</code> / <code>$@field_value$</code> (field menus only), <code>$@sid$</code>, <code>$@offset$</code>, <code>$@namespace$</code>, <code>$@latest_time$</code>.</p>
+<h2 id="defaults-and-limits">Defaults and limits<a class="anchor" href="#defaults-and-limits" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Values</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>link</code>, <code>search</code></td>
+<td>none, required (skipped if unset)</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>text + tokens</td>
+<td>none, required (skipped if unset)</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td>list, wildcards</td>
+<td><code>*</code> (all fields)</td>
+</tr>
+<tr>
+<td><code>eventtypes</code></td>
+<td>list, wildcards</td>
+<td>none (no restriction)</td>
+</tr>
+<tr>
+<td><code>display_location</code></td>
+<td><code>field_menu</code>, <code>event_menu</code>, <code>both</code></td>
+<td><code>both</code></td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td><code>True</code>, <code>False</code></td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>link.uri</code></td>
+<td>URL + tokens</td>
+<td>none, required for link</td>
+</tr>
+<tr>
+<td><code>link.target</code></td>
+<td><code>blank</code>, <code>self</code></td>
+<td><code>blank</code> (new window)</td>
+</tr>
+<tr>
+<td><code>link.method</code></td>
+<td><code>get</code>, <code>post</code></td>
+<td><code>get</code></td>
+</tr>
+<tr>
+<td><code>link.postargs.&lt;int&gt;.&lt;key/value&gt;</code></td>
+<td>text + tokens</td>
+<td>none (post only)</td>
+</tr>
+<tr>
+<td><code>search.search_string</code></td>
+<td>SPL + tokens</td>
+<td>none, required for search</td>
+</tr>
+<tr>
+<td><code>search.app</code></td>
+<td>app name</td>
+<td>current app</td>
+</tr>
+<tr>
+<td><code>search.view</code></td>
+<td>view name</td>
+<td>current view</td>
+</tr>
+<tr>
+<td><code>search.target</code></td>
+<td><code>blank</code>, <code>self</code></td>
+<td>as <code>link.target</code></td>
+</tr>
+<tr>
+<td><code>search.earliest</code> / <code>search.latest</code></td>
+<td>abs or rel time</td>
+<td>none (all time)</td>
+</tr>
+<tr>
+<td><code>search.preserve_timerange</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>UI to conf: Action type = <code>type</code>; Show action in = <code>display_location</code>; Open link in / Run search in = <code>.target</code>; Link method = <code>link.method</code>; URI = <code>link.uri</code>; Search string = <code>search.search_string</code>.</p>
+<h2 id="decision-rule">Decision rule<a class="anchor" href="#decision-rule" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>External system, values fit a query string</td>
+<td>GET: <code>type = link</code> + <code>link.method = get</code></td>
+</tr>
+<tr>
+<td>External system, needs a body / <code>$_raw$</code> / values out of the URL / creates a record</td>
+<td>POST: <code>type = link</code> + <code>link.method = post</code> + <code>link.postargs</code></td>
+</tr>
+<tr>
+<td>Stay in Splunk, run more SPL</td>
+<td>Search: <code>type = search</code></td>
+</tr>
+<tr>
+<td>Inherit analyst's window</td>
+<td><code>preserve_timerange = true</code> AND no earliest/latest</td>
+</tr>
+<tr>
+<td>Fixed lookback</td>
+<td><code>search.earliest</code> / <code>search.latest</code> (checkbox then ignored)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="five-facts-they-test">Five facts they test<a class="anchor" href="#five-facts-they-test" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Action type has TWO values (<code>link</code>, <code>search</code>); GET vs POST is <code>link.method</code>.</li>
+<li><code>link.target</code> and <code>search.target</code> default to <code>blank</code> = NEW window.</li>
+<li>Blank &quot;Apply only to&quot; = <code>fields = *</code> + <code>display_location = both</code> = appears everywhere; multiple fields are ANDed.</li>
+<li>POST args go in the request BODY, HTTP-form encoded, never the query string.</li>
+<li><code>link.uri</code> tokens are auto URI-encoded; <code>search.search_string</code> tokens are NOT escaped (quote them yourself). <code>preserve_timerange</code> is ignored if either bound is set.</li>
+</ol>
+<h2 id="trap-ids">Trap IDs<a class="anchor" href="#trap-ids" aria-label="Link to this section">#</a></h2>
+<p>T-08-01 type is link/search not get/post/search - T-08-02 target default blank = new window - T-08-03 link.method defaults to get - T-08-04 blank fields means all fields - T-08-05 field list is AND not OR - T-08-06 postargs in body not URL - T-08-07 URI encoded, search string not - T-08-08 preserve_timerange ignored if earliest/latest set - T-08-09 <code>$@field_value$</code> not available in event menus - T-08-10 Name internal vs Label displayed and tokenized - T-08-11 workflow action is click-only, creates no field, is not an alert action - T-08-12 display_location defaults to both - T-08-13 private until shared, admin/power promote - T-08-14 search.app/search.view default to current app/view</p>
+
+<nav class="pn" aria-label="Section"><a href="07-macros.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">7.0</span><span class="pn-label">Macros</span></a><a href="09-data-models-and-pivot.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">9.0</span><span class="pn-label">Data models and pivot</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#syntax"><span>Syntax</span></a></li>
+<li><a class="lvl2" href="#defaults-and-limits"><span>Defaults and limits</span></a></li>
+<li><a class="lvl2" href="#decision-rule"><span>Decision rule</span></a></li>
+<li><a class="lvl2" href="#five-facts-they-test"><span>Five facts they test</span></a></li>
+<li><a class="lvl2" href="#trap-ids"><span>Trap IDs</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>3 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

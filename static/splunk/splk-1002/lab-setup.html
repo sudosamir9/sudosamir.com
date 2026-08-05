@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab setup | SPLK-1002</title>
+<meta name="description" content="Lab setup, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body data-page="lab-setup" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="lab-setup.html" aria-current="page"><span class="t">Lab setup</span></a>
+<a class="navitem" href="cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Start here</span><span class="sep">/</span>
+        <span>Lab setup</span>
+        
+      </div>
+<h1 id="lab-setup">Lab setup</h1>
+<p>One-time setup on your local Splunk Enterprise 10.x. Every lab and every worked example in this guide runs against the dataset below. Budget about twenty minutes.</p>
+<p>You will create three indexes, load seven log files, add one lookup, and install the CIM add-on.</p>
+<h2 id="the-practice-dataset">The practice dataset<a class="anchor" href="#the-practice-dataset" aria-label="Link to this section">#</a></h2>
+<p><a href="lab-data/splk-1002-practice-data.zip">Download the practice data</a> (1.5 MB zipped, 18 MB unpacked). The individual files are also <a href="lab-data/">browsable</a> if you want to look at a line without unpacking anything.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>File in the zip</th>
+<th>Goes to index</th>
+<th>Host to set</th>
+<th>Sourcetype</th>
+<th>Events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>www1/access.log</code></td>
+<td><code>web</code></td>
+<td><code>web1</code></td>
+<td><code>access_combined</code></td>
+<td>13,628</td>
+</tr>
+<tr>
+<td><code>www2/access.log</code></td>
+<td><code>web</code></td>
+<td><code>web2</code></td>
+<td><code>access_combined</code></td>
+<td>12,912</td>
+</tr>
+<tr>
+<td><code>www3/access.log</code></td>
+<td><code>web</code></td>
+<td><code>web3</code></td>
+<td><code>access_combined</code></td>
+<td>12,992</td>
+</tr>
+<tr>
+<td><code>www1/secure.log</code></td>
+<td><code>security</code></td>
+<td><code>web1</code></td>
+<td><code>linux_secure</code></td>
+<td>10,593</td>
+</tr>
+<tr>
+<td><code>www2/secure.log</code></td>
+<td><code>security</code></td>
+<td><code>web2</code></td>
+<td><code>linux_secure</code></td>
+<td>9,683</td>
+</tr>
+<tr>
+<td><code>www3/secure.log</code></td>
+<td><code>security</code></td>
+<td><code>web3</code></td>
+<td><code>linux_secure</code></td>
+<td>9,983</td>
+</tr>
+<tr>
+<td><code>cisco_ironport_web.log</code></td>
+<td><code>cisco</code></td>
+<td><code>cisco</code></td>
+<td><code>cisco:wsa:squid</code></td>
+<td>6,757</td>
+</tr>
+<tr>
+<td><code>MOCK_DATA.csv</code></td>
+<td>not an index</td>
+<td></td>
+<td>uploaded as a lookup</td>
+<td>1,000 rows</td>
+</tr>
+</tbody>
+</table></div>
+<p>The folders are named <code>www1</code> to <code>www3</code> but the host you set is <code>web1</code> to <code>web3</code>. That is deliberate: the host is something you choose at input time, not something read out of the file, and this guide's searches all use <code>web1</code>, <code>web2</code>, <code>web3</code>.</p>
+<p><strong>What each source is good for.</strong> The <code>web</code> index is richly structured, so it carries the transforming, filtering and correlation work. Every access event has a <code>JSESSIONID</code> in its query string, which is what makes the <code>transaction</code> labs in section 3.0 work. The <code>security</code> index is semi-structured text, which makes it the right target for the field extraction labs in section 4.0. The <code>cisco</code> index is Squid-format proxy logging, useful for delimiter extraction and for the CIM normalization work in section 10.0.</p>
+<p><strong>The timestamps are fixed and historical.</strong> The web and security logs cover 31 March to 7 April 2021. The Cisco log covers 12 November to 15 December 2017. Searching &quot;Last 24 hours&quot; returns nothing at all. Every search in this guide uses <strong>All time</strong>, or sets <code>earliest=0</code> explicitly. Set your time picker to All time now and leave it there. Fixed timestamps are easier to reason about anyway when you are testing <code>maxspan</code> and <code>maxpause</code>, because the data does not move under you between runs.</p>
+<h2 id="step-1-create-the-three-indexes">Step 1: create the three indexes<a class="anchor" href="#step-1-create-the-three-indexes" aria-label="Link to this section">#</a></h2>
+<p>Settings, Indexes, New Index. Create three, leaving every other setting at its default.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web</code></td>
+<td>Apache access logs from three web servers</td>
+</tr>
+<tr>
+<td><code>security</code></td>
+<td>Linux <code>sshd</code> and <code>su</code> authentication logs from the same three servers</td>
+</tr>
+<tr>
+<td><code>cisco</code></td>
+<td>Cisco Web Security Appliance proxy logs in Squid format</td>
+</tr>
+</tbody>
+</table></div>
+<p>From the CLI instead, if you prefer:</p>
+<pre class="plain lang-bash"><code>splunk add index web
+splunk add index security
+splunk add index cisco</code></pre>
+<h2 id="step-2-load-the-six-web-and-security-logs">Step 2: load the six web and security logs<a class="anchor" href="#step-2-load-the-six-web-and-security-logs" aria-label="Link to this section">#</a></h2>
+<p>Settings, Add Data, Upload. Repeat six times, once per file. The wizard is four steps and only two of them need your attention.</p>
+<ol>
+<li><strong>Select Source.</strong> Choose the file, for example <code>www1/access.log</code>.</li>
+<li><strong>Set Source Type.</strong> For an <code>access.log</code> choose <strong>Web</strong>, then <code>access_combined</code>. For a <code>secure.log</code> choose <strong>Operating System</strong>, then <code>linux_secure</code>. Check the preview before continuing: you want one event per line, with a populated Time column. If the Time column is blank or every event shares the upload time, the sourcetype is wrong and nothing downstream will work.</li>
+<li><strong>Input Settings.</strong> This is the step people skip. Set <strong>Host</strong> to <code>web1</code>, <code>web2</code> or <code>web3</code> by hand, matching the folder the file came from. Set <strong>Index</strong> to <code>web</code> for an access log or <code>security</code> for a secure log.</li>
+<li><strong>Review</strong>, then <strong>Submit</strong>.</li>
+</ol>
+<h2 id="step-3-load-the-cisco-proxy-log">Step 3: load the Cisco proxy log<a class="anchor" href="#step-3-load-the-cisco-proxy-log" aria-label="Link to this section">#</a></h2>
+<p>Same wizard, once.</p>
+<ol>
+<li>Select <code>cisco_ironport_web.log</code>.</li>
+<li>Set Source Type: type <code>cisco:wsa:squid</code> into the sourcetype box. It may not appear in the menu, which is fine, the name is what matters. The preview should show one event per line with times in November and December 2017, read from the leading epoch value.</li>
+<li>Input Settings: Host <code>cisco</code>, Index <code>cisco</code>.</li>
+<li>Review, Submit.</li>
+</ol>
+<p>Without the Splunk Add-on for Cisco WSA installed, these events arrive as raw text with almost no extracted fields. That is intentional here. Section 4.0 uses them to practise extraction, and the field names you create are yours.</p>
+<h2 id="step-4-verify-the-load">Step 4: verify the load<a class="anchor" href="#step-4-verify-the-load" aria-label="Link to this section">#</a></h2>
+<p>Run this with the time range set to <strong>All time</strong>:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-op">*</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span><span class="t-op">,</span> <span class="t-field">index</span><span class="t-op">,</span> <span class="t-field">sourcetype</span></code></pre></div>
+<p>You should get exactly seven rows:</p>
+<div class="tw"><div class="results"><div class="results-head">Statistics</div><table>
+<thead>
+<tr>
+<th>host</th>
+<th>index</th>
+<th>sourcetype</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cisco</td>
+<td>cisco</td>
+<td>cisco:wsa:squid</td>
+<td>6757</td>
+</tr>
+<tr>
+<td>web1</td>
+<td>security</td>
+<td>linux_secure</td>
+<td>10593</td>
+</tr>
+<tr>
+<td>web1</td>
+<td>web</td>
+<td>access_combined</td>
+<td>13628</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>security</td>
+<td>linux_secure</td>
+<td>9683</td>
+</tr>
+<tr>
+<td>web2</td>
+<td>web</td>
+<td>access_combined</td>
+<td>12912</td>
+</tr>
+<tr>
+<td>web3</td>
+<td>security</td>
+<td>linux_secure</td>
+<td>9983</td>
+</tr>
+<tr>
+<td>web3</td>
+<td>web</td>
+<td>access_combined</td>
+<td>12992</td>
+</tr>
+</tbody>
+</table></div></div>
+<p>That is 76,548 events in total. If a count is short, the file was partially uploaded; delete the input and repeat it. If a whole row is missing, the index or host was set wrong on that upload. If you see extra rows for hosts you do not recognise, you have leftover inputs from earlier experiments; find them under Settings, Data inputs and remove them.</p>
+<p>Now confirm the fields you will rely on actually extracted:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">1</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">clientip</span><span class="t-op">,</span> <span class="t-field">method</span><span class="t-op">,</span> <span class="t-field">uri_path</span><span class="t-op">,</span> <span class="t-field">status</span><span class="t-op">,</span> <span class="t-field">bytes</span><span class="t-op">,</span> <span class="t-field">action</span><span class="t-op">,</span> <span class="t-field">categoryId</span><span class="t-op">,</span> <span class="t-field">productId</span><span class="t-op">,</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<p>Every column should hold a value except <code>categoryId</code> and <code>productId</code>, which are only present on some events. <code>action</code>, <code>categoryId</code>, <code>productId</code> and <code>JSESSIONID</code> come from Splunk's automatic key-value extraction reading the <code>key=value</code> pairs out of the URI query string, which is search-time operation four of nine. If those four columns are empty, check that the sourcetype really is <code>access_combined</code> and not something Splunk guessed.</p>
+<h2 id="step-5-add-the-lookup">Step 5: add the lookup<a class="anchor" href="#step-5-add-the-lookup" aria-label="Link to this section">#</a></h2>
+<p><code>MOCK_DATA.csv</code> is a thousand rows of fictional people with an <code>ip_address</code> column. It is used in a couple of places in this guide to show where lookups sit in the search-time sequence, nothing more.</p>
+<ol>
+<li>Settings, Lookups, Lookup table files, New Lookup Table File.</li>
+<li>Destination app <code>search</code>, upload <code>MOCK_DATA.csv</code>, destination filename <code>mock_users.csv</code>.</li>
+<li>Settings, Lookups, Lookup definitions, New. Name <code>mock_users</code>, type File-based, file <code>mock_users.csv</code>.</li>
+</ol>
+<p>Check it:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-pipe">|</span> <span class="t-cmd">inputlookup</span> <span class="t-field">mock_users</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span></code></pre></div>
+<h2 id="step-6-install-the-cim-add-on">Step 6: install the CIM add-on<a class="anchor" href="#step-6-install-the-cim-add-on" aria-label="Link to this section">#</a></h2>
+<p>Section 10.0 needs it. Apps, Find More Apps, search for <strong>Splunk Common Information Model</strong>, install, restart when prompted. It installs to <code>$SPLUNK_HOME/etc/apps/Splunk_SA_CIM</code>.</p>
+<p>The add-on contains only search-time knowledge objects, so on a single-instance install there is nothing else to place anywhere. Every one of its data models ships with acceleration turned <strong>off</strong>, which is what you want on a laptop.</p>
+<p>Confirm it is there:</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span></code></pre></div>
+<p>You should see the CIM models listed, <code>Web</code>, <code>Authentication</code>, <code>Network_Traffic</code> and the rest.</p>
+<h2 id="step-7-raise-the-search-limits-you-will-hit">Step 7: raise the search limits you will hit<a class="anchor" href="#step-7-raise-the-search-limits-you-will-hit" aria-label="Link to this section">#</a></h2>
+<p>Two defaults get in the way of the section 3.0 labs on a dataset this size. Settings, Server settings, Search preferences, or edit <code>limits.conf</code> in <code>$SPLUNK_HOME/etc/system/local/</code>:</p>
+<pre class="plain lang-ini"><code>[search]
+max_rawsize_perchunk = 200000000
+
+[transactions]
+maxopentxn = 20000
+maxopenevents = 200000</code></pre>
+<p>You can skip this and come back to it if a <code>transaction</code> search warns that transactions were evicted. Nothing else in the guide needs it.</p>
+<h2 id="what-you-should-be-able-to-run-now">What you should be able to run now<a class="anchor" href="#what-you-should-be-able-to-run-now" aria-label="Link to this section">#</a></h2>
+<p>If these three return results, the lab is ready.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">cisco</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">cisco:wsa:squid</span>
+<span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-num">5</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">_time</span><span class="t-op">,</span> <span class="t-field">_raw</span></code></pre></div>
+<h2 id="resetting">Resetting<a class="anchor" href="#resetting" aria-label="Link to this section">#</a></h2>
+<p>To start over, Settings, Indexes, and delete the contents of <code>web</code>, <code>security</code> and <code>cisco</code>, then re-upload. From the CLI:</p>
+<pre class="plain lang-bash"><code>splunk clean eventdata -index web
+splunk clean eventdata -index security
+splunk clean eventdata -index cisco</code></pre>
+
+<nav class="pn" aria-label="Section"><a href="00-exam-overview.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Exam overview</span></a><a href="cram/all-in-one.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Final review sheet</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#the-practice-dataset"><span>The practice dataset</span></a></li>
+<li><a class="lvl2" href="#step-1-create-the-three-indexes"><span>Step 1: create the three indexes</span></a></li>
+<li><a class="lvl2" href="#step-2-load-the-six-web-and-security-logs"><span>Step 2: load the six web and security logs</span></a></li>
+<li><a class="lvl2" href="#step-3-load-the-cisco-proxy-log"><span>Step 3: load the Cisco proxy log</span></a></li>
+<li><a class="lvl2" href="#step-4-verify-the-load"><span>Step 4: verify the load</span></a></li>
+<li><a class="lvl2" href="#step-5-add-the-lookup"><span>Step 5: add the lookup</span></a></li>
+<li><a class="lvl2" href="#step-6-install-the-cim-add-on"><span>Step 6: install the CIM add-on</span></a></li>
+<li><a class="lvl2" href="#step-7-raise-the-search-limits-you-will-hit"><span>Step 7: raise the search limits you will hit</span></a></li>
+<li><a class="lvl2" href="#what-you-should-be-able-to-run-now"><span>What you should be able to run now</span></a></li>
+<li><a class="lvl2" href="#resetting"><span>Resetting</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>7 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="progress.js"></script>
+<script src="search-index.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

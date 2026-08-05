@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPL command reference, scoped to SPLK-1002 | SPLK-1002</title>
+<meta name="description" content="SPL command reference, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="reference/spl-command-reference" data-section="">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="../topics/00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="../topics/01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="../topics/02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="../topics/04-field-extractions.html"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="../topics/10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Reference</summary>
+<a class="navitem" href="knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="spl-command-reference.html" aria-current="page"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Reference</span><span class="sep">/</span>
+        <span>SPL command reference</span>
+        
+      </div>
+<h1 id="spl-command-reference-scoped-to-splk-1002">SPL command reference, scoped to SPLK-1002</h1>
+<p>Every command the exam can put in front of you, organised by command type, because the type is itself examinable. Commands with their own topic file get a two-line entry and a link; everything else gets syntax, the options that matter with their defaults, one example and one gotcha. Defaults are the 10.4 documented values.</p>
+<h2 id="1.-command-types">1. Command types<a class="anchor" href="#1.-command-types" aria-label="Link to this section">#</a></h2>
+<p>The 10.4 quick reference names five types: streaming (split into distributable and centralized), generating, orchestrating, transforming, and dataset processing. The types are not mutually exclusive. <code>append</code> is both transforming and dataset processing, <code>history</code> is both transforming and generating, <code>datamodel</code> and <code>from</code> are both generating and dataset processing, and <code>dedup</code> changes class depending on its arguments.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+<th>Where it runs</th>
+<th>Pipeline position</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distributable streaming</td>
+<td>One event in, one or zero events out, order irrelevant</td>
+<td>Indexers, but only while every preceding command is also distributable streaming; otherwise the search head</td>
+<td>Anywhere after retrieval</td>
+</tr>
+<tr>
+<td>Centralized streaming</td>
+<td>One event at a time, but the order of events changes the answer</td>
+<td>Search head only</td>
+<td>Anywhere after retrieval, forces everything after it onto the search head</td>
+</tr>
+<tr>
+<td>Transforming</td>
+<td>Orders results into a data table, turning event values into the numbers a visualization needs</td>
+<td>Search head, though <code>stats</code>, <code>chart</code> and <code>timechart</code> push a first reduce step to the indexers</td>
+<td>Ends the event stream</td>
+</tr>
+<tr>
+<td>Generating</td>
+<td>Produces results instead of consuming them</td>
+<td>Depends on the command; <code>search</code> and <code>tstats</code> retrieve from indexers, <code>makeresults</code> and <code>inputlookup</code> do not</td>
+<td>First in the pipeline</td>
+</tr>
+<tr>
+<td>Orchestrating</td>
+<td>Controls how the search is processed without directly changing the final result set</td>
+<td>Varies</td>
+<td>Anywhere</td>
+</tr>
+<tr>
+<td>Dataset processing</td>
+<td>Needs the entire dataset in hand before it can emit a first result</td>
+<td>Search head</td>
+<td>Anywhere, but it is a hard barrier</td>
+</tr>
+</tbody>
+</table></div>
+<p>Verbatim membership lists from the 10.4 command types quick reference, which is what a question is likely to be built from:</p>
+<ul>
+<li><strong>Transforming</strong>: <code>addtotals</code>, <code>anomalydetection</code>, <code>append</code>, <code>associate</code>, <code>chart</code>, <code>cofilter</code>, <code>contingency</code>, <code>history</code>, <code>makecontinuous</code>, <code>mvcombine</code>, <code>rare</code>, <code>stats</code>, <code>table</code>, <code>timechart</code>, <code>top</code>, <code>xyseries</code></li>
+<li><strong>Generating</strong>: <code>datamodel</code>, <code>dbinspect</code>, <code>eventcount</code>, <code>from</code>, <code>gentimes</code>, <code>history</code>, <code>inputcsv</code>, <code>inputlookup</code>, <code>loadjob</code>, <code>makeresults</code>, <code>metadata</code>, <code>metasearch</code>, <code>mstats</code>, <code>multisearch</code>, <code>pivot</code>, <code>rest</code>, <code>search</code>, <code>searchtxn</code>, <code>set</code>, <code>tstats</code>, <code>typeahead</code>, <code>walklex</code></li>
+<li><strong>Orchestrating</strong>: <code>localop</code>, <code>lookup</code>, <code>noop</code>, <code>redistribute</code>, <code>require</code></li>
+<li><strong>Dataset processing</strong>: <code>anomalousvalue</code>, <code>anomalydetection</code>, <code>append</code>, <code>appendcols</code>, <code>appendpipe</code>, <code>bin</code>, <code>cluster</code>, <code>concurrency</code>, <code>datamodel</code>, <code>dedup</code>, <code>eventstats</code>, <code>fieldsummary</code>, <code>fillnull</code>, <code>from</code>, <code>join</code>, <code>map</code>, <code>outlier</code>, <code>reverse</code>, <code>sort</code>, <code>tail</code>, <code>transaction</code>, <code>union</code></li>
+</ul>
+<p>Streaming is not given as a list; each command page states its own class. Distributable streaming examples named in the search manual are <code>eval</code>, <code>fields</code>, <code>makemv</code>, <code>rename</code>, <code>regex</code>, <code>replace</code>, <code>strcat</code>, <code>typer</code> and <code>where</code>. Centralized streaming examples are <code>head</code>, <code>streamstats</code>, and certain modes of <code>dedup</code> and <code>cluster</code>.</p>
+<p>There is no <strong>orphan</strong> command type. The word appears in two other places and both are testable: <code>transaction keeporphans=true</code> emits events that joined no transaction, flagged <code>_txn_orphan=1</code>, and an orphaned knowledge object is one whose owning account no longer exists, fixed from Settings with Reassign Knowledge Objects except when the object is both orphaned and privately shared. If an answer choice offers &quot;orphan&quot; as a command type, it is a distractor.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 1014 611" width="1014" height="611" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 41.0 C507.0 61.0 507.0 61.0 507.0 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 124.0 C507.0 194.0 507.0 194.0 507.0 264.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 324.0 C507.0 244.0 507.0 244.0 507.0 164.0"/><rect class="dg-lblbg" x="492.475" y="232.0" width="29.05" height="16" rx="3"/><text class="dg-lbl" x="507.0" y="241.0" text-anchor="middle" dominant-baseline="middle">yes</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 224.0 C507.0 244.0 507.0 244.0 507.0 264.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 324.0 C507.0 344.0 507.0 344.0 507.0 364.0"/><rect class="dg-lblbg" x="495.65" y="332.0" width="22.700000000000003" height="16" rx="3"/><text class="dg-lbl" x="507.0" y="341.0" text-anchor="middle" dominant-baseline="middle">no</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 407.0 C507.0 427.0 123.25 427.0 123.25 447.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 407.0 C507.0 427.0 439.07500000000005 427.0 439.07500000000005 447.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M507.0 407.0 C507.0 427.0 822.825 427.0 822.825 447.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M439.07500000000005 507.0 C439.07500000000005 527.0 507.0 527.0 507.0 547.0"/><rect class="dg-node" x="350.0" y="2.0" width="314.0" height="39" rx="5"/><text class="dg-text" x="507.0" y="22.5" text-anchor="middle" dominant-baseline="middle">Search string parsed and macros expanded</text><rect class="dg-node" x="321.4" y="85.0" width="371.20000000000005" height="39" rx="5"/><text class="dg-text" x="507.0" y="105.5" text-anchor="middle" dominant-baseline="middle">Generating command produces the first result set</text><path class="dg-node dg-diamond" d="M507.0 268.0 L653.2750000000001 296.0 L507.0 324.0 L360.725 296.0 z"/><text class="dg-text" x="507.0" y="288.5" text-anchor="middle" dominant-baseline="middle">Next command distributable streaming,</text><text class="dg-text" x="507.0" y="305.5" text-anchor="middle" dominant-baseline="middle">and every command before it too?</text><rect class="dg-node" x="324.975" y="168.0" width="364.05" height="56" rx="5"/><text class="dg-text" x="507.0" y="188.5" text-anchor="middle" dominant-baseline="middle">Runs on every indexer in parallel</text><text class="dg-text" x="507.0" y="205.5" text-anchor="middle" dominant-baseline="middle">eval, fields, rename, regex, rex, where, search</text><rect class="dg-node" x="357.15" y="368.0" width="299.7" height="39" rx="5"/><text class="dg-text" x="507.0" y="388.5" text-anchor="middle" dominant-baseline="middle">Search head only, from here to the end</text><rect class="dg-node" x="2.0" y="451.0" width="242.5" height="56" rx="5"/><text class="dg-text" x="123.25" y="471.5" text-anchor="middle" dominant-baseline="middle">Centralized streaming</text><text class="dg-text" x="123.25" y="488.5" text-anchor="middle" dominant-baseline="middle">head, streamstats, transaction</text><rect class="dg-node" x="278.5" y="451.0" width="321.15000000000003" height="56" rx="5"/><text class="dg-text" x="439.07500000000005" y="471.5" text-anchor="middle" dominant-baseline="middle">Transforming</text><text class="dg-text" x="439.07500000000005" y="488.5" text-anchor="middle" dominant-baseline="middle">stats, chart, timechart, top, rare, table</text><rect class="dg-node" x="633.6500000000001" y="451.0" width="378.35" height="56" rx="5"/><text class="dg-text" x="822.825" y="471.5" text-anchor="middle" dominant-baseline="middle">Dataset processing</text><text class="dg-text" x="822.825" y="488.5" text-anchor="middle" dominant-baseline="middle">sort, eventstats, join, union, tail, dedup sortby</text><rect class="dg-node" x="317.825" y="551.0" width="378.35" height="56" rx="5"/><text class="dg-text" x="507.0" y="571.5" text-anchor="middle" dominant-baseline="middle">Events are gone. Rows only.</text><text class="dg-text" x="507.0" y="588.5" text-anchor="middle" dominant-baseline="middle">_raw discarded, _time only if the command made it</text></svg></figure>
+<h2 id="2.-master-table">2. Master table<a class="anchor" href="#2.-master-table" aria-label="Link to this section">#</a></h2>
+<p>Type abbreviations: DS is distributable streaming, CS is centralized streaming, T is transforming, G is generating, DP is dataset processing, O is orchestrating. &quot;Unlisted&quot; means the command appears in none of the four verbatim lists above and its page states no class.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Type</th>
+<th>Section</th>
+<th>Purpose</th>
+<th>Topic file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>G first, DS after a pipe</td>
+<td>2.0</td>
+<td>Retrieve events, or filter rows already in the pipeline</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>where</code></td>
+<td>DS</td>
+<td>2.0</td>
+<td>Filter using an eval expression, so field against field</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>eval</code></td>
+<td>DS</td>
+<td>2.0</td>
+<td>Calculate a new field or overwrite an existing one</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td>DS</td>
+<td>2.0</td>
+<td>Keep or drop fields, without changing column order</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>rename</code></td>
+<td>DS</td>
+<td>2.0</td>
+<td>Change a field's name, replacing the old one</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>DP</td>
+<td>2.0</td>
+<td>Order results by one or more fields</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>dedup</code></td>
+<td>CS, DP with <code>sortby</code></td>
+<td>2.0</td>
+<td>Keep the first N events per combination of field values</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>head</code></td>
+<td>CS</td>
+<td>2.0</td>
+<td>Keep the first N results, or results until an expression is false</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>tail</code></td>
+<td>DP</td>
+<td>2.0</td>
+<td>Keep the last N results, returned in reverse order</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>table</code></td>
+<td>T</td>
+<td>1.0, 2.0</td>
+<td>Keep named fields in the given column order as a table</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>fillnull</code></td>
+<td>DS with a field list, DP without</td>
+<td>2.0</td>
+<td>Replace null values with a constant</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>filldown</code></td>
+<td>Unlisted</td>
+<td>2.0</td>
+<td>Replace null values with the last non-null value above</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>fieldformat</code></td>
+<td>DS</td>
+<td>2.0</td>
+<td>Change how a field displays without changing its value</td>
+<td><a href="../topics/02-filtering-and-formatting.html">02</a></td>
+</tr>
+<tr>
+<td><code>stats</code></td>
+<td>T</td>
+<td>1.0, 3.0</td>
+<td>Aggregate into a results table, one row per BY combination</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>eventstats</code></td>
+<td>DP</td>
+<td>1.0</td>
+<td>Compute the same aggregates and write them onto every event</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>streamstats</code></td>
+<td>CS</td>
+<td>1.0</td>
+<td>Compute a running aggregate over events seen so far</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>chart</code></td>
+<td>T</td>
+<td>1.0</td>
+<td>Two-dimensional table, row-split by column-split</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>timechart</code></td>
+<td>T</td>
+<td>1.0</td>
+<td>Aggregate over time bins, <code>_time</code> always the first column</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td>T</td>
+<td>1.0</td>
+<td>Most common values with <code>count</code> and <code>percent</code></td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>rare</code></td>
+<td>T</td>
+<td>1.0</td>
+<td>Least common values with <code>count</code> and <code>percent</code></td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>bin</code> (alias <code>bucket</code>)</td>
+<td>DP, streaming with <code>span</code></td>
+<td>1.0</td>
+<td>Put a numeric or time field into buckets</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>addtotals</code></td>
+<td>DS, T when <code>col=true</code></td>
+<td>1.0</td>
+<td>Sum numeric fields across a row, or down a column</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>untable</code></td>
+<td>DS</td>
+<td>1.0</td>
+<td>Turn a chart-shaped table into stats-shaped long rows</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>xyseries</code></td>
+<td>DS, T when <code>grouped=true</code></td>
+<td>1.0</td>
+<td>Turn stats-shaped rows into a chart-shaped table</td>
+<td><a href="../topics/01-transforming-commands.html">01</a></td>
+</tr>
+<tr>
+<td><code>transaction</code></td>
+<td>CS, also DP</td>
+<td>3.0</td>
+<td>Group related events into one result with <code>duration</code></td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>append</code></td>
+<td>T and DP</td>
+<td>3.0</td>
+<td>Add subsearch results as extra rows at the end</td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>appendcols</code></td>
+<td>DP</td>
+<td>3.0</td>
+<td>Merge the Nth subsearch row into the Nth main row</td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>appendpipe</code></td>
+<td>DP</td>
+<td>3.0</td>
+<td>Append the output of a subpipeline run on the current results</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>join</code></td>
+<td>CS with a field list, DP without</td>
+<td>3.0</td>
+<td>SQL-style join to a subsearch on shared fields</td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>union</code></td>
+<td>DP</td>
+<td>3.0</td>
+<td>Merge two or more datasets into one result set</td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>selfjoin</code></td>
+<td>Unlisted</td>
+<td>3.0</td>
+<td>Join result rows to other rows in the same result set</td>
+<td><a href="../topics/03-correlating-events.html">03</a></td>
+</tr>
+<tr>
+<td><code>lookup</code></td>
+<td>O</td>
+<td>Off blueprint</td>
+<td>Enrich rows from a lookup table at search time</td>
+<td><a href="../topics/00-foundations-refresher.html">00</a></td>
+</tr>
+<tr>
+<td><code>inputlookup</code></td>
+<td>G</td>
+<td>Off blueprint</td>
+<td>Read a lookup table as the search's input</td>
+<td><a href="../topics/00-foundations-refresher.html">00</a></td>
+</tr>
+<tr>
+<td><code>outputlookup</code></td>
+<td>Unlisted</td>
+<td>Off blueprint</td>
+<td>Write the current results into a lookup table</td>
+<td><a href="../topics/00-foundations-refresher.html">00</a></td>
+</tr>
+<tr>
+<td><code>rex</code></td>
+<td>DS</td>
+<td>4.0</td>
+<td>Extract fields with named capture groups, or edit with sed</td>
+<td><a href="../topics/04-field-extractions.html">04</a></td>
+</tr>
+<tr>
+<td><code>erex</code></td>
+<td>Not stated on the page</td>
+<td>4.0</td>
+<td>Generate a regex from example values</td>
+<td><a href="../topics/04-field-extractions.html">04</a></td>
+</tr>
+<tr>
+<td><code>regex</code></td>
+<td>DS</td>
+<td>4.0</td>
+<td>Filter events by a regular expression, extracting nothing</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>extract</code> (alias <code>kv</code>)</td>
+<td>DS</td>
+<td>4.0</td>
+<td>Run key-value extraction on <code>_raw</code> at search time</td>
+<td><a href="../topics/04-field-extractions.html">04</a></td>
+</tr>
+<tr>
+<td><code>spath</code></td>
+<td>DS</td>
+<td>4.0</td>
+<td>Extract fields from JSON or XML by path</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>makemv</code></td>
+<td>DS</td>
+<td>4.0</td>
+<td>Split one field's value into a multivalue field</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>mvexpand</code></td>
+<td>DS</td>
+<td>4.0</td>
+<td>Turn each value of a multivalue field into its own result</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>nomv</code></td>
+<td>Unlisted</td>
+<td>4.0</td>
+<td>Collapse a multivalue field back to a single value</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>datamodel</code></td>
+<td>G and DP</td>
+<td>9.0, 10.0</td>
+<td>Inspect a model, or run a dataset's search</td>
+<td><a href="../topics/09-data-models-and-pivot.html">09</a></td>
+</tr>
+<tr>
+<td><code>tstats</code></td>
+<td>G</td>
+<td>9.0, 10.0</td>
+<td>Aggregate over indexed fields or an accelerated model</td>
+<td><a href="../topics/09-data-models-and-pivot.html">09</a></td>
+</tr>
+<tr>
+<td><code>from</code></td>
+<td>G and DP</td>
+<td>9.0, 10.0</td>
+<td>Read a dataset: data model, lookup or saved search</td>
+<td><a href="../topics/09-data-models-and-pivot.html">09</a></td>
+</tr>
+<tr>
+<td><code>pivot</code></td>
+<td>G</td>
+<td>9.0</td>
+<td>Run a Pivot report against a data model dataset in SPL</td>
+<td><a href="../topics/09-data-models-and-pivot.html">09</a></td>
+</tr>
+<tr>
+<td><code>makeresults</code></td>
+<td>G</td>
+<td>Support</td>
+<td>Create N empty results with <code>_time</code> for testing</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td>Unlisted</td>
+<td>3.0</td>
+<td>Turn subsearch rows into one search-string field</td>
+<td><a href="../topics/00-foundations-refresher.html">00</a></td>
+</tr>
+<tr>
+<td><code>foreach</code></td>
+<td>Unlisted</td>
+<td>Support</td>
+<td>Run a template subpipeline once per matching field</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>map</code></td>
+<td>DP</td>
+<td>Support</td>
+<td>Run a search once per input result, with token substitution</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>multisearch</code></td>
+<td>G</td>
+<td>Support</td>
+<td>Run two or more generating subsearches concurrently</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>loadjob</code></td>
+<td>G</td>
+<td>Support</td>
+<td>Load the results of a completed search job</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>savedsearch</code></td>
+<td>G in practice, absent from the list</td>
+<td>6.0, 7.0</td>
+<td>Run a saved search's SPL inline</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>collect</code></td>
+<td>Unlisted</td>
+<td>Off blueprint</td>
+<td>Write results into a summary index</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>history</code></td>
+<td>T and G</td>
+<td>Support</td>
+<td>Return your own search history</td>
+<td>-</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3.-command-entries">3. Command entries<a class="anchor" href="#3.-command-entries" aria-label="Link to this section">#</a></h2>
+<h3 id="already-covered-in-depth">Already covered in depth<a class="anchor" href="#already-covered-in-depth" aria-label="Link to this section">#</a></h3>
+<p><code>search</code>, <code>where</code>, <code>eval</code>, <code>fillnull</code>, <code>filldown</code> and <code>fieldformat</code> are section 2.0 and are documented option by option in <a href="../topics/02-filtering-and-formatting.html">02-filtering-and-formatting</a>. The two facts that get tested most: <code>fillnull</code> defaults to <code>value=0</code> and fills every field when given no field list, and <code>fieldformat</code> accepts exactly one expression and changes display only.</p>
+<p><code>chart</code>, <code>timechart</code>, <code>top</code>, <code>rare</code>, <code>untable</code> and <code>xyseries</code> are section 1.0 and are in <a href="../topics/01-transforming-commands.html">01-transforming-commands</a>. Carry these: <code>chart</code> defaults to <code>limit=top 10</code> and <code>bins=300</code>, <code>timechart</code> to <code>limit=top10</code> and <code>bins=100</code>, <code>top</code> and <code>rare</code> to <code>limit=10</code>, and <code>span</code> beats <code>bins</code> when both are given.</p>
+<p><code>stats</code> is covered across <a href="../topics/01-transforming-commands.html">01</a> and <a href="../topics/03-correlating-events.html">03</a>. Syntax is <code>stats [partitions=&lt;num&gt;] [allnum=&lt;bool&gt;] [delim=&lt;string&gt;] &lt;stats-agg-term&gt;... [BY &lt;field-list&gt;]</code>, <code>allnum</code> defaults to <code>false</code>, <code>delim</code> to a single space. With no BY clause it returns exactly one row. <code>values(x)</code> returns distinct values in lexicographical order; <code>list(x)</code> returns every value in event order, capped at the first 100.</p>
+<p><code>transaction</code> is section 3.0 and is in <a href="../topics/03-correlating-events.html">03-correlating-events</a>. <code>maxspan=-1</code>, <code>maxpause=-1</code>, <code>maxevents=1000</code>, and it creates <code>duration</code>, <code>eventcount</code> and <code>closed_txn</code>.</p>
+<p><code>append</code>, <code>appendcols</code>, <code>join</code>, <code>union</code> and <code>selfjoin</code> are compared in <a href="../topics/03-correlating-events.html">03-correlating-events</a>. <code>join</code> is <code>type=inner</code>, <code>max=1</code>, right side capped at 50,000 rows over 60 seconds. <code>append</code>, <code>appendcols</code> and <code>union</code> all use <code>maxout=50000</code> and <code>maxtime=60</code>.</p>
+<p><code>rex</code>, <code>erex</code> and <code>extract</code> are section 4.0 and are in <a href="../topics/04-field-extractions.html">04-field-extractions</a>. <code>rex field=_raw max_match=1</code>, <code>erex fromfield=_raw maxtrainers=100</code>, <code>extract limit=50 maxchars=10240</code> and <code>_raw</code> only.</p>
+<p><code>datamodel</code>, <code>tstats</code>, <code>from</code> and <code>pivot</code> are sections 9.0 and 10.0 and are in <a href="../topics/09-data-models-and-pivot.html">09-data-models-and-pivot</a> and <a href="../topics/10-cim.html">10-cim</a>. <code>datamodel strict_fields=true</code>, <code>tstats summariesonly=false</code>, <code>tstats</code> writes <code>FROM datamodel=&lt;model&gt;.&lt;root&gt;</code> with an equals sign while <code>from</code> writes <code>datamodel:&lt;model&gt;.&lt;dataset&gt;</code> with a colon.</p>
+<p><code>lookup</code>, <code>inputlookup</code>, <code>outputlookup</code> and <code>format</code> are summarised in <a href="../topics/00-foundations-refresher.html">00-foundations-refresher</a>. Lookups are off blueprint except for where they sit in the search-time sequence, which is step 7, after calculated fields and before event types.</p>
+<h3 id="fields">fields<a class="anchor" href="#fields" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">fields</span> <span class="t-op">[</span><span class="t-op">+</span><span class="t-pipe">|</span><span class="t-op">-</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">wc-field-list</span><span class="t-op">&gt;</span></code></pre></div>
+<p>The sign defaults to <code>+</code>, meaning keep only the listed fields. Wildcards are supported. Internal fields such as <code>_raw</code> and <code>_time</code> are not removed by <code>+</code> unless you name them, so <code>| fields - _*</code> is the only way to clear them all. The docs warn against removing <code>_time</code>, since <code>chart</code> and <code>timechart</code> cannot display date or time information without it.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-field">clientip</span> <span class="t-field">status</span> <span class="t-field">bytes</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-field">status</span></code></pre></div>
+<p>Gotcha: <code>fields</code> does not reorder columns and does not turn the Events tab into a Statistics tab, because it is distributable streaming, not transforming. Placing <code>| fields</code> early is a genuine performance win because it reduces what gets moved from the indexers.</p>
+<h3 id="rename">rename<a class="anchor" href="#rename" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-cmd">rename</span> <span class="t-op">&lt;</span><span class="t-field">wc-field</span><span class="t-op">&gt;</span> <span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">wc-field</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Wildcards must appear on both sides and must correspond. Field names containing spaces must be quoted. The old name disappears, which is the whole difference from a field alias.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">rename</span> <span class="t-field">productId</span> <span class="t-kw">AS</span> <span class="t-str">&quot;Product ID&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-str">&quot;Product ID&quot;</span> <span class="t-field">bytes</span></code></pre></div>
+<p>Gotcha: renaming a field onto a name that already exists overwrites it, and renaming several fields onto one name loses data. A rename lives for one search only; the persistent equivalent is a field alias, which keeps both names alive.</p>
+<h3 id="sort">sort<a class="anchor" href="#sort" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-cmd">sort</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-func">count</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">sort-by-clause</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-field">desc</span><span class="t-op">]</span></code></pre></div>
+<p>With no count, the limit is 10,000 results. Prefix a field with <code>-</code> for descending or <code>+</code> for ascending; ascending is the default. The ordering functions are <code>num()</code>, <code>str()</code>, <code>ip()</code> and <code>auto()</code>, and <code>auto()</code> is what runs when you name a bare field.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-num">5</span> <span class="t-op">-</span><span class="t-field">revenue</span></code></pre></div>
+<p>Gotcha: <code>sort</code> is a dataset processing command, so it emits nothing until it has the whole set, and it silently truncates at 10,000 unless you pass a count. A field that was formatted with <code>eval</code> rather than <code>fieldformat</code> sorts lexicographically, which is why <code>$1,204.50</code> lands before <code>$9.99</code>.</p>
+<h3 id="dedup">dedup<a class="anchor" href="#dedup" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-cmd">dedup</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">keepevents</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">keepempty</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">consecutive</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-kw">sortby</span> <span class="t-op">&lt;</span><span class="t-field">sort-by-clause</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p>The leading integer is how many events to keep per combination of values and defaults to 1. <code>consecutive=false</code>, <code>keepempty=false</code> and <code>keepevents=false</code> are the defaults. Events missing any listed field are dropped unless <code>keepempty=true</code>. With <code>sortby</code>, <code>dedup</code> becomes a dataset processing command instead of a streaming one.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">dedup</span> <span class="t-num">2</span> <span class="t-field">clientip</span> <span class="t-kw">sortby</span> <span class="t-op">-</span><span class="t-field">bytes</span></code></pre></div>
+<p>Gotcha: &quot;first&quot; means first in the order the events arrive, which by default is most recent first. Change the sort and you change which event survives. <code>consecutive=true</code> only removes duplicates that are adjacent, which is a different answer entirely.</p>
+<h3 id="head-and-tail">head and tail<a class="anchor" href="#head-and-tail" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-cmd">head</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">N</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">eval-expression</span><span class="t-op">&gt;</span><span class="t-op">)</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">limit</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">null</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">keeplast</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">tail</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">N</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p>Both default to 10 results. <code>head</code> stops at the first result for which the eval expression is false; <code>null=false</code> and <code>keeplast=false</code> are the defaults, and <code>keeplast=true</code> keeps the result that ended the run. If both a count and an expression are given, the more restrictive wins. <code>tail</code> returns the last N results in reverse order.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span><span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">head</span> <span class="t-op">(</span><span class="t-field">bytes</span> <span class="t-op">&gt;</span> <span class="t-num">1000</span><span class="t-op">)</span> <span class="t-opt">keeplast</span><span class="t-op">=</span><span class="t-kw">true</span></code></pre></div>
+<p>Gotcha: <code>head</code> is centralized streaming and <code>tail</code> is dataset processing, so <code>tail</code> is the more expensive of the pair. <code>| head 5</code> after a transforming command takes the first five rows of the table, not the first five events.</p>
+<h3 id="eventstats-and-streamstats">eventstats and streamstats<a class="anchor" href="#eventstats-and-streamstats" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-cmd">eventstats</span> <span class="t-op">[</span><span class="t-opt">allnum</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">stats-agg-term</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">streamstats</span> <span class="t-op">[</span><span class="t-opt">reset_on_change</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">reset_before</span><span class="t-op">=</span><span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">eval</span><span class="t-op">&gt;</span><span class="t-op">)</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">reset_after</span><span class="t-op">=</span><span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">eval</span><span class="t-op">&gt;</span><span class="t-op">)</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">current</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">window</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">time_window</span><span class="t-op">=&lt;</span><span class="t-field">span</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">global</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allnum</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">stats-agg-term</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-kw">BY</span> <span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p>Both keep every input row and add columns rather than replacing the result set. <code>allnum=false</code> on both. <code>streamstats</code> defaults are <code>window=0</code> (no window, so all events so far), <code>current=true</code> (include the current event), <code>global=true</code> (one window shared across BY groups), and the three reset options all <code>false</code>. With <code>window=0</code> the <code>max_stream_window</code> limit of 10,000 events still applies.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">eventstats</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_bytes</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">bytes</span> <span class="t-op">&gt;</span> <span class="t-field">avg_bytes</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">streamstats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">running_total</span></code></pre></div>
+<p>Gotcha: <code>eventstats</code> is dataset processing and <code>streamstats</code> is centralized streaming, and neither is transforming, so neither one on its own populates the Statistics tab from an event search. <code>streamstats current=false</code> gives you the previous row's value, which is the standard way to compute a delta.</p>
+<h3 id="bin-alias-bucket">bin (alias bucket)<a class="anchor" href="#bin-alias-bucket" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-cmd">bin</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">bin-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-kw">AS</span> <span class="t-op">&lt;</span><span class="t-field">newfield</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>bins</code> defaults to 100 and is a maximum, not a target. <code>span</code>, <code>minspan</code>, <code>start</code>, <code>end</code> and <code>aligntime</code> are unset by default; <code>aligntime</code> aligns to the UTC epoch when not given. Specifying <code>span</code> makes <code>bin</code> a streaming command instead of a dataset processing one.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-14">Copy</button></div><pre id="spl-14"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">bin</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span> <span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">_time</span><span class="t-op">,</span> <span class="t-field">status</span></code></pre></div>
+<p>Gotcha: that example is what <code>timechart</code> does for you. <code>bin</code> is the answer when you need time buckets and more than one BY field, since <code>timechart</code> allows exactly one split-by field.</p>
+<h3 id="addtotals">addtotals<a class="anchor" href="#addtotals" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-15">Copy</button></div><pre id="spl-15"><code><span class="t-cmd">addtotals</span> <span class="t-op">[</span><span class="t-opt">row</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">col</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">labelfield</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">label</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">fieldname</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field-list</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>row=true</code> and <code>col=false</code> are the defaults, so bare <code>addtotals</code> adds a per-row sum in a new field named by <code>fieldname</code>, default <code>Total</code>. <code>col=true</code> appends a summary row whose label is <code>label</code>, default <code>Total</code>, written into <code>labelfield</code>. Only numeric fields are summed.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-16">Copy</button></div><pre id="spl-16"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">chart</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">OVER</span> <span class="t-field">categoryId</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">addtotals</span> <span class="t-opt">col</span><span class="t-op">=</span><span class="t-kw">true</span> <span class="t-opt">labelfield</span><span class="t-op">=</span><span class="t-field">categoryId</span></code></pre></div>
+<p>Gotcha: the type changes with the arguments. <code>addtotals</code> is distributable streaming for row totals and transforming for column totals. Without <code>labelfield</code> the summary row appears with no label, which reads like a bug.</p>
+<h3 id="appendpipe">appendpipe<a class="anchor" href="#appendpipe" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-17">Copy</button></div><pre id="spl-17"><code><span class="t-cmd">appendpipe</span> <span class="t-op">[</span><span class="t-opt">run_in_preview</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">subpipeline</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p>Runs the subpipeline against the results already in the pipeline and appends its output as extra rows. Unlike <code>append</code>, there is no subsearch and no second data retrieval, so the subsearch limits do not apply. <code>run_in_preview</code> defaults to <code>true</code> [verify].</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-18">Copy</button></div><pre id="spl-18"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">appendpipe</span> <span class="t-op">[</span><span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">revenue</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">categoryId</span><span class="t-op">=</span><span class="t-str">&quot;TOTAL&quot;</span><span class="t-op">]</span></code></pre></div>
+<p>Gotcha: it is the cheap way to add a totals row, and it is a dataset processing command, so it sits with <code>sort</code> and <code>eventstats</code> as a barrier in the pipeline.</p>
+<h3 id="regex">regex<a class="anchor" href="#regex" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-19">Copy</button></div><pre id="spl-19"><code><span class="t-cmd">regex</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;=&lt;</span><span class="t-field">regex</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;!=&lt;</span><span class="t-field">regex</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">regex</span><span class="t-op">&gt;</span><span class="t-op">)</span></code></pre></div>
+<p>Defaults to matching against <code>_raw</code>. It filters and nothing else: no field is created, no value is changed. <code>!=</code> keeps the events that do not match.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-20">Copy</button></div><pre id="spl-20"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-pipe">|</span> <span class="t-cmd">regex</span> <span class="t-opt">_raw</span><span class="t-op">=</span><span class="t-str">&quot;(?i)failed password for (invalid user )?\w+&quot;</span></code></pre></div>
+<p>Gotcha: this is the one that pairs with <code>rex</code> in a two-answer question. <code>rex</code> extracts and returns every input event whether it matched or not; <code>regex</code> extracts nothing and returns only matching events.</p>
+<h3 id="spath">spath<a class="anchor" href="#spath" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-21">Copy</button></div><pre id="spl-21"><code><span class="t-cmd">spath</span> <span class="t-op">[</span><span class="t-opt">input</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">output</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">path</span><span class="t-op">=&lt;</span><span class="t-field">datapath</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">datapath</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>input</code> defaults to <code>_raw</code>. With no <code>path</code>, <code>spath</code> extracts every field it can find in the structured data. Paths use dot notation for objects and <code>{}</code> for arrays, so <code>objects{}.name</code> reaches into an array of objects, and <code>{n}</code> selects one element.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-22">Copy</button></div><pre id="spl-22"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">cisco</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">cisco:wsa:squid</span> <span class="t-pipe">|</span> <span class="t-cmd">spath</span> <span class="t-opt">input</span><span class="t-op">=</span><span class="t-field">_raw</span> <span class="t-opt">output</span><span class="t-op">=</span><span class="t-field">user_role</span> <span class="t-opt">path</span><span class="t-op">=</span><span class="t-field">user.role</span></code></pre></div>
+<p>Gotcha: <code>spath</code> reads JSON and XML only. For a flat <code>key=value</code> line the command is <code>extract</code>, and for arbitrary text it is <code>rex</code>. Automatic key-value extraction already handles well-formed JSON in many cases, so <code>spath</code> is most useful when the JSON is nested inside a field rather than in <code>_raw</code>.</p>
+<h3 id="makemv-mvexpand-and-nomv">makemv, mvexpand and nomv<a class="anchor" href="#makemv-mvexpand-and-nomv" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-23">Copy</button></div><pre id="spl-23"><code><span class="t-cmd">makemv</span> <span class="t-op">[</span><span class="t-opt">delim</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-opt">tokenizer</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">allowempty</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">setsv</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span>
+<span class="t-field">mvexpand</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">limit</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-field">nomv</span> <span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span></code></pre></div>
+<p><code>makemv</code> splits one field's value into several. <code>delim</code> defaults to a single space, <code>tokenizer</code> is unset, <code>allowempty=false</code> and <code>setsv=false</code>. <code>mvexpand</code> turns each value of one multivalue field into its own result, duplicating the other fields; <code>limit</code> defaults to 0, meaning no cap. <code>nomv</code> reverses the process and returns a single value.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-24">Copy</button></div><pre id="spl-24"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">tags</span><span class="t-op">=</span><span class="t-str">&quot;a,b,c&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">makemv</span> <span class="t-opt">delim</span><span class="t-op">=</span><span class="t-str">&quot;,&quot;</span> <span class="t-field">tags</span> <span class="t-pipe">|</span> <span class="t-cmd">mvexpand</span> <span class="t-field">tags</span></code></pre></div>
+<p>Gotcha: <code>mvexpand</code> accepts exactly one field per command and multiplies your row count, which is how a search that ran fine yesterday hits <code>max_mem_usage_mb</code> today. <code>makemv</code> uses <code>delim</code> or <code>tokenizer</code>, never both.</p>
+<h3 id="makeresults">makeresults<a class="anchor" href="#makeresults" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-25">Copy</button></div><pre id="spl-25"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span> <span class="t-op">[</span><span class="t-opt">count</span><span class="t-op">=&lt;</span><span class="t-field">num</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">annotate</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">splunk_server</span><span class="t-op">=&lt;</span><span class="t-field">wc-string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">splunk_server_group</span><span class="t-op">=&lt;</span><span class="t-field">wc-string</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>count</code> defaults to 1 and <code>annotate</code> to <code>false</code>. With <code>annotate=false</code> the result carries a single field, <code>_time</code>, set to the time the search ran. <code>annotate=true</code> adds <code>_raw</code>, <code>host</code>, <code>source</code>, <code>sourcetype</code> and <code>splunk_server</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-26">Copy</button></div><pre id="spl-26"><code><span class="t-pipe">|</span> <span class="t-cmd">makeresults</span> <span class="t-opt">count</span><span class="t-op">=</span><span class="t-num">10</span> <span class="t-pipe">|</span> <span class="t-cmd">streamstats</span> <span class="t-func">count</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">_time</span><span class="t-op">=</span><span class="t-func">now</span><span class="t-op">(</span><span class="t-op">)</span><span class="t-op">+</span><span class="t-num">10</span><span class="t-op">*</span><span class="t-func">count</span><span class="t-op">,</span> <span class="t-opt">user</span><span class="t-op">=</span><span class="t-str">&quot;nobody&quot;</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span><span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">user</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">11s</span></code></pre></div>
+<p>Gotcha: it is a generating command, so it must be first and needs a leading pipe. That example is the documented way to build a transaction test set without touching an index, and it is the search behind the <code>closed_txn=0</code> result in the correlating events topic.</p>
+<h3 id="foreach">foreach<a class="anchor" href="#foreach" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-27">Copy</button></div><pre id="spl-27"><code><span class="t-cmd">foreach</span> <span class="t-op">&lt;</span><span class="t-field">wc-field</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-op">[</span><span class="t-opt">fieldstr</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">matchstr</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">matchseg1</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">mode</span><span class="t-op">=&lt;</span><span class="t-field">multifield</span><span class="t-pipe">|</span><span class="t-field">multivalue</span><span class="t-pipe">|</span><span class="t-cmd">multikv</span><span class="t-pipe">|</span><span class="t-field">json_array</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">&lt;</span><span class="t-field">subsearch</span><span class="t-op">&gt;</span></code></pre></div>
+<p>Runs a template subpipeline once per field matched by the wildcard, substituting the field name for the <code>&lt;&lt;FIELD&gt;&gt;</code> token. <code>&lt;&lt;MATCHSTR&gt;&gt;</code> gives the part of the name that matched the wildcard. <code>mode</code> defaults to <code>multifield</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-28">Copy</button></div><pre id="spl-28"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-field">host</span> <span class="t-pipe">|</span> <span class="t-cmd">foreach</span> <span class="t-op">*</span> <span class="t-op">[</span><span class="t-cmd">eval</span> <span class="t-op">&lt;&lt;</span><span class="t-field">FIELD</span><span class="t-op">&gt;&gt;=</span><span class="t-func">round</span><span class="t-op">(</span>&#x27;<span class="t-op">&lt;&lt;</span><span class="t-field">FIELD</span><span class="t-op">&gt;&gt;</span>&#x27;<span class="t-op">/</span><span class="t-num">1024</span><span class="t-op">,</span> <span class="t-num">2</span><span class="t-op">)</span><span class="t-op">]</span></code></pre></div>
+<p>Gotcha: <code>foreach</code> is the documented exception to the rule that a subsearch must start with a generating command, because its bracketed argument is a template pipeline rather than a subsearch.</p>
+<h3 id="map-multisearch-loadjob-and-savedsearch">map, multisearch, loadjob and savedsearch<a class="anchor" href="#map-multisearch-loadjob-and-savedsearch" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-29">Copy</button></div><pre id="spl-29"><code><span class="t-pipe">|</span> <span class="t-cmd">map</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">search</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">savedsearch</span><span class="t-op">&gt;</span><span class="t-op">)</span> <span class="t-op">[</span><span class="t-opt">maxsearches</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">multisearch</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">subsearch1</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">subsearch2</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span>
+<span class="t-pipe">|</span> <span class="t-cmd">loadjob</span> <span class="t-op">(</span><span class="t-op">&lt;</span><span class="t-field">sid</span><span class="t-op">&gt;</span> <span class="t-pipe">|</span> <span class="t-op">&lt;</span><span class="t-field">savedsearch-identifier</span><span class="t-op">&gt;</span><span class="t-op">)</span> <span class="t-op">[</span><span class="t-opt">events</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">savedsearch</span> <span class="t-op">&lt;</span><span class="t-field">savedsearch-name</span><span class="t-op">&gt;</span></code></pre></div>
+<p><code>map</code> runs a search once per input result with <code>$field$</code> token substitution and defaults to <code>maxsearches=10</code>, silently dropping the rest. <code>multisearch</code> needs at least two subsearches, each starting with a generating command, and permits only streaming commands inside them. <code>loadjob</code> reads the artifacts of a job that already finished rather than rerunning it, and <code>events</code> defaults to <code>false</code>, meaning results rather than events. <code>savedsearch</code> runs the saved search's SPL inline.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-30">Copy</button></div><pre id="spl-30"><code><span class="t-pipe">|</span> <span class="t-cmd">multisearch</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;web&quot;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">src</span><span class="t-op">=</span><span class="t-str">&quot;sales&quot;</span><span class="t-op">]</span></code></pre></div>
+<p>Gotcha: <code>savedsearch</code> is the thing an event type definition may not contain, along with a pipe and a subsearch. Do not confuse the <code>savedsearch</code> command with the <code>savedsearch=</code> search modifier, which is a filter term inside <code>search</code>.</p>
+<h3 id="collect-and-history">collect and history<a class="anchor" href="#collect-and-history" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-31">Copy</button></div><pre id="spl-31"><code><span class="t-pipe">|</span> <span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">collect</span> <span class="t-opt">index</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">addtime</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">marker</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">testmode</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">history</span> <span class="t-op">[</span><span class="t-opt">events</span><span class="t-op">=&lt;</span><span class="t-field">bool</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<p><code>collect</code> writes the current results into a summary index you name; <code>index</code> is required, and <code>testmode</code> defaults to <code>false</code>, so it writes for real. <code>addtime</code> defaults to <code>true</code> [verify]. <code>history</code> returns your own search history and <code>events</code> defaults to <code>false</code>, giving a table rather than events.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-32">Copy</button></div><pre id="spl-32"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">collect</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">summary</span> <span class="t-opt">marker</span><span class="t-op">=</span><span class="t-str">&quot;report=daily_revenue&quot;</span></code></pre></div>
+<p>Gotcha: summary indexing is one of three distinct acceleration mechanisms and is not report acceleration or data model acceleration. <code>history</code> is on both the transforming and the generating lists, which makes it a clean example of the types not being mutually exclusive.</p>
+<h2 id="4.-commands-that-look-alike">4. Commands that look alike<a class="anchor" href="#4.-commands-that-look-alike" aria-label="Link to this section">#</a></h2>
+<p><strong><code>search</code> versus <code>where</code>.</strong> <code>search</code> compares a field to a literal and reads an unquoted right-hand word as a string, so it can never compare two fields. <code>where</code> evaluates an eval expression, so it can compare fields, do arithmetic, and call functions. <code>search</code> evaluates OR before AND and has no XOR; <code>where</code> and <code>eval</code> evaluate AND before OR and do have XOR. Wildcards work in <code>search</code> and only through <code>like()</code> or <code>LIKE</code> in <code>where</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-33">Copy</button></div><pre id="spl-33"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">clientip</span><span class="t-op">=</span><span class="t-num">192.168</span><span class="t-op">.</span><span class="t-num">1.1</span> <span class="t-opt">status</span><span class="t-op">=</span><span class="t-num">200</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">bytes</span> <span class="t-op">&gt;</span> <span class="t-field">avg_bytes</span> <span class="t-kw">AND</span> <span class="t-func">like</span><span class="t-op">(</span><span class="t-field">uri_path</span><span class="t-op">,</span> <span class="t-str">&quot;/product%&quot;</span><span class="t-op">)</span></code></pre></div>
+<p><strong><code>rex</code> versus <code>regex</code> versus <code>extract</code>.</strong> <code>rex</code> extracts named capture groups into fields and passes every input event through, matched or not. <code>regex</code> extracts nothing and passes through only the events that match. <code>extract</code> runs key-value extraction on <code>_raw</code> with delimiters rather than a pattern, and has no <code>field=</code> argument at all.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-34">Copy</button></div><pre id="spl-34"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">field</span><span class="t-op">=</span><span class="t-field">_raw</span> <span class="t-str">&quot;port (?&lt;src_port&gt;\d+)&quot;</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">regex</span> <span class="t-opt">_raw</span><span class="t-op">=</span><span class="t-str">&quot;port \d+&quot;</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">extract</span> <span class="t-opt">pairdelim</span><span class="t-op">=</span><span class="t-str">&quot;,&quot;</span> <span class="t-opt">kvdelim</span><span class="t-op">=</span><span class="t-str">&quot;=&quot;</span></code></pre></div>
+<p><strong><code>stats</code> versus <code>eventstats</code> versus <code>streamstats</code>.</strong> <code>stats</code> replaces the events with a results table. <code>eventstats</code> computes the same aggregates and writes them back onto every event, so the row count never changes. <code>streamstats</code> computes a running aggregate over the events seen so far, so each row gets a different value. Use <code>eventstats</code> when you need to compare a row to a whole-set aggregate, and <code>streamstats</code> when you need a running total, a rank, or a previous-row comparison.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-35">Copy</button></div><pre id="spl-35"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-field">host</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">eventstats</span> <span class="t-func">avg</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">avg_bytes</span> <span class="t-kw">BY</span> <span class="t-field">host</span> <span class="t-pipe">|</span> <span class="t-cmd">where</span> <span class="t-field">bytes</span> <span class="t-op">&gt;</span> <span class="t-field">avg_bytes</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">streamstats</span> <span class="t-opt">current</span><span class="t-op">=</span><span class="t-kw">false</span> <span class="t-func">last</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">prev_bytes</span> <span class="t-kw">BY</span> <span class="t-field">host</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">delta</span><span class="t-op">=</span><span class="t-field">bytes-prev_bytes</span></code></pre></div>
+<p><strong><code>chart</code> versus <code>timechart</code> versus <code>stats</code>.</strong> If the X-axis is time, use <code>timechart</code>, which fixes <code>_time</code> as the row-split and takes exactly one BY field. If the X-axis is any other field, use <code>chart</code>, which takes two BY fields, the first becoming rows and the second becoming columns. If you want one row per unique combination with every group-by field kept as its own column, use <code>stats</code>, which takes many BY fields. All three are transforming and all three destroy the event list.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-36">Copy</button></div><pre id="spl-36"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span><span class="t-op">,</span> <span class="t-field">status</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">chart</span> <span class="t-func">count</span> <span class="t-kw">OVER</span> <span class="t-field">host</span> <span class="t-kw">BY</span> <span class="t-field">status</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-opt">span</span><span class="t-op">=</span><span class="t-time">1h</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">status</span></code></pre></div>
+<p><strong><code>fillnull</code> versus <code>filldown</code>.</strong> <code>fillnull</code> writes a constant, defaulting to <code>0</code>, into every null cell, and with no field list it fills every field. <code>filldown</code> writes the last non-null value seen above in that column and leaves the cell null when there is nothing above it. <code>filldown</code> accepts wildcards in its field list; <code>fillnull</code> does not.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-37">Copy</button></div><pre id="spl-37"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">timechart</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">categoryId</span> <span class="t-pipe">|</span> <span class="t-cmd">fillnull</span> <span class="t-opt">value</span><span class="t-op">=</span><span class="t-num">0</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-field">_time</span> <span class="t-pipe">|</span> <span class="t-cmd">filldown</span> <span class="t-field">session_id</span> <span class="t-field">user</span><span class="t-op">*</span></code></pre></div>
+<p><strong><code>eval</code> versus <code>fieldformat</code>.</strong> Both take an eval expression. <code>eval</code> changes the stored value, so everything downstream, including <code>sort</code>, <code>where</code> and any export, sees the new value. <code>fieldformat</code> changes only how the field renders, so downstream commands still see the original, and the change does not reach <code>outputcsv</code> or <code>outputlookup</code>. Format currency, durations and byte counts with <code>fieldformat</code> and keep the arithmetic intact.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-38">Copy</button></div><pre id="spl-38"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-pipe">|</span> <span class="t-cmd">eval</span> <span class="t-opt">revenue</span><span class="t-op">=</span><span class="t-str">&quot;$&quot;</span><span class="t-op">.</span><span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-pipe">|</span> <span class="t-cmd">fieldformat</span> <span class="t-opt">revenue</span><span class="t-op">=</span><span class="t-str">&quot;$&quot;</span><span class="t-op">.</span><span class="t-func">tostring</span><span class="t-op">(</span><span class="t-field">revenue</span><span class="t-op">,</span> <span class="t-str">&quot;commas&quot;</span><span class="t-op">)</span></code></pre></div>
+<p><strong><code>dedup</code> versus <code>stats values</code>.</strong> <code>dedup</code> keeps whole events, one per combination of the named fields, and the surviving event is whichever arrived first. <code>stats values()</code> throws the events away and returns the distinct values themselves, sorted lexicographically, alongside whatever else you aggregate. If the question asks for unique events, <code>dedup</code>; if it asks for the set of values, <code>stats</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-39">Copy</button></div><pre id="spl-39"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">dedup</span> <span class="t-field">host</span> <span class="t-field">sourcetype</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">sourcetype</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">sourcetypes</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span></code></pre></div>
+<p><strong><code>transaction</code> versus <code>stats</code>.</strong> <code>transaction</code> preserves <code>_raw</code> for every member, sets <code>_time</code> to the earliest member, unions all other fields, and adds <code>duration</code>, <code>eventcount</code> and <code>closed_txn</code>. <code>stats</code> is a transforming command that can push its first reduce step to the indexers, so the docs recommend it whenever a unique identifier exists and the raw text is not needed. <code>transaction</code> is the answer when the grouping needs <code>startswith</code>, <code>endswith</code>, <code>maxspan</code>, <code>maxpause</code> or the raw text; <code>stats</code> is the answer for large or distributed data, and the only option after an <code>append</code>.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-40">Copy</button></div><pre id="spl-40"><code><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">transaction</span> <span class="t-field">JSESSIONID</span> <span class="t-opt">maxspan</span><span class="t-op">=</span><span class="t-time">30m</span> <span class="t-opt">startswith</span><span class="t-op">=</span><span class="t-str">&quot;view&quot;</span> <span class="t-opt">endswith</span><span class="t-op">=</span><span class="t-str">&quot;purchase&quot;</span>
+<span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">range</span><span class="t-op">(</span><span class="t-field">_time</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">duration</span><span class="t-op">,</span> <span class="t-func">count</span> <span class="t-kw">AS</span> <span class="t-field">eventcount</span><span class="t-op">,</span> <span class="t-func">values</span><span class="t-op">(</span><span class="t-field">action</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">actions</span> <span class="t-kw">BY</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<p><strong><code>append</code> versus <code>appendcols</code> versus <code>join</code> versus <code>union</code>.</strong> <code>append</code> adds subsearch rows to the bottom, keeping columns aligned by name. <code>appendcols</code> merges the Nth subsearch row into the Nth main row by position, which is fragile and rarely the exam answer. <code>join</code> matches rows on shared field values with <code>type=inner</code> and <code>max=1</code> by default. <code>union</code> merges whole datasets and interleaves on <code>_time</code>. All four are limited: 50,000 rows and 60 seconds by default, and <code>join</code> caps the right side at one matching row per main row.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-41">Copy</button></div><pre id="spl-41"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span> <span class="t-pipe">|</span> <span class="t-cmd">append</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span><span class="t-op">]</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">host</span> <span class="t-pipe">|</span> <span class="t-cmd">join</span> <span class="t-opt">type</span><span class="t-op">=</span><span class="t-field">left</span> <span class="t-field">host</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total_bytes</span> <span class="t-kw">BY</span> <span class="t-field">host</span><span class="t-op">]</span>
+<span class="t-pipe">|</span> <span class="t-cmd">union</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-cmd">search</span> <span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span><span class="t-op">]</span></code></pre></div>
+<p><strong><code>table</code> versus <code>fields</code>.</strong> <code>table</code> is transforming: it produces a results table in the column order you typed, ends the event stream, and populates the Statistics tab. <code>fields</code> is distributable streaming: it keeps or drops columns without reordering them and without ending the event stream, and it can run on the indexers. Both accept wildcards. Use <code>fields</code> early to cut data volume, and <code>table</code> at the end to fix presentation, especially the marker, X, Y ordering a scatter chart needs.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-42">Copy</button></div><pre id="spl-42"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-pipe">|</span> <span class="t-cmd">fields</span> <span class="t-field">clientip</span> <span class="t-field">status</span> <span class="t-field">bytes</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">BY</span> <span class="t-field">status</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">bytes</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">total</span> <span class="t-kw">BY</span> <span class="t-field">status</span> <span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">status</span> <span class="t-field">total</span></code></pre></div>
+<p><strong><code>inputlookup</code> versus <code>lookup</code>.</strong> <code>inputlookup</code> is a generating command: it reads the lookup table as the search's input and must be first, with a leading pipe. <code>lookup</code> is an orchestrating command that enriches results already in the pipeline by matching one or more fields. <code>inputlookup</code> when the table is the data; <code>lookup</code> when the table is the annotation.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-43">Copy</button></div><pre id="spl-43"><code><span class="t-pipe">|</span> <span class="t-cmd">inputlookup</span> <span class="t-field">categoryIds.csv</span> <span class="t-pipe">|</span> <span class="t-cmd">search</span> <span class="t-opt">categoryId</span><span class="t-op">=</span><span class="t-field">STRATEGY</span>
+<span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span> <span class="t-pipe">|</span> <span class="t-cmd">lookup</span> <span class="t-field">categoryIds.csv</span> <span class="t-field">productId</span> <span class="t-kw">OUTPUT</span> <span class="t-field">categoryId</span></code></pre></div>
+<p><strong><code>datamodel</code> versus <code>tstats</code> versus <code>from datamodel</code>.</strong> <code>datamodel &lt;model&gt; &lt;dataset&gt; search</code> runs the dataset's generated search against raw events and honours <code>strict_fields=true</code>, so you see the constraint fields only. <code>tstats</code> reads indexed fields and accelerated summaries, is by far the fastest, and returns nothing useful with <code>summariesonly=true</code> against an unaccelerated model, which every stock CIM model is. <code>from datamodel:&lt;model&gt;.&lt;dataset&gt;</code> is the dataset-reading form and takes a colon where <code>tstats</code> takes an equals sign.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-44">Copy</button></div><pre id="spl-44"><code><span class="t-pipe">|</span> <span class="t-cmd">datamodel</span> <span class="t-field">Authentication</span> <span class="t-field">Failed_Authentication</span> <span class="t-field">search</span>
+<span class="t-pipe">|</span> <span class="t-cmd">tstats</span> <span class="t-func">count</span> <span class="t-kw">FROM</span> <span class="t-opt">datamodel</span><span class="t-op">=</span><span class="t-field">Authentication</span> <span class="t-kw">WHERE</span> <span class="t-opt">nodename</span><span class="t-op">=</span><span class="t-field">Authentication.Failed_Authentication</span> <span class="t-kw">BY</span> <span class="t-field">Authentication.src</span>
+<span class="t-pipe">|</span> <span class="t-cmd">from</span> <span class="t-field">datamodel:Authentication.Failed_Authentication</span> <span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">BY</span> <span class="t-field">src</span></code></pre></div>
+<h2 id="5.-pipeline-rules">5. Pipeline rules<a class="anchor" href="#5.-pipeline-rules" aria-label="Link to this section">#</a></h2>
+<p><strong>A generating command must be first.</strong> Every generating command except <code>search</code> is written with a leading pipe: <code>| inputlookup</code>, <code>| makeresults</code>, <code>| tstats</code>, <code>| datamodel</code>, <code>| pivot</code>, <code>| from</code>, <code>| multisearch</code>, <code>| loadjob</code>, <code>| history</code>. <code>search</code> is generating too, which is exactly why a bare search string works with no pipe in front of it. A generating command anywhere other than the first position is a syntax error, and that is the single most common shape of a malformed-SPL question.</p>
+<p><strong>A subsearch runs first.</strong> The bracketed inner search executes before the outer search, its rows are converted by <code>format</code> into one field named <code>search</code> containing a Boolean string, and that string is substituted into the outer search before the outer search runs. The defaults are <code>maxout=10000</code> results and <code>maxtime=60</code> seconds, and exceeding either finalizes the subsearch silently, so a wrong answer looks exactly like a right one. The first command in a subsearch must be a generating command, with <code>foreach</code> as the documented exception. Time modifiers do not cross the bracket in either direction.</p>
+<p><strong>A transforming command ends the event stream.</strong> After <code>stats</code>, <code>chart</code>, <code>timechart</code>, <code>top</code>, <code>rare</code> or <code>table</code>, the pipeline carries rows, not events. <code>_raw</code> is gone, so bare keyword search terms and <code>rex field=_raw</code> no longer find anything. <code>_time</code> survives only when the transforming command produced it, which <code>timechart</code> always does and <code>stats count BY host</code> never does. What still works afterwards is anything that operates on a table: <code>sort</code>, <code>where</code>, <code>search</code> on surviving fields, <code>eval</code>, <code>rename</code>, <code>fields</code>, <code>fillnull</code>, <code>filldown</code>, <code>addtotals</code>, <code>appendpipe</code>, and a second transforming command.</p>
+<p><strong>A non-streaming command ends distributed processing.</strong> While every command so far is distributable streaming, the whole chain runs on each indexer in parallel and only the reduced results cross the network. The first centralized streaming, transforming or dataset processing command pins everything from that point onward to the search head, running once, in one process. This is why <code>transaction</code>, a centralized streaming command that holds open transactions in search head memory, loses to <code>stats</code>, whose first reduce step the indexers can do, and why filtering before the first pipe beats filtering after it.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 756 146" width="756" height="146" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><rect class="dg-node" x="2" y="2" width="185.3" height="56" rx="5"/><text class="dg-text" x="94.65" y="22.5" text-anchor="middle" dominant-baseline="middle">index=web status=503</text><text class="dg-text" x="94.65" y="39.5" text-anchor="middle" dominant-baseline="middle">retrieval, on indexers</text><rect class="dg-node" x="221.3" y="2" width="285.40000000000003" height="56" rx="5"/><text class="dg-text" x="364.0" y="22.5" text-anchor="middle" dominant-baseline="middle">| eval kb=bytes/1024</text><text class="dg-text" x="364.0" y="39.5" text-anchor="middle" dominant-baseline="middle">distributable streaming, on indexers</text><rect class="dg-node" x="540.7" y="2" width="128.10000000000002" height="56" rx="5"/><text class="dg-text" x="604.75" y="31.0" text-anchor="middle" dominant-baseline="middle">| stats sum(kb</text><rect class="dg-node" x="2" y="88" width="249.65" height="56" rx="5"/><text class="dg-text" x="126.825" y="117.0" text-anchor="middle" dominant-baseline="middle">final reduce on the search head</text><rect class="dg-node" x="285.65" y="88" width="128.10000000000002" height="56" rx="5"/><text class="dg-text" x="349.7" y="117.0" text-anchor="middle" dominant-baseline="middle">| sort -sum(kb</text><rect class="dg-node" x="447.75" y="88" width="306.85" height="56" rx="5"/><text class="dg-text" x="601.175" y="108.5" text-anchor="middle" dominant-baseline="middle">| head 10</text><text class="dg-text" x="601.175" y="125.5" text-anchor="middle" dominant-baseline="middle">centralized streaming, search head only</text><path class="dg-edge" marker-end="url(#ah)" d="M187.3 30.0 L217.3 30.0"/><path class="dg-edge" marker-end="url(#ah)" d="M506.70000000000005 30.0 L536.7 30.0"/><path class="dg-edge" marker-end="url(#ah)" fill="none" d="M604.75 58 L604.75 73.0 L126.825 73.0 L126.825 84"/><path class="dg-edge" marker-end="url(#ah)" d="M251.65 116.0 L281.65 116.0"/><path class="dg-edge" marker-end="url(#ah)" d="M413.75 116.0 L443.75 116.0"/></svg></figure>
+<p><strong>Order the pipeline for cost.</strong> Filter before the first pipe wherever the terms allow it, drop fields with <code>fields</code> before any expensive command, put <code>where</code> before <code>stats</code> when the filter uses a field that already exists, and put <code>where</code> after <code>stats</code> when the filter uses a field that <code>stats</code> created, such as a <code>count</code> or a <code>duration</code>. <code>sort</code> and <code>dedup sortby</code> are barriers; place them once, late.</p>
+
+<nav class="pn" aria-label="Section"><a href="doc-links.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-label">Doc links by manual</span></a><a href="eval-functions.html" rel="next"><span class="pn-rel">Next</span><span class="pn-label">Eval functions</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#1.-command-types"><span>1. Command types</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#2.-master-table"><span>2. Master table</span><span class="min">6m</span></a></li>
+<li><a class="lvl2" href="#3.-command-entries"><span>3. Command entries</span><span class="min">11m</span></a></li>
+<li><a class="lvl3" href="#already-covered-in-depth"><span>Already covered in depth</span></a></li>
+<li><a class="lvl3" href="#fields"><span>fields</span></a></li>
+<li><a class="lvl3" href="#rename"><span>rename</span></a></li>
+<li><a class="lvl3" href="#sort"><span>sort</span></a></li>
+<li><a class="lvl3" href="#dedup"><span>dedup</span></a></li>
+<li><a class="lvl3" href="#head-and-tail"><span>head and tail</span></a></li>
+<li><a class="lvl3" href="#eventstats-and-streamstats"><span>eventstats and streamstats</span></a></li>
+<li><a class="lvl3" href="#bin-alias-bucket"><span>bin (alias bucket)</span></a></li>
+<li><a class="lvl3" href="#addtotals"><span>addtotals</span></a></li>
+<li><a class="lvl3" href="#appendpipe"><span>appendpipe</span></a></li>
+<li><a class="lvl3" href="#regex"><span>regex</span></a></li>
+<li><a class="lvl3" href="#spath"><span>spath</span></a></li>
+<li><a class="lvl3" href="#makemv-mvexpand-and-nomv"><span>makemv, mvexpand and nomv</span></a></li>
+<li><a class="lvl3" href="#makeresults"><span>makeresults</span></a></li>
+<li><a class="lvl3" href="#foreach"><span>foreach</span></a></li>
+<li><a class="lvl3" href="#map-multisearch-loadjob-and-savedsearch"><span>map, multisearch, loadjob and savedsearch</span></a></li>
+<li><a class="lvl3" href="#collect-and-history"><span>collect and history</span></a></li>
+<li><a class="lvl2" href="#4.-commands-that-look-alike"><span>4. Commands that look alike</span><span class="min">6m</span></a></li>
+<li><a class="lvl2" href="#5.-pipeline-rules"><span>5. Pipeline rules</span><span class="min">2m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      
+      <span>28 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>

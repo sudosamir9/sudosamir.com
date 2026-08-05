@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.0 Creating and Managing Fields | SPLK-1002</title>
+<meta name="description" content="Field extractions, SPLK-1002 Splunk Core Certified Power User study guide.">
+<script>(function(){try{var t=localStorage.getItem("splk1002.theme");
+if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"ink":"paper";
+document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../fonts.css">
+<link rel="stylesheet" href="../theme.css">
+</head>
+<body data-page="topics/04-field-extractions" data-section="4">
+<a class="skip" href="#doc">Skip to content</a>
+
+<header class="topbar">
+  <a class="brand" href="../index.html">
+    <span class="brand-code">SPLK-1002</span>
+    <span class="brand-name">Splunk Core Certified Power User</span>
+  </a>
+  <nav class="modes" aria-label="Section of the site">
+    <a href="../index.html" aria-current="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2H7v12H3.5A1.5 1.5 0 0 1 2 12.5z"/><path d="M14 3.5A1.5 1.5 0 0 0 12.5 2H9v12h3.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Guide</a>
+    <a href="../exam/index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.5"/></svg>Simulator</a>
+  </nav>
+  <span class="topbar-spacer"></span>
+  <div class="topbar-actions">
+    <button class="searchbtn" type="button" id="searchbtn" aria-label="Search all pages">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span>Search</span><kbd>/</kbd>
+    </button>
+    <button class="iconbtn" type="button" id="theme"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="3.2"/><path d="M8 1v1.6M8 13.4V15M15 8h-1.6M2.6 8H1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1M12.9 12.9l-1.1-1.1M4.2 4.2 3.1 3.1"/></svg></button>
+  </div>
+  <div class="readbar" id="readbar"></div>
+</header>
+
+<div class="spineband"><div class="spine" id="spine"></div></div>
+
+<div class="shell">
+  <aside class="rail" aria-label="Guide contents">
+    <nav aria-label="Pages">
+<details class="railgroup" open>
+<summary>Start here</summary>
+<a class="navitem" href="../index.html"><span class="t">Read me first</span></a>
+<a class="navitem" href="../00-exam-overview.html"><span class="t">Exam overview</span></a>
+<a class="navitem" href="../lab-setup.html"><span class="t">Lab setup</span></a>
+<a class="navitem" href="../cram/all-in-one.html"><span class="t">Final review sheet</span></a>
+</details>
+<details class="railgroup" open>
+<summary>Sections</summary>
+<a class="navitem" href="00-foundations-refresher.html"><span class="n">0.0</span><span class="t">Foundations refresher</span></a>
+<a class="navitem" href="01-transforming-commands.html"><span class="n">1.0</span><span class="t">Transforming commands</span><span class="w">5%</span></a>
+<a class="navitem" href="02-filtering-and-formatting.html"><span class="n">2.0</span><span class="t">Filtering and formatting</span><span class="w">10%</span></a>
+<a class="navitem" href="03-correlating-events.html"><span class="n">3.0</span><span class="t">Correlating events</span><span class="w">15%</span></a>
+<a class="navitem" href="04-field-extractions.html" aria-current="page"><span class="n">4.0</span><span class="t">Field extractions</span><span class="w">10%</span></a>
+<a class="navitem" href="05-aliases-and-calculated-fields.html"><span class="n">5.0</span><span class="t">Aliases and calculated fields</span><span class="w">10%</span></a>
+<a class="navitem" href="06-tags-and-event-types.html"><span class="n">6.0</span><span class="t">Tags and event types</span><span class="w">10%</span></a>
+<a class="navitem" href="07-macros.html"><span class="n">7.0</span><span class="t">Macros</span><span class="w">10%</span></a>
+<a class="navitem" href="08-workflow-actions.html"><span class="n">8.0</span><span class="t">Workflow actions</span><span class="w">10%</span></a>
+<a class="navitem" href="09-data-models-and-pivot.html"><span class="n">9.0</span><span class="t">Data models and pivot</span><span class="w">10%</span></a>
+<a class="navitem" href="10-cim.html"><span class="n">10.0</span><span class="t">CIM</span><span class="w">10%</span></a>
+</details>
+<details class="railgroup">
+<summary>Reference</summary>
+<a class="navitem" href="../reference/knowledge-object-precedence.html"><span class="t">Search-time precedence</span></a>
+<a class="navitem" href="../reference/exam-traps.html"><span class="t">Trap inventory</span></a>
+<a class="navitem" href="../reference/docs-by-blueprint.html"><span class="t">Docs by blueprint</span></a>
+<a class="navitem" href="../reference/doc-links.html"><span class="t">Doc links by manual</span></a>
+<a class="navitem" href="../reference/spl-command-reference.html"><span class="t">SPL command reference</span></a>
+<a class="navitem" href="../reference/eval-functions.html"><span class="t">Eval functions</span></a>
+<a class="navitem" href="../reference/stats-and-chart-functions.html"><span class="t">Stats and chart functions</span></a>
+<a class="navitem" href="../reference/time-modifiers.html"><span class="t">Time modifiers</span></a>
+<a class="navitem" href="../reference/regex-for-splunk.html"><span class="t">Regex for Splunk</span></a>
+<a class="navitem" href="../reference/cim-data-models.html"><span class="t">CIM data models</span></a>
+<a class="navitem" href="../reference/glossary.html"><span class="t">Glossary</span></a>
+</details>
+    </nav>
+    <div class="railfoot">
+      <a href="../lab-data/splk-1002-practice-data.zip">Practice data</a>
+    </div>
+  </aside>
+
+  <main>
+    <article class="doc" id="doc" tabindex="-1">
+      <div class="crumbs">
+        <a href="../index.html">SPLK-1002</a><span class="sep">/</span>
+        <span>Sections</span><span class="sep">/</span>
+        <span>Field extractions</span>
+        <div class="seg" role="group" aria-label="Page format"><a class="on" href="04-field-extractions.html">Study</a><a class="" href="../cram/04-field-extractions.html">Cram</a></div>
+      </div>
+<h1 id="4.0-creating-and-managing-fields-10">4.0 Creating and Managing Fields</h1>
+<p>This section is about turning raw text into named fields at search time, and the exam tests it almost entirely through the Field Extractor wizard in Splunk Web, because that is the one field-creation path a Power User can drive without editing configuration files or restarting anything.</p>
+<h2 id="blueprint-mapping">Blueprint mapping<a class="anchor" href="#blueprint-mapping" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>The following topics are general guidelines for the content likely to be included on the exam; however, other related topics may also appear on any specific delivery of the exam. In order to better reflect the contents of the exam and for clarity purposes, the guidelines below may change at any time without notice.</p>
+</blockquote>
+<ul>
+<li>Section 4.0 Creating and Managing Fields</li>
+<li>Weight: 10%</li>
+<li>4.1 Perform regex field extractions using the Field Extractor (FX)</li>
+<li>4.2 Perform delimiter field extractions using the FX</li>
+</ul>
+<h2 id="what-it-is">What it is<a class="anchor" href="#what-it-is" aria-label="Link to this section">#</a></h2>
+<p>Splunk extracts a small, fixed set of default fields when data is indexed, and extracts everything else when you run a search. Index-time extraction is expensive and permanent: an indexed field increases the size of the searchable index, and changing it requires reindexing the data. Search-time extraction is cheap and reversible: the extraction is a knowledge object evaluated against <code>_raw</code> while the search runs, so creating one immediately applies to data that was indexed months ago and deleting one changes nothing about what is stored. The Field Extractor only ever creates search-time extractions, which is exactly why the Power User exam confines itself to search time.</p>
+<p>At index time Splunk adds these fields to every event: the internal fields <code>_raw</code>, <code>_time</code>, <code>_indextime</code>, <code>_cd</code>, and <code>_bkt</code>; the default fields <code>host</code>, <code>index</code>, <code>linecount</code>, <code>punct</code>, <code>source</code>, <code>sourcetype</code>, <code>splunk_server</code>, and <code>timestamp</code>; and the default datetime fields <code>date_hour</code>, <code>date_mday</code>, <code>date_minute</code>, <code>date_month</code>, <code>date_second</code>, <code>date_wday</code>, <code>date_year</code>, and <code>date_zone</code>. The docs state plainly of the default-field group that &quot;These fields are indexed and added to the Fields menu by default.&quot; The <code>date_*</code> fields only exist for events that carried timestamp information generated by their source system. Note what is absent: <code>eventtype</code> and <code>tag</code> are not on the default field list. They are search-time knowledge objects that attach to events after extraction, and the exam will offer them as distractors in a &quot;which of these are default fields&quot; question.</p>
+<p>At search time, when field discovery is on, Splunk identifies and extracts the first 100 fields it finds that match obvious <code>key=value</code> pairs, extracts any field named in the search string, and then runs custom extractions from configuration files or from commands such as <code>rex</code>. Field discovery happens for non-transforming searches in Smart mode and for any search in Verbose mode. Fast mode turns field discovery off, but the docs are careful about what that costs: fast mode &quot;only returns information on indexed and default fields, and any search-time extracted fields that you explicitly include in your search&quot;. A field you name in the search still resolves in Fast mode, so Fast mode alone never explains an empty result set. Custom search-time extractions run in a fixed order relative to everything else the search does.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 489 1141" width="489" height="1141" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 41.0 C244.8 61.0 244.8 61.0 244.8 81.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 141.0 C244.8 161.0 244.8 161.0 244.8 181.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 224.0 C244.8 244.0 244.8 244.0 244.8 264.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 307.0 C244.8 327.0 244.8 327.0 244.8 347.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 390.0 C244.8 410.0 244.8 410.0 244.8 430.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 473.0 C244.8 493.0 244.8 493.0 244.8 513.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 556.0 C244.8 576.0 244.8 576.0 244.8 596.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 639.0 C244.8 659.0 244.8 659.0 244.8 679.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 722.0 C244.8 742.0 244.8 742.0 244.8 762.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 805.0 C244.8 825.0 244.8 825.0 244.8 845.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 888.0 C244.8 908.0 244.8 908.0 244.8 928.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 971.0 C244.8 991.0 244.8 991.0 244.8 1011.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M244.8 1054.0 C244.8 1074.0 244.8 1074.0 244.8 1094.0"/><rect class="dg-node" x="170.025" y="2.0" width="149.55" height="39" rx="5"/><text class="dg-text" x="244.8" y="22.5" text-anchor="middle" dominant-baseline="middle">Raw data ingested</text><rect class="dg-node" x="27.025000000000006" y="85.0" width="435.55" height="56" rx="5"/><text class="dg-text" x="244.8" y="105.5" text-anchor="middle" dominant-baseline="middle">Index time: host, source, sourcetype, _time,</text><text class="dg-text" x="244.8" y="122.5" text-anchor="middle" dominant-baseline="middle">index, linecount, punct, splunk_server, timestamp, date_*</text><rect class="dg-node" x="155.72500000000002" y="185.0" width="178.15" height="39" rx="5"/><text class="dg-text" x="244.8" y="205.5" text-anchor="middle" dominant-baseline="middle">Data written to index</text><rect class="dg-node" x="191.47500000000002" y="268.0" width="106.65" height="39" rx="5"/><text class="dg-text" x="244.8" y="288.5" text-anchor="middle" dominant-baseline="middle">Search runs</text><rect class="dg-node" x="173.60000000000002" y="351.0" width="142.4" height="39" rx="5"/><text class="dg-text" x="244.8" y="371.5" text-anchor="middle" dominant-baseline="middle">1. Field filters</text><rect class="dg-node" x="84.225" y="434.0" width="321.15000000000003" height="39" rx="5"/><text class="dg-text" x="244.8" y="454.5" text-anchor="middle" dominant-baseline="middle">2. Inline extraction: props.conf EXTRACT-</text><rect class="dg-node" x="2.0" y="517.0" width="485.6" height="39" rx="5"/><text class="dg-text" x="244.8" y="537.5" text-anchor="middle" dominant-baseline="middle">3. Transform extraction: props.conf REPORT- plus transforms.conf</text><rect class="dg-node" x="80.65" y="600.0" width="328.3" height="39" rx="5"/><text class="dg-text" x="244.8" y="620.5" text-anchor="middle" dominant-baseline="middle">4. Automatic key-value extraction (KV_MODE</text><rect class="dg-node" x="130.7" y="683.0" width="228.20000000000002" height="39" rx="5"/><text class="dg-text" x="244.8" y="703.5" text-anchor="middle" dominant-baseline="middle">5. Field aliases (FIELDALIAS</text><rect class="dg-node" x="137.85000000000002" y="766.0" width="213.9" height="39" rx="5"/><text class="dg-text" x="244.8" y="786.5" text-anchor="middle" dominant-baseline="middle">6. Calculated fields (EVAL</text><rect class="dg-node" x="166.45" y="849.0" width="156.70000000000002" height="39" rx="5"/><text class="dg-text" x="244.8" y="869.5" text-anchor="middle" dominant-baseline="middle">7. Lookups (LOOKUP</text><rect class="dg-node" x="180.75" y="932.0" width="128.10000000000002" height="39" rx="5"/><text class="dg-text" x="244.8" y="952.5" text-anchor="middle" dominant-baseline="middle">8. Event types</text><rect class="dg-node" x="205.775" y="1015.0" width="78.05000000000001" height="39" rx="5"/><text class="dg-text" x="244.8" y="1035.5" text-anchor="middle" dominant-baseline="middle">9. Tags</text><rect class="dg-node" x="55.625" y="1098.0" width="378.35" height="39" rx="5"/><text class="dg-text" x="244.8" y="1118.5" text-anchor="middle" dominant-baseline="middle">SPL commands run: rex, erex, extract, eval, stats</text></svg></figure>
+<p>The Field Extractor writes into stage 2 or stage 3 of that sequence depending on which method you pick. Inline extractions are processed before transform extractions, so when both produce the same field name the inline version is retained and the transform version is discarded, because <code>MV_ADD</code> defaults to false.</p>
+<h3 id="selected-interesting-and-all-fields">Selected, Interesting, and All Fields<a class="anchor" href="#selected-interesting-and-all-fields" aria-label="Link to this section">#</a></h3>
+<p>The fields sidebar is two lists plus a dialog, and the exam separates them carefully. <strong>Selected Fields</strong> holds the fields displayed under every event in the events list, and the docs state that &quot;when you first run a search the Selected Fields list contains the default fields host, source, and sourcetype.&quot; Those three, and only those three, are selected for you. <strong>Interesting Fields</strong> lists fields that appear in at least 20 percent of the returned events. <strong>All Fields</strong> is not a third list: it is the dialog you open to see every field the search produced and to promote any of them into Selected Fields, and it is also one of the entry points into the Field Extractor.</p>
+<p><code>index</code> is what this design catches people on. It is a default field, present on every event, so it clears the 20 percent bar comfortably, but it is not one of the three that start out selected, so on a fresh search it appears under Interesting Fields. The 20 percent figure governs that list and nothing else.</p>
+<h3 id="the-field-extractor-workflow">The Field Extractor workflow<a class="anchor" href="#the-field-extractor-workflow" aria-label="Link to this section">#</a></h3>
+<p>The FX is a wizard with six named screens, and which screens you see depends on the method you choose.</p>
+<figure class="dg-wrap"><svg class="dg" viewBox="0 0 756 112" width="756" height="112" role="img" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="dg-arrow" d="M0 0 L10 5 L0 10 z"/></marker></defs><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M122.95 56.0 C150.95 56.0 150.95 56.0 178.95 56.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M303.9 56.0 C331.9 56.0 331.9 21.5 359.9 21.5"/><rect class="dg-lblbg" x="269.75" y="23.75" width="124.30000000000001" height="16" rx="3"/><text class="dg-lbl" x="331.9" y="32.75" text-anchor="middle" dominant-baseline="middle">Regular Expression</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M484.84999999999997 21.5 C512.8499999999999 21.5 512.8499999999999 56.0 540.8499999999999 56.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M630.05 56.0 C658.05 56.0 658.05 56.0 686.05 56.0"/><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M303.9 56.0 C331.9 56.0 331.9 90.5 359.9 90.5"/><rect class="dg-lblbg" x="295.15" y="58.25" width="73.5" height="16" rx="3"/><text class="dg-lbl" x="331.9" y="67.25" text-anchor="middle" dominant-baseline="middle">Delimiters</text><path class="dg-edge" fill="none" marker-end="url(#ah)" d="M484.84999999999997 90.5 C585.4499999999999 90.5 585.4499999999999 56.0 686.05 56.0"/><rect class="dg-node" x="2.0" y="36.5" width="120.95" height="39" rx="5"/><text class="dg-text" x="62.475" y="57.0" text-anchor="middle" dominant-baseline="middle">Select Sample</text><rect class="dg-node" x="182.95" y="36.5" width="120.95" height="39" rx="5"/><text class="dg-text" x="243.42499999999998" y="57.0" text-anchor="middle" dominant-baseline="middle">Select Method</text><rect class="dg-node" x="363.9" y="2.0" width="120.95" height="39" rx="5"/><text class="dg-text" x="424.375" y="22.5" text-anchor="middle" dominant-baseline="middle">Select Fields</text><rect class="dg-node" x="544.8499999999999" y="36.5" width="85.2" height="39" rx="5"/><text class="dg-text" x="587.4499999999999" y="57.0" text-anchor="middle" dominant-baseline="middle">Validate</text><rect class="dg-node" x="690.05" y="36.5" width="62" height="39" rx="5"/><text class="dg-text" x="721.05" y="57.0" text-anchor="middle" dominant-baseline="middle">Save</text><rect class="dg-node" x="363.9" y="71.0" width="120.95" height="39" rx="5"/><text class="dg-text" x="424.375" y="91.5" text-anchor="middle" dominant-baseline="middle">Rename Fields</text></svg></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Screen</th>
+<th>Method</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Select Sample</td>
+<td>both</td>
+<td>Pick a source type from a dropdown or type a source, then click one event from the list to be the sample. The FX is limited to twenty lines on a sample event. Existing extractions are drawn as coloured outlines, and a red triangle next to Existing fields warns that extractions overlap.</td>
+</tr>
+<tr>
+<td>Select Method</td>
+<td>both</td>
+<td>Choose Regular Expression for unstructured data such as a system log, or Delimiters when values are cleanly separated by a common character and sit in the same position in every event.</td>
+</tr>
+<tr>
+<td>Select Fields</td>
+<td>regex only</td>
+<td>Highlight a value, name the field, add the extraction. The FX generates the regex for you. Add required text, add more sample events, or open the generated regex for manual editing.</td>
+</tr>
+<tr>
+<td>Rename Fields</td>
+<td>delimiters only</td>
+<td>Pick the delimiter, then rename the auto-named fields. Four delimiters are offered as buttons: Space, Comma, Tab, and Pipe. Anything else, a colon or a double pipe for instance, works only by selecting <strong>Other</strong> and typing the character or characters yourself.</td>
+</tr>
+<tr>
+<td>Validate</td>
+<td>regex only</td>
+<td>Review matching and non-matching events, and mark bad extractions as counterexamples so the FX rewrites the regex.</td>
+</tr>
+<tr>
+<td>Save</td>
+<td>both</td>
+<td>Name the extraction, set permissions, Finish.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="what-the-delimiter-method-assumes-about-your-data">What the delimiter method assumes about your data<a class="anchor" href="#what-the-delimiter-method-assumes-about-your-data" aria-label="Link to this section">#</a></h3>
+<p>The docs describe the delimiters method as designed for structured event data, &quot;data from files with headers, where all of the fields in the events are separated by a common delimiter, such as a comma or space&quot;. Headers, not the absence of them. The header row sits in the file rather than inside each event, which is why the extractor has no names to work with and hands you <code>field1</code>, <code>field2</code>, <code>field3</code> to rename.</p>
+<p>The second condition is the one people forget: the values must also be consistent across events, each in the same position every time. Cleanly comma-separated events whose fields move around are a bad candidate, and the docs send you to the regular expression method with required text instead. Hierarchical formats are not candidates at all, since XML and JSON are nested rather than delimited and Splunk parses them through automatic key-value extraction or <code>spath</code>. A <code>.csv</code> file, or events indexed from a database table, is the textbook case.</p>
+<h3 id="required-text-on-the-select-fields-step">Required text on the Select Fields step<a class="anchor" href="#required-text-on-the-select-fields-step" aria-label="Link to this section">#</a></h3>
+<p>Required text is the regex path's filter: highlight a literal string in the sample event, select <strong>Require</strong>, then <strong>Add Required Text</strong>. The docs say it &quot;behaves like a search filter. It is a string of text that must be present in the event for Splunk software to match it with the extraction.&quot; Be precise about the consequence: it narrows which events the extraction applies to, not which events a search returns. An event lacking the string is still returned by any search that would otherwise return it, it simply does not gain the extracted fields.</p>
+<p>Two limits are testable. You get one required-text string per field extraction, and required text cannot overlap a field value in either direction: text already highlighted as a value cannot be marked required, and required text cannot then be highlighted as a value. Requiring text does not lock the pattern, since <strong>Show Regular Expression</strong> and its <strong>Edit the Regular Expression</strong> option stay available.</p>
+<h3 id="the-entry-points-the-exam-cares-about">The entry points the exam cares about<a class="anchor" href="#the-entry-points-the-exam-cares-about" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Entry point</th>
+<th>Exact path</th>
+<th>Opens on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fields sidebar</td>
+<td>Run a search, scroll to the bottom of the fields sidebar, select <strong>Extract New Fields</strong></td>
+<td>Select Sample</td>
+</tr>
+<tr>
+<td>All Fields dialog</td>
+<td>Run a search, select <strong>All Fields</strong>, select <strong>Extract new fields</strong></td>
+<td>Select Sample</td>
+</tr>
+<tr>
+<td>Event Actions</td>
+<td>Run a search, expand an event, select <strong>Event Actions</strong>, then <strong>Extract Fields</strong></td>
+<td>Select Method, in a new browser tab (source type and sample are already fixed by the event you clicked)</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td><strong>Settings &gt; Fields &gt; Field extractions</strong>, then <strong>Open field extractor</strong></td>
+<td>Select Sample</td>
+</tr>
+<tr>
+<td>Home page</td>
+<td>Home page, <strong>extract fields</strong> link under the Add Data icon (needs a role with <code>edit_monitor</code>, such as Admin)</td>
+<td>Select Sample</td>
+</tr>
+<tr>
+<td>Add Data</td>
+<td>Add Data, define a fixed source type, then <strong>Extract Fields</strong> (needs <code>edit_monitor</code>)</td>
+<td>Select Sample</td>
+</tr>
+</tbody>
+</table></div>
+<p>The search-driven entry points run only against the set of events returned by that search. The Settings entry point sees every source type in the deployment.</p>
+<p>One button on that Settings page is not an entry point at all. <strong>New Field Extraction</strong>, beside Open field extractor, opens a plain configuration form: destination app, name, the sourcetype, source, or host to apply to, the type (Inline or Uses transform), and the regex or transform name, all typed by hand with no sample event and no validation. The wizard is only ever behind <strong>Open field extractor</strong>.</p>
+<h2 id="syntax-and-options">Syntax and options<a class="anchor" href="#syntax-and-options" aria-label="Link to this section">#</a></h2>
+<p>The FX has no syntax. The four SPL commands that do the same job in a search do, and the exam mixes them into FX questions freely.</p>
+<h3 id="rex">rex<a class="anchor" href="#rex" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-1">Copy</button></div><pre id="spl-1"><code><span class="t-cmd">rex</span> <span class="t-op">[</span><span class="t-opt">field</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">(</span> <span class="t-op">&lt;</span><span class="t-field">regex-expression</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">max_match</span><span class="t-op">=&lt;</span><span class="t-field">int</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">offset_field</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">)</span> <span class="t-pipe">|</span> <span class="t-op">(</span><span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-op">&lt;</span><span class="t-field">sed-expression</span><span class="t-op">&gt;</span><span class="t-op">)</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>any field name</td>
+<td><code>_raw</code></td>
+<td>Field the regex or sed expression is applied to.</td>
+</tr>
+<tr>
+<td><code>&lt;regex-expression&gt;</code></td>
+<td>a PCRE string in quotes, with named capture groups <code>(?&lt;name&gt;...)</code> or <code>(?P&lt;name&gt;...)</code></td>
+<td>none (required unless <code>mode=sed</code>)</td>
+<td>Pattern to match. Each named group creates a field of that name.</td>
+</tr>
+<tr>
+<td><code>max_match</code></td>
+<td>integer, <code>0</code> means unlimited</td>
+<td><code>1</code></td>
+<td>How many times the regex may match per event. Any value above 1 makes the resulting field multivalue.</td>
+</tr>
+<tr>
+<td><code>offset_field</code></td>
+<td>a field name</td>
+<td>none</td>
+<td>Creates a field holding the zero-indexed start and end character positions of each matched value.</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>sed</code></td>
+<td>none</td>
+<td>Switches to sed mode. Mutually exclusive with the regex-extraction form.</td>
+</tr>
+<tr>
+<td><code>&lt;sed-expression&gt;</code></td>
+<td><code>&quot;s/&lt;regex&gt;/&lt;replacement&gt;/&lt;flags&gt;&quot;</code> or <code>&quot;y/&lt;string1&gt;/&lt;string2&gt;/&quot;</code></td>
+<td>none (required when <code>mode=sed</code>)</td>
+<td><code>s</code> replaces, <code>y</code> substitutes character by character. Flags include <code>g</code> for global and a number for the Nth occurrence. Back references are <code>\1</code>, <code>\2</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="erex">erex<a class="anchor" href="#erex" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-2">Copy</button></div><pre id="spl-2"><code><span class="t-cmd">erex</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-opt">examples</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span> <span class="t-op">[</span><span class="t-opt">counterexamples</span><span class="t-op">=&lt;</span><span class="t-field">string</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">fromfield</span><span class="t-op">=&lt;</span><span class="t-field">field</span><span class="t-op">&gt;</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-opt">maxtrainers</span><span class="t-op">=&lt;</span><span class="t-field">integer</span><span class="t-op">&gt;</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;field&gt;</code></td>
+<td>a field name</td>
+<td>none</td>
+<td>Name of the new field that receives the extracted values.</td>
+</tr>
+<tr>
+<td><code>examples</code></td>
+<td>comma-separated values, quoted if they contain spaces</td>
+<td>none (required)</td>
+<td>Sample values you want extracted. They must exist in the events piped into <code>erex</code> or the command fails.</td>
+</tr>
+<tr>
+<td><code>counterexamples</code></td>
+<td>comma-separated values</td>
+<td>none</td>
+<td>Values that must not be extracted.</td>
+</tr>
+<tr>
+<td><code>fromfield</code></td>
+<td>a field name</td>
+<td><code>_raw</code></td>
+<td>Field to extract from.</td>
+</tr>
+<tr>
+<td><code>maxtrainers</code></td>
+<td>integer 1 to 1000</td>
+<td><code>100</code></td>
+<td>Maximum number of values to learn from.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="extract-alias-kv">extract (alias kv)<a class="anchor" href="#extract-alias-kv" aria-label="Link to this section">#</a></h3>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-3">Copy</button></div><pre id="spl-3"><code><span class="t-cmd">extract</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">extract-options</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span> <span class="t-op">[</span><span class="t-op">&lt;</span><span class="t-field">extractor-name</span><span class="t-op">&gt;</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">.</span><span class="t-op">]</span></code></pre></div>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pairdelim</code></td>
+<td>string of delimiter characters</td>
+<td>none stated in the docs</td>
+<td>Characters that separate one key-value pair from the next.</td>
+</tr>
+<tr>
+<td><code>kvdelim</code></td>
+<td>string of delimiter characters</td>
+<td>none stated in the docs</td>
+<td>Characters that separate a key from its value. A delimiter appearing inside a value blocks that extraction.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>integer</td>
+<td><code>50</code></td>
+<td>How many automatic key-value pairs to extract.</td>
+</tr>
+<tr>
+<td><code>maxchars</code></td>
+<td>integer</td>
+<td><code>10240</code></td>
+<td>How many characters into the event to look.</td>
+</tr>
+<tr>
+<td><code>mv_add</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Create multivalue fields. Overrides <code>MV_ADD</code> in transforms.conf.</td>
+</tr>
+<tr>
+<td><code>clean_keys</code></td>
+<td>boolean</td>
+<td>the value of <code>CLEAN_KEYS</code> in transforms.conf</td>
+<td>Strip leading underscores and digits from extracted field names.</td>
+</tr>
+<tr>
+<td><code>segment</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Note the locations of the key-value pairs in the results.</td>
+</tr>
+<tr>
+<td><code>reload</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Force a reload of props.conf and transforms.conf.</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td><code>f</code></td>
+<td>none</td>
+<td><code>auto=f</code> turns off automatic key-value extraction for that search.</td>
+</tr>
+<tr>
+<td><code>&lt;extractor-name&gt;</code></td>
+<td>a transforms.conf stanza name</td>
+<td>none</td>
+<td>Apply a named field transform instead of automatic extraction.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>extract</code> works only on <code>_raw</code>. There is no <code>field=</code> argument. To extract from another field you must rename that field to <code>_raw</code> first and rename it back afterwards.</p>
+<h3 id="named-capture-groups">Named capture groups<a class="anchor" href="#named-capture-groups" aria-label="Link to this section">#</a></h3>
+<p>Splunk regular expressions &quot;are PCRE (Perl Compatible Regular Expressions) and use the PCRE C library&quot;, and the docs use two spellings for a named capture group. The Capture groups section and every <code>EXTRACT-</code> example write <code>(?&lt;field_name&gt;capture pattern)</code>; the metacharacter table on the same page writes &quot;Use the syntax <code>(?P&lt;var&gt; ...)</code> to set up a named field extraction&quot;. Both are valid, and the first is the one the docs use everywhere else, so learn that one and recognise the other. PCRE matches case sensitively unless the pattern says otherwise, so <code>rex &quot;(?&lt;user&gt;admin)&quot;</code> does not match <code>Admin</code>.</p>
+<h3 id="what-the-fx-writes">What the FX writes<a class="anchor" href="#what-the-fx-writes" aria-label="Link to this section">#</a></h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>FX method</th>
+<th>props.conf</th>
+<th>transforms.conf</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regular Expression</td>
+<td><code>EXTRACT-&lt;name&gt; = &lt;generated regex&gt;</code> under the sourcetype or source stanza</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td>Delimiters</td>
+<td><code>REPORT-&lt;name&gt; = &lt;transform stanza name&gt;</code></td>
+<td>a stanza containing <code>DELIMS</code> and, when only values are being extracted, <code>FIELDS</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The Field extractions page in Settings states that &quot;EXTRACT-<class> field extractions are extractions that are only defined in props.conf. They are created automatically by field extractions made through IFX and certain search commands.&quot; The delimiter half is settled by joining two pages that each say part of it. The Save step proves a delimiter extraction has a transforms.conf stanza: &quot;For delimiter-based field extractions, you will need to move the transforms.conf stanzas manually in order to change the field extraction permissions.&quot; The Field extractions page supplies the name: &quot;Uses transform extractions always have REPORT-<class> name configurations. As such they reference field transforms in transforms.conf.&quot; A props.conf setting that points at a field transform has no other spelling, so the deduction is safe.</p>
+<pre class="plain lang-ini"><code># props.conf, what the FX regular expression method produces
+[secure]
+EXTRACT-src_port = port (?&lt;src_port&gt;\d+)
+
+# props.conf plus transforms.conf, what the FX delimiter method produces
+[my_pipe_data]
+REPORT-my_pipe_data_fields = my_pipe_data_fields</code></pre>
+<pre class="plain lang-ini"><code># transforms.conf
+[my_pipe_data_fields]
+DELIMS = &quot;|&quot;
+FIELDS = order_id, region, product, qty, unit_price</code></pre>
+<h2 id="result-contract">Result contract<a class="anchor" href="#result-contract" aria-label="Link to this section">#</a></h2>
+<p><strong>The Field Extractor.</strong> Its output is a knowledge object, not a result set. After you select Finish, the named fields appear in the fields sidebar for every event of that source type or source, retroactively, with no reindexing and no restart. The extraction shows up on <strong>Settings &gt; Fields &gt; Field extractions</strong> where you can edit its permissions or delete it. Nothing is written to <code>_raw</code>, nothing is written to the index, and no existing field is dropped.</p>
+<p><strong>Permissions at the Save step.</strong> The default is Owner, which means the extraction only extracts fields in searches run by the person who created it. App makes it available only to users of the app the extraction belongs to. All apps makes it available to all users of all apps. Promoting an extraction beyond Owner is always a deliberate, separate action. Permissions therefore decide which searches see the field, and a field that resolves for you and returns nothing for a colleague is almost always an Owner-scoped extraction. Extraction names cannot include spaces; the Field extractions page tells you to use underscores between words. The regex method proposes a name automatically from the comma-separated list of field names; the delimiter method requires you to type one.</p>
+<p>Sharing something built on an extraction does not share the extraction. A report saved on a private extraction can be shared to the whole app and still return an empty column for everyone but its author, because report and extraction carry independent permissions. The companion cause in that scenario is index access: roles control which indexes a user may search, so a colleague without the index gets no events at all, custom fields or not.</p>
+<p><strong>rex.</strong> A distributable streaming command. Row count is unchanged: every input event is emitted, matched or not. Each named capture group becomes a new field on events where the pattern matched; events where it did not match pass through untouched and simply lack the field. No existing field is dropped unless a capture group reuses an existing field name, in which case the new value overwrites it. With <code>max_match</code> above 1 the produced field is multivalue. In sed mode the target field's value is rewritten in the result set only, never in the index.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>_time</th>
+<th>_raw (abbreviated)</th>
+<th>src_port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-03-26 00:16:12</td>
+<td>... from 194.8.74.23 port 3351 ssh2</td>
+<td>3351</td>
+</tr>
+<tr>
+<td>2024-03-26 00:16:14</td>
+<td>... from 218.75.163.62 port 3768 ssh2</td>
+<td>3768</td>
+</tr>
+<tr>
+<td>2024-03-26 00:16:19</td>
+<td>... session opened for user djohnson</td>
+<td><em>(no value)</em></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>erex.</strong> Adds one new field holding values similar to your examples, and emits the generated regular expression as an informational message rather than a result row. You read it from the <strong>Job</strong> menu, then paste it into a <code>rex</code> command or an FX extraction. Nothing persists. The <code>rex</code> and <code>extract</code> reference pages each state &quot;distributable streaming command&quot; under Usage; the 10.4 <code>erex</code> page states no command type at all, so no exam question can turn on one.</p>
+<p><strong>extract.</strong> A distributable streaming command. It adds fields parsed out of <code>_raw</code> and leaves the row count alone. Because <code>clean_keys</code> defaults to whatever <code>CLEAN_KEYS</code> says in transforms.conf, and <code>CLEAN_KEYS</code> defaults to true, extracted keys have leading underscores and digits stripped unless you say otherwise.</p>
+<h2 id="worked-examples">Worked examples<a class="anchor" href="#worked-examples" aria-label="Link to this section">#</a></h2>
+<p>Assume the practice dataset from <a href="../lab-setup.html">lab setup</a> is loaded: <code>index=web</code> (<code>access_combined</code>), <code>index=security</code> (<code>linux_secure</code>), and <code>index=cisco</code> (<code>cisco:wsa:squid</code>). The Cisco events arrive with almost no extracted fields, which makes them the right target for the extractions below.</p>
+<p><strong>1. Basic named capture group. The single pattern every FX regex extraction reduces to.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-4">Copy</button></div><pre id="spl-4"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-str">&quot;port (?&lt;src_port&gt;\d+)&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">src_port</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<p><code>field</code> is omitted so the regex runs against <code>_raw</code>, producing one row per distinct source port with a count. It is the same regex the FX would generate if you highlighted <code>3351</code> in a sample event and named the field <code>src_port</code>, minus the surrounding context the FX usually adds.</p>
+<p><strong>2. Multivalue extraction with max_match.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-5">Copy</button></div><pre id="spl-5"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">field</span><span class="t-op">=</span><span class="t-field">uri_query</span> <span class="t-opt">max_match</span><span class="t-op">=</span><span class="t-num">0</span> <span class="t-str">&quot;(?&lt;qs_param&gt;[^&amp;]+)&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">qs_param</span></code></pre></div>
+<p><code>field=uri_query</code> retargets the regex away from <code>_raw</code>. <code>max_match=0</code> means unlimited matches, so <code>qs_param</code> becomes a multivalue field holding every <code>name=value</code> chunk of the query string, and <code>stats count by</code> on a multivalue field counts each value separately. Change <code>max_match=0</code> to the default <code>1</code> and you get only the first chunk per event, collapsing the stats table.</p>
+<p><strong>3. offset_field, which the exam likes because almost nobody uses it.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-6">Copy</button></div><pre id="spl-6"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-str">&quot;from (?&lt;src_ip&gt;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})&quot;</span> <span class="t-opt">offset_field</span><span class="t-op">=</span><span class="t-field">src_ip_offset</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">_time</span> <span class="t-field">src_ip</span> <span class="t-field">src_ip_offset</span></code></pre></div>
+<p>Produces two new fields. <code>src_ip</code> holds the address; <code>src_ip_offset</code> holds the zero-indexed character range of the match, rendered like <code>src_ip=71-83</code>. A clean giveaway that a question is about <code>rex</code> and not the FX, since the FX cannot produce an offset field.</p>
+<p><strong>4. sed mode for masking, which creates no new field at all.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-7">Copy</button></div><pre id="spl-7"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rex</span> <span class="t-opt">field</span><span class="t-op">=</span><span class="t-field">JSESSIONID</span> <span class="t-opt">mode</span><span class="t-op">=</span><span class="t-field">sed</span> <span class="t-str">&quot;s/\d(?=\d{4})/x/g&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">clientip</span> <span class="t-field">JSESSIONID</span></code></pre></div>
+<p>Rewrites <code>JSESSIONID</code> in place, masking every digit except the last four. There is no capture group and no new field name because <code>mode=sed</code> transforms an existing field rather than extracting a new one. The index is untouched; re-run the search without the <code>rex</code> and the original values are back.</p>
+<p><strong>5. erex, the example-based extractor.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-8">Copy</button></div><pre id="spl-8"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;failed password&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">erex</span> <span class="t-field">src_port</span> <span class="t-opt">examples</span><span class="t-op">=</span><span class="t-str">&quot;port 3351, port 3768&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">top</span> <span class="t-field">src_port</span></code></pre></div>
+<p><code>erex</code> learns from the two example values, creates <code>src_port</code>, and writes the regular expression it derived into the job messages, readable from the <strong>Job</strong> menu. Add <code>counterexamples=&quot;port 22&quot;</code> if it starts matching the destination port too. Treat the output as a draft for <code>rex</code> or the FX, not a finished extraction.</p>
+<p><strong>6. extract with explicit delimiters, the SPL twin of the FX delimiter method.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-9">Copy</button></div><pre id="spl-9"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span> <span class="t-opt">action</span><span class="t-op">=</span><span class="t-field">purchase</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rename</span> <span class="t-field">_raw</span> <span class="t-kw">AS</span> <span class="t-field">keep_raw</span><span class="t-op">,</span> <span class="t-field">uri_query</span> <span class="t-kw">AS</span> <span class="t-field">_raw</span>
+<span class="t-pipe">|</span> <span class="t-cmd">extract</span> <span class="t-opt">pairdelim</span><span class="t-op">=</span><span class="t-str">&quot;?&amp;&quot;</span> <span class="t-opt">kvdelim</span><span class="t-op">=</span><span class="t-str">&quot;=&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">rename</span> <span class="t-field">_raw</span> <span class="t-kw">AS</span> <span class="t-field">uri_query</span><span class="t-op">,</span> <span class="t-field">keep_raw</span> <span class="t-kw">AS</span> <span class="t-field">_raw</span>
+<span class="t-pipe">|</span> <span class="t-cmd">table</span> <span class="t-field">uri_query</span> <span class="t-field">itemId</span> <span class="t-field">productId</span></code></pre></div>
+<p>The double rename exists because <code>extract</code> works only on <code>_raw</code>. <code>pairdelim=&quot;?&amp;&quot;</code> says either <code>?</code> or <code>&amp;</code> separates one pair from the next; <code>kvdelim=&quot;=&quot;</code> says <code>=</code> separates key from value. Both arguments take a set of characters, not a single string to match.</p>
+<p><strong>7. The same delimiter job done as a saved knowledge object.</strong></p>
+<pre class="plain lang-ini"><code># transforms.conf
+[access_query_params]
+DELIMS = &quot;?&amp;&quot;, &quot;=&quot;
+
+# props.conf
+[access_combined]
+REPORT-access_query_params = access_query_params</code></pre>
+<p>Two sets of quoted delimiters because the data contains full key-value pairs. If the data contained only values, you would supply one set of delimiters plus a <code>FIELDS</code> list naming the values in the order they appear. This is exactly the shape the FX delimiter method writes on your behalf.</p>
+<h2 id="decision-rules">Decision rules<a class="anchor" href="#decision-rules" aria-label="Link to this section">#</a></h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Use</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Values are separated by a consistent character and sit in the same position in every event (CSV, TSV, pipe, database export)</td>
+<td>FX Delimiters method</td>
+<td>The wizard is faster and the resulting transform is far more maintainable than a positional regex.</td>
+</tr>
+<tr>
+<td>Events are unstructured, such as syslog or an application log, and the value has recognisable text around it</td>
+<td>FX Regular Expression method</td>
+<td>The FX can generate a regex that anchors on surrounding literal text.</td>
+</tr>
+<tr>
+<td>Fields are positionally inconsistent between events even though delimiters exist</td>
+<td>FX Regular Expression method with required text</td>
+<td>The delimiter method assumes each value is in the same place from event to event.</td>
+</tr>
+<tr>
+<td>Events are XML or JSON</td>
+<td>Automatic key-value extraction or <code>spath</code>, not the FX delimiter method</td>
+<td>Nested formats are structured but not delimited, so no single character separates the values in a fixed order.</td>
+</tr>
+<tr>
+<td>You need the field once, in one search, and nobody else needs it</td>
+<td><code>rex</code></td>
+<td>Not a knowledge object, so no permissions, no configuration, no cleanup.</td>
+</tr>
+<tr>
+<td>You need the field permanently, for everyone, for all past and future events of that source type</td>
+<td>FX, saved with App or All apps permissions</td>
+<td>Only a saved extraction persists.</td>
+</tr>
+<tr>
+<td>You know example values but cannot write the regex</td>
+<td><code>erex</code>, then transplant the generated regex</td>
+<td>It is a regex generator with a teaching purpose, not a persistence mechanism.</td>
+</tr>
+<tr>
+<td>You need to redact or reshape an existing field's value in search results</td>
+<td><code>rex mode=sed</code></td>
+<td>Sed mode transforms, it does not extract.</td>
+</tr>
+<tr>
+<td>Data is already <code>key=value</code> and just needs different delimiters than the automatic extractor assumes</td>
+<td><code>extract pairdelim=... kvdelim=...</code></td>
+<td>Fastest way to reparse delimited key-value text.</td>
+</tr>
+<tr>
+<td>You must extract from a field other than <code>_raw</code></td>
+<td><code>rex field=&lt;name&gt;</code> or <code>erex fromfield=&lt;name&gt;</code></td>
+<td><code>extract</code> cannot do it without renaming, and the FX always works from the raw event.</td>
+</tr>
+<tr>
+<td>The field must be searchable before the first pipe, at index time</td>
+<td>Not a Power User task</td>
+<td>Index-time extraction requires configuration-file changes and reindexing.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="traps">Traps<a class="anchor" href="#traps" aria-label="Link to this section">#</a></h2>
+<p class="trap" id="T-04-01"><span class="tid">T-04-01</span> The Field Extractor changes indexed data. <span class="wrong">Wrong belief</span>: after saving an extraction you must reindex, or the field will only appear on data ingested from now on. <span class="right">Correct fact</span>: the FX creates a search-time extraction only. It applies retroactively to every already-indexed event of that source type or source, and it requires no reindex and no restart.</p>
+<p class="trap" id="T-04-02"><span class="tid">T-04-02</span> <code>rex</code> creates a reusable field. <span class="wrong">Wrong belief</span>: a field created by <code>rex</code> shows up in the fields sidebar for future searches, or can be managed under Settings. <span class="right">Correct fact</span>: <code>rex</code> is a search command, not a knowledge object. Its fields exist for the duration of that one search pipeline and appear nowhere in Settings.</p>
+<p class="trap" id="T-04-03"><span class="tid">T-04-03</span> The Validate step applies to both methods. <span class="wrong">Wrong belief</span>: every FX extraction ends with Select Fields, Validate, Save. <span class="right">Correct fact</span>: Validate exists only on the regular expression path. The delimiter path is Select Sample, Select Method, Rename Fields, Save. Counterexamples are a Validate-step feature and therefore do not exist for delimiter extractions.</p>
+<p class="trap" id="T-04-04"><span class="tid">T-04-04</span> The default permission at the Save step is App. <span class="wrong">Wrong belief</span>: a saved extraction is immediately visible to everyone in the app. <span class="right">Correct fact</span>: the default is Owner, and the docs state it &quot;only extracts fields in searches run by the person who created the extraction.&quot; The three choices are Owner, App, All apps.</p>
+<p class="trap" id="T-04-05"><span class="tid">T-04-05</span> Field values are case sensitive. <span class="wrong">Wrong belief</span>, and one stated inconsistently across secondary material. The rule is per context, and this is the table to memorise.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Case sensitive?</th>
+<th>Source sentence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A bare keyword search term, <code>failed password</code></td>
+<td>No</td>
+<td>Keyword terms match regardless of case; <code>CASE()</code> exists precisely to override that</td>
+</tr>
+<tr>
+<td>The field name in <code>field=value</code> in the <code>search</code> command</td>
+<td>Yes</td>
+<td>&quot;Field names are case sensitive, but field values are not&quot;</td>
+</tr>
+<tr>
+<td>The field value in <code>field=value</code> in the <code>search</code> command</td>
+<td>No</td>
+<td>Same sentence. <code>status=Failed</code> matches <code>failed</code></td>
+</tr>
+<tr>
+<td><code>CASE(&lt;term&gt;)</code> in the <code>search</code> command</td>
+<td>Yes, deliberately</td>
+<td>&quot;You can use the CASE() directive to search for terms and field values that are case-sensitive&quot;</td>
+</tr>
+<tr>
+<td>A <code>where</code> expression</td>
+<td>Yes</td>
+<td>&quot;The <code>&lt;eval-expression&gt;</code> is case-sensitive&quot;</td>
+</tr>
+<tr>
+<td>An <code>eval</code> expression</td>
+<td>Yes</td>
+<td>&quot;The eval expression is case-sensitive&quot;</td>
+</tr>
+<tr>
+<td>A tag name in <code>tag=&lt;name&gt;</code></td>
+<td>No</td>
+<td>A tag name is matched as a value of the <code>tag</code> field, and field values are not case sensitive</td>
+</tr>
+<tr>
+<td>The field name in <code>tag::&lt;field&gt;=&lt;name&gt;</code></td>
+<td>Yes</td>
+<td>That position holds a field name, and field names are case sensitive</td>
+</tr>
+<tr>
+<td>Lookup matching</td>
+<td>Yes, by default</td>
+<td><code>case_sensitive_match</code> in transforms.conf defaults to true</td>
+</tr>
+<tr>
+<td>A regular expression in <code>rex</code>, <code>regex</code>, or an <code>EXTRACT-</code></td>
+<td>Yes, by default</td>
+<td>Splunk regexes are PCRE, which matches case sensitively unless the pattern says otherwise</td>
+</tr>
+</tbody>
+</table></div>
+<p>So <code>index=web sourcetype=access_combined</code> and <code>SOURCETYPE=...</code> are not the same search, but <code>status=Failed</code> matches <code>failed</code>. The exception the exam builds questions on is the eval family: <code>| where action=&quot;Purchase&quot;</code> returns nothing against <code>purchase</code> even though <code>action=Purchase</code> in the base search would have matched it.</p>
+<p class="trap" id="T-04-06"><span class="tid">T-04-06</span> <code>eventtype</code> and <code>tag</code> are default fields extracted at index time. <span class="wrong">Wrong belief</span>: they appear in the sidebar so they must be default. <span class="right">Correct fact</span>: the documented default field list is <code>host</code>, <code>index</code>, <code>linecount</code>, <code>punct</code>, <code>source</code>, <code>sourcetype</code>, <code>splunk_server</code>, <code>timestamp</code>, plus the internal fields <code>_raw</code>, <code>_time</code>, <code>_indextime</code>, <code>_cd</code>, <code>_bkt</code>, plus the <code>date_*</code> fields. Event types and tags are applied at search time, at stages 8 and 9 of the search-time sequence, long after extraction.</p>
+<p class="trap" id="T-04-07"><span class="tid">T-04-07</span> Interesting Fields means the fields Splunk considers important, or the 20 percent threshold controls what gets extracted. <span class="right">Correct fact</span>: it is a display rule for the sidebar only. A field appearing in 5 percent of events is fully extracted and fully searchable, it just sits outside the Interesting Fields list and is reached through All Fields.</p>
+<p class="trap" id="T-04-08"><span class="tid">T-04-08</span> <code>rex</code> requires a <code>field=</code> argument. <span class="wrong">Wrong belief</span>: you must name the target. <span class="right">Correct fact</span>: <code>field</code> defaults to <code>_raw</code>. <code>erex</code> uses <code>fromfield</code>, which also defaults to <code>_raw</code>. <code>extract</code> has neither and can only ever read <code>_raw</code>.</p>
+<p class="trap" id="T-04-09"><span class="tid">T-04-09</span> <code>max_match=0</code> means no matches, or <code>max_match</code> defaults to unlimited. <span class="right">Correct fact</span>: the default is <code>1</code>, and <code>0</code> means unlimited. Any value greater than 1 produces a multivalue field. If your pattern has a capture group that can match multiple times within itself, only the last capture group is used for the multiple matches.</p>
+<p class="trap" id="T-04-10"><span class="tid">T-04-10</span> <code>erex</code> saves an extraction. <span class="wrong">Wrong belief</span>: <code>erex</code> is the command-line version of the FX and persists what it builds. <span class="right">Correct fact</span>: <code>erex</code> extracts for that search only and prints its generated regular expression to the job messages, readable from the Job menu. It is a regex-writing aid. It is also completely absent from circulating study material, so do not expect that source to prepare you for it.</p>
+<p class="trap" id="T-04-11"><span class="tid">T-04-11</span> You can always back out of a manual regex edit in the FX. <span class="right">Correct fact</span>: you can select the Back button to abandon manual editing and return to the field extractor workflow &quot;only if you have not yet tried to preview a regular expression change.&quot; Once you preview an edited regex, the interactive highlighting workflow for that extraction is gone and you are committed to editing the regex by hand.</p>
+<p class="trap" id="T-04-12"><span class="tid">T-04-12</span> <code>extract</code> takes a <code>field=</code> argument like <code>rex</code>. <span class="right">Correct fact</span>: it does not. <code>extract</code> works only on <code>_raw</code>, and the documented workaround is <code>| rename _raw AS temp uri_query AS _raw | extract ... | rename _raw AS uri_query temp AS _raw</code>.</p>
+<p class="trap" id="T-04-13"><span class="tid">T-04-13</span> In the delimiter method you must rename every discovered field. <span class="right">Correct fact</span>: you must select and rename at least one field to move on to the Save step, and you do not have to rename every field the extractor found. Unrenamed fields keep their auto-assigned names <code>field1</code>, <code>field2</code>, <code>field3</code> and so on.</p>
+<p class="trap" id="T-04-14"><span class="tid">T-04-14</span> The FX always writes the same configuration. <span class="right">Correct fact</span>: the regular expression method writes an inline <code>EXTRACT-&lt;class&gt;</code> into props.conf with the regex embedded. The delimiter method writes a <code>transforms.conf</code> stanza holding <code>DELIMS</code> and <code>FIELDS</code> plus a <code>REPORT-&lt;class&gt;</code> reference in props.conf. This is why changing permissions on a delimiter extraction requires moving the transforms.conf stanza manually.</p>
+<p class="trap" id="T-04-15"><span class="tid">T-04-15</span> Delimiters are mostly used for unstructured data. This is a verbatim answer-key error found in circulating material. <span class="right">Correct fact</span>: choose Delimiters when values are cleanly separated by a common character such as a space, comma, or pipe, and are consistent across events, &quot;commonly the case with structured, table-based data such as .csv files or events indexed from a database.&quot; Choose Regular Expression for unstructured data such as a system log.</p>
+<p class="trap" id="T-04-16"><span class="tid">T-04-16</span> The Event Actions entry point starts the wizard at Select Sample. <span class="right">Correct fact</span>: opening the FX from <strong>Event Actions &gt; Extract Fields</strong> on a specific event starts you at Select Method, because the source type and the sample event are already determined by the event you clicked. Every other entry point starts at Select Sample.</p>
+<p class="trap" id="T-04-17"><span class="tid">T-04-17</span> A saved delimiter extraction can later be edited as a regular expression. <span class="right">Correct fact</span>: the two methods produce different configuration objects. A saved delimiter extraction is a transform built on <code>DELIMS</code> and <code>FIELDS</code>, with no <code>REGEX</code> setting, so there is no regular expression to open, and the Validate step does not apply to it. Within the wizard, before saving, you can back up and change the method. The 10.4 Select Method and Select Fields pages document a Back button but never say whether it lets you switch methods, so treat that last sentence as product behaviour rather than a documented fact. [verify]</p>
+<p class="trap" id="T-04-18"><span class="tid">T-04-18</span> Sample size does not matter. <span class="right">Correct fact</span>: the field extractor is limited to twenty lines on a sample event, so a very long multiline event cannot be fully sampled. Separately, automatic search-time key-value extraction finds only the first 100 obvious <code>key=value</code> pairs per event, and <code>extract</code> defaults to <code>limit=50</code> pairs and <code>maxchars=10240</code> characters of the event.</p>
+<p class="trap" id="T-04-19"><span class="tid">T-04-19</span> The delimiter method is for data that has no header row. <span class="wrong">Wrong belief</span>, and a common one in third-party material. <span class="right">Correct fact</span>: the docs describe the delimiters method as designed for structured event data, &quot;data from files with headers, where all of the fields in the events are separated by a common delimiter, such as a comma or space&quot;. The header row lives in the file, not inside each event, which is why the Rename Fields step gives you <code>field1</code>, <code>field2</code>, <code>field3</code> and makes you name them.</p>
+<p class="trap" id="T-04-20"><span class="tid">T-04-20</span> Required text filters your search results. <span class="wrong">Wrong belief</span>: events without the required string stop appearing in searches. <span class="right">Correct fact</span>: required text &quot;behaves like a search filter&quot; for the extraction only. Events that lack the string are still returned by the search, they just do not get the extracted fields. Two limits go with it: one required-text string per field extraction, and required text may not overlap with text already highlighted as a field value.</p>
+<p class="trap" id="T-04-21"><span class="tid">T-04-21</span> Selected Fields is Splunk's judgement about which fields matter. <span class="wrong">Wrong belief</span>, and its usual companion is that every default field starts out selected. <span class="right">Correct fact</span>: on a fresh search Selected Fields contains exactly <code>host</code>, <code>source</code>, and <code>sourcetype</code>. <code>index</code> is a default field on every event, so it clears the 20 percent bar and appears under Interesting Fields, not Selected Fields. All Fields is the dialog you use to promote anything else into the selected list.</p>
+<p class="trap" id="T-04-22"><span class="tid">T-04-22</span> Any delimiter character can be chosen from the delimiter list. <span class="right">Correct fact</span>: the Rename Fields step offers four presets, Space, Comma, Tab, and Pipe. Every other delimiter, a colon or a semicolon for instance, has to be typed into the <strong>Other</strong> box. Such delimiters work perfectly well; they are simply not on the button list.</p>
+<p class="trap" id="T-04-23"><span class="tid">T-04-23</span> New Field Extraction on the Field extractions page opens the Field Extractor. <span class="right">Correct fact</span>: it opens a manual configuration form where you type the stanza, the type, and the regex or transform name yourself. The wizard is behind the <strong>Open field extractor</strong> button on the same page.</p>
+<h2 id="lab">Lab<a class="anchor" href="#lab" aria-label="Link to this section">#</a></h2>
+<p>Fifteen minutes on a single-node Splunk Enterprise 10.x instance with the practice dataset loaded.</p>
+<p><strong>Part A, regex extraction from the search-result entry point (about 8 minutes).</strong></p>
+<ol>
+<li>Run this search over All time.</li>
+</ol>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-10">Copy</button></div><pre id="spl-10"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password for invalid user&quot;</span></code></pre></div>
+<ol start="2">
+<li>Expand any result event, select <strong>Event Actions</strong>, then <strong>Extract Fields</strong>. Confirm the wizard opens on <strong>Select Method</strong>, not Select Sample. That is the observable difference between the two entry points.</li>
+<li>Choose <strong>Regular Expression</strong>, select <strong>Next</strong>.</li>
+<li>In the sample event, highlight the username value, for example <code>appserver</code>, in the phrase <code>invalid user appserver from</code>. Name the field <code>bad_user</code> and select <strong>Add Extraction</strong>.</li>
+<li>Highlight the port digits, for example <code>3351</code>, name the field <code>src_port</code>, and select <strong>Add Extraction</strong>.</li>
+<li>Highlight the literal phrase <code>invalid user</code>, select <strong>Require</strong>, then <strong>Add Required Text</strong>. The extraction now matches only events containing that phrase, which is not the same as filtering anyone's search results.</li>
+<li>Select <strong>Show Regular Expression</strong> and read the pattern. Confirm one named capture group per field. The docs write <code>(?&lt;bad_user&gt;...)</code> everywhere and <code>(?P&lt;bad_user&gt;...)</code> once; both are valid. Do not select Edit the Regular Expression unless you intend to finish by hand.</li>
+<li>Select <strong>Next</strong> to reach <strong>Validate</strong>. Switch between the <code>bad_user</code> and <code>src_port</code> tabs and check the value distributions. If an event shows a wrong value, select the grey <strong>X</strong> beside it to submit a counterexample and watch the regex change.</li>
+<li>Select <strong>Next</strong> to reach <strong>Save</strong>. Set <strong>Permissions</strong> to <strong>App</strong>. Leave the auto-generated name or type one without spaces. Select <strong>Finish</strong>.</li>
+</ol>
+<p><strong>Part B, delimiter extraction (about 5 minutes).</strong></p>
+<ol>
+<li>Create a small pipe-delimited file.</li>
+</ol>
+<pre class="plain lang-bash"><code>printf &#x27;2024-03-26 10:04:20|EU-WEST|Dream Crusher|3|29.99\n2024-03-26 10:06:11|US-EAST|Manganiello Bros.|1|19.99\n2024-03-26 10:09:02|APAC|Curling 2014|7|24.99\n&#x27; &gt; /tmp/pipe_sales.log</code></pre>
+<ol start="2">
+<li>In Splunk Web go to <strong>Settings &gt; Add Data &gt; Upload</strong>, select the file, set <strong>Source type</strong> to a new type named <code>pipe_sales</code> and <strong>Index</strong> to <code>main</code>, then <strong>Review</strong> and <strong>Submit</strong>.</li>
+<li>Go to <strong>Settings &gt; Fields &gt; Field extractions</strong>, select <strong>Open field extractor</strong>.</li>
+<li>On <strong>Select Sample</strong>, choose source type <code>pipe_sales</code> and click one event.</li>
+<li>On <strong>Select Method</strong>, choose <strong>Delimiters</strong>. Note that selecting Next takes you to <strong>Rename Fields</strong>, not Select Fields, and that there is no Validate step ahead of you.</li>
+<li>Choose <strong>Pipe</strong> as the delimiter, and note that Space, Comma, Tab, and Pipe are the only presets: a colon or a semicolon would have to be typed into <strong>Other</strong>. Confirm the values are auto-named <code>field1</code> through <code>field5</code>.</li>
+<li>Rename <code>field2</code> to <code>region</code>, <code>field3</code> to <code>product</code>, and <code>field4</code> to <code>qty</code>. Leave <code>field1</code> and <code>field5</code> alone to prove that renaming all of them is not required.</li>
+<li>Select <strong>Next</strong>, name the extraction <code>pipe_sales_fields</code>, set <strong>Permissions</strong> to <strong>App</strong>, and select <strong>Finish</strong>.</li>
+</ol>
+<p><strong>Verification searches.</strong></p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-11">Copy</button></div><pre id="spl-11"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">security</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">linux_secure</span> <span class="t-str">&quot;Failed password for invalid user&quot;</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">count</span> <span class="t-kw">by</span> <span class="t-field">bad_user</span><span class="t-op">,</span> <span class="t-field">src_port</span>
+<span class="t-pipe">|</span> <span class="t-cmd">sort</span> <span class="t-op">-</span> <span class="t-func">count</span></code></pre></div>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-12">Copy</button></div><pre id="spl-12"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">cisco</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">cisco:wsa:squid</span>
+<span class="t-pipe">|</span> <span class="t-cmd">stats</span> <span class="t-func">sum</span><span class="t-op">(</span><span class="t-field">qty</span><span class="t-op">)</span> <span class="t-kw">AS</span> <span class="t-field">units</span> <span class="t-kw">by</span> <span class="t-field">region</span><span class="t-op">,</span> <span class="t-field">product</span></code></pre></div>
+<p>Both must return populated fields with no manual <code>rex</code> in the pipeline. If <code>bad_user</code> is empty, the extraction saved with Owner permissions under a different user, or the extraction is scoped to a source type that does not match. Confirm at <strong>Settings &gt; Fields &gt; Field extractions</strong> by filtering on the extraction name and checking the Sharing column reads <code>App</code> and the Owner column matches you.</p>
+<h2 id="self-check">Self-check<a class="anchor" href="#self-check" aria-label="Link to this section">#</a></h2>
+<p><strong>1.</strong> You open the Field Extractor by expanding an event in the search results and selecting Event Actions, then Extract Fields. Which wizard step appears first?</p>
+<ul>
+<li>A. Select Sample</li>
+<li>B. Select Method</li>
+<li>C. Select Fields</li>
+<li>D. Rename Fields</li>
+</ul>
+<p><strong>2.</strong> You save a Field Extractor extraction and accept every default. A colleague runs the same search and does not see the new field. What is the most likely cause?</p>
+<ul>
+<li>A. The extraction requires a reindex before it takes effect</li>
+<li>B. The extraction was saved with Owner permissions</li>
+<li>C. The colleague's role lacks the <code>edit_monitor</code> capability</li>
+<li>D. The field appears in fewer than 20 percent of events</li>
+</ul>
+<p><strong>3.</strong> Which of these is NOT a default field added when data is indexed?</p>
+<ul>
+<li>A. <code>punct</code></li>
+<li>B. <code>linecount</code></li>
+<li>C. <code>eventtype</code></li>
+<li>D. <code>splunk_server</code></li>
+</ul>
+<p><strong>4.</strong> <code>... | rex field=message &quot;(?&lt;code&gt;[A-Z]{3}\d{2})&quot;</code> runs against 500 events, and 120 of them contain a matching pattern. How many events does the command emit?</p>
+<ul>
+<li>A. 120</li>
+<li>B. 380</li>
+<li>C. 500</li>
+<li>D. 500, but the 380 non-matching events are marked as null results</li>
+</ul>
+<p><strong>5.</strong> You chose the Delimiters method in the Field Extractor. Which step will you NOT see before Save?</p>
+<ul>
+<li>A. Select Sample</li>
+<li>B. Select Method</li>
+<li>C. Rename Fields</li>
+<li>D. Validate</li>
+</ul>
+<p><strong>6.</strong> Which statement about case sensitivity is correct?</p>
+<ul>
+<li>A. Field names and field values are both case sensitive</li>
+<li>B. Field names are case sensitive, field values are not, but <code>where</code> and <code>eval</code> expressions are case sensitive</li>
+<li>C. Neither field names nor field values are case sensitive</li>
+<li>D. Field values are case sensitive, field names are not</li>
+</ul>
+<p><strong>7.</strong> You need to extract every <code>name=value</code> pair from the <code>uri_query</code> field. Which command cannot do this without first renaming a field?</p>
+<ul>
+<li>A. <code>rex</code></li>
+<li>B. <code>erex</code></li>
+<li>C. <code>extract</code></li>
+<li>D. <code>eval</code></li>
+</ul>
+<p><strong>8.</strong> A Field Extractor extraction built with the Delimiters method lands in which configuration?</p>
+<ul>
+<li>A. <code>EXTRACT-&lt;class&gt;</code> in props.conf only</li>
+<li>B. <code>REPORT-&lt;class&gt;</code> in props.conf plus a stanza in transforms.conf</li>
+<li>C. <code>DELIMS</code> in props.conf only</li>
+<li>D. <code>FIELDALIAS-&lt;class&gt;</code> in props.conf plus a stanza in transforms.conf</li>
+</ul>
+<p><strong>9.</strong> A source type carries both of these settings, and the transform <code>app_field_transform</code> also produces a field called <code>status_code</code>.</p>
+<pre class="plain lang-ini"><code># props.conf
+[app_log]
+EXTRACT-status = status=(?&lt;status_code&gt;\d+)
+REPORT-app_status = app_field_transform</code></pre>
+<p>Which value does <code>status_code</code> hold at search time?</p>
+<ul>
+<li>A. The value produced by <code>EXTRACT-status</code></li>
+<li>B. The value produced by <code>app_field_transform</code>, because transform extractions run last</li>
+<li>C. Both values, as a multivalue field</li>
+<li>D. Neither, because two extractions cannot define the same field name</li>
+</ul>
+<p><strong>10.</strong> You run this search and look at the fields sidebar.</p>
+<div class="spl"><div class="spl-chrome"><svg class="spl-glass" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg><span class="spl-label">Search</span><span class="spl-spacer"></span><button class="spl-copy" type="button" data-copy="spl-13">Copy</button></div><pre id="spl-13"><code><span class="t-opt">index</span><span class="t-op">=</span><span class="t-field">web</span> <span class="t-opt">sourcetype</span><span class="t-op">=</span><span class="t-field">access_combined</span></code></pre></div>
+<p><code>host</code>, <code>source</code>, and <code>sourcetype</code> are listed under Selected Fields. Where does <code>index</code> appear, and why?</p>
+<ul>
+<li>A. Under Selected Fields, because every default field is selected automatically</li>
+<li>B. Under Interesting Fields, because Selected Fields starts with only <code>host</code>, <code>source</code>, and <code>sourcetype</code></li>
+<li>C. Under All Fields only, because <code>index</code> is present in fewer than 20 percent of events</li>
+<li>D. Nowhere, because <code>index</code> is an internal field and internal fields are not listed in the sidebar</li>
+</ul>
+<details><summary>Answers</summary>
+<p><strong>1. B.</strong> Opening the FX from Event Actions on a specific event fixes both the source type and the sample event, so the wizard starts at Select Method. A is wrong because Select Sample is skipped precisely because the sample is already chosen; it is the first step for the sidebar, All Fields, Settings, Home page, and Add Data entry points. C is wrong because Select Fields comes after Select Method and only on the regex path. D is wrong for the same reason on the delimiter path.</p>
+<p><strong>2. B.</strong> The Save step defaults to Owner, which means the extraction only extracts fields in searches run by its creator. A is wrong because the FX creates search-time extractions, which never require reindexing. C is wrong because <code>edit_monitor</code> gates two FX entry points (Home page and Add Data), not the visibility of a saved extraction. D is wrong because the 20 percent threshold controls whether a field is listed under Interesting Fields in the sidebar; it never controls whether the field exists or is searchable.</p>
+<p><strong>3. C.</strong> <code>eventtype</code> is applied at search time, at stage 8 of the search-time sequence, well after extraction. A, B, and D are all on the documented default field list that is indexed and added to the Fields menu by default, alongside <code>host</code>, <code>index</code>, <code>source</code>, <code>sourcetype</code>, and <code>timestamp</code>.</p>
+<p><strong>4. C.</strong> <code>rex</code> is a distributable streaming command that does not filter. Every input event is emitted; the 380 non-matching events simply do not gain the <code>code</code> field. A is the answer for the <code>regex</code> command, which does filter, and that is the distractor the question is built on. B is the inverse of A. D is wrong because non-matching events do not gain a null-valued field, they gain nothing at all.</p>
+<p><strong>5. D.</strong> Validate is a regular-expression-only step, because counterexamples exist to refine a generated regex and a delimiter extraction has no regex. A and B are common to both methods. C is the delimiter-only step that replaces Select Fields and Validate.</p>
+<p><strong>6. B.</strong> Field names are case sensitive and field values are not, in search terms. The exception is that <code>eval</code> and <code>where</code> share an expression syntax that the docs state plainly is case-sensitive, so string comparisons inside them do respect case. A is the belief that fails on <code>status=Failed</code> matching <code>failed</code>. C fails on <code>sourcetype</code> versus <code>SOURCETYPE</code>. D inverts the rule entirely.</p>
+<p><strong>7. C.</strong> <code>extract</code> works only on <code>_raw</code> and has no field-targeting argument, so you must rename <code>uri_query</code> to <code>_raw</code> and back. A is wrong because <code>rex</code> takes <code>field=uri_query</code>. B is wrong because <code>erex</code> takes <code>fromfield=uri_query</code>. D is a partial distractor: <code>eval</code> is not an extraction command at all, but the question asks which cannot do it without renaming, and <code>eval</code> with <code>split</code> or <code>mvindex</code> operates on any field directly without renaming.</p>
+<p><strong>8. B.</strong> The delimiter method builds a field transform, which is by definition a transforms.conf stanza (holding <code>DELIMS</code>, and <code>FIELDS</code> when only values are present) plus a <code>REPORT-&lt;class&gt;</code> reference in props.conf. This is why the Save step warns that changing permissions on a delimiter extraction requires moving the transforms.conf stanza by hand. A is what the regular expression method produces. C is wrong because <code>DELIMS</code> is a transforms.conf setting and never appears in props.conf. D is wrong because <code>FIELDALIAS</code> renames an existing field and extracts nothing.</p>
+<p><strong>9. A.</strong> Inline extractions are stage 2 of the search-time sequence and transform extractions are stage 3, so the inline <code>EXTRACT-</code> value is written first and the transform value is discarded when it collides with an existing field name. B inverts the ordering and also misreads &quot;runs last&quot; as &quot;wins&quot;; later stages do not overwrite an established field. C is what would happen only if <code>MV_ADD</code> were turned on for the transform, and it defaults to false. D is wrong because nothing errors here, the collision is resolved silently, which is exactly what makes it hard to debug.</p>
+<p><strong>10. B.</strong> Selected Fields starts a search with the three default fields <code>host</code>, <code>source</code>, and <code>sourcetype</code>, so <code>index</code> is not there even though it is also a default field. It appears on every event, so it passes the 20 percent threshold and lands under Interesting Fields. A is wrong because being a default field does not make a field selected, only those three start selected. C is wrong on the arithmetic: <code>index</code> is present on 100 percent of events, and All Fields is a dialog showing everything rather than a leftovers list. D confuses default fields with internal fields; <code>index</code> is on the default field list, not the internal list that begins with <code>_raw</code> and <code>_time</code>.</p>
+</details>
+<h2 id="docs">Docs<a class="anchor" href="#docs" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/about-fields" target="_blank" rel="noopener">About fields</a> - what a field is, every mechanism for creating one, and the rule that custom extractions belong at search time. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/use-default-fields" target="_blank" rel="noopener">Use default fields</a> - the three groups (internal, default, default datetime) and what is not on the list. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/fields-and-field-extractions/when-splunk-software-extracts-fields" target="_blank" rel="noopener">When Splunk software extracts fields</a> - index time versus search time, and the first-100-fields rule. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/build-field-extractions-with-the-field-extractor" target="_blank" rel="noopener">Build field extractions with the field extractor</a> - the entry-point table and which entry point lands on which step. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-sample-step" target="_blank" rel="noopener">Field Extractor: Select Sample step</a> - the twenty-line sample limit and the overlapping-extraction warning. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-method-step" target="_blank" rel="noopener">Field Extractor: Select Method step</a> - the exact criteria for choosing Regular Expression versus Delimiters, and which step each choice leads to. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-select-fields-step" target="_blank" rel="noopener">Field Extractor: Select Fields step</a> - field naming rules, required text and its two limits, adding sample events, and when you can still back out of a manual regex edit. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-rename-fields-step" target="_blank" rel="noopener">Field Extractor: Rename Fields step</a> - the four preset delimiters (Space, Comma, Tab, Pipe) plus Other, <code>field1</code> auto-naming, and the rename-at-least-one rule. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-validate-step" target="_blank" rel="noopener">Field Extractor: Validate step</a> - counterexamples, the grey X and the blue X. 4 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-field-extractor-in-splunk-web/field-extractor-save-step" target="_blank" rel="noopener">Field Extractor: Save step</a> - the Owner default and the transforms.conf note. Highest yield per word in the section. 5 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/rex" target="_blank" rel="noopener">rex</a> - syntax, <code>field</code> default <code>_raw</code>, <code>max_match</code> default 1, <code>offset_field</code>, and sed mode. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/erex" target="_blank" rel="noopener">erex</a> - <code>examples</code>, <code>counterexamples</code>, <code>fromfield</code> default <code>_raw</code>, <code>maxtrainers</code> default 100 with range 1 to 1000. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/extract" target="_blank" rel="noopener">extract</a> - <code>pairdelim</code>, <code>kvdelim</code>, <code>limit=50</code>, <code>maxchars=10240</code>, and the <code>_raw</code>-only restriction. 7 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-settings-pages-for-field-extractions-in-splunk-web/use-the-field-extractions-page" target="_blank" rel="noopener">Use the Field extractions page</a> - Inline versus Uses transform, the statement that IFX creates <code>EXTRACT-&lt;class&gt;</code> entries, and the manual New Field Extraction form that is not the wizard. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/use-the-configuration-files-to-configure-field-extractions/configure-advanced-extractions-with-field-transforms" target="_blank" rel="noopener">Configure advanced extractions with field transforms</a> - <code>DELIMS</code>, <code>FIELDS</code>, <code>REGEX</code>, <code>FORMAT</code>, <code>MV_ADD</code>, <code>CLEAN_KEYS</code>, and <code>REPORT-&lt;class&gt;</code>. Read for recognition. 10 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/the-sequence-of-search-time-operations" target="_blank" rel="noopener">The sequence of search-time operations</a> - the nine ordered stages, and why EXTRACT wins over REPORT for the same field name. Shared with sections 5 and 6. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-tutorial/10.4/part-4-searching-the-tutorial-data/use-fields-to-search" target="_blank" rel="noopener">Use fields to search</a> - the fields sidebar, the Selected Fields default of <code>host</code>, <code>source</code>, and <code>sourcetype</code>, the 20 percent Interesting Fields threshold, and the exact case-sensitivity sentence. 6 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/manage-knowledge-objects/knowledge-management-manual/10.4/get-started-with-knowledge-objects/about-splunk-regular-expressions" target="_blank" rel="noopener">About Splunk regular expressions</a> - the PCRE statement and the two named-capture spellings, <code>(?P&lt;var&gt; ...)</code> in the metacharacter table and <code>(?&lt;field_name&gt;capture pattern)</code> in the Capture groups section. 8 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/where" target="_blank" rel="noopener">where</a> and <a href="https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.4/search-commands/eval" target="_blank" rel="noopener">eval</a> - one sentence each, and both are the sentence behind T-04-05: the expression is case-sensitive. 2 minutes.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/search/search-manual/10.4/use-the-search-app/search-modes" target="_blank" rel="noopener">Search modes</a> - what Fast mode still returns with field discovery off, and the Smart mode rule about event versus transforming searches. Shared with section 1. 4 minutes.</li>
+</ol>
+
+<nav class="pn" aria-label="Section"><a href="03-correlating-events.html" rel="prev"><span class="pn-rel">Previous</span><span class="pn-sec">3.0</span><span class="pn-label">Correlating events</span></a><a href="05-aliases-and-calculated-fields.html" rel="next"><span class="pn-rel">Next</span><span class="pn-sec">5.0</span><span class="pn-label">Aliases and calculated fields</span></a></nav>
+
+    </article>
+  </main>
+
+  <aside class="aside" aria-label="On this page">
+    <p class="aside-title">On this page</p>
+    <ul class="toc">
+<li><a class="lvl2" href="#blueprint-mapping"><span>Blueprint mapping</span><span class="min">1m</span></a></li>
+<li><a class="lvl2" href="#what-it-is"><span>What it is</span><span class="min">8m</span></a></li>
+<li><a class="lvl3" href="#selected-interesting-and-all-fields"><span>Selected, Interesting, and All Fields</span></a></li>
+<li><a class="lvl3" href="#the-field-extractor-workflow"><span>The Field Extractor workflow</span></a></li>
+<li><a class="lvl3" href="#what-the-delimiter-method-assumes-about-your-data"><span>What the delimiter method assumes about your data</span></a></li>
+<li><a class="lvl3" href="#required-text-on-the-select-fields-step"><span>Required text on the Select Fields step</span></a></li>
+<li><a class="lvl3" href="#the-entry-points-the-exam-cares-about"><span>The entry points the exam cares about</span></a></li>
+<li><a class="lvl2" href="#syntax-and-options"><span>Syntax and options</span><span class="min">5m</span></a></li>
+<li><a class="lvl3" href="#rex"><span>rex</span></a></li>
+<li><a class="lvl3" href="#erex"><span>erex</span></a></li>
+<li><a class="lvl3" href="#extract-alias-kv"><span>extract (alias kv)</span></a></li>
+<li><a class="lvl3" href="#named-capture-groups"><span>Named capture groups</span></a></li>
+<li><a class="lvl3" href="#what-the-fx-writes"><span>What the FX writes</span></a></li>
+<li><a class="lvl2" href="#result-contract"><span>Result contract</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#worked-examples"><span>Worked examples</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#decision-rules"><span>Decision rules</span><span class="min">2m</span></a></li>
+<li><a class="lvl2" href="#traps"><span>Traps</span><span class="min">9m</span></a></li>
+<li><a class="lvl2" href="#lab"><span>Lab</span><span class="min">3m</span></a></li>
+<li><a class="lvl2" href="#self-check"><span>Self-check</span><span class="min">7m</span></a></li>
+<li><a class="lvl2" href="#docs"><span>Docs</span><span class="min">2m</span></a></li>
+    </ul>
+    <div class="aside-meta">
+      <span class="weight">10% of the exam</span>
+      <span>43 min read</span>
+    </div>
+  </aside>
+</div>
+
+<div class="searchwrap" id="searchwrap" hidden>
+  <div class="searchbox" role="dialog" aria-modal="true" aria-label="Search all pages">
+    <input type="search" id="q" placeholder="Search headings, traps and SPL commands" autocomplete="off" spellcheck="false">
+    <div class="results-list" id="results" role="listbox"></div>
+  </div>
+</div>
+
+<script src="../progress.js"></script>
+<script src="../search-index.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>
