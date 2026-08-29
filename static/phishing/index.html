@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phish Lab — Phishing Awareness Training</title>
+<style>
+/* ============================================================
+   PHISH LAB — a training inbox
+   Chrome = dark instrument.  Email = light paper sheet.
+   Signature = the forensic markup pass on verdict.
+   No external assets: works offline, double-click to open.
+   ============================================================ */
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+[hidden]{display:none!important}
+
+:root{
+  --ink:#0F141A;      /* desk */
+  --ink2:#161D25;     /* panel */
+  --ink3:#1F2833;     /* raised */
+  --line:#2A3542;
+  --line2:#374453;
+  --text:#E6ECF3;
+  --dim:#8A98A8;
+  --dim2:#61707F;
+
+  --paper:#FFFFFF;    /* the email */
+  --paper2:#F4F7F9;
+  --pline:#E2E8ED;
+  --ptext:#1A222C;
+  --pdim:#5D6C7B;
+
+  --flag:#FFB224;     /* highlighter — red flags */
+  --hot:#FF5C45;      /* phishing */
+  --safe:#28C387;     /* legitimate / green flags */
+  --focus:#6BA5FF;
+
+  --ui:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+  --mail:Arial,"Helvetica Neue",Helvetica,sans-serif;
+
+  --rail:54px;
+}
+
+body{
+  background:var(--ink);color:var(--text);
+  font-family:var(--ui);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+
+.mlabel{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);font-weight:700}
+.mono{font-family:var(--mono)}
+
+/* ---------- rail ---------- */
+.rail{
+  position:sticky;top:0;z-index:60;height:var(--rail);
+  display:flex;align-items:center;gap:16px;padding:0 16px;
+  background:rgba(15,20,26,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.mark{display:flex;align-items:center;gap:9px;background:none;border:0;padding:4px 6px;cursor:pointer;border-radius:4px}
+.mark:hover{background:var(--ink2)}
+.mark .dot{width:9px;height:9px;background:var(--flag);transform:rotate(45deg);flex:none}
+.mark .wm{font-size:13px;font-weight:750;letter-spacing:-.01em}
+.mark .wm span{color:var(--dim);font-weight:500}
+
+.sim{
+  font-size:9.5px;font-weight:700;letter-spacing:.16em;color:var(--flag);
+  border:1px dashed rgba(255,178,36,.5);padding:4px 8px;border-radius:2px;white-space:nowrap;
+}
+.rail .spacer{flex:1}
+
+.tabs{display:flex;gap:3px}
+.tab{
+  min-width:30px;height:30px;padding:0 9px;border:0;border-radius:4px;background:transparent;
+  color:var(--dim);font-size:12px;font-weight:650;cursor:pointer;letter-spacing:.02em;
+}
+.tab:hover{background:var(--ink2);color:var(--text)}
+.tab[aria-current="true"]{background:var(--ink3);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+.tab .done{color:var(--safe)}
+
+.counter{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pips{display:flex;gap:3px;margin-left:8px}
+.pip{width:5px;height:5px;border-radius:50%;background:var(--line2)}
+.pip.on{background:var(--dim)}
+
+.ghost{
+  background:transparent;border:1px solid var(--line2);color:var(--dim);
+  padding:5px 10px;border-radius:4px;font-size:11.5px;cursor:pointer;
+}
+.ghost:hover{border-color:var(--dim2);color:var(--text)}
+
+/* ---------- start screen ---------- */
+.start{max-width:940px;margin:0 auto;padding:56px 24px 80px}
+.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.eyebrow .rule{height:1px;flex:1;background:var(--line)}
+.start h1{
+  font-size:clamp(34px,6vw,58px);line-height:1.02;letter-spacing:-.035em;
+  font-weight:780;margin:0 0 18px;max-width:15ch;
+}
+.start h1 em{font-style:normal;color:var(--flag)}
+.lede{font-size:16.5px;line-height:1.6;color:var(--dim);max-width:60ch;margin:0 0 34px}
+.lede strong{color:var(--text);font-weight:600}
+
+/* the thesis, shown literally */
+.exhibit{
+  background:var(--paper);border-radius:5px;padding:20px 22px;max-width:560px;
+  box-shadow:0 20px 44px -24px rgba(0,0,0,.8);margin-bottom:14px;
+}
+.exhibit .ex-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--pdim);font-weight:700;margin-bottom:9px}
+.exhibit .ex-row{font-family:var(--mail);color:var(--ptext);font-size:14.5px;line-height:2}
+.exhibit .ex-row b{font-weight:700}
+.ex-cap{font-size:12px;color:var(--dim2);max-width:560px;margin:0 0 40px}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:40px}
+.step{background:var(--ink);padding:18px 20px}
+.step .n{font-family:var(--mono);font-size:11px;color:var(--flag);margin-bottom:8px}
+.step h3{margin:0 0 5px;font-size:14px;font-weight:650}
+.step p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.55}
+
+.lv-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.lv-head h2{font-size:17px;font-weight:700;margin:0;letter-spacing:-.01em}
+.lv-head span{font-size:12px;color:var(--dim2)}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-bottom:34px}
+.lcard{
+  text-align:left;background:var(--ink2);border:1px solid var(--line);border-radius:7px;
+  padding:16px;cursor:pointer;transition:border-color .16s,transform .16s,background .16s;
+}
+.lcard:hover{border-color:var(--line2);background:var(--ink3);transform:translateY(-2px)}
+.lcard .lv{font-family:var(--mono);font-size:11px;color:var(--dim2);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.lcard h4{margin:0 0 6px;font-size:14.5px;font-weight:680;letter-spacing:-.01em}
+.lcard p{margin:0;font-size:12px;color:var(--dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:6;line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.lcard .bars{display:flex;gap:3px;margin-top:12px}
+.lcard .bars i{height:3px;flex:1;border-radius:2px;background:var(--line2)}
+.lcard .bars i.f{background:var(--flag)}
+.lcard .tick{color:var(--safe);font-size:12px}
+
+.note{border-left:2px solid var(--line2);padding:2px 0 2px 14px;color:var(--dim2);font-size:12.5px;line-height:1.6;max-width:70ch}
+.note b{color:var(--dim);font-weight:600}
+
+/* ---------- split view ---------- */
+.split{display:grid;grid-template-columns:minmax(320px,376px) 1fr;height:calc(100vh - var(--rail));}
+.list{overflow-y:auto;border-right:1px solid var(--line);background:var(--ink)}
+.list-head{
+  position:sticky;top:0;z-index:5;background:var(--ink);padding:15px 16px 11px;border-bottom:1px solid var(--line);
+}
+.list-head h2{margin:0 0 3px;font-size:14.5px;font-weight:680;letter-spacing:-.01em}
+.list-head p{margin:0;font-size:12px;color:var(--dim);line-height:1.5}
+
+.item{
+  width:100%;text-align:left;display:grid;grid-template-columns:32px 1fr;gap:11px;
+  padding:13px 16px;background:transparent;border:0;border-bottom:1px solid var(--line);
+  cursor:pointer;position:relative;
+}
+.item:hover{background:var(--ink2)}
+.item[aria-selected="true"]{background:var(--ink3)}
+.item[aria-selected="true"]::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--flag)}
+.item.answered .i-from,.item.answered .i-sub{color:var(--dim)}
+.tile{
+  width:32px;height:32px;border-radius:6px;display:grid;place-items:center;
+  font-size:13px;font-weight:750;color:#fff;flex:none;
+}
+.i-main{min-width:0}
+.i-top{display:flex;align-items:baseline;gap:8px;margin-bottom:2px;min-width:0}
+.i-from{display:block;min-width:0;font-size:13px;font-weight:650;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i-date{margin-left:auto;font-size:10.5px;color:var(--dim2);white-space:nowrap;flex:none}
+.i-sub{display:block;font-size:12.5px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i-pre{display:block;font-size:11.5px;color:var(--dim2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i-chip{
+  display:inline-flex;align-items:center;gap:4px;margin-top:7px;
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 7px;border-radius:3px;
+}
+.i-chip.ok{background:rgba(40,195,135,.14);color:var(--safe)}
+.i-chip.no{background:rgba(255,92,69,.14);color:var(--hot)}
+
+/* ---------- reading pane ---------- */
+.pane{overflow-y:auto;position:relative;scroll-behavior:smooth}
+.pane-inner{padding:0 26px 26px;max-width:832px;margin:0 auto}
+
+.banner{
+  display:flex;gap:13px;align-items:flex-start;margin:24px 0 0;padding:14px 16px;
+  border-radius:6px;border:1px solid;font-size:13.5px;line-height:1.55;
+}
+.banner .bi{font-size:15px;line-height:1.2;flex:none}
+.banner b{display:block;font-size:13px;letter-spacing:.01em;margin-bottom:2px}
+.banner.right{background:rgba(40,195,135,.09);border-color:rgba(40,195,135,.32);color:#B8EED8}
+.banner.right b{color:var(--safe)}
+.banner.wrong{background:rgba(255,178,36,.08);border-color:rgba(255,178,36,.32);color:#F2DCB4}
+.banner.wrong b{color:var(--flag)}
+
+/* the sheet — an email is a document */
+.sheet{
+  background:var(--paper);color:var(--ptext);border-radius:5px;margin:22px 0 0;overflow:hidden;
+  box-shadow:0 1px 0 rgba(0,0,0,.5),0 24px 52px -28px rgba(0,0,0,.85);
+}
+.sheet-top{padding:22px 26px 0}
+.sheet h1{font-size:19px;line-height:1.35;font-weight:650;letter-spacing:-.012em;margin:0 0 16px;color:var(--ptext)}
+.hrow{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start}
+.hrow .tile{width:38px;height:38px;border-radius:50%;font-size:15px}
+.hmain{min-width:0}
+.hline{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;font-size:13.5px}
+.hname{font-weight:700;color:var(--ptext)}
+.haddr{font-family:var(--mono);font-size:12px;color:var(--pdim);word-break:break-all}
+.hto{font-size:12px;color:var(--pdim);margin-top:2px;display:flex;align-items:center;gap:6px}
+.hdate{font-size:12px;color:var(--pdim);white-space:nowrap;margin-left:auto}
+.dtoggle{
+  background:transparent;border:0;padding:1px 4px;border-radius:3px;cursor:pointer;
+  color:var(--pdim);font-size:11px;font-weight:600;
+}
+.dtoggle:hover{background:var(--paper2);color:var(--ptext)}
+.details{
+  margin:12px 0 0;padding:11px 13px;background:var(--paper2);border:1px solid var(--pline);border-radius:4px;
+  font-family:var(--mono);font-size:11.5px;line-height:1.85;color:var(--pdim);
+}
+.details .k{display:inline-block;min-width:88px;color:#8595A4}
+.details .v{color:var(--ptext);word-break:break-all}
+.inspbtn{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--paper);
+  border:1px solid var(--pline);color:var(--pdim);padding:5px 11px;border-radius:4px;
+  font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--ui);
+}
+.inspbtn:hover{border-color:#C6D0D8;color:var(--ptext)}
+.insp{margin-top:10px;border:1px solid var(--pline);border-radius:4px;overflow:hidden}
+.insp-h{padding:8px 12px;background:#EEF2F5;border-bottom:1px solid var(--pline);
+  font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pdim)}
+.insp-row{padding:9px 12px;border-top:1px solid var(--pline);font-family:var(--mono);font-size:11.5px}
+.insp-row:first-of-type{border-top:0}
+.insp-w{display:block;font-family:var(--ui);font-size:9.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#8E9CA9;margin-bottom:3px}
+.insp-host{color:var(--ptext);word-break:break-all}
+.insp-bad{margin-top:6px;padding:7px 9px;border-radius:3px;background:#FFF1EE;border:1px solid #FFCFC4;
+  font-family:var(--ui);font-size:11.5px;line-height:1.5;color:#8C2A18}
+.insp-bad code{font-family:var(--mono);font-size:11px;background:#FFE2DB;padding:1px 4px;border-radius:2px}
+.insp-ok{margin-top:5px;font-family:var(--ui);font-size:11.5px;color:#3F7D5E}
+.mail{
+  font-family:var(--mail);font-size:14.5px;line-height:1.62;color:#2A333D;
+  padding:20px 26px 28px;margin-top:18px;border-top:1px solid var(--pline);
+}
+.mail p{margin:0 0 13px}
+.mail ul{margin:0 0 13px;padding-left:22px}
+.mail li{margin-bottom:5px}
+.mail strong{color:#161D24}
+.mail a.lnk{color:var(--bbrand,#1A73E8);text-decoration:underline;cursor:pointer}
+.mail a.btn{
+  display:inline-block;background:var(--bbrand,#1A73E8);color:#fff;text-decoration:none;
+  padding:11px 22px;border-radius:4px;font-weight:700;font-size:14px;margin:4px 0 8px;cursor:pointer;
+}
+.mail a.btn:hover{filter:brightness(1.08)}
+.mail .sig{color:var(--pdim);font-size:13px}
+
+/* ---------- forensic markup ---------- */
+.mk{position:relative;border-radius:2px;padding:0 1px}
+.mk.flagged{box-shadow:inset 0 -.62em 0 rgba(255,178,36,.42)}
+.mk.green{box-shadow:inset 0 -.62em 0 rgba(40,195,135,.34)}
+.mk.blk{display:inline-block;box-shadow:none;outline:2px dashed rgba(255,178,36,.85);outline-offset:4px;border-radius:5px}
+.mk.blk.green{outline-color:rgba(40,195,135,.85)}
+.mk::after{
+  content:attr(data-n);position:absolute;top:-9px;right:-11px;
+  width:17px;height:17px;border-radius:50%;background:var(--flag);color:#231700;
+  font:750 10px/17px var(--ui);text-align:center;letter-spacing:0;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.mk.green::after{background:var(--safe);color:#032117}
+.mk.pulse{box-shadow:inset 0 -.62em 0 rgba(255,178,36,.85)}
+.mk.green.pulse{box-shadow:inset 0 -.62em 0 rgba(40,195,135,.8)}
+.mk.blk.pulse{box-shadow:none;outline-style:solid}
+.reveal .mk{animation:mkin .34s cubic-bezier(.2,.9,.3,1) backwards}
+@keyframes mkin{from{box-shadow:inset 0 -.62em 0 rgba(255,178,36,0);opacity:.55}}
+
+/* ---------- findings ---------- */
+.findings{margin:26px 0 0;border:1px solid var(--line);border-radius:7px;background:var(--ink2);overflow:hidden}
+.f-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.f-head h3{margin:0;font-size:13px;font-weight:680;letter-spacing:-.005em}
+.f-head .badge{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px}
+.badge.phish{background:rgba(255,92,69,.15);color:var(--hot)}
+.badge.legit{background:rgba(40,195,135,.15);color:var(--safe)}
+.finding{
+  display:grid;grid-template-columns:20px 1fr;gap:13px;padding:14px 18px;
+  border-top:1px solid var(--line);cursor:default;
+}
+.finding:first-of-type{border-top:0}
+.finding:hover{background:var(--ink3)}
+.fnum{
+  width:20px;height:20px;border-radius:50%;background:var(--flag);color:#231700;
+  font-size:10.5px;font-weight:750;display:grid;place-items:center;margin-top:1px;
+}
+.finding.green .fnum{background:var(--safe);color:#032117}
+.f-label{font-size:13.5px;font-weight:650;margin-bottom:6px;letter-spacing:-.005em}
+.f-ev{
+  display:inline-block;font-family:var(--mono);font-size:11.5px;
+  background:rgba(255,178,36,.09);color:var(--flag);border:1px solid rgba(255,178,36,.2);
+  padding:2px 7px;border-radius:3px;margin-bottom:7px;word-break:break-all;max-width:100%;
+}
+.finding.green .f-ev{background:rgba(40,195,135,.09);color:var(--safe);border-color:rgba(40,195,135,.2)}
+.f-exp{font-size:13px;color:var(--dim);line-height:1.6}
+.f-dest{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line2)}
+.f-dest .dl{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);flex:none}
+.f-dest .du{font-family:var(--mono);font-size:11.5px;color:var(--hot);word-break:break-all}
+.f-puny{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-top:9px;padding:8px 10px;border-radius:4px;background:rgba(255,92,69,.07);border:1px solid rgba(255,92,69,.18)}
+.f-puny .pl{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--hot);flex:none}
+.f-puny .pu{font-family:var(--mono);font-size:11.5px;color:#FFCFC7;word-break:break-all}
+.finding.green .f-dest .du{color:var(--safe)}
+.takeaway{display:flex;gap:11px;padding:15px 18px;border-top:1px solid var(--line);background:var(--ink3);font-size:13px;line-height:1.55}
+.takeaway .tl{color:var(--flag);flex:none;font-weight:700}
+
+.next{display:flex;gap:10px;align-items:center;margin:20px 0 0;flex-wrap:wrap}
+.pbtn{
+  background:var(--flag);color:#231700;border:0;padding:11px 20px;border-radius:5px;
+  font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:-.005em;
+}
+.pbtn:hover{filter:brightness(1.07)}
+.pbtn.alt{background:var(--ink3);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+.pbtn.alt:hover{background:#28323F;filter:none}
+
+/* ---------- verdict bar ---------- */
+.verdict{
+  position:sticky;bottom:0;z-index:20;margin-top:26px;padding:20px 0 22px;
+  background:linear-gradient(to top,var(--ink) 58%,rgba(15,20,26,0));
+  display:flex;gap:11px;align-items:center;justify-content:center;flex-wrap:wrap;
+}
+.verdict .q{font-size:12.5px;color:var(--dim);margin-right:4px}
+.vbtn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:6px;
+  font-size:14px;font-weight:680;cursor:pointer;border:1px solid;background:var(--ink2);
+  transition:transform .13s,background .13s;
+}
+.vbtn:hover{transform:translateY(-1px)}
+.vbtn.phish{border-color:rgba(255,92,69,.4);color:#FFB0A3}
+.vbtn.phish:hover{background:rgba(255,92,69,.14);border-color:var(--hot)}
+.vbtn.legit{border-color:rgba(40,195,135,.4);color:#9FE9CB}
+.vbtn.legit:hover{background:rgba(40,195,135,.14);border-color:var(--safe)}
+.kbd{font-family:var(--mono);font-size:10px;opacity:.6;border:1px solid currentColor;border-radius:3px;padding:0 4px;line-height:15px}
+
+.empty{display:grid;place-items:center;height:100%;padding:40px;text-align:center;color:var(--dim2)}
+.empty p{max-width:34ch;font-size:13.5px;line-height:1.6}
+
+/* ---------- debrief ---------- */
+.debrief{max-width:800px;margin:0 auto;padding:46px 26px 70px}
+.debrief h1{font-size:clamp(26px,4vw,38px);letter-spacing:-.03em;font-weight:760;margin:0 0 12px;line-height:1.08}
+.debrief .sub{color:var(--dim);font-size:15px;margin:0 0 34px;max-width:58ch;line-height:1.6}
+.dpoints{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:32px}
+.dpoints .dh{padding:13px 18px;background:var(--ink2);border-bottom:1px solid var(--line)}
+.dpoint{display:grid;grid-template-columns:16px 1fr;gap:13px;padding:13px 18px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.6;color:var(--text)}
+.dpoint:first-of-type{border-top:0}
+.dpoint .dk{color:var(--flag);font-weight:700;line-height:1.45}
+.recap{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:30px}
+.recap .dh{padding:13px 18px;background:var(--ink2);border-bottom:1px solid var(--line)}
+.rrow{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:start;padding:13px 18px;border-top:1px solid var(--line)}
+.rrow:first-of-type{border-top:0}
+.rmark{font-size:13px;line-height:1.5}
+.rmark.ok{color:var(--safe)}
+.rmark.no{color:var(--hot)}
+.rsub{display:block;font-size:13px;font-weight:600;margin-bottom:3px;letter-spacing:-.005em}
+.rtake{display:block;font-size:12.5px;color:var(--dim);line-height:1.55}
+.rtag{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:3px 7px;border-radius:3px;white-space:nowrap;margin-top:1px}
+.rtag.phish{background:rgba(255,92,69,.14);color:var(--hot)}
+.rtag.legit{background:rgba(40,195,135,.14);color:var(--safe)}
+
+/* ---------- status bar (true link destination) ---------- */
+.statusbar{
+  position:fixed;left:0;bottom:0;z-index:90;max-width:min(74vw,760px);
+  display:flex;align-items:center;gap:9px;
+  background:#0A0E12;border:1px solid var(--line2);border-left:0;border-bottom:0;
+  border-radius:0 6px 0 0;padding:8px 14px 8px 12px;box-shadow:0 -3px 18px rgba(0,0,0,.5);
+}
+.statusbar .sb-l{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);flex:none}
+.statusbar .sb-u{font-family:var(--mono);font-size:12px;color:var(--flag);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:95;
+  background:#0A0E12;border:1px solid var(--line2);border-radius:6px;padding:10px 16px;
+  font-size:12.5px;color:var(--dim);box-shadow:0 8px 30px rgba(0,0,0,.6);
+}
+.toast b{color:var(--flag);font-weight:650}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .split{grid-template-columns:1fr}
+  .list{border-right:0;border-bottom:1px solid var(--line)}
+  body[data-view="mail"] .list{display:none}
+  body:not([data-view="mail"]) .pane{display:none}
+  .split{height:auto;min-height:calc(100vh - var(--rail))}
+  .pane-inner{padding:0 14px 20px}
+  .sheet-top{padding:18px 17px 0}
+  .mail{padding:18px 17px 24px}
+  .rail{gap:10px;padding:0 11px}
+  .rail .counter,.rail .pips{display:none}
+  .sim{font-size:8.5px;letter-spacing:.1em;padding:3px 6px}
+  .start{padding:38px 18px 60px}
+  .statusbar{max-width:100vw;width:100%;border-radius:0;border-right:0}
+  .tab{min-width:25px;height:26px;padding:0 5px;font-size:11px}
+  .tabs{gap:2px}
+  .rail [data-reset]{display:none}
+  .mark{padding:4px 2px}
+}
+.backbtn{display:none}
+@media (max-width:900px){.backbtn{display:inline-flex;align-items:center;gap:6px}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="statusbar" class="statusbar" hidden><span class="sb-l">Really goes to</span><span class="sb-u" id="sburl"></span></div>
+<div id="toast" class="toast" hidden></div>
+<script>
+/* ============================================================
+   Data — generated level content is injected here.
+   ============================================================ */
+const LEVELS = /*__DATA__*/[{"level": 1, "title": "Obvious", "intro": "Welcome to your first shift on the Northwind Trading inbox, Jordan. Four of these five messages are crude fakes — wrong sender domains, mangled spelling and threats designed to make you panic — but one is completely real, so read before you click.", "debriefPoints": ["Judge the sender's address, never the display name: \"PayPal Service Team\" wrote from a gmail.com mailbox and \"Northwind IT Helpdesk\" from outlook-mail-services.net. Free mail and invented domains (.info, .xyz, .online) are not how a bank, a retailer or your own IT department writes to you.", "Reply-To is a second address the sender picks for himself — the Netflix fake sent replies to netflixhelpdesk2024@yahoo.com, which is the scammer's real inbox.", "\"Dear Valued Customer\", \"Dear User\", \"Dear Employee\", \"Dear Customer\" — a nameless greeting means a mass blast. The one genuine message used your name and listed an order only Amazon could know about.", "Typos, ALL-CAPS shouting and manufactured countdowns ('24 HOURS', 'EXPIRE TODAY', profiles 'DELETE permanently', suspension and legal action) exist to stop you thinking. Real services pause your billing and wait.", "The buttons here were commands, not addresses — \"VERIFY MY PASSWORD HERE\", \"UPDATE PAYMENT DETAILS\". Hovering exposed the truth: a raw IP address (192.241.88.14) or a .php login page on the same fake domain as the sender, never the brand's own site.", "Nothing legitimate asks for your existing password or card details by email, and closing off your escape routes ('do not reply, the helpdesk phone line is closed tonight') is itself the tell. Real mail is boring — it confirms something you already did and asks you for nothing."], "emails": [{"id": "l1-paypal", "brand": "PayPal", "brandKey": "paypal", "fromName": "PayPal Service Team", "fromAddress": "paypal.secure.team93@gmail.com", "replyTo": null, "subject": "URGENT!! You'r PayPal Acount Has Been LIMITED !!!", "date": "Aug 28, 3:41 AM", "preview": "We have detect unusual activity on you'r account and it has been limited...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear Valued Customer<\/span>,<\/p><p>We have <span class='tell' data-tell='t2'>detect a unusual activity<\/span> on you'r PayPal acount from a unknow device. For you'r protection we has temporarily limited the acount.<\/p><p>You must confirm you'r informations <span class='tell' data-tell='t3'>within 24 HOURS<\/span> or the acount will be <strong>PERMANENTLY CLOSED<\/strong> and all funds will be hold.<\/p><p><a class='btn' data-href='http://paypal-secure-verify.gq/login/update.php' data-tell='t4'>CONFIRM MY ACCOUNT NOW !!<\/a><\/p><p>Thank you for you'r cooperation,<br>PayPal Security Departement<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Sent from a free Gmail account", "evidence": "paypal.secure.team93@gmail.com", "explanation": "PayPal sends from paypal.com. A billion-dollar payment company does not email you from a personal Gmail address with a number stuck on the end."}, {"anchor": "subject", "label": "ALL CAPS, typos and shouting punctuation", "evidence": "URGENT!! You'r PayPal Acount Has Been LIMITED !!!", "explanation": "\"You'r\" and \"Acount\" are misspellings, and stacked exclamation marks are pure panic-bait. Real corporate mail is proofread."}, {"anchor": "t1", "label": "Generic greeting", "evidence": "Dear Valued Customer", "explanation": "PayPal knows your name because it holds your account. A generic greeting means this went to thousands of addresses at once."}, {"anchor": "t2", "label": "Broken grammar throughout", "evidence": "detect a unusual activity", "explanation": "Wrong verb tense and article errors show the sender isn't a professional communications team. Bad English is one of the cheapest tells to spot."}, {"anchor": "t3", "label": "Artificial 24-hour deadline", "evidence": "within 24 HOURS", "explanation": "Countdown threats are engineered to stop you checking. Genuine account reviews give you normal time and never threaten to seize your money."}, {"anchor": "t4", "label": "Link goes nowhere near PayPal", "evidence": "paypal-secure-verify.gq/login/update.php", "explanation": "Hovering reveals a throwaway .gq domain, not paypal.com. Putting the brand name in front of a hyphen doesn't make a domain genuine."}], "takeaway": "A payment company emailing you from Gmail with typos and a 24-hour threat is a scam, every single time."}, {"id": "l1-meridianbank", "brand": "Meridian Bank", "brandKey": "meridianbank", "fromName": "Meridian Bank Alerts", "fromAddress": "alerts@meridian-bank-online-secure.info", "replyTo": null, "subject": "Your Account Will Be SUSPENDED Today - Action Required !!", "date": "Aug 28, 5:07 AM", "preview": "Dear Customer, we was unable to verify your recent transaction of $4,280.00...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear Customer<\/span>,<\/p><p>Our system <span class='tell' data-tell='t2'>was unable to verifying<\/span> a transaction of <strong>$4,280.00<\/strong> made from your Meridian Bank account today.<\/p><p>If this payment was not authorise by you, you must login immediately and cancel it. <span class='tell' data-tell='t3'>Failure to respond today will result in your account being SUSPENDED and reported to the legal department.<\/span><\/p><p><a class='btn' data-href='http://192.241.88.14/meridian/secure-login.html' data-tell='t4'>CANCEL THIS TRANSACTION<\/a><\/p><p>Regard,<br>Meridian Bank Fraud Team<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Made-up domain stuffed with trust words", "evidence": "meridian-bank-online-secure.info", "explanation": "Meridian Bank's real domain is meridianbank.com. Piling words like \"online\" and \"secure\" onto a cheap .info domain is a scammer trying to look official."}, {"anchor": "t1", "label": "Your bank doesn't call you \"Customer\"", "evidence": "Dear Customer", "explanation": "Your bank has your legal name on file and uses it. A nameless greeting is the strongest sign this was blasted to a mailing list."}, {"anchor": "t2", "label": "Grammatical errors", "evidence": "was unable to verifying", "explanation": "Real bank alerts are templated and reviewed by lawyers. Mangled verb forms mean nobody at a bank wrote this."}, {"anchor": "t3", "label": "Threat of suspension and legal action", "evidence": "Failure to respond today will result in your account being SUSPENDED and reported to the legal department.", "explanation": "Fear plus a same-day deadline is the whole attack. Banks freeze suspicious payments themselves and ask you to call the number on your card."}, {"anchor": "t4", "label": "Link is a raw IP address", "evidence": "192.241.88.14/meridian/secure-login.html", "explanation": "A bare IP address instead of a domain name is something no real bank ever uses. It's usually a compromised server hosting a fake login page."}], "takeaway": "Never log in from an alarming email — open your banking app yourself or call the number printed on your card."}, {"id": "l1-netflix", "brand": "Netflix", "brandKey": "netflix", "fromName": "Netflix Billing", "fromAddress": "billing-update@netflix-payments-center.xyz", "replyTo": "netflixhelpdesk2024@yahoo.com", "subject": "Payement Declined - Update you card to avoid cancelation", "date": "Aug 27, 11:52 PM", "preview": "Dear User, we are sorry to inform that we could not to process your last payement...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear User<\/span>,<\/p><p>We are sorry to inform that we <span class='tell' data-tell='t2'>could not to process your last payement<\/span> and your membership is now ON HOLD.<\/p><p>Please update you billing informations so you can continue enjoy Netflix. <strong><span class='tell' data-tell='t3'>If we do not receive a responce in 48 hours your account and all profiles will be DELETE permanently.<\/span><\/strong><\/p><p><a class='btn' data-href='http://netflix-payments-center.xyz/billing/card-update.php' data-tell='t4'>UPDATE PAYMENT DETAILS<\/a><\/p><p>Sincerly,<br>The Netflix Team<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Not a netflix.com address", "evidence": "netflix-payments-center.xyz", "explanation": "Netflix mail comes from netflix.com. A .xyz domain with the brand name bolted on is an impostor no matter how familiar the wording feels."}, {"anchor": "replyto", "label": "Replies go to a Yahoo inbox", "evidence": "netflixhelpdesk2024@yahoo.com", "explanation": "A corporate sender whose replies land in a free Yahoo account is a dead giveaway — that's the human scammer's actual mailbox."}, {"anchor": "t1", "label": "Generic greeting", "evidence": "Dear User", "explanation": "Netflix greets you by your profile name. \"Dear User\" means the sender has no idea who you are."}, {"anchor": "t2", "label": "Multiple spelling and grammar errors", "evidence": "could not to process your last payement", "explanation": "\"Payement\", \"responce\", \"Sincerly\" — a streaming giant proofreads its billing mail. A pile of typos means an amateur wrote it."}, {"anchor": "t3", "label": "Threat to delete your account in 48 hours", "evidence": "If we do not receive a responce in 48 hours your account and all profiles will be DELETE permanently.", "explanation": "A countdown to permanent deletion is pure panic-bait. When a real card payment fails, Netflix simply pauses billing, keeps your profiles, and waits for you to update it."}, {"anchor": "t4", "label": "Button leads to the attacker's own domain", "evidence": "netflix-payments-center.xyz/billing/card-update.php", "explanation": "Hovering shows a .php page on the same fake .xyz domain as the sender, not netflix.com. That page exists to capture the card number you type into it."}], "takeaway": "If a subscription claims your payment failed, close the email and check your account by typing the site address yourself."}, {"id": "l1-it-helpdesk", "brand": "Northwind IT Helpdesk", "brandKey": "it-helpdesk", "fromName": "Northwind IT Helpdesk", "fromAddress": "northwind.it.support@outlook-mail-services.net", "replyTo": null, "subject": "ATTENTION ALL STAFF: Your Email Password Expire TODAY", "date": "Aug 28, 6:18 AM", "preview": "Dear Employee, The IT departement is upgrading all mailbox tonight. Our records show...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear Employee<\/span>,<\/p><p>The IT departement is upgrading all mailbox tonight. Our records show your password <strong>EXPIRE TODAY<\/strong>.<\/p><p><span class='tell' data-tell='t2'>Verify your current password now or you will lose acess to your email and all company file.<\/span><\/p><p><a class='btn' data-href='http://webmail-northwind-verify.online/staff/login.php' data-tell='t3'>VERIFY MY PASSWORD HERE<\/a><\/p><p><span class='tell' data-tell='t4'>Do not reply to this message. The helpdesk phone line is closed during tonight's migration.<\/span><\/p><p>Thank You,<br>IT Helpdesk Adminstrator<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Internal mail from an external domain", "evidence": "northwind.it.support@outlook-mail-services.net", "explanation": "Your real helpdesk is helpdesk@northwind-trading.com. Anything claiming to be internal IT from an outside domain is fake by definition."}, {"anchor": "t1", "label": "Your own IT team doesn't say \"Dear Employee\"", "evidence": "Dear Employee", "explanation": "Colleagues who work at your company have your name in the directory. A nameless internal email is a stranger pretending to be a coworker."}, {"anchor": "t2", "label": "Asks you to hand over your password", "evidence": "Verify your current password now or you will lose acess to your email and all company file.", "explanation": "No legitimate IT department ever needs your existing password — they can reset it without it. Any request to \"verify\" a password is a credential theft attempt."}, {"anchor": "t3", "label": "Login link on an unknown outside domain", "evidence": "webmail-northwind-verify.online/staff/login.php", "explanation": "A real internal portal lives on your company's domain. This .online lookalike just hosts a fake sign-in form."}, {"anchor": "t4", "label": "Closes every channel you could check on", "evidence": "Do not reply to this message. The helpdesk phone line is closed during tonight's migration.", "explanation": "Blocking replies and claiming the phone line is down removes the one step that would expose the fake. Cutting you off from contacting IT is itself the red flag — pick up the phone anyway."}], "takeaway": "IT never asks for your current password — if a \"helpdesk\" email pressures you to enter it, report it and call the helpdesk directly."}, {"id": "l1-amazon", "brand": "Amazon", "brandKey": "amazon", "fromName": "Amazon.com", "fromAddress": "auto-confirm@amazon.com", "replyTo": null, "subject": "Your Amazon.com order #112-4480219-6635417", "date": "Aug 27, 4:26 PM", "preview": "Hello Jordan, Thank you for your order. We'll send a confirmation when your item ships.", "bodyHtml": "<p><span class='tell' data-tell='t1'>Hello Jordan,<\/span><\/p><p>Thank you for your order. We'll send a confirmation when your item ships.<\/p><p><strong>Arriving Friday, August 28<\/strong><br>Ships to: Jordan Rivera<\/p><ul><li>Anker USB-C to USB-C Cable, 6ft, 2-pack — $16.99<\/li><li>Logitech MX Master 3S Wireless Mouse — $99.99<\/li><\/ul><p>Order total: <strong>$126.19<\/strong><\/p><p><a class='lnk' data-href='https://www.amazon.com/gp/css/order-history' data-tell='t2'>View or manage order<\/a><\/p><p><span class='tell' data-tell='t3'>This message was sent to you because you placed an order on Amazon.com. We will never ask for your password or payment details by email.<\/span><\/p><p>Amazon.com Services LLC, 410 Terry Ave North, Seattle, WA 98109<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Genuine amazon.com domain", "evidence": "auto-confirm@amazon.com", "explanation": "The address ends in amazon.com with nothing appended — no hyphens, no extra words, no unusual top-level domain. That is the real thing."}, {"anchor": "t1", "label": "Addressed by name with real order detail", "evidence": "Hello Jordan,", "explanation": "It uses your first name and lists specific items, prices and an order number — details only the real retailer would hold."}, {"anchor": "t2", "label": "Link points to the real amazon.com", "evidence": "https://www.amazon.com/gp/css/order-history", "explanation": "Hovering shows a genuine amazon.com path. Note it goes to your order history rather than a login form demanding credentials."}, {"anchor": "t3", "label": "No urgency and nothing is asked of you", "evidence": "We will never ask for your password or payment details by email.", "explanation": "There's no deadline, threat, or request for information — it just confirms something you already did. Real transactional mail is calm and boring."}], "takeaway": "Legit mail confirms an action you took, uses your name, and asks for nothing — don't panic-flag ordinary receipts."}]}, {"level": 2, "title": "Lookalike Domains", "intro": "The obvious junk is gone: these read like real corporate mail, with clean grammar, correct logos and believable stories. The lie has moved into the sender's domain — one swapped character, or one extra word bolted onto a brand name.", "debriefPoints": ["Read a web or email domain right-to-left: the owner is the last two labels before the first single slash. amaz0n-support.com and paypa1-billing.com belong to whoever registered them; accountprotection.microsoft.com ends at microsoft.com, so it really is Microsoft's.", "Two flavours of lookalike appeared here — digit-for-letter swaps (paypa1, amaz0n, micros0ft) that survive a fast glance, and hyphenated add-on words: ups.com is UPS, but ups-parcel-services.com is a domain anyone can buy.", "The display name and the Reply-To header are both chosen by the sender — the 'Microsoft' notice routed replies to ms-verify-desk.com. Link text lies just as easily: the PayPal fake displayed www.paypal.com over a link to paypa1-billing.com. Only the destination counts.", "A phone number printed inside a suspicious email reaches whoever sent it, not the brand. The fake $2,499 order offered a 'billing desk' number precisely so you would call it — use the number on your card, your statement, or the company's own site.", "Clean writing, a real logo and a perfect unsubscribe footer are not safety signals: phishing kits clone genuine templates footer and all. Judge the domain and the ask, not the polish.", "A genuine message can still be alarming. The Microsoft sign-in alert and the LinkedIn recruiter InMail came from exact-match domains, asked for nothing, and were both waiting for you if you opened the app yourself — that independent check is free and settles it."], "emails": [{"id": "l2-paypal", "brand": "PayPal", "brandKey": "paypal", "fromName": "PayPal Service", "fromAddress": "service@paypa1-billing.com", "replyTo": null, "subject": "Your automatic payment to Aurora Fitness could not be processed", "date": "Aug 28, 8:12 AM", "preview": "We were unable to charge your linked card for your recurring payment of $54.99...", "bodyHtml": "<p>Hello Jordan,<\/p><p>We were unable to process your recurring payment of <strong>$54.99<\/strong> to Aurora Fitness on 27 August. The card linked to your PayPal account was declined by the issuing bank.<\/p><p>To avoid an interruption to your subscription, please update your payment method. If no action is taken <span class='tell' data-tell='t1'>within 48 hours<\/span>, the automatic payment agreement will be cancelled and a reinstatement fee may apply.<\/p><p><a class='btn' data-href='https://paypa1-billing.com/account/wallet/update' data-tell='t2'>Update Payment Method<\/a><\/p><p>You can also review this transaction at <a class='lnk' data-href='https://paypa1-billing.com/signin' data-tell='t3'>www.paypal.com/signin<\/a>.<\/p><p>Sincerely,<br>PayPal Billing Services<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Digit swapped into the brand name", "evidence": "service@paypa1-billing.com", "explanation": "The 'l' in paypal has been replaced with the digit 1, and '-billing' bolted on. PayPal sends from paypal.com and nothing else."}, {"anchor": "t1", "label": "Deadline manufactured around a fee", "evidence": "within 48 hours", "explanation": "A short clock plus a threatened 'reinstatement fee' is pressure engineering. A genuinely failed payment simply retries; nothing expires in two days."}, {"anchor": "t2", "label": "Button goes to the typosquat domain", "evidence": "paypa1-billing.com/account/wallet/update", "explanation": "Hovering shows the same fake domain as the sender. Real PayPal buttons resolve to paypal.com."}, {"anchor": "t3", "label": "Link text lies about the destination", "evidence": "www.paypal.com/signin", "explanation": "The visible text reads paypal.com but the link actually loads paypa1-billing.com. Never trust displayed link text — check the hover target."}], "takeaway": "A single swapped character (paypa1 vs paypal) is the whole scam — read brand names in addresses letter by letter."}, {"id": "l2-microsoft", "brand": "Microsoft 365", "brandKey": "microsoft", "fromName": "Microsoft 365 Account Team", "fromAddress": "no-reply@micros0ft-security.net", "replyTo": "support@ms-verify-desk.com", "subject": "Action required: your Microsoft 365 password expires today", "date": "Aug 28, 10:47 AM", "preview": "Your password for j.rivera@northwind-trading.com is scheduled to expire in 6 hours...", "bodyHtml": "<p>Dear Jordan Rivera,<\/p><p>The password for <strong>j.rivera@northwind-trading.com<\/strong> is scheduled to expire today at 5:00 PM. Users who do not update their credentials will lose access to Outlook, Teams and SharePoint until an administrator restores the account.<\/p><p>Select the option below to keep your current password for a further 90 days.<\/p><p><a class='btn' data-href='https://micros0ft-security.net/o365/keep-password' data-tell='t1'>Keep My Password<\/a><\/p><p><span class='tell' data-tell='t2'>Please do not forward this notice to your IT department, as duplicate requests will lock the mailbox.<\/span><\/p><p>Microsoft 365 Identity Services<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Zero-for-o lookalike domain", "evidence": "no-reply@micros0ft-security.net", "explanation": "'micros0ft' uses a zero in place of the letter o, and the real domain here is micros0ft-security.net — Microsoft mail comes from microsoft.com or accountprotection.microsoft.com."}, {"anchor": "replyto", "label": "Reply-to is a third, unrelated domain", "evidence": "support@ms-verify-desk.com", "explanation": "The From and Reply-To point at two different attacker domains. Legitimate senders reply to their own domain."}, {"anchor": "t1", "label": "Credential-harvest button", "evidence": "micros0ft-security.net/o365/keep-password", "explanation": "Microsoft never offers a 'keep my password' link by email. Password changes happen in the portal you navigate to yourself."}, {"anchor": "t2", "label": "Discourages contacting IT", "evidence": "Please do not forward this notice to your IT department", "explanation": "No real system warns you against involving your own helpdesk. Isolating the victim from anyone who could check the mail is a pure attacker move."}], "takeaway": "Password-expiry mail is the classic lure — go to the portal yourself and never click a 'keep my password' link."}, {"id": "l2-amazon", "brand": "Amazon", "brandKey": "amazon", "fromName": "Amazon.com", "fromAddress": "orders@amaz0n-support.com", "replyTo": null, "subject": "Order #114-8827391 confirmed — Apple MacBook Pro 16\" ($2,499.00)", "date": "Aug 27, 11:58 PM", "preview": "Hello, Thank you for your order. Your Apple MacBook Pro 16\" ($2,499.00) is being prepared for delivery...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Hello,<\/span><\/p><p>Thank you for your order. Your <strong>Apple MacBook Pro 16\"<\/strong> ($2,499.00) is being prepared for delivery to an address in Bridgeport, CT.<\/p><p><span class='tell' data-tell='t2'>If you did not authorize this purchase, cancel it immediately using the link below — orders cannot be canceled once they enter dispatch.<\/span><\/p><p><a class='btn' data-href='https://amaz0n-support.com/cancel-order/114-8827391' data-tell='t3'>Cancel This Order<\/a><\/p><p>Alternatively call our billing desk on <span class='tell' data-tell='t4'>+1 (888) 402-7719<\/span> and quote your order number.<\/p><p>Amazon Customer Service<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Lookalike Amazon domain", "evidence": "orders@amaz0n-support.com", "explanation": "A zero replaces the o in amazon and '-support' is appended. The registered owner is amaz0n-support.com, not Amazon — real order mail comes from amazon.com addresses."}, {"anchor": "t1", "label": "Generic greeting on a supposedly personal order", "evidence": "Hello,", "explanation": "A retailer that just took a $2,499 order from you has your name on the account and uses it. A nameless greeting means the sender is blasting this to a list and does not know who you are."}, {"anchor": "t2", "label": "Panic lure over a purchase you never made", "evidence": "If you did not authorize this purchase, cancel it immediately", "explanation": "A big surprise charge plus a closing dispatch window is designed to make you click before you think. Check your real order history in the Amazon app instead — if there is no such order, there is nothing to cancel."}, {"anchor": "t3", "label": "Cancel button leads to the fake domain", "evidence": "amaz0n-support.com/cancel-order/114-8827391", "explanation": "The 'cancel' page is the phishing page — it will ask for your Amazon login or card details to 'verify' the refund. Hovering shows the same counterfeit host as the sender."}, {"anchor": "t4", "label": "Callback number planted in the email", "evidence": "+1 (888) 402-7719", "explanation": "A phone number printed inside a suspicious email reaches whoever sent it, not the brand. This is callback phishing: the 'agent' talks you through handing over card data or installing remote-access software. Only ever dial the number on your card, statement or the company's own site."}], "takeaway": "Never use the cancel link or the phone number inside a surprise order email — open the retailer's own app and check your orders."}, {"id": "l2-dhl", "brand": "UPS", "brandKey": "ups", "fromName": "UPS Delivery Services", "fromAddress": "notify@ups-parcel-services.com", "replyTo": null, "subject": "Delivery on hold: we could not verify the address for tracking 1Z8842W7039118", "date": "Aug 28, 7:34 AM", "preview": "Dear Customer, UPS was unable to verify the delivery address for tracking number 1Z8842W7039118...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear Customer<\/span>,<\/p><p>UPS was unable to verify the delivery address for tracking number <strong>1Z8842W7039118<\/strong>, addressed to Northwind Trading Co. The package is on hold at our Secaucus, NJ sorting facility.<\/p><p>To release it for delivery, <span class='tell' data-tell='t2'>confirm the recipient's full name, delivery address and a contact phone number<\/span> using the link below. <span class='tell' data-tell='t3'>Packages not confirmed within 72 hours are returned to sender and the shipping charge is forfeited.<\/span><\/p><p><a class='btn' data-href='https://ups-parcel-services.com/track/address-confirm?id=1Z8842W7039118' data-tell='t4'>Confirm Delivery Address<\/a><\/p><p>Thank you for choosing UPS.<br>UPS Delivery Support<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Hyphen-extended lookalike of the carrier's domain", "evidence": "notify@ups-parcel-services.com", "explanation": "Read the domain right-to-left: the registered owner is ups-parcel-services.com, a domain anyone can buy. UPS sends from ups.com — bolting extra words onto a brand name with hyphens does not make it the brand."}, {"anchor": "t1", "label": "Generic greeting from a carrier holding your parcel", "evidence": "Dear Customer", "explanation": "A courier that genuinely has a package for you has the recipient name printed on the label. A nameless greeting means this was blasted to a mailing list in the hope that someone is expecting a delivery."}, {"anchor": "t2", "label": "Asks for details the real carrier already holds", "evidence": "confirm the recipient's full name, delivery address and a contact phone number", "explanation": "The shipper wrote that information on the label before the parcel entered the network. The 'confirmation' form exists to collect a real name, address and phone number for the attacker, and it will ask for more on the next page."}, {"anchor": "t3", "label": "Return-to-sender countdown with a cost attached", "evidence": "Packages not confirmed within 72 hours are returned to sender and the shipping charge is forfeited.", "explanation": "A short clock plus a threatened loss is pressure engineering. A real carrier that cannot deliver leaves a physical notice and holds the package for several days without demanding anything by email."}, {"anchor": "t4", "label": "Button lands on the lookalike domain", "evidence": "ups-parcel-services.com/track/address-confirm", "explanation": "Hovering shows the same impostor host as the sender, not ups.com. If a delivery genuinely stalls, type the tracking number into the carrier's own site yourself."}], "takeaway": "Hyphenated add-on words are the trick: ups.com is UPS, but ups-parcel-services.com belongs to whoever registered it."}, {"id": "l2-microsoft-legit", "brand": "Microsoft account", "brandKey": "microsoft", "fromName": "Microsoft account team", "fromAddress": "account-security-noreply@accountprotection.microsoft.com", "replyTo": null, "subject": "New sign-in to your Microsoft account", "date": "Aug 28, 9:03 AM", "preview": "We noticed a new sign-in to your Microsoft account from a Windows device in Chicago...", "bodyHtml": "<p>Jordan Rivera,<\/p><p>Your Microsoft account was signed in to from a new device.<\/p><ul><li>Country/region: United States<\/li><li>IP address: 74.12.••.••<\/li><li>Platform: Windows<\/li><li>Browser: Edge<\/li><\/ul><p><span class='tell' data-tell='t1'>If this was you, you don't need to do anything.<\/span> If you don't recognise this activity, <span class='tell' data-tell='t2'>go to your Microsoft account security page and review your recent activity<\/span>.<\/p><p><a class='lnk' data-href='https://account.microsoft.com/security' data-tell='t3'>account.microsoft.com/security<\/a><\/p><p>Thanks,<br>The Microsoft account team<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Genuine Microsoft security domain", "evidence": "account-security-noreply@accountprotection.microsoft.com", "explanation": "accountprotection.microsoft.com is a real Microsoft-owned subdomain — the part before the final .com is microsoft, with no digits or hyphenated add-ons."}, {"anchor": "t1", "label": "No pressure, no deadline", "evidence": "If this was you, you don't need to do anything.", "explanation": "Real alerts are informational. Phishing needs you to act; genuine notices are happy for you to ignore them."}, {"anchor": "t2", "label": "Tells you to navigate yourself", "evidence": "go to your Microsoft account security page and review your recent activity", "explanation": "Directing you to the site rather than demanding a click is the opposite of credential harvesting."}, {"anchor": "t3", "label": "Link matches the visible text and the brand", "evidence": "account.microsoft.com/security", "explanation": "Displayed text and hover destination are identical and sit on microsoft.com. Nothing to reset, nothing to confirm — just a page to look at."}], "takeaway": "An alarming subject on a correct domain, with no deadline and nothing to click, is usually the real thing."}, {"id": "l2-linkedin", "brand": "LinkedIn", "brandKey": "linkedin", "fromName": "LinkedIn", "fromAddress": "messages-noreply@linkedin.com", "replyTo": null, "subject": "Priya Raghavan sent you a message about Finance Operations", "date": "Aug 27, 4:35 PM", "preview": "Priya Raghavan · Talent Partner at Calder Systems — Hi Jordan, we're hiring a Senior Finance Operations Analyst...", "bodyHtml": "<p><strong>Priya Raghavan<\/strong> · Talent Partner at Calder Systems<\/p><p>\"Hi Jordan — we're hiring a Senior Finance Operations Analyst and your background at Northwind Trading stood out. <span class='tell' data-tell='t2'>Would you be open to a short call next week? No CV, documents or account details needed at this stage — just reply here if you're interested.<\/span>\"<\/p><p><a class='btn' data-href='https://www.linkedin.com/messaging/' data-tell='t1'>Reply to Priya<\/a><\/p><p>You are receiving InMail notification emails. Manage your email preferences or unsubscribe.<\/p><p>© 2026 LinkedIn Corporation, 1000 West Maude Avenue, Sunnyvale, CA 94085<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Exact LinkedIn domain, no extras", "evidence": "messages-noreply@linkedin.com", "explanation": "The registered domain is plain linkedin.com — no hyphenated suffix, no swapped characters, nothing appended after the .com. Compare it with the 'linked-in-mail.com' style domains scammers register."}, {"anchor": "t1", "label": "Button opens the messaging inbox, not a sign-in form", "evidence": "https://www.linkedin.com/messaging/", "explanation": "The target is your own message inbox on linkedin.com. There is no credential page anywhere in this flow — and you can skip the button entirely, open the LinkedIn app yourself, and the same message will be waiting there. That check is free and settles it."}, {"anchor": "t2", "label": "Asks for nothing — the only request is a conversation", "evidence": "No CV, documents or account details needed at this stage — just reply here if you're interested.", "explanation": "Nothing here is worth stealing: no login, no file, no payment detail, no personal data, and no deadline. An attacker's whole purpose is to extract something on this click, so a message whose entire ask is 'would you talk to me' has no payload to deliver."}], "takeaway": "Recruiter mail is a favourite disguise, so judge the sender domain and what the message actually wants — the unsubscribe footer proves nothing, since phishing kits clone real templates footer and all."}]}, {"level": 3, "title": "Plausible Pretexts", "intro": "The bait now looks exactly like your Tuesday inbox: a colleague's shared spreadsheet, a quarantine digest, a parcel stuck at customs. The brand name is still sitting in the address — it just isn't the part that's registered.", "debriefPoints": ["The right-to-left rule, one level deeper: everything to the LEFT of those last two labels is a subdomain, and the domain's owner invents as many as he likes for free. In dropbox.com.file-share-secure.net and protection.outlook.com.mail-quarantine-review.net the real owners are file-share-secure.net and mail-quarantine-review.net.", "Nothing may follow the brand's .com. docs.google.com and www.fedex.com are genuine subdomains OF the real domain — brand last. Once extra labels appear after the .com, the familiar name is just decoration in front of someone else's domain.", "No file-share, quarantine portal or mailbox ever needs your work password from an email. The Dropbox lure and the fake Defender digest both demanded it; the real Google share and the real FedEx notice asked for nothing at all.", "Fabricated countdowns: a link that 'expires in 24 hours', quarantine 'permanently deleted after 24 hours' (Microsoft actually holds it about 30 days), a parcel returned in 48 hours. Real systems do not destroy your things overnight.", "Small fees and familiar names are bait. $2.99 is priced to feel too trivial to verify, and a quarantine list naming your vendor, your bank and your manager is guessable — the prize is the card number or the password, not the fee.", "Every legitimate message here could be reached without touching the email: DocuSign's Access Documents security code, 'Shared with me' in your own Drive, the tracking number typed into fedex.com. If you cannot reach the thing independently, do not trust the button."], "emails": [{"id": "l3-dropbox", "brand": "Dropbox", "brandKey": "dropbox", "fromName": "Dropbox", "fromAddress": "no-reply@dropbox.com.file-share-secure.net", "replyTo": null, "subject": "Marcus Webb shared \"Q3_Vendor_Payments_FINAL.xlsx\" with you", "date": "Aug 27, 6:52 PM", "preview": "Marcus Webb shared a folder with you on Dropbox Business. This secure link expires in 24 hours...", "bodyHtml": "<p>Hi Jordan,<\/p><p><strong>Marcus Webb<\/strong> shared a file with you on Dropbox Business.<\/p><p><em>Q3_Vendor_Payments_FINAL.xlsx<\/em> — 412 KB<\/p><p><a class='btn' data-href='https://dropbox.com.file-share-secure.net/business/view?id=8842' data-tell='t1'>View file<\/a><\/p><p><span class='tell' data-tell='t2'>To open this document you will be asked to confirm your Northwind email address and password.<\/span><\/p><p><span class='tell' data-tell='t3'>This secure link expires 24 hours after delivery.<\/span><\/p><p>Direct link: <a class='lnk' data-href='https://dropbox.com.file-share-secure.net/business/view?id=8842' data-tell='t4'>https://www.dropbox.com/scl/fi/q3-vendor-payments<\/a><\/p><p>Happy collaborating,<br>The Dropbox team<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Dropbox is only a subdomain here", "evidence": "dropbox.com.file-share-secure.net", "explanation": "Read it right-to-left: the registered domain is file-share-secure.net, and 'dropbox.com' is just a subdomain label the attacker typed in front of it. Real Dropbox mail ends in @dropbox.com with nothing after it."}, {"anchor": "t1", "label": "Button leads to the attacker's domain", "evidence": "dropbox.com.file-share-secure.net/business/view?id=8842", "explanation": "Hovering shows the same fake host as the sender. A genuine share button lands on dropbox.com or dropboxusercontent.com."}, {"anchor": "t2", "label": "Asks for your work email password", "evidence": "confirm your Northwind email address and password", "explanation": "Dropbox has no reason to want your Microsoft 365 credentials — it can't check them. Any file link that asks for a password belonging to a different service is harvesting logins."}, {"anchor": "t3", "label": "Artificial expiry on a shared file", "evidence": "This secure link expires 24 hours after delivery", "explanation": "Share links from colleagues don't self-destruct overnight. The countdown exists to stop you walking over to Marcus's desk and asking."}, {"anchor": "t4", "label": "Link text lies about the destination", "evidence": "https://www.dropbox.com/scl/fi/q3-vendor-payments", "explanation": "The visible text is a perfectly real Dropbox URL, but the underlying data-href goes somewhere else entirely. Visible link text is decoration; only the hover target is real."}], "takeaway": "A trusted brand sitting to the LEFT of the last dot is decoration — the owner of the address is always the last two labels before the first slash."}, {"id": "l3-microsoft", "brand": "Microsoft 365", "brandKey": "microsoft", "fromName": "Microsoft 365 Defender", "fromAddress": "no-reply@protection.outlook.com.mail-quarantine-review.net", "replyTo": null, "subject": "3 messages were quarantined as spam - review and release", "date": "Aug 28, 7:12 AM", "preview": "Microsoft Defender for Office 365 placed 3 messages addressed to you in quarantine between 27 and 28 August...", "bodyHtml": "<p>Hi Jordan,<\/p><p>Microsoft Defender for Office 365 placed <strong>3 messages<\/strong> addressed to j.rivera@northwind-trading.com in quarantine between 27 and 28 August. They were classified as spam and are held pending your review.<\/p><ul><li><span class='tell' data-tell='t1'>Bishop &amp; Vane Supplies — Remittance advice PO-44120<\/span><\/li><li>Meridian Bank — Your August statement is ready<\/li><li>Marcus Webb — Fwd: Q3 close checklist<\/li><\/ul><p><a class='btn' data-href='https://protection.outlook.com.mail-quarantine-review.net/quarantine/review?id=NW8842' data-tell='t2'>Review quarantined messages<\/a><\/p><p><span class='tell' data-tell='t3'>Sign in with your Northwind email password to release any message you want delivered.<\/span><\/p><p><span class='tell' data-tell='t4'>Items left in quarantine are permanently deleted after 24 hours and cannot be recovered.<\/span><\/p><p>Microsoft Defender for Office 365 — Quarantine digest<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "protection.outlook.com is only a subdomain label here", "evidence": "protection.outlook.com.mail-quarantine-review.net", "explanation": "Read it right-to-left: the registered owner is mail-quarantine-review.net, and Microsoft's real filtering host has simply been typed in front of it as a subdomain. Genuine Defender digests end at outlook.com or microsoft.com with nothing appended after."}, {"anchor": "t2", "label": "Review button lands on the attacker's registered domain", "evidence": "protection.outlook.com.mail-quarantine-review.net/quarantine/review", "explanation": "Microsoft sign-in happens on Microsoft-owned hosts such as login.microsoftonline.com or login.microsoft.com — the registrable domain always ends at microsoft.com or microsoftonline.com with nothing appended after it. Here extra labels follow the .com, so the page belongs to whoever bought mail-quarantine-review.net."}, {"anchor": "t3", "label": "Asks you to type your work password", "evidence": "Sign in with your Northwind email password to release any message", "explanation": "A real quarantine portal opens inside the Microsoft 365 session you already hold; releasing a message never requires you to re-key your password from an email. Any prompt for it is credential harvesting."}, {"anchor": "t4", "label": "Fabricated 24-hour deletion window", "evidence": "permanently deleted after 24 hours and cannot be recovered", "explanation": "Microsoft holds quarantined mail for roughly 30 days by default, and nothing vanishes overnight. The countdown exists so you click before checking with the helpdesk."}, {"anchor": "t1", "label": "Quarantine list seeded with senders you actually deal with", "evidence": "Bishop & Vane Supplies", "explanation": "Naming a real vendor, your bank and your manager makes the digest feel authentic and makes you fear you have missed something important. Sender names are trivial to guess or scrape — they are bait, not proof."}], "takeaway": "Quarantine digests are easy to fake — open the release page from your own Outlook or the Microsoft 365 portal you navigate to yourself, never from the emailed button."}, {"id": "l3-dhl", "brand": "DHL Express", "brandKey": "dhl", "fromName": "DHL Express", "fromAddress": "notice@dhl.com.parcel-redelivery-track.net", "replyTo": null, "subject": "Delivery attempt failed - customs charge of $2.99 outstanding", "date": "Aug 28, 5:26 AM", "preview": "Waybill 4423 8871 09 could not be delivered because import duties remain unpaid...", "bodyHtml": "<p><span class='tell' data-tell='t1'>Dear Customer,<\/span><\/p><p>Our courier attempted to deliver your parcel (waybill 4423 8871 09) on 27 August, but delivery could not be completed because <strong>import duties remain unpaid<\/strong>.<\/p><p><span class='tell' data-tell='t2'>An outstanding customs charge of $2.99 must be settled by card before delivery can be rescheduled.<\/span><\/p><p><a class='btn' data-href='https://dhl.com.parcel-redelivery-track.net/pay/4423887109' data-tell='t3'>Pay Fee and Reschedule Delivery<\/a><\/p><p><span class='tell' data-tell='t4'>Parcels not claimed within 48 hours are returned to the sender and shipping costs are forfeited.<\/span><\/p><p>DHL Express Customer Service<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "dhl.com is only the first label", "evidence": "dhl.com.parcel-redelivery-track.net", "explanation": "The registered domain is parcel-redelivery-track.net. Attackers buy a plausible logistics domain and then prepend the carrier's real name as a subdomain."}, {"anchor": "t1", "label": "Generic greeting on a named shipment", "evidence": "Dear Customer", "explanation": "A carrier that genuinely holds a parcel for you knows the recipient name and delivery address printed on the label."}, {"anchor": "t2", "label": "Tiny fee, card details required", "evidence": "customs charge of $2.99 must be settled by card", "explanation": "The amount is deliberately trivial so you pay rather than investigate. The target is your full card number, expiry and CVV — not the three euros."}, {"anchor": "t3", "label": "Payment page on the impostor domain", "evidence": "dhl.com.parcel-redelivery-track.net/pay/4423887109", "explanation": "Real duty payments are made through dhl.com after logging into the carrier's own portal, reached by typing the address yourself."}, {"anchor": "t4", "label": "48-hour forfeiture threat", "evidence": "returned to the sender and shipping costs are forfeited", "explanation": "Loss-framing plus a countdown is the standard pressure pattern. Carriers hold parcels for days and leave a physical card, not an emailed ultimatum."}], "takeaway": "If a delivery notice asks for money, look up the tracking number yourself on the carrier's real site — never through the link in the message."}, {"id": "l3-docusign", "brand": "DocuSign", "brandKey": "docusign", "fromName": "Bishop & Vane Supplies via DocuSign", "fromAddress": "dse_NA3@docusign.net", "replyTo": "accounts@bishopvane.com", "subject": "Please DocuSign: Bishop & Vane Supplies - Q4 Supply Agreement", "date": "Aug 28, 10:18 AM", "preview": "Alex Bishop sent you a document to review and sign. Security code: 4C9A21DE77...", "bodyHtml": "<p>Alex Bishop sent you a document to review and sign.<\/p><p><strong>Q4 Supply Agreement — Northwind Trading Co.<\/strong><\/p><p>Jordan — this is the renewal we talked through on Tuesday. Pricing schedule is unchanged from Q3; signature needed on page 4 only.<\/p><p><a class='btn' data-href='https://na3.docusign.net/Signing/EmailStart.aspx?a=8f2c1b' data-tell='t1'>Review Document<\/a><\/p><p><span class='tell' data-tell='t2'>Alternate signing method: go to docusign.com, choose Access Documents, and enter security code 4C9A21DE77.<\/span><\/p><p>This link is unique to you — please do not forward this email. Questions about the contents of the document should go to the sender directly.<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "docusign.net is DocuSign's real sending domain", "evidence": "dse_NA3@docusign.net", "explanation": "DocuSign envelopes genuinely come from docusign.net (dse_ prefixes are its mail relays), and the domain ends there — nothing is appended after it."}, {"anchor": "replyto", "label": "Reply-to points at the real vendor, which is normal here", "evidence": "accounts@bishopvane.com", "explanation": "DocuSign deliberately sets reply-to to the company that sent the envelope, so a reply reaches Bishop & Vane. A reply-to that differs from the from-line is only suspicious when it points somewhere unrelated to either party."}, {"anchor": "t1", "label": "Signing link stays on docusign.net", "evidence": "na3.docusign.net/Signing/EmailStart.aspx", "explanation": "na3 is a regional DocuSign server, a subdomain OF docusign.net — the trusted name is the registered domain here, not a label in front of someone else's."}, {"anchor": "t2", "label": "Security code lets you bypass the link entirely", "evidence": "go to docusign.com, choose Access Documents, and enter security code 4C9A21DE77", "explanation": "This is a genuine DocuSign feature and the safest way to open any envelope: type docusign.com yourself and enter the code. Phishing copies rarely offer a route that doesn't use their link."}], "takeaway": "Real DocuSign lives at docusign.net/docusign.com and hands you a security code so you never have to trust the emailed button."}, {"id": "l3-fedex", "brand": "FedEx", "brandKey": "fedex", "fromName": "FedEx", "fromAddress": "TrackingUpdates@fedex.com", "replyTo": null, "subject": "Delivery exception: shipment 7742 1188 3096 to Northwind Trading Co.", "date": "Aug 28, 12:04 PM", "preview": "Hello JORDAN RIVERA, we attempted delivery of your shipment on Aug 28 at 11:42 AM, but the receiving dock was closed...", "bodyHtml": "<p>Hello JORDAN RIVERA,<\/p><p>We attempted delivery of your shipment on Aug 28 at 11:42 AM, but the receiving dock was closed.<\/p><p><span class='tell' data-tell='t1'>No action is required — we will automatically attempt delivery again on the next business day (Monday 31 August).<\/span><\/p><p>Tracking number: 7742 1188 3096<br><span class='tell' data-tell='t2'>Shipper: Bishop &amp; Vane Supplies — Reference: PO-44120<\/span><\/p><p><a class='btn' data-href='https://www.fedex.com/fedextrack/?trknbr=774211883096' data-tell='t3'>Track this shipment<\/a><\/p><p>FedEx Customer Support<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "fedex.com is the registered domain", "evidence": "TrackingUpdates@fedex.com", "explanation": "The address ends at fedex.com with nothing appended — compare it against the DHL message in this level, where the carrier's name sat in front of somebody else's domain."}, {"anchor": "t1", "label": "Nothing is demanded of you", "evidence": "No action is required", "explanation": "An exception notice that resolves itself is the opposite of the phishing pattern, and the retry date is stated plainly rather than left as a countdown. Fraudulent delivery mail always needs a fee, a form or a login within hours."}, {"anchor": "t2", "label": "Details match a shipment you're expecting", "evidence": "Shipper: Bishop & Vane Supplies — Reference: PO-44120", "explanation": "A real carrier notice carries the shipper name and your own purchase-order reference, which you can check against your records before clicking anything."}, {"anchor": "t3", "label": "Tracking link resolves to www.fedex.com", "evidence": "https://www.fedex.com/fedextrack/?trknbr=774211883096", "explanation": "Hovering shows the host is www.fedex.com and the tracking number is only a query parameter. You could also paste that number into fedex.com yourself and get the same page."}], "takeaway": "A delivery problem is not automatically a scam — a real one names your shipment, asks for no money, and links to the carrier's own domain."}, {"id": "l3-google", "brand": "Google Docs", "brandKey": "google", "fromName": "Marcus Webb (via Google Sheets)", "fromAddress": "drive-shares-dm-noreply@google.com", "replyTo": "m.webb@northwind-trading.com", "subject": "Marcus Webb shared a document: FY26 Budget Variance - Ops", "date": "Aug 28, 4:15 PM", "preview": "Marcus Webb has invited you to edit the following document: FY26 Budget Variance - Ops...", "bodyHtml": "<p><strong>Marcus Webb<\/strong> has invited you to <em>edit<\/em> the following document:<\/p><p><strong><a class='lnk' data-href='https://docs.google.com/spreadsheets/d/1kQ9fVarianceOps26/edit' data-tell='t1'>FY26 Budget Variance — Ops<\/a><\/strong><\/p><p>Jordan — variance notes ahead of next Thursday's review. Leave comments in the margin, no need to reply by mail.<\/p><p><a class='btn' data-href='https://docs.google.com/spreadsheets/d/1kQ9fVarianceOps26/edit' data-tell='t2'>Open in Google Sheets<\/a><\/p><p>The file also appears in your Drive under <em>Shared with me<\/em>.<\/p><p>Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Google's genuine share-notification address", "evidence": "drive-shares-dm-noreply@google.com", "explanation": "Drive shares are sent by a no-reply robot at google.com. The display name shows the colleague, but the sending domain is Google's own and ends there — nothing is appended after the .com."}, {"anchor": "replyto", "label": "Reply-to is the real colleague on the real internal domain", "evidence": "m.webb@northwind-trading.com", "explanation": "Google routes replies back to the person who shared the file. The spelling of northwind-trading.com is exact — worth checking character by character every time."}, {"anchor": "t1", "label": "Document link stays on docs.google.com", "evidence": "https://docs.google.com/spreadsheets/d/1kQ9fVarianceOps26/edit", "explanation": "docs.google.com is a subdomain of google.com, the registered domain. That is the legitimate shape — brand last, not brand first, unlike dropbox.com.file-share-secure.net elsewhere in this level."}, {"anchor": "t2", "label": "The button only opens the file — nothing here asks for a password", "evidence": "Open in Google Sheets", "explanation": "Read the whole message and notice what is missing: no credential request anywhere. A real share simply opens in the browser session you are already using, or from Shared with me in your own Drive. The Dropbox lure in this level demanded your Northwind email password before it would show the file — that difference is the whole lesson."}], "takeaway": "Compare this with the Dropbox lure: same 'a colleague shared a file' story, but here the domain is google.com and nothing in the message ever asks for a password."}]}, {"level": 4, "title": "Near-Perfect Forgeries", "intro": "Everything here is pixel-perfect: correct logos, flawless grammar, real finance context, no shouting. What's left are single-character domain forgeries, header mismatches, and reassurance the sender simply typed himself.", "debriefPoints": ["Homograph domains: the 'a' in meridiаnbank.com and аpple.com is Cyrillic U+0430, pixel-identical to Latin 'a', and it disguised the links as well as the sender. You cannot see it by eye — open “details → check the characters” on any message and the lab names every non-Latin character and the punycode (xn--) form the domain really registers as. In real life you copy the suspect address into a plain-text editor or notes app. Never open the page to find out.", "The 'rn' trick: rnicrosoft.com reads as microsoft.com at a glance and in small type. Read the domain character by character, right to left from the TLD.", "Reply-To is a separate header from From, and a mismatch is not automatically bad — what matters is where it points. Concur's pointed at t.okafor@northwind-trading.com, a named colleague on your own exact domain; the bank forgery's pointed at meridianbank-treasury.com, a third domain entirely.", "Security reassurance inside a message proves nothing. '256-bit SSL', 'SPF, DKIM and DMARC all passed', 'delivered over TLS 1.3 and digitally signed by Apple' are sentences any sender can type — genuine authentication results are computed by your mail server, which is why real senders never advertise them.", "Never dial a number an email supplies. The Apple and Meridian numbers reach the attacker, who talks you through 'cancelling' the charge and then asks for a one-time token code or remote access — a code read aloud is a sign-in as you. Use the number on your card, your statement or your own vendor record.", "Fall back on what only you know: you never bought Final Cut Pro, the Concur report matches a trip you can verify, and Google's notice actively told you to check with your own IT. Perfect design cannot fake your history — and note that the legitimate mail here carried no deadline and asked for no password."], "emails": [{"id": "l4-microsoft", "brand": "Microsoft 365", "brandKey": "microsoft", "fromName": "Microsoft 365 Message Center", "fromAddress": "no-reply@rnicrosoft.com", "replyTo": "m365-support@secure-mailflow.net", "subject": "Action required: re-register Microsoft Authenticator before Aug 31", "date": "Aug 28, 8:02 AM", "preview": "Your organisation has updated its conditional access policy. Devices enrolled before June 2026 must...", "bodyHtml": "<p>Hello Jordan,<\/p><p>Northwind Trading Co. has updated its conditional access policy. Accounts whose authenticator was registered before June 2026 must re-register to keep uninterrupted access to Outlook, SharePoint and Teams.<\/p><p>Re-registration takes about two minutes and <span class='tell' data-tell='t1'>requires your current password to confirm your identity<\/span>.<\/p><p><a class='btn' data-href='https://login.rnicrosoft.com/common/oauth2/reauthorize' data-tell='t2'>Re-register Microsoft Authenticator<\/a><\/p><p><span class='tell' data-tell='t3'>This message is secured with 256-bit SSL. Look for the padlock in your browser before signing in.<\/span><\/p><p>Microsoft 365 Identity Team<br><a class='lnk' data-href='https://rnicrosoft.com/privacy' data-tell='t4'>microsoft.com/privacy<\/a><\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "'rn' is impersonating 'm'", "evidence": "no-reply@rnicrosoft.com", "explanation": "The domain is r-n-i-c-r-o-s-o-f-t.com, not microsoft.com. At normal font sizes 'rn' is visually indistinguishable from 'm', so read a domain letter by letter when anything is being asked of you."}, {"anchor": "replyto", "label": "Reply-To goes somewhere else entirely", "evidence": "m365-support@secure-mailflow.net", "explanation": "The From and Reply-To headers are independent. Even if the From line had been perfect, any reply here would land at secure-mailflow.net, an address with no relationship to Microsoft."}, {"anchor": "t1", "label": "Asks for your current password", "evidence": "requires your current password to confirm your identity", "explanation": "Re-enrolling an authenticator happens inside a session you already started yourself. A notification email that needs your password is harvesting it."}, {"anchor": "t2", "label": "Sign-in button uses the fake domain", "evidence": "https://login.rnicrosoft.com/common/oauth2/reauthorize", "explanation": "The path copies Microsoft's real OAuth structure to look authentic, but the host is the counterfeit rnicrosoft.com. Genuine sign-in is always login.microsoftonline.com."}, {"anchor": "t3", "label": "Fake security reassurance", "evidence": "This message is secured with 256-bit SSL", "explanation": "SSL protects data in transit; it says nothing about who sent the mail. Attackers add padlock language precisely because it makes readers relax."}, {"anchor": "t4", "label": "Footer link text lies about its destination", "evidence": "microsoft.com/privacy", "explanation": "The visible text reads microsoft.com but the link resolves to rnicrosoft.com/privacy. Even boilerplate footer links are worth hovering."}], "takeaway": "Read domains character by character — 'rn' can pose as 'm' — and remember Reply-To can point anywhere the sender likes."}, {"id": "l4-meridianbank", "brand": "Meridian Bank", "brandKey": "meridianbank", "fromName": "Meridian Bank Treasury Services", "fromAddress": "treasury.alerts@meridiаnbank.com", "replyTo": "positivepay.review@meridianbank-treasury.com", "subject": "Positive Pay: 2 exception items require a decision by 11:00 ET", "date": "Aug 28, 7:48 AM", "preview": "Good morning Jordan, two items presented against operating account ending 4416 did not match your issued-check file...", "bodyHtml": "<p>Good morning Jordan,<\/p><p>Two items presented against Northwind Trading Co. operating account ending 4416 did not match your issued-check file and are being held as Positive Pay exceptions:<\/p><ul><li>Check 10428 — $8,940.00 — Bishop &amp; Vane Supplies — amount mismatch<\/li><li>Check 10431 — $2,215.60 — payee mismatch<\/li><\/ul><p>Please pay or return each item before this morning's 11:00 ET cut-off.<\/p><p><span class='tell' data-tell='t1'>This notification is verified: SPF, DKIM and DMARC all passed.<\/span><\/p><p><a class='btn' data-href='https://meridiаnbank.com/treasury/exceptions/decision'>Review exceptions in Treasury Gateway<\/a><\/p><p><span class='tell' data-tell='t2'>If you cannot sign in, call the Treasury Desk on +1 (203) 555-0148 with your token code ready and we will action the items for you.<\/span><\/p><p>Meridian Bank, N.A. — Treasury Services, Stamford CT · <a class='lnk' data-href='https://meridiаnbank.com/treasury' data-tell='t3'>meridianbank.com<\/a><\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Cyrillic look-alike in the domain", "evidence": "treasury.alerts@meridiаnbank.com", "explanation": "The 'a' in 'meridian' is Cyrillic 'а' (U+0430), not Latin 'a'. It renders identically but registers as a completely different domain. Paste suspect addresses into a plain-text editor to expose them."}, {"anchor": "replyto", "label": "Reply-To is a third, unrelated domain", "evidence": "positivepay.review@meridianbank-treasury.com", "explanation": "A real bank replies from its own domain. Here the hyphenated meridianbank-treasury.com is attacker-controlled and would collect anything you send back, including account details."}, {"anchor": "t1", "label": "Self-declared authentication results", "evidence": "SPF, DKIM and DMARC all passed", "explanation": "Authentication results are computed by your mail server, not written by the sender. Any sender can type this sentence, which is why real banks never do."}, {"anchor": "t2", "label": "Callback number plus token code request", "evidence": "call the Treasury Desk on +1 (203) 555-0148 with your token code ready", "explanation": "The number is supplied by the attacker, and a one-time token code read aloud lets them sign in as you. Only call the number printed on your statement or in your treasury vendor record."}, {"anchor": "t3", "label": "Footer link text is all-Latin, the destination is not", "evidence": "meridianbank.com", "explanation": "The visible footer text is the genuine Latin meridianbank.com, but the hover target is the Cyrillic forgery used everywhere else in this message — and the two look identical on screen. Displayed text is decoration; only the destination counts, and here even that is disguised, so type the bank's address yourself."}], "takeaway": "One Cyrillic character can clone a bank's domain and its links — verify money decisions in the portal you navigate to yourself, and confirm a same-day cut-off by calling the number on your statement."}, {"id": "l4-apple", "brand": "Apple", "brandKey": "apple", "fromName": "Apple", "fromAddress": "no_reply@invoice.аpple.com", "replyTo": null, "subject": "Your receipt from Apple", "date": "Aug 28, 11:26 PM", "preview": "Your receipt from Apple — Order ID MLQ7K2P4X9 — Final Cut Pro — $324.74 billed to Visa ending 6042", "bodyHtml": "<p><strong>Your receipt from Apple<\/strong><\/p><p>Apple ID: j.rivera@northwind-trading.com<br>Order ID: MLQ7K2P4X9<br>Date: 28 Aug 2026<\/p><ul><li>Final Cut Pro — one-time purchase — $299.99<\/li><li>Subtotal $299.99 · Tax $24.75 · <strong>Total $324.74<\/strong><\/li><\/ul><p>Billed to Visa ending 6042. <span class='tell' data-tell='t1'>If you did not authorise this purchase, you must cancel it within 48 hours.<\/span><\/p><p><a class='btn' data-href='https://аpple.com/receipts/dispute' data-tell='t2'>Report a Problem<\/a><\/p><p><span class='tell' data-tell='t3'>This receipt was delivered over TLS 1.3 and is digitally signed by Apple.<\/span><\/p><p>Need help sooner? Call Apple Billing Support on <span class='tell' data-tell='t4'>+1 (888) 555-0172<\/span>.<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Cyrillic 'а' in apple.com", "evidence": "no_reply@invoice.аpple.com", "explanation": "The first letter of 'apple' is Cyrillic 'а' (U+0430), not Latin 'a'. It renders identically, but the registrable domain belongs to whoever bought the lookalike. Paste any address you are about to trust into a plain-text editor to expose it."}, {"anchor": "t1", "label": "48-hour cancellation window on a receipt", "evidence": "you must cancel it within 48 hours", "explanation": "A receipt records something that already happened; it has no deadline. The clock exists so you click before checking your real purchase history."}, {"anchor": "t2", "label": "Dispute button goes to the counterfeit domain", "evidence": "https://аpple.com/receipts/dispute", "explanation": "The hover target carries the same Cyrillic 'а' as the sender, so it looks perfect. Apple billing disputes live at reportaproblem.apple.com, reached by typing it yourself."}, {"anchor": "t3", "label": "Encryption claim used as proof of identity", "evidence": "delivered over TLS 1.3 and is digitally signed by Apple", "explanation": "Transport encryption and signing claims typed into a message body are unverifiable text that any sender can write. Genuine Apple receipts never advertise their own cryptography."}, {"anchor": "t4", "label": "Support number planted in the email", "evidence": "+1 (888) 555-0172", "explanation": "The number routes to the attacker, who will walk you through 'refunding' the charge and capture your card or remote access. Find support numbers on the vendor's own site or the back of your card."}], "takeaway": "An unexpected charge is bait — never use the phone number or dispute link inside the message; reach the vendor through an address you typed yourself."}, {"id": "l4-google", "brand": "Google Workspace", "brandKey": "google", "fromName": "Google Workspace", "fromAddress": "googleworkspace-noreply@google.com", "replyTo": null, "subject": "Reconnect SheetSync for Excel before 11 September", "date": "Aug 27, 1:14 PM", "preview": "We're writing about a change to how third-party apps connect to Google Workspace at Northwind...", "bodyHtml": "<p>Hello Jordan,<\/p><p>We're writing about a change to how third-party apps connect to Google Workspace at Northwind Trading Co.<\/p><p>From <span class='tell' data-tell='t1'>11 September 2026<\/span>, apps that sign in with only a username and password will no longer be able to reach Gmail, Drive or Calendar. Affected apps have to be reconnected using Sign in with Google.<\/p><p>One app on your account still uses the older method: <strong>SheetSync for Excel<\/strong>.<\/p><p>Nothing needs doing from this message. <span class='tell' data-tell='t2'>If you're unsure whether you still use this app, check with your Northwind IT administrator before the change date.<\/span><\/p><p>What's changing, and how to reconnect: <a class='lnk' data-href='https://support.google.com/a/answer/7281227' data-tell='t3'>support.google.com/a<\/a><\/p><p>You received this mandatory service announcement about your Google Workspace account.<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Google's real Workspace notification address", "evidence": "googleworkspace-noreply@google.com", "explanation": "Read the last two labels before the @-sign's domain ends: google.com, every character Latin, with nothing appended after it. Compare that shape with google.com.workspace-notice.net or g00gle.com, where the familiar word is decoration in front of somebody else's registered domain."}, {"anchor": "t1", "label": "A scheduled date, not a countdown", "evidence": "11 September 2026", "explanation": "The deadline is a published product change more than two weeks out, and missing it breaks one spreadsheet add-on — not your account. Phishing deadlines are hours long and always threaten loss of access, money or the mailbox itself."}, {"anchor": "t2", "label": "Actively points you at your own IT team", "evidence": "check with your Northwind IT administrator", "explanation": "A genuine notice is happy for you to verify it with someone else. Look at the fakes that tell you the opposite — 'do not forward this to your IT department' — because a second pair of eyes is exactly what an attacker cannot survive."}, {"anchor": "t3", "label": "Link goes to Google's help centre, not a sign-in form", "evidence": "https://support.google.com/a/answer/7281227", "explanation": "support.google.com is a subdomain of google.com, and the page it opens explains the change rather than asking you to authenticate. The email hands you information; it never asks for a password, a code or a card."}], "takeaway": "A deadline and an app about to stop working is not automatically an attack — this one is on Google's own domain, sends you to a help article, and invites you to check with IT."}, {"id": "l4-docusign", "brand": "SAP Concur", "brandKey": "generic", "fromName": "SAP Concur", "fromAddress": "automated-notification@concursolutions.com", "replyTo": "t.okafor@northwind-trading.com", "subject": "Expense report awaiting your approval: Tomas Okafor - Cleveland client visit", "date": "Aug 28, 9:41 AM", "preview": "Hello Jordan, Tomas Okafor submitted an expense report that is waiting for your approval as delegate approver...", "bodyHtml": "<p>Hello Jordan,<\/p><p><strong>Tomas Okafor<\/strong> submitted an expense report that is waiting for your approval as delegate approver.<\/p><ul><li>Report: Client visit - Cleveland, Aug 18-20<\/li><li>Total: $1,142.63<\/li><li>Policy exceptions: 0<\/li><\/ul><p>You can approve it or send it back for revision in Concur. Questions about individual line items should go to the submitter - replies to this notification reach Tomas directly.<\/p><p><a class='btn' data-href='https://www.concursolutions.com/approvals/report/8841772' data-tell='t1'>Review in Concur<\/a><\/p><p><span class='tell' data-tell='t2'>No password is requested in this message; you will sign in with your usual Northwind single sign-on.<\/span><\/p><p>SAP Concur, 601 108th Ave NE, Bellevue, WA 98004<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Concur's real sending domain, ending where it should", "evidence": "automated-notification@concursolutions.com", "explanation": "concursolutions.com is the registered domain and the address stops there - no extra label appended after the .com, no digit or 'rn' substitution. Read it right-to-left the same way you read rnicrosoft.com in this level, and it survives the check."}, {"anchor": "replyto", "label": "Reply-To differs from From, but points at your own colleague", "evidence": "t.okafor@northwind-trading.com", "explanation": "Bulk notification platforms send from a no-reply robot and set Reply-To to the human who triggered the message, so your reply reaches Tomas rather than a mail server. A differing Reply-To is only suspicious when it points somewhere unrelated to either party - here it is your own company's exact domain, northwind-trading.com, spelled character for character."}, {"anchor": "t1", "label": "Approval link stays on the registered domain", "evidence": "https://www.concursolutions.com/approvals/report/8841772", "explanation": "The host is www.concursolutions.com, a subdomain OF the real domain - brand last, not brand pasted in front of somebody else's name. You could also reach the same queue by opening Concur from your own bookmark."}, {"anchor": "t2", "label": "Nothing is harvested and nothing expires", "evidence": "No password is requested in this message", "explanation": "It asks for a routine business decision on a report you can verify against a trip you already know about, with no deadline and no credentials. Compare the Microsoft forgery in this level, which needed your current password to proceed."}], "takeaway": "A Reply-To that differs from the From line is normal for automated systems - what matters is where it points, and here it points at a named colleague on your own exact domain."}, {"id": "l4-adobe", "brand": "Adobe", "brandKey": "adobe", "fromName": "Adobe", "fromAddress": "mail@mail.adobe.com", "replyTo": null, "subject": "Your Acrobat Pro for teams plan renews on Sep 12, 2026", "date": "Aug 27, 10:05 AM", "preview": "Your annual subscription for 12 licences renews next month. No action is needed to continue.", "bodyHtml": "<p>Hi Jordan,<\/p><p>Your <strong>Acrobat Pro for teams<\/strong> subscription (12 licences) renews on 12 September 2026 at $179.88 per licence per year, billed annually to the card already on file.<\/p><p><span class='tell' data-tell='t1'>No action is needed if you want to continue.<\/span> You can change licence counts or cancel any time before the renewal date in the Admin Console.<\/p><p><a class='btn' data-href='https://account.adobe.com/plans' data-tell='t2'>Manage your plan<\/a><\/p><p>Your invoice will appear under Billing History after the renewal date. <span class='tell' data-tell='t3'>Adobe never requests payment or card details by email.<\/span><\/p><p>Adobe Inc., 345 Park Avenue, San Jose, CA 95110<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Bulk-mail subdomain under the real domain", "evidence": "mail@mail.adobe.com", "explanation": "Read the last two labels: adobe.com. A subdomain like mail.adobe.com is controlled by Adobe, unlike a lookalike such as adobe-mail.com where the real domain is something else entirely."}, {"anchor": "t1", "label": "No deadline, no pressure", "evidence": "No action is needed if you want to continue.", "explanation": "A genuine renewal notice exists to inform you before a charge. Phishing invoices do the opposite: they demand you act now to stop a payment."}, {"anchor": "t2", "label": "Button lands on Adobe's account console", "evidence": "https://account.adobe.com/plans", "explanation": "account.adobe.com is Adobe's real self-service portal, and it manages the plan rather than collecting a card number on a form embedded in a link."}, {"anchor": "t3", "label": "Payment stays on file, not requested", "evidence": "Adobe never requests payment or card details by email.", "explanation": "For an existing subscription the card is already stored, so no legitimate renewal notice needs new payment details. Any 'update your card to avoid cancellation' email is the fake version of this one."}], "takeaway": "Judge a renewal notice by its registrable domain and by what it asks for — a real one informs you; a fake one wants your card."}]}, {"level": 5, "title": "Spear-phishing & BEC", "intro": "The attackers have done their homework: they know your name, your CEO, your vendor and your payment run. Almost nothing here is technically wrong, so decide each message on what it asks you to do, not on how it looks.", "debriefPoints": ["Lookalikes of your OWN domain are the hardest tell to see: northwind-trading.co with the 'm' quietly dropped, and northwind-tradlng.com with an 'l' standing in for the 'i' of 'trading'. Read your own company's address character by character, exactly as you would a stranger's.", "Business Email Compromise has three signature asks — an urgent wire, gift card codes, and a vendor changing its bank details. Any one of them means stop and verify by voice, on a number you already held.", "'I'm in the board session all morning and can't take calls', 'our accounts line is offline during the migration' — that is not an alibi, it is the attack removing your ability to check. The urgency window and the no-calls window are always the same window.", "Secrecy and process-bypass are the payload: 'keep this between us', 'process it outside the normal payment run', 'don't raise it with procurement'. Those controls exist precisely to stop these emails, and an executive who asks you to skip them should still be refused.", "'Re:', a quoted reply underneath, and 'Sent from my iPhone' are free to type — thread history can be copied from a breached mailbox or invented, and a mobile signature pre-excuses any oddity in tone. The vendor's link text read bishopvane.com while the destination was bishopvane-supplies.com.", "Genuine internal and vendor mail is boring: it asks for work or points at records you already hold — a PO number, unchanged bank details, your usual SSO tile, a recurring 1:1 — keeps its links on the real domain, and gives you a normal deadline."], "emails": [{"id": "l5-elaine-wire", "brand": "Elaine Cho (CEO)", "brandKey": "exec-internal", "fromName": "Elaine Cho", "fromAddress": "e.cho@northwind-trading.co", "replyTo": null, "subject": "Confidential - time sensitive", "date": "Aug 28, 7:52 AM", "preview": "Are you at your desk? I'm in the board session all morning and can't take calls...", "bodyHtml": "<p>Jordan,<\/p><p>Are you at your desk? <span class='tell' data-tell='t1'>I'm in the board session all morning and can't take calls<\/span> - email only.<\/p><p>We are finalising the Halvorsen supplier acquisition and counsel needs the escrow deposit moved <strong>today<\/strong>. Details:<\/p><ul><li>Beneficiary: Halvorsen Holdings LLP<\/li><li>Amount: USD 48,750.00<\/li><li><span class='tell' data-tell='t2'>Account and routing details follow in my next mail - process it as a same-day transfer outside the normal payment run<\/span><\/li><\/ul><p><span class='tell' data-tell='t3'>Please keep this between us<\/span> until the announcement goes out. Confirm here the moment it is sent.<\/p><p>Elaine<\/p><p><span class='tell' data-tell='t4'>Sent from my iPhone<\/span><\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Internal domain is one letter short", "evidence": "e.cho@northwind-trading.co", "explanation": "Northwind's domain is northwind-trading.com - this one ends in .co, with the 'm' quietly dropped. A lookalike of your OWN domain is the signature move of spear-phishing, because your eye reads the familiar part and stops."}, {"anchor": "t1", "label": "Pre-emptively blocks verification", "evidence": "I'm in the board session all morning and can't take calls", "explanation": "The one thing that would expose this fraud is a thirty-second phone call, so the message explains in advance why you cannot make one. Treat 'don't call me' as the red flag itself, not as a reason."}, {"anchor": "t2", "label": "Asks you to bypass the payment process", "evidence": "process it as a same-day transfer outside the normal payment run", "explanation": "Controls like the payment run and dual approval exist precisely to stop this email. A genuine CEO does not ask Finance Ops to route around them - and an executive who does should still be refused."}, {"anchor": "t3", "label": "Demand for secrecy", "evidence": "Please keep this between us", "explanation": "Secrecy stops you doing the one safe thing: mentioning it to a colleague. Any payment request that also asks you not to discuss it is fraudulent until proven otherwise."}, {"anchor": "t4", "label": "'Sent from my phone' as an excuse generator", "evidence": "Sent from my iPhone", "explanation": "The mobile signature pre-explains any oddity in tone, brevity or address. It is trivial to type and is a staple of CEO-fraud mail."}], "takeaway": "An urgent, secret, process-skipping payment request is fraud regardless of whose name is on it - verify on a phone number you already had, never one the email supplies."}, {"id": "l5-bishopvane-bank", "brand": "Bishop & Vane Supplies", "brandKey": "vendor", "fromName": "Bishop & Vane Accounts", "fromAddress": "accounts@bishopvane-supplies.com", "replyTo": "remittance@bishopvane-supplies.net", "subject": "Re: Invoice BV-4471 - remittance advice", "date": "Aug 28, 4:12 PM", "preview": "Thanks for confirming receipt below. Two things before your Friday run...", "bodyHtml": "<p>Hi Jordan,<\/p><p>Thanks for confirming receipt below. Two things before your Friday run.<\/p><p>Bishop &amp; Vane completed a treasury migration this week, so <span class='tell' data-tell='t1'>remittance for BV-4471 and all future invoices should now go to our new account<\/span>:<\/p><ul><li>Bank: Calderon Commercial<\/li><li>ABA routing 021000021 &middot; Account 8841220317<\/li><\/ul><p><span class='tell' data-tell='t2'>Our accounts line is offline during the migration, so please reply by email rather than calling.<\/span><\/p><p>Updated remittance form: <a class='lnk' data-href='https://bishopvane-supplies.com/remit/northwind' data-tell='t3'>bishopvane.com/remittance<\/a><\/p><p>Regards,<br>Dana Croft - Accounts Receivable<\/p><p><em><span class='tell' data-tell='t4'>&gt; On Aug 21, j.rivera@northwind-trading.com wrote: \"Received, thanks - BV-4471 is queued for the next run.\"<\/span><\/em><\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Vendor domain has grown a word", "evidence": "accounts@bishopvane-supplies.com", "explanation": "Your real vendor mail comes from bishopvane.com. Adding a plausible word from the company's name ('-supplies') creates a domain that reads correctly but is registered by someone else entirely."}, {"anchor": "replyto", "label": "Replies go to a third domain", "evidence": "remittance@bishopvane-supplies.net", "explanation": "The From line and the Reply-To differ - and even the TLD changes (.com vs .net). Your answer, and any bank confirmation in it, lands somewhere you never inspected."}, {"anchor": "t1", "label": "Bank details changed by email", "evidence": "remittance for BV-4471 and all future invoices should now go to our new account", "explanation": "A vendor bank-detail change is the single highest-value request in business email compromise. A new ABA routing and account number arriving by email must always be verified by calling the number on your signed contract, never a number or address in the email."}, {"anchor": "t2", "label": "Removes the phone channel", "evidence": "Our accounts line is offline during the migration, so please reply by email rather than calling.", "explanation": "Exactly like the 'I'm in a meeting' excuse, this exists to kill out-of-band verification. A real treasury migration does not disable a supplier's telephones."}, {"anchor": "t3", "label": "Link text shows the real domain, destination doesn't", "evidence": "bishopvane-supplies.com/remit/northwind", "explanation": "The visible text reads bishopvane.com to reassure you, while the hover target is the impostor domain. Always judge a link by where it goes, not what it says."}, {"anchor": "t4", "label": "Hijacked thread", "evidence": "On Aug 21, j.rivera@northwind-trading.com wrote:", "explanation": "A 'Re:' subject and a quoted reply beneath make this look like an ongoing conversation, borrowing trust the sender never earned. Quoted text can be copied from a breached mailbox or simply invented."}], "takeaway": "No email can change where you send money - a bank-detail change is only real once you have confirmed it by voice on a number you held beforehand."}, {"id": "l5-marcus-giftcards", "brand": "Marcus Webb (CFO)", "brandKey": "exec-internal", "fromName": "Marcus Webb", "fromAddress": "m.webb@northwind-tradlng.com", "replyTo": null, "subject": "Re: Quick favour before 2pm", "date": "Aug 28, 11:06 AM", "preview": "Jordan - are you around? I'm in back-to-back interviews until 4 and can't step out to call...", "bodyHtml": "<p>Jordan - are you around?<\/p><p>I'm <span class='tell' data-tell='t1'>in back-to-back interviews until 4 and can't step out to call<\/span>, so this has to be email.<\/p><p>I need <strong>10 x $200 Amazon gift cards<\/strong> for the client appreciation awards on Monday morning. Buy them on your card, <span class='tell' data-tell='t2'>scratch the panels and send me the codes in a reply<\/span> - I'll get the expense signed off Monday.<\/p><p><span class='tell' data-tell='t3'>Don't raise it with procurement<\/span>, it's meant to be a surprise and they'll only slow it down.<\/p><p>Thanks, appreciate you covering this.<\/p><p>Marcus<\/p>", "verdict": "phishing", "tells": [{"anchor": "from", "label": "Lookalike of your own company domain", "evidence": "m.webb@northwind-tradlng.com", "explanation": "Marcus is m.webb@northwind-trading.com. This is northwind-tradlng.com - the 'i' of 'trading' replaced by an 'l'. Attackers register a near-copy of the domain you trust most, because your eye reads the familiar shape and stops. Read your own company's domain character by character, exactly as you would a stranger's."}, {"anchor": "subject", "label": "'Re:' on a conversation that never happened", "evidence": "Re: Quick favour before 2pm", "explanation": "Check your sent folder before trusting a reply prefix. 'Re:' is just text in the subject line and costs an attacker nothing to add."}, {"anchor": "t1", "label": "Unreachable by design", "evidence": "in back-to-back interviews until 4 and can't step out to call", "explanation": "Every BEC message explains why you cannot verify it right now. The urgency window and the no-calls window are always the same window."}, {"anchor": "t2", "label": "Gift card codes requested by email", "evidence": "scratch the panels and send me the codes in a reply", "explanation": "Gift card codes are untraceable, instantly resold, and irreversible - which is why no real finance process ever moves value that way. This ask alone is enough to condemn the email."}, {"anchor": "t3", "label": "Cut procurement out", "evidence": "Don't raise it with procurement", "explanation": "A friendly reason ('it's a surprise') is offered for isolating you from the people who would spot the fraud. Isolation plus a spending request is the whole attack."}], "takeaway": "Nobody senior ever genuinely needs gift card codes emailed to them - walk to their desk or call the number in the company directory before spending a cent."}, {"id": "l5-elaine-legit", "brand": "Elaine Cho (CEO)", "brandKey": "exec-internal", "fromName": "Elaine Cho", "fromAddress": "e.cho@northwind-trading.com", "replyTo": null, "subject": "Board follow-up: Q3 travel variance", "date": "Aug 27, 5:40 PM", "preview": "The board picked up on the Q3 travel and entertainment variance yesterday...", "bodyHtml": "<p>Jordan,<\/p><p>The board picked up on the Q3 travel and entertainment variance yesterday. <span class='tell' data-tell='t1'>Could you pull the month-by-month breakdown against budget and send it to Marcus and me by Thursday?<\/span> Nothing fancy - the standard variance tab is fine.<\/p><p>Prior-quarter packs are in the usual place: <a class='lnk' data-href='https://intranet.northwind-trading.com/finance/board-packs'>intranet.northwind-trading.com/finance/board-packs<\/a><\/p><p>We can walk through it at our <span class='tell' data-tell='t2'>Tuesday 1:1<\/span> if it throws up anything odd.<\/p><p>Thanks,<br>Elaine Cho<br>CEO, Northwind Trading Co.<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Exact internal domain, exact address", "evidence": "e.cho@northwind-trading.com", "explanation": "Compare this letter by letter with the earlier 'Elaine' mail: full .com, no extra words, matching the CEO's known address. When the address survives that check, the pressure to find something wrong should drop."}, {"anchor": "t1", "label": "Asks for information, and keeps the CFO in the loop", "evidence": "send it to Marcus and me by Thursday", "explanation": "No money moves, and the request deliberately includes Jordan's manager rather than isolating him. Fraud narrows the circle; real work widens it."}, {"anchor": "t2", "label": "References a real recurring meeting", "evidence": "Tuesday 1:1", "explanation": "The sender points to an existing, scheduled channel where you would see her face - the opposite of the 'I can't take calls' pattern. Details only the real Elaine would default to are reassuring."}], "takeaway": "Genuine executive mail asks for work, not for money, and leaves your normal channels and colleagues intact - don't over-flag it just because a CEO's name is on top."}, {"id": "l5-bishopvane-legit", "brand": "Bishop & Vane Supplies", "brandKey": "vendor", "fromName": "Bishop & Vane Accounts", "fromAddress": "accounts@bishopvane.com", "replyTo": null, "subject": "Invoice BV-4488 - PO 22140 (August supplies)", "date": "Aug 28, 10:22 AM", "preview": "Invoice BV-4488 for August consumables is now on the AP portal, raised against PO 22140...", "bodyHtml": "<p>Hello Jordan,<\/p><p>Invoice <strong>BV-4488<\/strong> for August consumables is now on the AP portal, raised against <span class='tell' data-tell='t1'>PO 22140<\/span>. Total USD 6,412.80, net 30, due 27 September.<\/p><p><span class='tell' data-tell='t2'>Payment details are unchanged from the ones held on your vendor master record.<\/span><\/p><p><span class='tell' data-tell='t3'>As always: Bishop &amp; Vane will never ask you to change our bank details by email. If you receive such a request, call the accounts number on your signed contract before acting.<\/span><\/p><p>Statement and copy invoice: <a class='lnk' data-href='https://bishopvane.com/portal/invoices'>bishopvane.com/portal/invoices<\/a><\/p><p>Kind regards,<br>Dana Croft - Accounts Receivable, Bishop &amp; Vane Supplies<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "The vendor's actual domain", "evidence": "accounts@bishopvane.com", "explanation": "This is the address on file for Bishop & Vane - no added words, no alternate TLD, and no separate Reply-To. Held next to the impostor 'bishopvane-supplies.com' mail, the difference is the whole lesson."}, {"anchor": "t1", "label": "Ties to a purchase order you can check", "evidence": "PO 22140", "explanation": "A real invoice references a PO, an amount and terms you can match against your own records. Fraudulent invoices avoid identifiers that would be checked internally."}, {"anchor": "t2", "label": "Explicitly no change to bank details", "evidence": "Payment details are unchanged from the ones held on your vendor master record.", "explanation": "The safe path is the default: pay what you already have on file. Nothing here asks you to edit the vendor master, which is the only field an attacker actually wants."}, {"anchor": "t3", "label": "Vendor states its own anti-fraud policy", "evidence": "Bishop & Vane will never ask you to change our bank details by email", "explanation": "Mature suppliers publish this exact warning because they are impersonated constantly. Take it at face value and apply it to every future 'Bishop & Vane' mail."}], "takeaway": "A real invoice points at existing records - a PO, unchanged bank details, standard terms - and never asks you to change anything about how you pay."}, {"id": "l5-hr-payroll", "brand": "Northwind People Team", "brandKey": "hr-internal", "fromName": "Northwind People Team", "fromAddress": "people@northwind-trading.com", "replyTo": null, "subject": "Annual payroll details check - due 11 September", "date": "Aug 26, 9:03 AM", "preview": "Time for the annual payroll details check - confirm your bank and address details are current...", "bodyHtml": "<p>Hi Jordan,<\/p><p>It's time for the annual payroll details check. Please confirm your bank and address details are current before <span class='tell' data-tell='t1'>Friday 11 September<\/span>.<\/p><p><span class='tell' data-tell='t2'>Sign in through your usual SSO tile - we will never email you a form, send you a link that asks for your password, or ask you to send bank details in a reply.<\/span><\/p><p><a class='btn' data-href='https://people.northwind-trading.com/payroll-check' data-tell='t3'>Open the People Portal<\/a><\/p><p>Questions? Raise a ticket with the helpdesk (helpdesk@northwind-trading.com) or reply here.<\/p><p>Northwind People Team<\/p>", "verdict": "legit", "tells": [{"anchor": "from", "label": "Correct internal HR address", "evidence": "people@northwind-trading.com", "explanation": "The known People Team mailbox on the exact company domain, with no Reply-To redirect. The subject matter is alarming - bank details - but the sender checks out."}, {"anchor": "t1", "label": "A calm, realistic deadline", "evidence": "Friday 11 September", "explanation": "Over two weeks, on a named date, with no threat attached. Real administrative deadlines give you time; phishing deadlines are measured in hours."}, {"anchor": "t2", "label": "Tells you what it will never do", "evidence": "we will never email you a form, send you a link that asks for your password, or ask you to send bank details in a reply", "explanation": "Nothing sensitive is requested in the message itself - it points you at a system you already log into. That is what a real bank-details process looks like."}, {"anchor": "t3", "label": "Button stays on the company domain", "evidence": "people.northwind-trading.com/payroll-check", "explanation": "Hovering shows a subdomain of northwind-trading.com, reached over SSO. Compare with lookalikes such as northwind-trading.co: the real thing has the whole domain intact before the first single slash."}], "takeaway": "Payroll and bank-detail mail can be genuine - the test is whether it asks you for the details or simply sends you to the system you already use."}]}];
+
+/* Brand accent colours. Used for the monogram tile and the in-email
+   button/link colour, so each message reads like the brand it claims. */
+const BRAND = {
+  paypal:'#0070BA', microsoft:'#0067B8', google:'#1A73E8', apple:'#3C3C3C',
+  amazon:'#FF9900', dhl:'#D40511', fedex:'#4D148C', ups:'#6B4A17',
+  netflix:'#E50914', docusign:'#3B6BB0', dropbox:'#0061FF', linkedin:'#0A66C2',
+  adobe:'#EB1000', meta:'#0866FF', instagram:'#C13584', slack:'#4A154B',
+  zoom:'#2D8CFF', github:'#24292F', coinbase:'#0052FF', meridianbank:'#116149',
+  'it-helpdesk':'#3D5A80', 'hr-internal':'#6A4C93', 'exec-internal':'#2A4D69',
+  vendor:'#8A6D3B', generic:'#4A5568'
+};
+const brandColor = k => BRAND[k] || BRAND.generic;
+
+/* ============================================================
+   State
+   ============================================================ */
+const S = { view:'start', li:0, openId:null, answers:{}, details:{}, inspect:{} };
+const app = document.getElementById('app');
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lvl = () => LEVELS[S.li];
+const emails = () => (lvl() && lvl().emails) || [];
+const answeredIn = i => (LEVELS[i]?LEVELS[i].emails:[]).filter(e => S.answers[e.id]).length;
+const levelDone = i => LEVELS[i] && answeredIn(i) === LEVELS[i].emails.length;
+
+/* ============================================================
+   Chrome
+   ============================================================ */
+function railHtml(){
+  const tabs = LEVELS.map((L,i) => `
+    <button class="tab" data-goto="${i}" aria-current="${S.view!=='start'&&i===S.li}"
+            title="Level ${L.level} — ${esc(L.title)}">${L.level}${levelDone(i)?' <span class="done">&check;</span>':''}</button>`).join('');
+  const n = emails().length, a = answeredIn(S.li);
+  const prog = S.view==='start' ? '' : `
+    <div class="counter">${a} of ${n} triaged</div>
+    <div class="pips">${emails().map(e=>`<div class="pip${S.answers[e.id]?' on':''}"></div>`).join('')}</div>`;
+  return `<header class="rail">
+    <button class="mark" data-home title="Back to the briefing">
+      <span class="dot"></span><span class="wm">PHISH<span>LAB</span></span>
+    </button>
+    <span class="sim">TRAINING SIMULATOR</span>
+    <div class="spacer"></div>
+    ${prog}
+    <div class="tabs">${tabs}</div>
+    <button class="ghost" data-reset>Start over</button>
+  </header>`;
+}
+
+/* ============================================================
+   Start screen
+   ============================================================ */
+function renderStart(){
+  const cards = LEVELS.map((L,i) => `
+    <button class="lcard" data-goto="${i}">
+      <div class="lv"><span>LEVEL ${L.level}</span>${levelDone(i)?'<span class="tick">&check; done</span>':`<span>${L.emails.length} emails</span>`}</div>
+      <h4>${esc(L.title)}</h4>
+      <p>${esc(L.intro)}</p>
+      <div class="bars">${[0,1,2,3,4].map(k=>`<i class="${k<=i?'f':''}"></i>`).join('')}</div>
+    </button>`).join('');
+
+  app.innerHTML = railHtml() + `
+  <div class="start">
+    <div class="eyebrow"><span class="mlabel">Phishing awareness lab</span><span class="rule"></span><span class="mlabel">5 levels &middot; easy &rarr; expert</span></div>
+    <h1>Every phish leaves a <em>trace</em>. Find it.</h1>
+    <p class="lede">You are <strong>Jordan Rivera</strong>, Finance Operations at Northwind Trading Co. Your inbox holds real mail and fake mail, mixed together. Call each one, then see exactly what gave it away &mdash; or why it was genuine after all.</p>
+
+    <div class="exhibit">
+      <div class="ex-l">A reveal, marked up</div>
+      <div class="ex-row">From: <b>PayPal Service</b> &lt;<span class="mk flagged" data-n="1">service@paypa1-secure.com</span>&gt;</div>
+    </div>
+    <p class="ex-cap">Every verdict marks the message up like this. Each highlight ties to a numbered finding that names the trick and explains it.</p>
+
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Read it like it's yours</h3><p>Open the message. Hover any link to see where it truly points, and open <em>details &rarr; check the characters</em> when a domain looks right but feels wrong.</p></div>
+      <div class="step"><div class="n">02</div><h3>Make the call</h3><p>Phishing or legitimate. Both kinds are in every level &mdash; flagging real mail is its own mistake.</p></div>
+      <div class="step"><div class="n">03</div><h3>See the evidence</h3><p>The tells light up on the message itself, with an explanation for each one and a takeaway you can reuse.</p></div>
+    </div>
+
+    <div class="lv-head"><h2>Choose a level</h2><span>each one adds a trick the last one didn't use</span>
+      ${Object.keys(S.answers).length ? '<button class="ghost" data-reset style="margin-left:auto">Start over</button>' : ''}</div>
+    <div class="levels">${cards}</div>
+
+    <p class="note"><b>For the classroom.</b> Every message is a simulation. Links are inert &mdash; nothing opens, nothing is submitted, and no data leaves this file. Brands are imitated for realistic training only; the companies here are not involved. Runs offline in any browser.</p>
+  </div>`;
+  document.body.dataset.view = 'start';
+}
+
+/* ============================================================
+   Level view
+   ============================================================ */
+function renderLevel(){
+  const L = lvl();
+  const list = emails().map(e => {
+    const ans = S.answers[e.id];
+    const right = ans && ans === e.verdict;
+    const chip = ans ? `<span class="i-chip ${right?'ok':'no'}">${right?'&check; called it':'&times; missed'}</span>` : '';
+    return `<button class="item${ans?' answered':''}" data-open="${esc(e.id)}" aria-selected="${S.openId===e.id}">
+      <span class="tile" style="background:${brandColor(e.brandKey)}">${esc((e.fromName||e.brand||'?').trim()[0]||'?')}</span>
+      <span class="i-main">
+        <span class="i-top"><span class="i-from">${esc(e.fromName)}</span><span class="i-date">${esc(e.date)}</span></span>
+        <span class="i-sub">${esc(e.subject)}</span>
+        <span class="i-pre">${esc(e.preview)}</span>
+        ${chip}
+      </span>
+    </button>`;
+  }).join('');
+
+  app.innerHTML = railHtml() + `<div class="split">
+    <aside class="list">
+      <div class="list-head">
+        <h2>Level ${L.level} &middot; ${esc(L.title)}</h2>
+        <p>${esc(L.intro)}</p>
+      </div>
+      ${list}
+    </aside>
+    <section class="pane" id="pane">${paneHtml()}</section>
+  </div>`;
+  document.body.dataset.view = S.openId ? 'mail' : 'list';
+  if(S.openId) afterPane();
+}
+
+function paneHtml(){
+  const e = emails().find(x => x.id === S.openId);
+  if(!e) return `<div class="empty"><p>Pick a message on the left to begin. Read it the way you'd read your own inbox &mdash; then call it.</p></div>`;
+
+  const ans = S.answers[e.id];
+  const showDetails = S.details[e.id] || (ans && e.tells.some(t => t.anchor === 'replyto'));
+  const dom = (e.fromAddress.split('@')[1] || '').trim();
+
+  const banner = !ans ? '' : (() => {
+    const right = ans === e.verdict;
+    const truth = e.verdict === 'phishing' ? 'This is phishing.' : 'This one is genuine.';
+    const msg = right
+      ? (e.verdict==='phishing' ? 'You spotted it. Here is what betrayed it:' : 'Correctly left alone. Here is what makes it trustworthy:')
+      : (e.verdict==='phishing' ? 'This one slipped past. Look at what it was hiding:' : 'A false alarm &mdash; real mail flagged as phishing. Here is why it checks out:');
+    return `<div class="banner ${right?'right':'wrong'}">
+      <span class="bi">${right?'&check;':'!'}</span>
+      <span><b>${right?'Correct.':'Not quite.'} ${truth}</b>${msg}</span></div>`;
+  })();
+
+  const details = `<div class="details" data-details${showDetails?'':' hidden'}>
+      <div><span class="k">from:</span><span class="v" data-field="from">${esc(e.fromName)} &lt;${esc(e.fromAddress)}&gt;</span></div>
+      ${e.replyTo?`<div><span class="k">reply-to:</span><span class="v" data-field="replyto">${esc(e.replyTo)}</span></div>`:''}
+      <div><span class="k">to:</span><span class="v">Jordan Rivera &lt;j.rivera@northwind-trading.com&gt;</span></div>
+      <div><span class="k">date:</span><span class="v" data-field="date">${esc(e.date)}</span></div>
+      <div><span class="k">mailed-by:</span><span class="v" data-field="mailedby">${esc(dom)}</span></div>
+      <button class="inspbtn" data-inspect>${S.inspect[e.id]?'&#9652; hide character check':'&#9026; check the characters'}</button>
+      ${S.inspect[e.id] ? inspectHtml(e) : ''}
+    </div>`;
+
+  const verdictBar = ans ? '' : `<div class="verdict">
+      <span class="q">Your call:</span>
+      <button class="vbtn phish" data-verdict="phishing">&#127907; Phishing <span class="kbd">P</span></button>
+      <button class="vbtn legit" data-verdict="legit">&#10003; Legitimate <span class="kbd">L</span></button>
+    </div>`;
+
+  return `<div class="pane-inner">
+    ${banner}
+    <div class="sheet" id="sheet" style="--bbrand:${brandColor(e.brandKey)}">
+      <div class="sheet-top">
+        <h1 data-field="subject">${esc(e.subject)}</h1>
+        <div class="hrow">
+          <span class="tile" style="background:${brandColor(e.brandKey)}">${esc((e.fromName||e.brand||'?').trim()[0]||'?')}</span>
+          <div class="hmain">
+            <div class="hline">
+              <span class="hname">${esc(e.fromName)}</span>
+              <span class="haddr" data-field="from">&lt;${esc(e.fromAddress)}&gt;</span>
+              <span class="hdate" data-field="date">${esc(e.date)}</span>
+            </div>
+            <div class="hto">to me <button class="dtoggle" data-toggle-details>${showDetails?'&#9652; hide details':'&#9662; details'}</button></div>
+            ${details}
+          </div>
+        </div>
+      </div>
+      <div class="mail" id="mailbody">${e.bodyHtml}</div>
+    </div>
+    ${ans ? findingsHtml(e) : ''}
+    ${verdictBar}
+  </div>`;
+}
+
+/* Number the evidence in reading order, so chip 1 is the first thing on the page
+   and the findings list runs top-to-bottom however the content was authored. */
+function orderedTells(e){
+  const head = { subject:0, from:1, date:2, replyto:3, mailedby:4 };
+  const at = a => {
+    if(a in head) return head[a];
+    const i = e.bodyHtml.indexOf('data-tell="' + a + '"');
+    const j = e.bodyHtml.indexOf("data-tell='" + a + "'");
+    const k = i < 0 ? j : (j < 0 ? i : Math.min(i, j));
+    return 100 + (k < 0 ? 9999 : k);
+  };
+  return e.tells.slice().sort((x, y) => at(x.anchor) - at(y.anchor));
+}
+
+/* ---- Character check -------------------------------------------------------
+   A look-alike domain is invisible in rendered mail, so the lab gives the student
+   the move a real analyst makes: pull the address apart and read its characters.
+   Available before answering, because a tell you cannot possibly see is not a test. */
+function scriptOf(c){
+  const n = c.codePointAt(0);
+  if(n>=0x0400 && n<=0x04FF) return 'Cyrillic';
+  if(n>=0x0370 && n<=0x03FF) return 'Greek';
+  if(n>=0x0530 && n<=0x058F) return 'Armenian';
+  if(n>=0x2000 && n<=0x206F) return 'invisible/spacing';
+  return 'non-Latin';
+}
+function rawHost(u){ return String(u||'').replace(/^([a-z]+:)?\/\//i,'').split('/')[0].split('@').pop().split(':')[0]; }
+function toAscii(h){ try{ return new URL('http://' + h).hostname; }catch(_){ return null; } }
+
+function inspectRows(e){
+  const rows = [{ what:'Sender domain', host:(e.fromAddress.split('@')[1]||'').trim() }];
+  if(e.replyTo) rows.push({ what:'Reply-to domain', host:(e.replyTo.split('@')[1]||'').trim() });
+  const box = document.createElement('div'); box.innerHTML = e.bodyHtml;
+  const seen = {};
+  box.querySelectorAll('[data-href]').forEach(a => {
+    const h = rawHost(a.dataset.href);
+    if(h && !seen[h]){ seen[h] = 1; rows.push({ what:'Link destination', host:h }); }
+  });
+  return rows;
+}
+
+function inspectHtml(e){
+  const rows = inspectRows(e).map(r => {
+    const ascii = toAscii(r.host);
+    const odd = [...r.host].filter(c => c.charCodeAt(0) > 127);
+    let verdict;
+    if(odd.length){
+      const list = odd.map(c => `<code>${esc(c)}</code> U+${c.codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} ${scriptOf(c)}`).join(', ');
+      verdict = `<div class="insp-bad">${odd.length} character${odd.length>1?'s':''} here ${odd.length>1?'are':'is'} not Latin: ${list}.` +
+                (ascii && ascii !== r.host.toLowerCase() ? ` This name actually registers as <code>${esc(ascii)}</code>.` : '') + `</div>`;
+    } else {
+      verdict = `<div class="insp-ok">&check; All standard Latin characters.</div>`;
+    }
+    return `<div class="insp-row"><span class="insp-w">${esc(r.what)}</span><span class="insp-host">${esc(r.host)}</span>${verdict}</div>`;
+  }).join('');
+  return `<div class="insp"><div class="insp-h">Character check &mdash; what these names are really made of</div>${rows}</div>`;
+}
+
+/* The destination behind a marked link, so the finding names it outright. */
+function tellHref(e, anchor){
+  if(!/^t\d+$/i.test(anchor)) return null;
+  const box = document.createElement('div');
+  box.innerHTML = e.bodyHtml;
+  const el = box.querySelector('[data-tell="' + anchor + '"]');
+  if(el && el.dataset.href) return el.dataset.href;
+  const inner = el && el.querySelector('[data-href]');
+  return inner ? inner.dataset.href : null;
+}
+
+/* A domain built from look-alike Unicode resolves to a punycode name. Showing it
+   after the verdict teaches the actual way to unmask a homograph. */
+function asciiForm(str){
+  if(!str || !/[^\x00-\x7F]/.test(str)) return null;
+  const m = String(str).match(/[^\s<>"'(),:;]*[^\x00-\x7F][^\s<>"'(),:;]*/);
+  if(!m) return null;
+  let host = m[0].replace(/^([a-z]+:)?\/\//i,'').split('/')[0].split('@').pop().split(':')[0]
+                 .replace(/[.,;!?]+$/,'');
+  if(!host.includes('.')) return null;
+  try{
+    const ascii = new URL('http://' + host).hostname;
+    return (ascii && ascii !== host.toLowerCase() && /^xn--|\.xn--/.test(ascii)) ? ascii : null;
+  }catch(_){ return null; }
+}
+
+function findingsHtml(e){
+  const green = e.verdict === 'legit';
+  const rows = orderedTells(e).map((t,i) => `
+    <div class="finding${green?' green':''}" data-n="${i+1}">
+      <span class="fnum">${i+1}</span>
+      <span>
+        <span class="f-label">${esc(t.label)}</span>
+        <span class="f-ev">${esc(t.evidence)}</span>
+        <div class="f-exp">${esc(t.explanation)}</div>
+        ${(() => { const h = tellHref(e, t.anchor); return h ? `<div class="f-dest"><span class="dl">Really goes to</span><span class="du">${esc(h)}</span></div>` : ''; })()}
+        ${(() => {
+            const a = asciiForm(t.evidence) || asciiForm(tellHref(e, t.anchor));
+            return a ? `<div class="f-puny"><span class="pl">Not the domain it looks like</span><span class="pu">${esc(a)}</span></div>` : '';
+          })()}
+      </span>
+    </div>`).join('');
+
+  const idx = emails().findIndex(x => x.id === e.id);
+  const nextUn = emails().find((x,j) => j > idx && !S.answers[x.id]) || emails().find(x => !S.answers[x.id]);
+  const all = emails().every(x => S.answers[x.id]);
+  const nav = `<div class="next">
+    ${all
+      ? `<button class="pbtn" data-debrief>Level ${lvl().level} debrief &rarr;</button>`
+      : `<button class="pbtn" data-open="${esc(nextUn.id)}">Next message &rarr;</button>`}
+    <button class="pbtn alt backbtn" data-back>&larr; Inbox</button>
+  </div>`;
+
+  return `<div class="findings">
+    <div class="f-head">
+      <h3>${green?'Why this one is safe':'What gave it away'}</h3>
+      <span class="badge ${green?'legit':'phish'}">${green?'Legitimate':'Phishing'}</span>
+    </div>
+    ${rows}
+    <div class="takeaway"><span class="tl">Takeaway</span><span>${esc(e.takeaway)}</span></div>
+  </div>${nav}`;
+}
+
+/* ============================================================
+   Forensic markup — the signature moment
+   ============================================================ */
+function afterPane(){
+  const e = emails().find(x => x.id === S.openId);
+  if(!e) return;
+  const sheet = document.getElementById('sheet');
+  if(!sheet) return;
+  sheet.querySelectorAll('[data-href]').forEach(a => { a.setAttribute('tabindex','0'); a.setAttribute('role','link'); });
+  if(S.answers[e.id]) applyMarkup(sheet, e);
+}
+
+function applyMarkup(scope, e){
+  const kind = e.verdict === 'legit' ? 'green' : 'flagged';
+  scope.classList.add('reveal');
+  orderedTells(e).forEach((t,i) => {
+    const n = i + 1;
+    const el = /^t\d+$/i.test(t.anchor)
+      ? scope.querySelector('[data-tell="' + t.anchor + '"]')
+      : scope.querySelector('[data-field="' + t.anchor + '"]');
+    if(!el) return;
+    const node = wrapEvidence(el, t.evidence, n, kind) || markWhole(el, n, kind);
+    if(node) node.style.animationDelay = (i * 75) + 'ms';
+  });
+  scope.querySelectorAll('.mk').forEach(m => {
+    m.addEventListener('mouseenter', () => highlight(m.dataset.n, true));
+    m.addEventListener('mouseleave', () => highlight(m.dataset.n, false));
+  });
+  document.querySelectorAll('.finding').forEach(f => {
+    f.addEventListener('mouseenter', () => highlight(f.dataset.n, true));
+    f.addEventListener('mouseleave', () => highlight(f.dataset.n, false));
+  });
+}
+
+function highlight(n, on){
+  document.querySelectorAll('.mk[data-n="'+n+'"]').forEach(m => m.classList.toggle('pulse', on));
+  document.querySelectorAll('.finding[data-n="'+n+'"]').forEach(f => f.style.background = on ? 'var(--ink3)' : '');
+}
+
+/* Wrap just the offending substring, so the highlight lands on the evidence. */
+function wrapEvidence(el, evidence, n, kind){
+  if(!evidence) return null;
+  const needle = String(evidence).trim();
+  if(needle.length < 2) return null;
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  let node;
+  while((node = walker.nextNode())){
+    const i = node.nodeValue.toLowerCase().indexOf(needle.toLowerCase());
+    if(i === -1) continue;
+    const after = node.splitText(i);
+    after.splitText(needle.length);
+    const span = document.createElement('span');
+    span.className = 'mk ' + kind;
+    span.dataset.n = n;
+    after.parentNode.insertBefore(span, after);
+    span.appendChild(after);
+    return span;
+  }
+  return null;
+}
+
+/* Fall back to marking the whole element (buttons, whole paragraphs). */
+function markWhole(el, n, kind){
+  const block = el.classList.contains('btn') || /^(P|DIV|UL|OL|LI|H1|H2|H3)$/.test(el.tagName);
+  el.classList.add('mk', kind);
+  if(block) el.classList.add('blk');
+  el.dataset.n = n;
+  return el;
+}
+
+/* ============================================================
+   Debrief
+   ============================================================ */
+function renderDebrief(){
+  const L = lvl();
+  const points = L.debriefPoints.map(p => `<div class="dpoint"><span class="dk">&rarr;</span><span>${esc(p)}</span></div>`).join('');
+  const rows = L.emails.map(e => {
+    const right = S.answers[e.id] === e.verdict;
+    return `<div class="rrow">
+      <span class="rmark ${right?'ok':'no'}">${right?'&check;':'&times;'}</span>
+      <span><span class="rsub">${esc(e.subject)}</span><span class="rtake">${esc(e.takeaway)}</span></span>
+      <span class="rtag ${e.verdict==='phishing'?'phish':'legit'}">${e.verdict==='phishing'?'Phishing':'Legitimate'}</span>
+    </div>`;
+  }).join('');
+  const more = S.li < LEVELS.length - 1;
+
+  app.innerHTML = railHtml() + `<div class="debrief">
+    <div class="eyebrow"><span class="mlabel">Level ${L.level} complete</span><span class="rule"></span></div>
+    <h1>${esc(L.title)}</h1>
+    <p class="sub">Here is what this level was teaching you to notice. The next one keeps all of it and adds something new.</p>
+    <div class="dpoints">
+      <div class="dh"><span class="mlabel">New tells in this level</span></div>
+      ${points}
+    </div>
+    <div class="recap">
+      <div class="dh"><span class="mlabel">Your calls</span></div>
+      ${rows}
+    </div>
+    <div class="next">
+      ${more ? `<button class="pbtn" data-goto="${S.li+1}">Level ${LEVELS[S.li+1].level}: ${esc(LEVELS[S.li+1].title)} &rarr;</button>` : `<button class="pbtn" data-home>Back to the briefing</button>`}
+      <button class="pbtn alt" data-goto="${S.li}">Review this level</button>
+    </div>
+  </div>`;
+  document.body.dataset.view = 'debrief';
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   Router + events
+   ============================================================ */
+function render(){
+  if(S.view === 'start') renderStart();
+  else if(S.view === 'debrief') renderDebrief();
+  else renderLevel();
+}
+
+function openEmail(id){
+  S.openId = id;
+  S.view = 'level';
+  render();
+  const p = document.getElementById('pane');
+  if(p) p.scrollTop = 0;
+}
+
+function answer(v){
+  const e = emails().find(x => x.id === S.openId);
+  if(!e || S.answers[e.id]) return;
+  S.answers[e.id] = v;
+  render();
+  const p = document.getElementById('pane');
+  if(p) p.scrollTop = 0;
+}
+
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-open],[data-goto],[data-home],[data-reset],[data-verdict],[data-debrief],[data-back],[data-toggle-details],[data-href]');
+  if(!t) return;
+
+  if(t.hasAttribute('data-href')){
+    ev.preventDefault();
+    showToast('Links are disabled in this simulator. This one really points to <b>' + esc(t.dataset.href) + '</b>');
+    return;
+  }
+  if(t.hasAttribute('data-open')) return openEmail(t.dataset.open);
+  if(t.hasAttribute('data-goto')){ S.li = +t.dataset.goto; S.openId = null; S.view = 'level'; return render(); }
+  if(t.hasAttribute('data-home')){ S.view = 'start'; S.openId = null; return render(); }
+  if(t.hasAttribute('data-back')){ S.openId = null; document.body.dataset.view = 'list'; return render(); }
+  if(t.hasAttribute('data-verdict')) return answer(t.dataset.verdict);
+  if(t.hasAttribute('data-debrief')){ S.view = 'debrief'; return render(); }
+  if(t.hasAttribute('data-toggle-details')){ S.details[S.openId] = !S.details[S.openId]; return render(); }
+  if(t.hasAttribute('data-inspect')){ S.inspect[S.openId] = !S.inspect[S.openId]; return render(); }
+  if(t.hasAttribute('data-reset')){
+    if(confirm('Clear every answer and start the lab over?')){ S.answers = {}; S.details = {}; S.inspect = {}; S.openId = null; S.view = 'start'; render(); }
+  }
+});
+
+/* Hover any link to see its true destination — the habit this lab is teaching. */
+const sb = document.getElementById('statusbar'), sbu = document.getElementById('sburl');
+function showUrl(el){ if(!el) return; sbu.textContent = el.dataset.href; sb.hidden = false; }
+function hideUrl(){ sb.hidden = true; }
+document.addEventListener('mouseover', e => { const a = e.target.closest('[data-href]'); if(a) showUrl(a); });
+document.addEventListener('mouseout',  e => { if(e.target.closest('[data-href]')) hideUrl(); });
+document.addEventListener('focusin',   e => { const a = e.target.closest('[data-href]'); if(a) showUrl(a); });
+document.addEventListener('focusout',  e => { if(e.target.closest('[data-href]')) hideUrl(); });
+
+let toastT;
+function showToast(html){
+  const el = document.getElementById('toast');
+  el.innerHTML = html; el.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 4200);
+}
+
+document.addEventListener('keydown', e => {
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'input' || tag === 'textarea') return;
+  if(S.view !== 'level') return;
+  const k = e.key.toLowerCase();
+  const list = emails(), i = list.findIndex(x => x.id === S.openId);
+
+  if(k === 'p' || k === 'l'){
+    if(S.openId && !S.answers[S.openId]){ e.preventDefault(); answer(k === 'p' ? 'phishing' : 'legit'); }
+  } else if(k === 'j' || e.key === 'ArrowDown'){
+    e.preventDefault(); openEmail(list[Math.min(list.length - 1, i + 1)].id);
+  } else if(k === 'k' || e.key === 'ArrowUp'){
+    e.preventDefault(); openEmail(list[Math.max(0, i - 1)].id);
+  } else if(e.key === 'Escape'){
+    S.openId = null; render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
